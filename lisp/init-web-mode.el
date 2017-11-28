@@ -58,6 +58,8 @@
   '(progn
      ;; make org-mode export fail, I use evil and evil-matchit
      ;; to select text, so expand-region.el is not used
+     (flycheck-add-mode 'javascript-eslint 'web-mode)
+
      (remove-hook 'web-mode-hook 'er/add-web-mode-expansions)
      (setq web-mode-enable-auto-closing t) ; enable auto close tag in text-mode
      (setq web-mode-enable-auto-pairing t)
