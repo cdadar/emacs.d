@@ -14,7 +14,10 @@
                  '(ccl ("ccl") :coding-system utf-8-unix)))
   (when (executable-find "sbcl")
     (add-to-list 'slime-lisp-implementations
-                 '(sbcl ("sbcl") :coding-system utf-8-unix))))
+                 '(sbcl ("sbcl") :coding-system utf-8-unix)))
+  (when (executable-find "ros")
+    (add-to-list 'slime-lisp-implementations
+                 '(roswell ("ros" "-Q" "run") :coding-system utf-8-unix))))
 
 ;; From http://bc.tech.coop/blog/070515.html
 (defun lispdoc ()
