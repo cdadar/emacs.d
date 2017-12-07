@@ -78,7 +78,8 @@ instead."
     (add-hook 'after-save-hook 'counsel-etags-virtual-update-tags)
     (setq counsel-etags-update-interval 300) ; 300 seconds, OPTIONAL
     (setq counsel-etags-update-tags-backend (lambda () (shell-command "find . -type f -iname \"*.[ch]\" | etags -")))
-    (define-key ivy-mode-map (kbd "M-s ]") 'counsel-etags-find-tag-at-point)))
+    (define-key ivy-mode-map (kbd "M-s ]") 'counsel-etags-find-tag-at-point)
+    (define-key ivy-mode-map (kbd "M-s [") 'counsel-etags-grep)))
 
 
 
