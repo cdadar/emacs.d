@@ -81,6 +81,7 @@ instead."
     (define-key ivy-mode-map (kbd "M-s ]") 'counsel-etags-find-tag-at-point)
     (define-key ivy-mode-map (kbd "M-s [") 'counsel-etags-grep)))
 
-
+(when (maybe-require-package 'ivy-xref)
+  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
 (provide 'init-ivy)
