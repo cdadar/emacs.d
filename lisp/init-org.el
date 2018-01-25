@@ -24,6 +24,7 @@
 
 ;; Lots of stuff from http://doc.norang.ca/org-mode.html
 
+;; TODO: fail gracefully
 (defun sanityinc/grab-ditaa (url jar-name)
   "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
   ;; TODO: handle errors
