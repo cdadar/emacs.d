@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t -*-
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;;; This file bootstraps the configuration, which is divided into
 ;;; a number of other files.
