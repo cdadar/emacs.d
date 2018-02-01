@@ -49,5 +49,6 @@ site-lisp/package/
 /.uptimes.el
 /rake.cache
 /plantuml.jar
+/magithub
 projectile.cache
 emojis/
