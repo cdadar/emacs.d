@@ -106,4 +106,9 @@
   (global-set-key (kbd "C-c C-S-d") 'define-word))
 
 
+(when (maybe-require-package 'super-save)
+  (super-save-mode +1)
+  (setq super-save-auto-save-when-idle t)
+  (setq auto-save-default nil))
+
 (provide 'init-personal)
