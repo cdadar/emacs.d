@@ -108,6 +108,7 @@
 
 (when (maybe-require-package 'super-save)
   (super-save-mode +1)
-  (setq auto-save-default nil))
+  (setq auto-save-default nil)
+  (diminish 'super-save-mode))
 
 (provide 'init-personal)
