@@ -111,4 +111,9 @@
   (setq auto-save-default nil)
   (diminish 'super-save-mode))
 
+;; (setq url-gateway-method 'socks)
+;; (setq socks-server '("Default server" "127.0.0.1" 7070 5))
+;; (setq url-gateway-local-host-regexp
+;;       (concat "\\`" (regexp-opt '("localhost" "127.0.0.1")) "\\'"))
+
 (provide 'init-personal)
