@@ -16,7 +16,7 @@
 
 ;; erc autojoin
 (setq erc-autojoin-channels-alist
-      '(("freenode.net" "#lisp" "#opensuse-cn" "#fedora-zh" "#emacs")))
+      '(("freenode.net" "#lisp" "#opensuse-cn" "#fedora-zh" "#emacs" "#linuxba")))
 
 (after-load 'company-c-headers
   (setq  company-c-headers-path-system '("."
