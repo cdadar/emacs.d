@@ -168,7 +168,6 @@
   (require-package 'osx-location))
 (unless (eq system-type 'windows-nt)
   (maybe-require-package 'daemons))
-(maybe-require-package 'regex-tool)
 (maybe-require-package 'dotenv-mode)
 
 (when (maybe-require-package 'uptimes)
