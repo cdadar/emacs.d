@@ -18,6 +18,7 @@
       org-fast-tag-selection-single-key 'expert
       org-html-validation-link nil
       org-export-kill-product-buffer-when-displayed t
+      org-enforce-todo-dependencies t
       org-image-actual-width '(400)
       org-tags-column 80)
 
@@ -476,8 +477,9 @@ typical word processor."
 (after-load 'org
   (maybe-require-package 'ox-ioslide))
 
+;; 已经在melpa上不能找到该包
 ;; generate mind map
-(after-load 'org
-  (maybe-require-package 'org-mind-map))
+;; (after-load 'org
+;;   (maybe-require-package 'org-mind-map))
 
 (provide 'init-org)
