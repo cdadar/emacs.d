@@ -1,0 +1,11 @@
+# key: json_php_base
+# name: json_php_base
+# --
+\`\`\`json
+{
+    "code": 200,
+    "results": {
+    },
+    "msg": "${1:message}"
+}
+\`\`\`

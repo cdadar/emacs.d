@@ -1,0 +1,38 @@
+# -*- mode: snippet -*-
+# name: new_model
+# key: new_model
+# --
+
+<?php
+
+namespace App\Models\Project;
+
+use App\Http\Controllers\Api\V3\BaseController;
+use App\Models\BaseModel;
+use App\Models\User;
+
+use App\Models\Users;
+use Illuminate\Support\Facades\DB;
+
+class ${1:modelName} extends BaseModel
+{
+    public $table = '${2:tableName}';
+
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
+    protected $dateFormat = 'U';//时间戳格式
+    protected $guarded = ['create_time', 'create_name', 'update_time', 'update_name'];
+    protected $hidden = ['update_name', 'is_state'];
+
+
+    public function __construct(array $attributes = array())
+    {
+        parent::__construct($attributes);
+    }
+
+
+    $0
+
+
+
+}

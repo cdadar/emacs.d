@@ -1,0 +1,29 @@
+# -*- mode: snippet -*-
+# name: php_controller
+# key: php_controller
+# --
+
+<?php
+
+namespace App\Http\Controllers\Api\V3\Article;
+
+use App\Http\Controllers\Api\V3\BaseController;
+use App\Models\Project\Project;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+
+/**
+ * ${1:controller_comment}Controller
+ * User: chens
+ * Date: ${2:dateTime}
+ */
+class ${3:controllerName}Controller extends BaseController
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+
+}

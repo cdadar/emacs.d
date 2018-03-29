@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: create_fdid
+# key: create_fdid
+# --
+
+DROP TABLE IF EXISTS fd_${1:table};
+CREATE TABLE fd_${1:$(yas/substr yas-text "[^ ]*")} (
+\`id\` INT(11) UNSIGNED  NOT NULL AUTO_INCREMENT COMMENT 'id',
+\`uid\` varchar(32) NOT NULL COMMENT 'uid',
+\`create_time\` int(5) UNSIGNED  NULL COMMENT '创建时间',
+\`create_name\` int(11) UNSIGNED DEFAULT NULL COMMENT '创建人',
+\`update_time\` int(5) UNSIGNED  DEFAULT NULL COMMENT '修改时间',
+\`update_name\` int(11) UNSIGNED DEFAULT NULL COMMENT '修改人',
+\`is_state\` tinyint(1) DEFAULT 1 COMMENT '状态：0/删除，1/正常',
+$0
+PRIMARY KEY  (\`id\`, \`uid\`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=UTF8 COMMENT='${2:tableName}';
