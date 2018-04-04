@@ -51,8 +51,11 @@
 ;; (require-package 'iedit)
 ;; (global-set-key (kbd "M-s e") 'iedit-mode)
 
-;; (require-packages '(editorconfig))
-;; (require 'editorconfig)
+(when (maybe-require-package 'editorconfig)
+  (editorconfig-mode)
+  (after-load 'diminish
+    (diminish editorconfig-mode)))
+
 ;;; personal.el ends here
 
 ;; (require-package 'recentf)
