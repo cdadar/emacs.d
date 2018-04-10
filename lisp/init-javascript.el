@@ -4,7 +4,6 @@
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
 
-(maybe-require-package 'tern)
 
 (defcustom preferred-javascript-mode
   (first (remove-if-not #'fboundp '(js2-mode js-mode)))
@@ -42,15 +41,6 @@
   (add-hook 'js2-mode-hook 'sanityinc/disable-js2-checks-if-flycheck-active)
 
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
-
-  (when (maybe-require-package 'company-tern)
-    (add-hook 'js-mode-hook
-              '(lambda ()
-                 (tern-mode 1)
-                 (define-key tern-mode-keymap (kbd "M-.") nil)
-                 (define-key tern-mode-keymap (kbd "M-,") nil)
-                 (setq company-tooltip-align-annotations t)
-                 (sanityinc/local-push-company-backend 'company-tern))))
 
   (after-load 'js2-mode
     (js2-imenu-extras-setup)))
