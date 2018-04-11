@@ -53,6 +53,13 @@
 
 (when (maybe-require-package 'editorconfig)
   (editorconfig-mode)
+  (after-load 'projectile
+    '(progn
+       (add-hook 'projectile-after-switch-project-hook
+                 (lambda ()
+                   (let editorconfig-config-path (expand-file-name "./.editorconfig" projectile-project-root ))
+                   (when (file-exists-p editorconfig-config-path)
+                     (setq editorconfig-exec-path editorconfig-config-path))))))
   (after-load 'diminish
     (diminish editorconfig-mode)))
 
