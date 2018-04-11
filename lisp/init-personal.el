@@ -126,4 +126,13 @@
 ;; (setq url-gateway-local-host-regexp
 ;;       (concat "\\`" (regexp-opt '("localhost" "127.0.0.1")) "\\'"))
 
+(when (maybe-require-package 'hl-todo)
+  (global-hl-todo-mode)
+  (diminish 'global-hl-todo-mode)
+  (after-load 'hl-todo
+    '(progn
+       (define-key hl-todo-mode-map (kbd "C-c M-p") 'hl-todo-previous)
+       (define-key hl-todo-mode-map (kbd "C-c M-n") 'hl-todo-next)
+       (define-key hl-todo-mode-map (kbd "C-c M-o") 'hl-todo-occur))))
+
 (provide 'init-personal)
