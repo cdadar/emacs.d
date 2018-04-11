@@ -449,7 +449,7 @@ typical word processor."
 
 
 (after-load 'org
-  (defun jiarenlu/org-screenshot ()
+  (defun cdadar/org-screenshot ()
     "Take a screenshot into a unique-named file in the current buffer file
  directory and insert a link to this file."
     (interactive)
@@ -469,7 +469,7 @@ typical word processor."
 
     (insert (concat "[[" (concat "./images/" filename) "]]")))
 
-  (define-key org-mode-map (kbd "C-c s c") 'jiarenlu/org-screenshot))
+  (define-key org-mode-map (kbd "C-c s c") 'cdadar/org-screenshot))
 
 ;; create ppt
 (after-load 'org
