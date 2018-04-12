@@ -7,6 +7,9 @@
     (setq php-template-compatibility nil)
     (subword-mode 1))
 
+  (when (maybe-require-package 'php-refactor-mode)
+    (add-hook 'php-mode-hook 'php-refactor-mode))
+
   (when (maybe-require-package 'company-php)
     (after-load 'company
       (add-hook 'php-mode-hook
