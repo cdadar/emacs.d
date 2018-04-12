@@ -16,8 +16,7 @@
     (setq c-auto-newline nil)
 
     ;;company-clang
-    (sanityinc/local-push-company-backend #'company-clang)
-    (setq company-backends (delete 'company-semantic company-backends))))
+    (sanityinc/local-push-company-backend #'company-clang)))
 
 (add-hook 'c-mode-common-hook 'c-mode-common-hook-setup)
 
