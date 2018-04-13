@@ -158,6 +158,7 @@
 (require 'init-neotree)
 ;; (require 'init-treemacs)
 (require 'init-personal)
+(require 'init-email)
 ;; Extra packages which don't require any configuration
 
 (require-package 'gnuplot)
