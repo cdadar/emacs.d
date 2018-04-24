@@ -34,6 +34,7 @@
 
 (when (maybe-require-package 'counsel)
   (setq-default counsel-mode-override-describe-bindings t)
+  (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
   (when (maybe-require-package 'diminish)
     (after-load 'counsel
       (diminish 'counsel-mode)))
