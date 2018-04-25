@@ -19,6 +19,7 @@
 
     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
 
+    (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
     (when (maybe-require-package 'diminish)
       (diminish 'ivy-mode)))
 
@@ -34,7 +35,7 @@
 
 (when (maybe-require-package 'counsel)
   (setq-default counsel-mode-override-describe-bindings t)
-  (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
+
   (when (maybe-require-package 'diminish)
     (after-load 'counsel
       (diminish 'counsel-mode)))
