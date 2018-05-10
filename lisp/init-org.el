@@ -111,6 +111,8 @@ typical word processor."
          "* NEXT %?\n%U\n" :clock-resume t)
         ("n" "note" entry (file "")
          "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
+        ("j" "Journal" entry (file+datetree org-default-journal-file)
+         "* %?\nEntered on %U\n %i\n %a")
         ))
 
 

@@ -1,5 +1,6 @@
 ;; org setting
 (setq org-default-notes-file "~/data/org-model/capture.org"
+      org-default-journal-file "~/data/org-model/journal.org"
       org-directory "~/data/org-model/")
 
 ;; exec-path setting
