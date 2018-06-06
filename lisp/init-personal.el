@@ -20,7 +20,7 @@
 (add-hook 'after-init-hook
           (lambda ()
             ;; 禁用滚动条
-            (set-scroll-bar-mode nil)
+            ;; (set-scroll-bar-mode nil)
             ;; 选中替换
             (delete-selection-mode t)))
 
