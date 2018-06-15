@@ -126,6 +126,11 @@ This command currently blocks the UI, sorry."
   (after-load 'dash-at-point
     (add-to-list 'dash-at-point-mode-alist '(sql-mode . "psql,mysql,sqlite,postgis"))))
 
+(after-load 'sql
+  (after-load 'zeal-at-point
+    (add-to-list 'zeal-at-point-mode-alist '(sql-mode . "psql,mysql,sqlite,postgis"))))
+
+
 
 (after-load 'page-break-lines
   (push 'sql-mode page-break-lines-modes))
