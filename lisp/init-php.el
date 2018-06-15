@@ -7,6 +7,11 @@
     (setq php-template-compatibility nil)
     (subword-mode 1))
 
+
+  (maybe-require-package 'geben)
+
+
+
   (when (maybe-require-package 'php-refactor-mode)
     (add-hook 'php-mode-hook 'php-refactor-mode))
 
