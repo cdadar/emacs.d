@@ -22,6 +22,11 @@
             ;; 禁用滚动条
             ;; (set-scroll-bar-mode nil)
             ;; 选中替换
+            ;; Minimal UI
+            (scroll-bar-mode -1)
+            (tool-bar-mode   -1)
+            (tooltip-mode    -1)
+            (menu-bar-mode   -1)
             (delete-selection-mode t)))
 
 
