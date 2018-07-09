@@ -1,13 +1,13 @@
 ;; org setting
-(setq org-default-notes-file "~/data/org-model/capture.org"
-      org-default-journal-file "~/data/org-model/journal.org"
-      org-directory "~/data/org-model/")
+(setq org-default-notes-file "~/org-model/capture.org"
+      org-default-journal-file "~/org-model/journal.org"
+      org-directory "~/org-model/")
 
 ;; exec-path setting
 (setq exec-path-from-shell-arguments '("-i"))
 
 ;; org mobile
-;;(setq org-mobile-files (list "~/data/org-model/plan.org"))
+;;(setq org-mobile-files (list "~/org-model/plan.org"))
 (setq org-mobile-inbox-for-pull "~/Dropbox/Apps/MobileOrg/index.org")
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 
