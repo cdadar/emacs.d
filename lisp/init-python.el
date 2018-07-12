@@ -34,15 +34,7 @@
     ;; note that setting `venv-location` is not necessary if you
     ;; use the default location (`~/.virtualenvs`), or if the
     ;; the environment variable `WORKON_HOME` points to the right place
-    (add-hook 'projectile-before-switch-project-hook
-              '(lambda ()
-                 (progn
-                   (venv-deactivate))))
-    (add-hook 'projectile-after-switch-project-hook
-              '(lambda ()
-                 (progn
-                   (when (eq major-mode 'python-mode)
-                     (venv-workon (projectile-project-name))))))))
+    ))
 
 
 
