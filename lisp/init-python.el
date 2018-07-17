@@ -16,17 +16,6 @@
 
 (after-load 'python
 
-  (require-package 'pyenv-mode)
-
-  (defun projectile-pyenv-mode-set ()
-    "Set pyenv version matching project name."
-    (let ((project (projectile-project-name)))
-      (if (member project (pyenv-mode-versions))
-          (pyenv-mode-set project)
-        (pyenv-mode-unset))))
-
-  (add-hook 'projectile-switch-project-hook 'projectile-pyenv-mode-set)
-
   (when (maybe-require-package 'virtualenvwrapper)
 
     (venv-initialize-interactive-shells) ;; if you want interactive shell support
@@ -34,6 +23,11 @@
     ;; note that setting `venv-location` is not necessary if you
     ;; use the default location (`~/.virtualenvs`), or if the
     ;; the environment variable `WORKON_HOME` points to the right place
+    (setq venv-dirlookup-names '(".venv" "pyenv" ".virtual" "venv"))
+    (setq projectile-switch-project-action
+          '(lambda ()
+             (venv-projectile-auto-workon)
+             (projectile-find-file)))
     ))
 
 
