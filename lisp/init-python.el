@@ -28,7 +28,16 @@
           '(lambda ()
              (venv-projectile-auto-workon)
              (projectile-find-file)))
-    ))
+
+    ;; (add-hook 'venv-postmkvirtualenv-hook
+    ;;           (lambda () (shell-command "pip install pylint")))
+    )
+
+
+  (when (executable-find "autopep8")
+    (when (maybe-require-package 'py-autopep8)
+      (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+      (setq py-autopep8-options '("--max-line-length=100")))))
 
 
 
