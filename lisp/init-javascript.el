@@ -4,7 +4,7 @@
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
 (maybe-require-package 'rjsx-mode)
-
+(maybe-require-package 'indium)
 
 (defcustom preferred-javascript-mode
   (first (remove-if-not #'fboundp '(js2-mode js-mode)))
@@ -119,6 +119,7 @@
 (when (maybe-require-package 'js2-refactor)
   (add-hook 'js2-mode-hook #'js2-refactor-mode)
   (js2r-add-keybindings-with-prefix "C-c C-m"))
+
 
 
 (provide 'init-javascript)
