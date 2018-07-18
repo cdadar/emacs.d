@@ -4,7 +4,7 @@
 ;;; This file bootstraps the configuration, which is divided into
 ;;; a number of other files.
 
-(let ((minver "24.3"))
+(let ((minver "24.4"))
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 (when (version< emacs-version "24.5")
