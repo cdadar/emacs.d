@@ -382,31 +382,31 @@ typical word processor."
     (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
 
 ;; org-latex
-(after-load 'org
-  (require 'ox-latex)
-  (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
-                                "xelatex -interaction nonstopmode %f"))
-  (add-to-list 'org-latex-classes
-               '("ctexart"
-                 "\\documentclass[UTF8]{ctexart}
-        \\usepackage{amsmath,latexsym,amssymb,mathrsfs,pifont}
-        \\usepackage[T1]{fontenc}
-        \\usepackage{fixltx2e}
-        \\usepackage{graphicx}
-        \\usepackage{subfig}
-        \\usepackage{grffile}
-        \\usepackage{longtable}
-        \\usepackage{wrapfig}
-        \\usepackage{rotating}
-        \\usepackage[colorlinks=true]{hyperref}
-        \\tolerance=1000
-        [NO-DEFAULT-PACKAGES]
-        [NO-PACKAGES]"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+;; (after-load 'org
+;;   (require 'ox-latex)
+;;   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
+;;                                 "xelatex -interaction nonstopmode %f"))
+;;   (add-to-list 'org-latex-classes
+;;                '("ctexart"
+;;                  "\\documentclass[UTF8]{ctexart}
+;;         \\usepackage{amsmath,latexsym,amssymb,mathrsfs,pifont}
+;;         \\usepackage[T1]{fontenc}
+;;         \\usepackage{fixltx2e}
+;;         \\usepackage{graphicx}
+;;         \\usepackage{subfig}
+;;         \\usepackage{grffile}
+;;         \\usepackage{longtable}
+;;         \\usepackage{wrapfig}
+;;         \\usepackage{rotating}
+;;         \\usepackage[colorlinks=true]{hyperref}
+;;         \\tolerance=1000
+;;         [NO-DEFAULT-PACKAGES]
+;;         [NO-PACKAGES]"
+;;                  ("\\section{%s}" . "\\section*{%s}")
+;;                  ("\\subsection{%s}" . "\\subsection*{%s}")
+;;                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+;;                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+;;                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 
 
