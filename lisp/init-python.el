@@ -29,22 +29,18 @@
              (venv-projectile-auto-workon)
              (projectile-find-file)))
 
-    ;; (add-hook 'venv-postmkvirtualenv-hook
-    ;;           (lambda () (shell-command "pip install pylint")))
+    (add-hook 'venv-postmkvirtualenv-hook
+              (lambda () (shell-command "pip install pyflakes")))
     )
 
+  (when (maybe-require-package 'flycheck-pyflakes)
+    (require 'flycheck-pyflakes)
+    (add-to-list 'flycheck-disabled-checkers 'python-flake8)
+    (add-to-list 'flycheck-disabled-checkers 'python-pylint))
 
   (when (executable-find "autopep8")
     (when (maybe-require-package 'py-autopep8)
       (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
       (setq py-autopep8-options '("--max-line-length=100")))))
-
-
-
-
-
-
-
-
 
 (provide 'init-python)
