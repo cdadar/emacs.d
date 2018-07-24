@@ -7,6 +7,13 @@
     (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
     (define-key counsel-gtags-mode-map (kbd "M-s ,") 'counsel-gtags-find-symbol)
     (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward)
-    (add-hook 'after-save-hook 'counsel-gtags-update-tags)))
+    ;; (add-hook 'after-save-hook 'counsel-gtags-update-tags)
+    ))
+
+(when (maybe-require-package 'ggtags)
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'php-mode 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1)))))
 
 (provide 'init-gtags)
