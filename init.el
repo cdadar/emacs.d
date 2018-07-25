@@ -159,6 +159,7 @@
 ;; (require 'init-treemacs)
 (require 'init-personal)
 (require 'init-email)
+(require 'init-vimrc)
 ;; Extra packages which don't require any configuration
 
 (require-package 'gnuplot)
