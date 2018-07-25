@@ -11,6 +11,10 @@
     ))
 
 (when (maybe-require-package 'ggtags)
+  (after-load 'ggtags
+    '(progn
+       (define-key ggtags-navigation-map (kbd "M-<") nil)
+       (define-key ggtags-navigation-map (kbd "M->") nil)))
   (add-hook 'c-mode-common-hook
             (lambda ()
               (when (derived-mode-p 'php-mode 'c-mode 'c++-mode 'java-mode)
