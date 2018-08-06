@@ -3,7 +3,7 @@
 (maybe-require-package 'coffee-mode)
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
-(maybe-require-package 'rjsx-mode)
+
 (maybe-require-package 'indium)
 
 (defcustom preferred-javascript-mode
@@ -24,12 +24,14 @@
                                   collect entry)))
 
 
-(after-load 'rjsx-mode
+(when (maybe-require-package 'rjsx-mode)
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
   (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (define-key rjsx-mode-map "<" nil)
-  (define-key rjsx-mode-map (kbd "C-d") nil)
-  (define-key rjsx-mode-map ">" nil))
+  (after-load 'rjsx-mode
+    (define-key rjsx-mode-map "<" nil)
+    (define-key rjsx-mode-map (kbd "C-d") nil)
+    (define-key rjsx-mode-map ">" nil)))
+
 ;; js2-mode
 
 ;; Change some defaults: customize them to override
