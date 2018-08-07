@@ -123,8 +123,14 @@
   (add-hook 'js2-mode-hook #'js2-refactor-mode)
   (js2r-add-keybindings-with-prefix "C-c C-m"))
 
+
 (when (maybe-require-package 'prettier-js-mode)
   (after-load 'js2-mode
-    (add-hook 'js2-mode-hook 'prettier-js-mode)))
+    (add-hook 'js2-mode-hook 'prettier-js-mode))
+  (setq prettier-js-args '(
+                           ;; "--trailing-comma" "all"
+                           ;; "--bracket-spacing" "false"
+                           "--mo-semi" "false"
+                           )))
 
 (provide 'init-javascript)
