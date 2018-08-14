@@ -137,4 +137,8 @@
        (define-key hl-todo-mode-map (kbd "C-c M-n") 'hl-todo-next)
        (define-key hl-todo-mode-map (kbd "C-c M-o") 'hl-todo-occur))))
 
+
+(when (maybe-require-package 'esh-autosuggest)
+  (add-hook 'eshell-mode-hook #'esh-autosuggest-mode))
+
 (provide 'init-personal)
