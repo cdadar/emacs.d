@@ -139,6 +139,7 @@
 
 
 (when (maybe-require-package 'esh-autosuggest)
-  (add-hook 'eshell-mode-hook #'esh-autosuggest-mode))
+  (after-load 'eshell-mode
+    (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)))
 
 (provide 'init-personal)
