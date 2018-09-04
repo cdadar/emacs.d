@@ -142,4 +142,17 @@
   (after-load 'eshell-mode
     (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)))
 
+(when (maybe-require-package 'dumb-jump)
+  (after-load 'dumb-jump
+    '(progn
+       (diminish 'dumb-jump)
+       (after-load 'ivy
+         (setq dumb-jump-selector 'ivy))
+       (cond
+        ((executable-find "pt") (setq dumb-jump-force-searcher 'pt))
+        ((executable-find "ack") (setq dumb-jump-force-searcher 'ack))
+        ((executable-find "ag") (setq dumb-jump-force-searcher 'ag))
+        ((executable-find "rg") (setq dumb-jump-force-searcher 'rg)))))
+  (add-hook 'after-init-hook #'dumb-jump-mode))
+
 (provide 'init-personal)
