@@ -85,4 +85,9 @@
   (define-key vc-prefix-map (kbd "p") #'git-messenger:popup-message))
 
 
+
+(require 'magit-extension)
+
+
+
 (provide 'init-git)
