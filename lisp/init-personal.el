@@ -155,4 +155,19 @@
         ((executable-find "rg") (setq dumb-jump-force-searcher 'rg)))))
   (add-hook 'after-init-hook #'dumb-jump-mode))
 
+
+(after-load 'grep
+  '(progn
+     (define-key grep-mode-map
+       (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)
+     (define-key ag-mode-map
+       (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)))
+
+(after-load 'wgrep
+  '(define-key grep-mode-map
+     (kbd "C-c C-c") 'wgrep-finish-edit))
+
+(when (maybe-require-package 'iedit)
+  (global-set-key (kbd "C-M-S-i") 'iedit-mode))
+
 (provide 'init-personal)
