@@ -172,11 +172,7 @@
 
 
 
-(ensure-lib-from-url 'awesome-tab "https://raw.github.com/manateelazycat/awesome-tab/master/awesome-tab.el")
 
-(require 'awesome-tab)
-
-(awesome-tab-mode t)
 
 
 

@@ -158,6 +158,7 @@
 (require 'init-neotree)
 ;; (require 'init-treemacs)
 (require 'init-personal)
+(require 'init-awesome-tab)
 (require 'init-email)
 (require 'init-vimrc)
 ;; Extra packages which don't require any configuration
