@@ -16,9 +16,9 @@
   (global-set-key (kbd "M-?") 'rg-project))
 
 
-(ensure-lib-from-url 'grep-dried "https://raw.github.com/manateelazycat/grep-dired/master/grep-dired.el")
+(ensure-lib-from-url 'grep-dired "https://raw.github.com/manateelazycat/grep-dired/master/grep-dired.el")
 
-(require 'grep-dried)
+(require 'grep-dired)
 
 
 (provide 'init-grep)
