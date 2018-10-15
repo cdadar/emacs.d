@@ -135,4 +135,31 @@ This command currently blocks the UI, sorry."
 (after-load 'page-break-lines
   (push 'sql-mode page-break-lines-modes))
 
+
+(setq sql-connection-alist
+      '((pool-a
+         (sql-product 'mysql)
+         (sql-server "1.2.3.4")
+         (sql-user "me")
+         (sql-password "mypassword")
+         (sql-database "thedb")
+         (sql-port 3306))
+        (pool-b
+         (sql-product 'mysql)
+         (sql-server "1.2.3.4")
+         (sql-user "me")
+         (sql-password "mypassword")
+         (sql-database "thedb")
+         (sql-port 3307))))
+
+(defun sql-connect-preset (name)
+  "Connect to a predefined SQL connection listed in `sql-connection-alist'"
+  (eval `(let ,(cdr (assoc name sql-connection-alist))
+           (flet ((sql-get-login (&rest what)))
+             (sql-product-interactive sql-product)))))
+
+(defun sql-pool-a ()
+  (interactive)
+  (sql-connect-preset 'pool-a))
+
 (provide 'init-sql)
