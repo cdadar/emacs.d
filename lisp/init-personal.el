@@ -170,11 +170,7 @@
 (when (maybe-require-package 'iedit)
   (global-set-key (kbd "C-M-S-i") 'iedit-mode))
 
-
-
-
-
-
+(require 'insert-translated-name)
 
 
 (provide 'init-personal)
