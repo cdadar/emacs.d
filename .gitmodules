@@ -7,3 +7,6 @@
 [submodule "site-lisp/grep-dired"]
 	path = site-lisp/grep-dired
 	url = git@github.com:manateelazycat/grep-dired.git
+[submodule "site-lisp/aweshell"]
+	path = site-lisp/aweshell
+	url = git@github.com:manateelazycat/aweshell.git
