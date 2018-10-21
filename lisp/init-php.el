@@ -17,8 +17,7 @@
 
   (when (maybe-require-package 'company-php)
     (after-load 'company
-      (add-hook 'php-mode-hook
-                (lambda () (sanityinc/local-push-company-backend 'company-ac-php-backend))))))
+      (push 'company-ac-php-backend company-backends))))
 
 
 
