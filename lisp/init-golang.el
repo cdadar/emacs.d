@@ -5,6 +5,6 @@
   (when (maybe-require-package 'company-go)
     (after-load 'company
       (add-hook 'go-mode-hook
-                (lambda () (sanityinc/local-push-company-backend 'company-go))))))
+                (push 'company-go company-backends)))))
 
 (provide 'init-golang)

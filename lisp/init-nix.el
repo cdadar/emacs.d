@@ -11,7 +11,7 @@
         (or (derived-mode-p 'nix-mode 'nix-repl-mode)
             (let ((file-name (buffer-file-name (current-buffer))))
               (and file-name (equal "nix" (file-name-extension file-name))))))
-      (sanityinc/local-push-company-backend 'company-nixos-options))))
+      (push 'company-nixos-options company-backends))))
 
 
 
