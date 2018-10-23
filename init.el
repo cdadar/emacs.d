@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t -*-
-(setq debug-on-error nil)
+(setq debug-on-error t)
 
 ;;; This file bootstraps the configuration, which is divided into
 ;;; a number of other files.
@@ -54,6 +54,7 @@
 ;;----------------------------------------------------------------------------
 
 (require-package 'wgrep)
+(require-package 'ripgrep)
 (require-package 'diminish)
 (require-package 'scratch)
 (require-package 'command-log-mode)
