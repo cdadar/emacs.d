@@ -2,7 +2,6 @@
 (maybe-require-package 'js2-mode)
 (maybe-require-package 'coffee-mode)
 (maybe-require-package 'typescript-mode)
-(maybe-require-package 'prettier-js)
 
 (maybe-require-package 'indium)
 
@@ -15,8 +14,8 @@
 
 (defconst preferred-javascript-indent-level 2)
 
-;; Need to first remove from list if present, since elpa adds entries too, which
 ;; may be in an arbitrary order
+;; Need to first remove from list if present, since elpa adds entries too, which
 (eval-when-compile (require 'cl))
 (setq auto-mode-alist (cons `("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
                             (loop for entry in auto-mode-alist
@@ -122,16 +121,31 @@
   (add-hook 'js2-mode-hook #'js2-refactor-mode)
   (js2r-add-keybindings-with-prefix "C-c C-m"))
 
-(add-hook 'js2-mode-hook 'prettier-js-mode)
-(add-hook 'rjsx-mode-hook 'prettier-js-mode)
-(add-hook 'web-mode-hook 'prettier-js-mode)
+(when (and (executable-find "prettier")
+           (maybe-require-package 'prettier-js))
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'web-mode-hook 'prettier-js-mode)
 
-(after-load 'prettier-js
-  (setq prettier-js-args '(
-                           ;; "--trailing-comma" "all"
-                           ;; "--bracket-spacing" "false"
-                           "--no-semi" "false"
-                           )))
+  (after-load 'prettier-js
+    (setq prettier-js-args '(
+                             ;; "--trailing-comma" "all"
+                             ;; "--bracket-spacing" "false"
+                             "--no-semi" "false"
+                             ))))
+
+
+(when (and (executable-find "tern")
+           (maybe-require-package 'tern))
+  (add-hook 'js2-mode-hook 'tern-mode)
+  (add-hook 'rjsx-mode-hook 'tern-mode)
+  (add-hook 'web-mode-hook 'tern-mode)
+  (after-load 'tern
+    ;; Disable completion keybindings, as we use xref-js2 instead
+    (define-key tern-mode-keymap (kbd "M-.") nil)
+    (define-key tern-mode-keymap (kbd "M-,") nil)
+    (when (maybe-require-package 'company-tern)
+      (push 'company-tern company-backends))))
 
 
 
