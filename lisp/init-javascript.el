@@ -135,17 +135,17 @@
                              ))))
 
 
-(when (and (executable-find "tern")
-           (maybe-require-package 'tern))
-  (add-hook 'js2-mode-hook 'tern-mode)
-  (add-hook 'rjsx-mode-hook 'tern-mode)
-  (add-hook 'web-mode-hook 'tern-mode)
-  (after-load 'tern
-    ;; Disable completion keybindings, as we use xref-js2 instead
-    (define-key tern-mode-keymap (kbd "M-.") nil)
-    (define-key tern-mode-keymap (kbd "M-,") nil)
-    (when (maybe-require-package 'company-tern)
-      (push 'company-tern company-backends))))
+;; (when (and (executable-find "tern")
+;;            (maybe-require-package 'tern))
+;;   (add-hook 'js2-mode-hook 'tern-mode)
+;;   (add-hook 'rjsx-mode-hook 'tern-mode)
+;;   (add-hook 'web-mode-hook 'tern-mode)
+;;   (after-load 'tern
+;;     ;; Disable completion keybindings, as we use xref-js2 instead
+;;     (define-key tern-mode-keymap (kbd "M-.") nil)
+;;     (define-key tern-mode-keymap (kbd "M-,") nil)
+;;     (when (maybe-require-package 'company-tern)
+;;       (push 'company-tern company-backends))))
 
 
 
