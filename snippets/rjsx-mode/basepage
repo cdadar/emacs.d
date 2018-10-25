@@ -1,0 +1,27 @@
+# key: basepage
+# name: basepage
+# --
+import React, { Component } from "react"
+import { Input,  Button } from "antd"
+import { browserHistory } from "react-router"
+
+class ${1:BaseForm} extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+    }
+  }
+
+  componentWillMount() {
+  }
+
+  render() {
+    return (
+      <div>
+        $0
+      </div>
+    )
+  }
+}
+
+export default ${1:$(yas/substr yas-text "[^ ]*")}
