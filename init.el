@@ -159,6 +159,7 @@
 (require 'init-awesome-tab)
 (require 'init-email)
 (require 'init-vimrc)
+(require 'init-elfeed)
 (require 'init-aweshell)
 ;; Extra packages which don't require any configuration
 

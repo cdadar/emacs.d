@@ -11,6 +11,8 @@
 (setq org-mobile-inbox-for-pull "~/Dropbox/Apps/MobileOrg/index.org")
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 
+(setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
+
 
 ;; python
 ;; (setq python-shell-interpreter "python3")
@@ -29,5 +31,11 @@
                                          "/usr/lib64/gcc/x86_64-suse-linux/4.8/include"
                                          "/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed"
                                          "/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/include")))
+
+
+(after-load 'elfeed
+  (setq elfeed-db-directory "~/Nutstore/.elfeed"))
+(after-load 'elfeed-org
+  (setq rmh-elfeed-org-files (list rmh-elfeed-org-file)))
 
 (provide 'init-local)
