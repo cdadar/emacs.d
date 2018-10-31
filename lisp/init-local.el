@@ -8,8 +8,8 @@
 
 ;; org mobile
 ;;(setq org-mobile-files (list "~/org-mode/plan.org"))
-(setq org-mobile-inbox-for-pull "~/Dropbox/Apps/MobileOrg/index.org")
-(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+(setq org-mobile-inbox-for-pull "~/MobileOrg/index.org")
+(setq org-mobile-directory "~/MobileOrg")
 
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 
