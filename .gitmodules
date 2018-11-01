@@ -1,9 +1,6 @@
 [submodule "site-lisp/insert-translated-name"]
 	path = site-lisp/insert-translated-name
 	url = git@github.com:manateelazycat/insert-translated-name.git
-[submodule "site-lisp/awesome-tab"]
-	path = site-lisp/awesome-tab
-	url = git@github.com:manateelazycat/awesome-tab.git
 [submodule "site-lisp/grep-dired"]
 	path = site-lisp/grep-dired
 	url = git@github.com:manateelazycat/grep-dired.git
