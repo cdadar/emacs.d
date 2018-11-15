@@ -20,11 +20,9 @@
   (setq mu4e-get-mail-command "getmail"
         mu4e-update-interval 300)
 
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-smtp-server "smtp.exmail.qq.com"
-        smtpmail-smtp-service 465)
-  (setq user-full-name "chens")
-  (setq user-mail-address "chens@fangde.com")
+  ;; sending mail
+  (setq message-send-mail-function 'message-send-mail-with-sendmail
+        sendmail-program "/usr/bin/msmtp")
 
 
   (when (maybe-require-package 'mu4e-alert)
