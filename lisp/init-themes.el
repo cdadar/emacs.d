@@ -2,7 +2,7 @@
 (require-package 'color-theme-sanityinc-tomorrow)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(sanityinc-solarized-dark))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
