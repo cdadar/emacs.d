@@ -167,9 +167,6 @@
   '(define-key grep-mode-map
      (kbd "C-c C-c") 'wgrep-finish-edit))
 
-(when (maybe-require-package 'iedit)
-  (global-set-key (kbd "C-M-S-i") 'iedit-mode))
-
 (require 'insert-translated-name)
 
 
