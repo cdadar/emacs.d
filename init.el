@@ -161,6 +161,7 @@
 (require 'init-vimrc)
 (require 'init-elfeed)
 (require 'init-aweshell)
+(require 'init-rpm)
 ;; Extra packages which don't require any configuration
 
 (require-package 'gnuplot)
