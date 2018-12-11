@@ -8,7 +8,7 @@ CREATE TABLE bszb_${1:$(yas/substr yas-text "[^ ]*")} (
 \`${2:$(yas/substr yas-text "[^ ]*")}_UUID\` varchar(32) NOT NULL COMMENT 'UUID',
 \`${2:$(yas/substr yas-text "[^ ]*")}_CDATE\` DATETIME DEFAULT NULL COMMENT '创建时间',
 \`${2:$(yas/substr yas-text "[^ ]*")}_UDATE\` DATETIME DEFAULT NULL COMMENT '修改时间',
-\`${2:$(yas/substr yas-text "[^ ]*")}_STATUS\` tinyint default 0 comment '状态 （0：草稿，1：正常数据，2：失效数据）',
+\`${2:$(yas/substr yas-text "[^ ]*")}_STATUS\` tinyint DEFAULT 0 comment '状态 （0：草稿，1：正常数据，2：失效数据）',
 \`${2:$(yas/substr yas-text "[^ ]*")}_CUSR\` varchar(32) DEFAULT NULL COMMENT '申请人UUID',
 \`${2:$(yas/substr yas-text "[^ ]*")}_CUSRNAME\` varchar(50) DEFAULT NULL COMMENT '申请人姓名',
 \`${2:$(yas/substr yas-text "[^ ]*")}_DEPMANAGERUUID\` varchar(32) DEFAULT NULL COMMENT '部门经理UUID',
