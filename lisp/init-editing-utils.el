@@ -326,4 +326,24 @@ With arg N, insert N newlines."
   (diminish 'guide-key-mode))
 
 
+(require-package 'string-inflection)
+(after-load 'string-inflection
+  ;; default
+  (global-set-key (kbd "C-c C-u") 'string-inflection-all-cycle)
+
+  ;; for ruby
+  (add-hook 'ruby-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+
+  ;; for java
+  (add-hook 'java-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+
+  ;; for python
+  (add-hook 'python-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
+
 (provide 'init-editing-utils)
