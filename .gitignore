@@ -50,3 +50,4 @@ site-lisp/package/
 /magithub
 projectile.cache
 emojis/
+.cache/
