@@ -1,3 +1,7 @@
+;;; init-python.el --- Python editing -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 (setq auto-mode-alist
       (append '(("SConstruct\\'" . python-mode)
                 ("SConscript\\'" . python-mode))
@@ -44,3 +48,4 @@
       (setq py-autopep8-options '("--max-line-length=100")))))
 
 (provide 'init-python)
+;;; init-python.el ends here

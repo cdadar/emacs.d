@@ -1,3 +1,9 @@
+;;; init-spelling.el --- Spell check settings -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+(require 'ispell)
+
 ;; {{ flyspell setup for web-mode
 (defun web-mode-flyspell-verify ()
   (let* ((f (get-text-property (- (point) 1) 'face))
@@ -198,3 +204,4 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
     (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
 
 (provide 'init-spelling)
+;;; init-spelling.el ends here

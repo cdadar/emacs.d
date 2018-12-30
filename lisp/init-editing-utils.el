@@ -1,3 +1,7 @@
+;;; init-editing-utils.el --- Day-to-day editing helpers -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 ;; -*- lexical-binding: t -*-
 (require-package 'unfill)
 
@@ -347,3 +351,4 @@ With arg N, insert N newlines."
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
 (provide 'init-editing-utils)
+;;; init-editing-utils.el ends here

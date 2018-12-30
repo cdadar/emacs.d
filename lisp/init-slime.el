@@ -1,3 +1,7 @@
+;;; init-slime.el --- Slime support for Common Lisp -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 (require-package 'slime)
 ;; package.el compiles the contrib subdir, but the compilation order
 ;; causes problems, so we remove the .elc files there. See
@@ -59,3 +63,4 @@
                                   (file-name-as-directory directory) "quicklisp/"))))
 
 (provide 'init-slime)
+;;; init-slime.el ends here
