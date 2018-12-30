@@ -51,3 +51,4 @@ site-lisp/package/
 projectile.cache
 emojis/
 .cache/
+/forge-database.sqlite
