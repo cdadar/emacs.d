@@ -1,3 +1,9 @@
+;;; init-elfeed.el --- elfeed plugin  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
 (when (maybe-require-package 'elfeed)
   (global-set-key (kbd "C-x w") 'elfeed)
   (after-load 'elfeed

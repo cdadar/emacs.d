@@ -1,3 +1,9 @@
+;;; init-email.el --- mu4e support  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
 (defvar mu4e-installation-path nil
   "Installation path for mu4e.")
 

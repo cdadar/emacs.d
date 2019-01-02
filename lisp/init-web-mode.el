@@ -1,3 +1,10 @@
+;;; init-web-mode.el --- web-mode  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
+
 (require-package 'web-mode)
 
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))

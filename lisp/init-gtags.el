@@ -1,3 +1,10 @@
+;;; init-ggtags.el --- ggtags  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
+
 (when (maybe-require-package 'counsel-gtags)
   (add-hook 'c-mode-hook 'counsel-gtags-mode)
   (add-hook 'c++-mode-hook 'counsel-gtags-mode)

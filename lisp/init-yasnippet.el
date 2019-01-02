@@ -1,3 +1,10 @@
+;;; init-yasnippet.el --- yasnippet config  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
+
 ;; loading yasnippet will slow the startup
 ;; but it's necessary cost
 

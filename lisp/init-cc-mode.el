@@ -1,3 +1,9 @@
+;;; init-cc-mode.el --- cc-mode  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
 (defun c-mode-common-hook-setup ()
   (progn
     ;;company-c-headers

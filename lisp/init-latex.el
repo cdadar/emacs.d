@@ -1,3 +1,8 @@
+;;; init-latex.el --- latex  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
 (require-package 'auctex)
 
 (add-hook 'LaTeX-mode-hook

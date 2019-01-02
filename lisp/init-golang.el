@@ -1,3 +1,8 @@
+;;; init-golang.el --- golang support  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
 (when (maybe-require-package 'go-mode)
   (after-load 'go-mode
     (add-hook 'go-mode-hook

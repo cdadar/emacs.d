@@ -1,3 +1,9 @@
+;;; init-search.el --- copy prelude-search  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
 
 ;; 从 prelude 中弄出来搜索的功能
 (defun prelude-search (query-url prompt)

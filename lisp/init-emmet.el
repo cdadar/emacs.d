@@ -1,3 +1,9 @@
+;;; init-emmet.el --- emmet plugin  -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+;; -*- lexical-binding: t -*-
+
 (when (maybe-require-package 'emmet-mode)
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'html-mode-hook 'emmet-mode)
