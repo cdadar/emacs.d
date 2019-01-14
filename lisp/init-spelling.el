@@ -169,8 +169,12 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
 ;; I'd rather manually spell check the English text
 
 ;; you can also use "M-x ispell-word" or hotkey "M-$". It pop up a multiple choice
-;; @see http://frequal.com/Perspectives/EmacsTip03-FlyspellAutoCorrectWord.html
+;; @see http://frequal.com/Perspectives/EmacsTip03-FlyspellAutoCorrectWord.HTML
 (global-set-key (kbd "C-c s") 'flyspell-auto-correct-word)
+
+(after-load 'flyspell-mode
+  (define-key flyspell-mode-map (kbd "C-.") nil))
+
 
 ;; {{ avoid spell-checking doublon (double word) in certain major modes
 (defvar flyspell-check-doublon t
