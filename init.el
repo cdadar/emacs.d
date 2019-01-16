@@ -169,6 +169,7 @@
 (require 'init-rpm)
 ;; Extra packages which don't require any configuration
 
+(maybe-require-package 'anki-editor)
 (require-package 'gnuplot)
 (require-package 'lua-mode)
 (require-package 'htmlize)
