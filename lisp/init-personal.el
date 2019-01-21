@@ -107,7 +107,7 @@
   (setq-default company-idle-delay 0.1))
 
 
-(windmove-default-keybindings 'super)
+;; (windmove-default-keybindings 'super)
 
 (when (maybe-require-package 'keyfreq)
   (keyfreq-mode 1)
