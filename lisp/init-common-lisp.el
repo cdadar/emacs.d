@@ -50,6 +50,8 @@
 
 (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)
 
+(after-load 'lisp-mode
+  (require-package 'common-lisp-snippets))
 
 (provide 'init-common-lisp)
 ;;; init-common-lisp.el ends here
