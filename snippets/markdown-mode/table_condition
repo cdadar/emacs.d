@@ -1,0 +1,6 @@
+# key: table_condition
+# name: table_condition
+# --
+| 参数名称  | 说明     | 类型   | 是否必需 |
+|-----------|----------|--------|----------|
+| condition | 搜索条件 | string | 否       |
