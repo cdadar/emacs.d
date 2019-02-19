@@ -52,3 +52,4 @@ projectile.cache
 emojis/
 .cache/
 /forge-database.sqlite
+/transient
