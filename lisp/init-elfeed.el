@@ -7,7 +7,10 @@
 (when (maybe-require-package 'elfeed)
   (global-set-key (kbd "C-x w") 'elfeed)
   (after-load 'elfeed
-    (define-key elfeed-search-mode-map "q" 'bjm/elfeed-save-db-and-bury))
+    (define-key elfeed-search-mode-map "q" 'bjm/elfeed-save-db-and-bury)
+    (after-load 'org
+      (when (maybe-require-package 'elfeed-org)
+        (elfeed-org))))
 
   ;;functions to support syncing .elfeed between machines
   ;;makes sure elfeed reads index from disk before launching
@@ -24,9 +27,6 @@
     (interactive)
     (elfeed-db-save)
     (quit-window))
-
-  (after-load 'org
-    (when (maybe-require-package 'elfeed-org)
-      (elfeed-org))))
+  )
 
 (provide 'init-elfeed)
