@@ -390,6 +390,7 @@ typical word processor."
 
 ;; org-latex
 (after-load 'org
+  (require 'ox-md)
   (require 'ox-latex)
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
                                 "xelatex -interaction nonstopmode %f"))
