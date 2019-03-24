@@ -16,14 +16,13 @@
 (when (file-exists-p mu4e-installation-path)
   (require 'mu4e)
 
-
   (setq mu4e-maildir       "~/mail"
         mu4e-sent-folder   "/sent"
         mu4e-drafts-folder "/drafts"
         mu4e-trash-folder  "/trash"
         mu4e-refile-folder "/archive")
 
-  (setq mu4e-get-mail-command "getmail"
+  (setq mu4e-get-mail-command "fetchmail -v || [ $? -eq 1 ]"
         mu4e-update-interval 300)
 
   ;; sending mail
