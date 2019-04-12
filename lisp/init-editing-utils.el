@@ -370,5 +370,8 @@ ORIG is the advised function, which is called with its ARGS."
             '(lambda ()
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
+(when (maybe-require-package 'undo-tree)
+  (global-undo-tree-mode))
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
