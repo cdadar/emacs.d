@@ -119,6 +119,13 @@
     (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
     (define-key symbol-overlay-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)))
 
+
+(require-package 'undo-tree)
+(add-hook 'after-init-hook 'global-undo-tree-mode)
+(after-load 'undo-tree
+  (diminish 'undo-tree-mode))
+
+
 ;;----------------------------------------------------------------------------
 ;; Zap *up* to char is a handy pair for zap-to-char
 ;;----------------------------------------------------------------------------
@@ -370,8 +377,6 @@ ORIG is the advised function, which is called with its ARGS."
             '(lambda ()
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
-(when (maybe-require-package 'undo-tree)
-  (global-undo-tree-mode))
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
