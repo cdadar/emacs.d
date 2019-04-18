@@ -378,5 +378,7 @@ ORIG is the advised function, which is called with its ARGS."
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
 
+(require 'color-rg)
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here

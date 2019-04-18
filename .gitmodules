@@ -7,3 +7,6 @@
 [submodule "site-lisp/aweshell"]
 	path = site-lisp/aweshell
 	url = git@github.com:manateelazycat/aweshell.git
+[submodule "site-lisp/color-rg"]
+	path = site-lisp/color-rg
+	url = git@github.com:manateelazycat/color-rg.git
