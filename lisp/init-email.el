@@ -41,6 +41,8 @@
     ;; 1. growl         - Notifications using the `growl' program, requires `growlnotify' to be in PATH
     (mu4e-alert-set-default-style 'libnotify)
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
-    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)))
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+
+  (when (maybe-require-package 'mu4e-overview)))
 
 (provide 'init-email)
