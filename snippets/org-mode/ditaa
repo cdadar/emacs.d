@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: ditaa
+# key: ditaa
+# --
+
+#+BEGIN_SRC ditaa :file ${1:export-file-name} :cmdline -r -s 0.8
+${0}
+#+END_SRC
