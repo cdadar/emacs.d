@@ -5,8 +5,9 @@
 ;; -*- lexical-binding: t -*-
 
 (when (maybe-require-package 'elfeed)
+  (global-set-key (kbd "C-x w") 'elfeed)
   (after-load 'elfeed
-    (global-set-key (kbd "C-x w") 'elfeed)
+
     (define-key elfeed-search-mode-map "q" 'bjm/elfeed-save-db-and-bury)
     (after-load 'org
       (when (maybe-require-package 'elfeed-org)
