@@ -25,6 +25,10 @@
   (setq mu4e-get-mail-command "fetchmail -v || [ $? -eq 1 ]"
         mu4e-update-interval 300)
 
+  (when (maybe-require-package 'w3m)
+    (setq mu4e-html2text-command "w3m -dump -T text/html"))
+
+
   ;; sending mail
   (setq message-send-mail-function 'message-send-mail-with-sendmail
         sendmail-program "/usr/bin/msmtp")
