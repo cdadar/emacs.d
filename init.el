@@ -168,6 +168,7 @@
 (require 'init-aweshell)
 (require 'init-rpm)
 (require 'init-shell)
+(require 'init-deft)
 ;; Extra packages which don't require any configuration
 
 (maybe-require-package 'anki-editor)
