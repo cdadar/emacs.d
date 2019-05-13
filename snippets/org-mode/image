@@ -1,0 +1,7 @@
+# key: image
+# name: image
+# --
+#+attr_html: :width 500px
+#+attr_latex: :width 500px
+#+ATTR_ORG: :width 500
+[[$0]]

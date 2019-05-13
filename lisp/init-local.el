@@ -13,6 +13,7 @@
 
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 
+(setq deft-directory "~/org-mode/notes")
 
 ;; python
 ;; (setq python-shell-interpreter "python3")
