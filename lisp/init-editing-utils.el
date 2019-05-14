@@ -381,7 +381,9 @@ ORIG is the advised function, which is called with its ARGS."
 (require 'color-rg)
 
 (after-load 'color-rg
-  (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg))
+  (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg)
+  (define-key global-map (kbd "M-s M-o") 'color-rg-search-input-in-project)
+  (define-key global-map (kbd "M-s M-p") 'color-rg-search-symbol-in-project))
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
