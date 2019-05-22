@@ -169,6 +169,7 @@
 (require 'init-rpm)
 (require 'init-shell)
 (require 'init-deft)
+(require 'init-latex)
 ;; Extra packages which don't require any configuration
 
 (maybe-require-package 'anki-editor)
