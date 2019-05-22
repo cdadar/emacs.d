@@ -39,4 +39,12 @@
 (after-load 'elfeed-org
   (setq rmh-elfeed-org-files (list rmh-elfeed-org-file)))
 
+(custom-set-variables
+ '(markdown-command "pandoc")
+ '(delete-selection-mode t)
+ '(scroll-bar-mode nil))
+
+
+
+
 (provide 'init-local)
