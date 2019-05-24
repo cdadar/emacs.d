@@ -170,6 +170,7 @@
 (require 'init-shell)
 (require 'init-deft)
 (require 'init-latex)
+(require 'init-perl)
 ;; Extra packages which don't require any configuration
 
 (maybe-require-package 'anki-editor)
