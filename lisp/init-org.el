@@ -39,6 +39,8 @@
       org-fast-tag-selection-single-key 'expert
       org-html-validation-link nil
       org-export-kill-product-buffer-when-displayed t
+      org-enforce-todo-dependencies t
+      org-enforce-todo-checkbox-dependencies t
       org-image-actual-width '(400)
       org-tags-column 80)
 
