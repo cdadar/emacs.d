@@ -63,7 +63,7 @@
                    (when (file-exists-p editorconfig-config-path)
                      (setq editorconfig-exec-path editorconfig-config-path))))))
   (after-load 'diminish
-    (diminish editorconfig-mode)))
+    (diminish 'editorconfig-mode)))
 
 ;;; personal.el ends here
 
