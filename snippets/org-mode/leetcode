@@ -3,5 +3,10 @@
 # key: leetcode
 # --
 
+#+TITLE:${1:title}
+* ${1:$(yas/substr yas-text "[^\s]*")}
 ** 题目描述
+
+
+
 ** 题解
