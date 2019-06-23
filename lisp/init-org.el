@@ -137,13 +137,31 @@ typical word processor."
 (global-set-key (kbd "C-c c") 'org-capture)
 
 (setq org-capture-templates
-      `(("t" "todo" entry (file "")  ; "" => `org-default-notes-file'
-         "* TODO %?\n%U\n" :clock-resume t)
-        ("n" "note" entry (file "")
-         "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
-        ("j" "Journal" entry (file+datetree org-default-journal-file)
-         "* %?\nEntered on %U\n %i\n %a")
-        ))
+      '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Workspace")
+         "* TODO [#B] %?\n  %i\n %U"
+         :empty-lines 1)
+        ("n" "notes" entry (file+headline org-agenda-file-note "Quick notes")
+         "* %?\n  %i\n %U"
+         :empty-lines 1)
+        ("b" "Blog Ideas" entry (file+headline org-agenda-file-note "Blog Ideas")
+         "* TODO [#B] %?\n  %i\n %U"
+         :empty-lines 1)
+        ("s" "Code Snippet" entry
+         (file org-agenda-file-code-snippet)
+         "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
+        ("w" "work" entry (file+headline org-agenda-file-gtd "Work")
+         "* TODO [#A] %?\n  %i\n %U"
+         :empty-lines 1)
+        ("c" "Chrome" entry (file+headline org-agenda-file-note "Quick notes")
+         "* TODO [#C] %?\n %(zilongshanren/retrieve-chrome-current-tab-url)\n %i\n %U"
+         :empty-lines 1)
+        ("l" "links" entry (file+headline org-agenda-file-note "Quick notes")
+         "* TODO [#C] %?\n  %i\n %a \n %U"
+         :empty-lines 1)
+        ("j" "Journal Entry"
+         entry (file+datetree org-agenda-file-journal)
+         "* %?"
+         :empty-lines 1)))
 
 
 
@@ -401,6 +419,27 @@ typical word processor."
 ;;                 (save-excursion
 ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
 ;;                 (insert (match-string 0))))))
+
+
+
+
+;;An entry without a cookie is treated just like priority ' B '.
+;;So when create new task, they are default 重要且紧急
+(setq org-agenda-custom-commands
+      '(
+        ("w" . "任务安排")
+        ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
+        ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
+        ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
+        ("b" "Blog" tags-todo "BLOG")
+        ("p" . "项目安排")
+        ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
+        ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"chens\"")
+        ("W" "Weekly Review"
+         ((stuck "") ;; review stuck projects as designated by org-stuck-projects
+          (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
+          ))))
+
 
 
 (after-load 'org

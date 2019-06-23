@@ -1,7 +1,15 @@
 ;; org setting
-(setq org-default-notes-file "~/org-mode/capture.org"
-      org-default-journal-file "~/org-mode/journal.org"
-      org-directory "~/org-mode/")
+(setq org-directory "~/org-mode/")
+
+
+;; define the refile targets
+(setq org-agenda-file-note (expand-file-name "notes.org" org-directory))
+(setq org-agenda-file-gtd (expand-file-name "gtd.org" org-directory))
+(setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
+(setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
+(setq org-default-notes-file (expand-file-name "gtd.org" org-directory))
+(setq org-agenda-file-blogposts (expand-file-name "all-posts.org" org-directory))
+(setq org-agenda-files (list org-directory))
 
 ;; exec-path setting
 (setq exec-path-from-shell-arguments '("-i"))
