@@ -149,7 +149,7 @@ typical word processor."
         ("s" "Code Snippet" entry
          (file org-agenda-file-code-snippet)
          "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
-        ("w" "work" entry (file+headline org-agenda-file-gtd "Work")
+        ("w" "work" entry (file+headline org-agenda-file-work "Work")
          "* TODO [#A] %?\n  %i\n %U"
          :empty-lines 1)
         ("c" "Chrome" entry (file+headline org-agenda-file-note "Quick notes")

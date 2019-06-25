@@ -5,6 +5,7 @@
 ;; define the refile targets
 (setq org-agenda-file-note (expand-file-name "notes.org" org-directory))
 (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-directory))
+(setq org-agenda-file-work (expand-file-name "work.org" org-directory))
 (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
 (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
 (setq org-default-notes-file (expand-file-name "gtd.org" org-directory))
