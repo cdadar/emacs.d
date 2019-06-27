@@ -110,17 +110,14 @@
   (js2r-add-keybindings-with-prefix "C-c C-m"))
 
 (when (and (executable-find "prettier")
-           (maybe-require-package 'prettier-js))
-  (add-hook 'js2-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-  (add-hook 'web-mode-hook 'prettier-js-mode)
+           (maybe-require-package 'reformatter))
 
-  (after-load 'prettier-js
-    (setq prettier-js-args '(
-                             ;; "--trailing-comma" "all"
-                             ;; "--bracket-spacing" "false"
-                             "--no-semi" "false"
-                             ))))
+  (reformatter-define prettier-javascript
+    :program "prettier"
+    :args '("--parser=babylon"))
+
+  (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode))
 
 
 ;; (when (and (executable-find "tern")

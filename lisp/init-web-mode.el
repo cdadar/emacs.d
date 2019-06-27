@@ -84,6 +84,17 @@
              (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
      ))
 
+(when (and (executable-find "prettier")
+           (maybe-require-package 'reformatter))
+  (reformatter-define prettier-css
+    :program "prettier"
+    :args '("--parser=css"))
+  (reformatter-define prettier-html
+    :program "prettier"
+    :args '("--parser=html"))
+
+  (add-hook 'web-mode 'prettier-html-on-save-mode))
+
 (after-load 'web-mode
   (require 'instant-rename-tag))
 
