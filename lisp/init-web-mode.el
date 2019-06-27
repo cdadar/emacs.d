@@ -84,4 +84,7 @@
              (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
      ))
 
+(after-load 'web-mode
+  (require 'instant-rename-tag))
+
 (provide 'init-web-mode)
