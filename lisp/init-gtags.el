@@ -27,8 +27,8 @@
        )))
 
 (when (maybe-require-package 'gxref)
-  (after-load 'gxref)
-  '(progn
-     (add-to-list 'xref-backend-functions 'gxref-xref-backend)))
+  (after-load 'gxref
+    '(progn
+       (add-to-list 'xref-backend-functions 'gxref-xref-backend))))
 
 (provide 'init-gtags)
