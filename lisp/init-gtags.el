@@ -18,17 +18,15 @@
     ))
 
 (when (maybe-require-package 'ggtags)
+  (ggtags-mode)
+  (after-load 'diminish
+    (diminish 'ggtags-mode))
   (after-load 'ggtags
     '(progn
        (define-key ggtags-navigation-map (kbd "M-<") nil)
        (define-key ggtags-navigation-map (kbd "M->") nil)
-       ;; (global-set-key (kbd "M-.") 'ggtags-find-tag-dwim)
-       ;; (global-set-key (kbd "M-?") 'ggtags-grep)
-       )))
+       (add-hook 'xref-backend-functions #'ggtags--xref-backend nil t))))
 
-(when (maybe-require-package 'gxref)
-  (after-load 'gxref
-    '(progn
-       (add-to-list 'xref-backend-functions 'gxref-xref-backend))))
+
 
 (provide 'init-gtags)
