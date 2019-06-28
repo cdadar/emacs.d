@@ -17,14 +17,18 @@
     ;; (add-hook 'after-save-hook 'counsel-gtags-update-tags)
     ))
 
-;; (when (maybe-require-package 'ggtags)
-;;   (after-load 'ggtags
-;;     '(progn
-;;        (define-key ggtags-navigation-map (kbd "M-<") nil)
-;;        (define-key ggtags-navigation-map (kbd "M->") nil)))
-;;   (add-hook 'c-mode-common-hook
-;;             (lambda ()
-;;               (when (derived-mode-p 'php-mode 'c-mode 'c++-mode 'java-mode)
-;;                 (ggtags-mode 1)))))
+(when (maybe-require-package 'ggtags)
+  (after-load 'ggtags
+    '(progn
+       (define-key ggtags-navigation-map (kbd "M-<") nil)
+       (define-key ggtags-navigation-map (kbd "M->") nil)
+       ;; (global-set-key (kbd "M-.") 'ggtags-find-tag-dwim)
+       ;; (global-set-key (kbd "M-?") 'ggtags-grep)
+       )))
+
+(when (maybe-require-package 'gxref)
+  (after-load 'gxref)
+  '(progn
+     (add-to-list 'xref-backend-functions 'gxref-xref-backend)))
 
 (provide 'init-gtags)
