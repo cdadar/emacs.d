@@ -10,6 +10,8 @@
 
     (add-auto-mode 'go-mode "\\.go\\'")
 
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (setq gofmt-command "goimports")
     (add-hook 'go-mode-hook (lambda ()
                               (setq tab-width 4)
                               (exec-path-from-shell-copy-env "GOPATH")))
@@ -28,6 +30,12 @@
   ;;; Golang eldoc
   (when (maybe-require-package 'go-eldoc)
     (after-load 'go-eldoc
-      (add-hook 'go-mode-hook 'go-eldoc-setup))))
+      (add-hook 'go-mode-hook 'go-eldoc-setup)))
+
+
+  (when (maybe-require-package 'go-guru)
+    (after-load 'go-guru
+      (add-hook 'go-mode-hook 'go-guru-hl-identifier-mode)))
+  (maybe-require-package 'go-rename))
 
 (provide 'init-golang)
