@@ -18,7 +18,11 @@
     ))
 
 (when (maybe-require-package 'ggtags)
-  (ggtags-mode)
+  (ggtags-mode 1)
+  (add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode 'php-mode)
+              (ggtags-mode 1))))
   (after-load 'diminish
     (diminish 'ggtags-mode))
   (after-load 'ggtags
