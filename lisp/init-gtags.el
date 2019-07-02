@@ -39,7 +39,7 @@
        (define-key ggtags-mode-map (kbd "M-.") 'ggtags-find-tag-dwim)
        (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
        (define-key ggtags-mode-map (kbd "C-c <") 'ggtags-prev-mark)
-       (define-key ggtags-mode-map (kbd "C-c >") 'ggtags-next-mark)))
+       (define-key ggtags-mode-map (kbd "C-c >") 'ggtags-next-mark))))
 
 (when (maybe-require-package 'gxref)
   (add-to-list 'xref-backend-functions 'gxref-xref-backend))

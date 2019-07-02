@@ -53,3 +53,8 @@ emojis/
 .cache/
 /forge-database.sqlite
 /transient
+GPATH
+GRTAGS
+GTAGS
+tags
+TAGS
