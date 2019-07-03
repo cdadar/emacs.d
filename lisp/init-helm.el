@@ -49,6 +49,30 @@
                                  (cons (helm-basename c) c) c))
         :action (helm-actions-from-type-file)))
 
+    ;; MacOS use spotlight instead locate.
+    (defvar helm-source-system
+      (if *is-a-mac*
+          helm-source-mac-spotlight
+        helm-source-locate))
+
+    (defun helm-dwim ()
+      (interactive)
+      (let ((helm-ff-transformer-show-only-basename nil)
+            helm-source-list)
+        (unless helm-source-buffers-list
+          (setq helm-source-buffers-list
+                (helm-make-source "Buffers" 'helm-source-buffers)))
+        (setq helm-source-list
+              '(
+                helm-source-awesome-tab-group
+                helm-source-buffers-list
+                helm-source-recentf
+                helm-source-kill-ring
+                helm-source-system
+                helm-source-elisp-library
+                helm-source-yasnippet
+                ))
+        (helm-other-buffer helm-source-list "*helm search*")))
 
 
     (define-key helm-map (kbd "M-s-j") 'helm-next-source)
@@ -59,6 +83,7 @@
     (define-key helm-map (kbd "M-m") 'move-beginning-of-line)
 
 
+    (global-set-key (kbd "s-y") #'helm-dwim)
     (global-set-key (kbd "C-x C-f") #'helm-find-files)
     (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
     (global-set-key (kbd "C-c h") #'helm-mini)
