@@ -3,7 +3,6 @@
 ;;; Code:
 
 (require-package 'color-theme-sanityinc-solarized)
-(require-package 'solarized-theme)
 (require-package 'color-theme-sanityinc-tomorrow)
 
 ;; If you don't customize it, this is the theme you get.
@@ -23,17 +22,31 @@
 ;;------------------------------------------------------------------------------
 ;; Toggle between light and dark
 ;;------------------------------------------------------------------------------
+
 (defun light ()
-  "Activate a light color theme."
-  (interactive)
-  (setq custom-enabled-themes '(solarized-light))
-  (reapply-themes))
+    "Activate a light color theme."
+    (interactive)
+    (setq custom-enabled-themes '(sanityinc-solarized-light))
+    (reapply-themes))
 
 (defun dark ()
-  "Activate a dark color theme."
-  (interactive)
-  (setq custom-enabled-themes '(solarized-dark))
-  (reapply-themes))
+    "Activate a dark color theme."
+    (interactive)
+    (setq custom-enabled-themes '(sanityinc-solarized-dark))
+    (reapply-themes))
+
+(when (maybe-require-package 'solarized-theme)
+  (defun light ()
+    "Activate a light color theme."
+    (interactive)
+    (setq custom-enabled-themes '(solarized-light))
+    (reapply-themes))
+
+  (defun dark ()
+    "Activate a dark color theme."
+    (interactive)
+    (setq custom-enabled-themes '(solarized-dark))
+    (reapply-themes)))
 
 (defun day ()
   "Activate a light color theme."
