@@ -6,17 +6,8 @@
 (require-package 'color-theme-sanityinc-tomorrow)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(solarized-light))
+(setq-default custom-enabled-themes '(sanityinc-solarized-light))
 
-;; Ensure that themes will be applied even if they have not been customized
-(defun reapply-themes ()
-  "Forcibly load the themes listed in `custom-enabled-themes'."
-  (dolist (theme custom-enabled-themes)
-    (unless (custom-theme-p theme)
-      (load-theme theme)))
-  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
-
-(add-hook 'after-init-hook 'reapply-themes)
 
 
 ;;------------------------------------------------------------------------------
@@ -24,10 +15,10 @@
 ;;------------------------------------------------------------------------------
 
 (defun light ()
-    "Activate a light color theme."
-    (interactive)
-    (setq custom-enabled-themes '(sanityinc-solarized-light))
-    (reapply-themes))
+  "Activate a light color theme."
+  (interactive)
+  (setq custom-enabled-themes '(sanityinc-solarized-light))
+  (reapply-themes))
 
 (defun dark ()
     "Activate a dark color theme."
@@ -36,6 +27,7 @@
     (reapply-themes))
 
 (when (maybe-require-package 'solarized-theme)
+  (setq-default custom-enabled-themes '(solarized-light))
   (defun light ()
     "Activate a light color theme."
     (interactive)
@@ -59,6 +51,16 @@
   (interactive)
   (setq custom-enabled-themes '(sanityinc-tomorrow-night))
   (reapply-themes))
+
+;; Ensure that themes will be applied even if they have not been customized
+(defun reapply-themes ()
+  "Forcibly load the themes listed in `custom-enabled-themes'."
+  (dolist (theme custom-enabled-themes)
+    (unless (custom-theme-p theme)
+      (load-theme theme)))
+  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+
+(add-hook 'after-init-hook 'reapply-themes)
 
 
 (when (maybe-require-package 'dimmer)
