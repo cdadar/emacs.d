@@ -96,7 +96,9 @@
     (global-set-key (kbd "C-x C-f") #'helm-find-files)
     (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
     (global-set-key (kbd "C-c h") #'helm-mini)
-
+    (global-set-key (kbd "M-s /") #'helm-occur)
+    (global-set-key (kbd "M-s '") #'helm-imenu)
+    
     (when (maybe-require-package 'projectile)
       (when (maybe-require-package 'helm-projectile)
         (helm-projectile-on)))
