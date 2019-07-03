@@ -1,4 +1,4 @@
-;;; init-ivy.el --- Use ivy for completion and more -*- lexical-binding: t -*-
+;;; init-helm.el --- Use helm for completion and more -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
