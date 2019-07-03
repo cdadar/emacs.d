@@ -10,7 +10,12 @@
   (after-load 'helm
 
     (require 'helm-config)
-
+    (require 'helm-buffers)
+    (require 'helm-c-yasnippet)
+    (require 'helm-for-files)
+    (require 'helm-x-files)
+    (require 'helm-ring)
+    
     (setq helm-buffer-max-length 60) ; make filename has enough width to display full name
 
     (when (executable-find "curl")
@@ -49,6 +54,8 @@
                                  (cons (helm-basename c) c) c))
         :action (helm-actions-from-type-file)))
 
+
+
     ;; MacOS use spotlight instead locate.
     (defvar helm-source-system
       (if *is-a-mac*
@@ -64,14 +71,13 @@
                 (helm-make-source "Buffers" 'helm-source-buffers)))
         (setq helm-source-list
               '(
-                helm-source-awesome-tab-group
-                helm-source-buffers-list
-                helm-source-recentf
-                helm-source-kill-ring
-                helm-source-system
-                helm-source-elisp-library
-                helm-source-yasnippet
-                ))
+		helm-source-buffers-list
+		helm-source-recentf
+		helm-source-kill-ring
+		helm-source-system
+		helm-source-elisp-library
+		helm-source-yasnippet
+		))
         (helm-other-buffer helm-source-list "*helm search*")))
 
 
@@ -83,7 +89,7 @@
     (define-key helm-map (kbd "M-m") 'move-beginning-of-line)
 
 
-    (global-set-key (kbd "s-y") #'helm-dwim)
+    (global-set-key (kbd "C-c o") #'helm-dwim)
     (global-set-key (kbd "C-x C-f") #'helm-find-files)
     (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
     (global-set-key (kbd "C-c h") #'helm-mini)
