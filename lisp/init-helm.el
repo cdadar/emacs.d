@@ -131,7 +131,6 @@
     (require 'helm-c-yasnippet)
     (require 'helm-files)
     (require 'helm-x-files)
-    (require-package 'helm-ls-git)
     (require 'helm-ring)
 
 ;;; Code:
@@ -161,7 +160,7 @@
 
     ;; MacOS use spotlight instead locate.
     (defvar helm-source-system
-      (if (featurep 'cocoa)
+      (if *is-a-mac*
           helm-source-mac-spotlight
         helm-source-locate))
 
@@ -172,13 +171,9 @@
         (unless helm-source-buffers-list
           (setq helm-source-buffers-list
                 (helm-make-source "Buffers" 'helm-source-buffers)))
-        (unless helm-source-ls-git
-          (setq helm-source-ls-git
-                (helm-ls-git-build-ls-git-source)))
         (setq helm-source-list
               '(
                 helm-source-buffers-list
-                helm-source-ls-git
                 helm-source-recentf
                 helm-source-kill-ring
                 helm-source-system
