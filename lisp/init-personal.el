@@ -14,8 +14,8 @@
 ;; (setq evil-default-cursor "#ffffff")
 ;; (set-cursor-color "#ffffff")
 
-(setq default-frame-alist
-      '((cursor-color . "#ffffff")))
+;; (setq default-frame-alist
+;;       '((cursor-color . "#ffffff")))
 
 ;; (add-hook 'after-init-hook
 ;;           (lambda ()
