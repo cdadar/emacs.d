@@ -34,6 +34,18 @@
   (setq custom-enabled-themes '(sanityinc-solarized-dark))
   (reapply-themes))
 
+(defun day ()
+  "Activate a light color theme."
+  (interactive)
+  (setq custom-enabled-themes '(sanityinc-tomorrow-day))
+  (reapply-themes))
+
+(defun night ()
+  "Activate a dark color theme."
+  (interactive)
+  (setq custom-enabled-themes '(sanityinc-tomorrow-night))
+  (reapply-themes))
+
 
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
