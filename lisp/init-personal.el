@@ -152,6 +152,8 @@
     '(progn
        (diminish 'dumb-jump)
        (after-load 'ivy
+         (setq dumb-jump-selector 'ivy))
+       (after-load 'helm
          (setq dumb-jump-selector 'helm))
        (cond
         ((executable-find "pt") (setq dumb-jump-force-searcher 'pt))

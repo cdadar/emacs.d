@@ -8,7 +8,7 @@
 
 
 (when (maybe-require-package 'ggtags)
-  (ggtags-mode 1)
+  (add-hook 'after-init-hook #'ggtags-mode)
   (add-hook 'c-mode-common-hook
             (lambda ()
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode 'php-mode)
