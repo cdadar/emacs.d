@@ -122,77 +122,44 @@
 ;;  helm-map)
 
 
-(when (maybe-require-package 'helm)
-  (after-load 'helm
+(after-load 'helm
 
-    ;;; Require
-    (require 'helm)
-    (require 'helm-buffers)
-    (require 'helm-c-yasnippet)
-    (require 'helm-files)
-    (require 'helm-x-files)
-    (require 'helm-ring)
+  (require 'helm-config)
 
-;;; Code:
+  (setq helm-buffer-max-length 60) ; make filename has enough width to display full name
 
-    (setq helm-buffer-max-length 60) ; make filename has enough width to display full name
+  (defvar helm-source-elisp-library
+    (helm-build-in-buffer-source  "Elisp libraries (Scan)"
+      :data #'helm-locate-library-scan-list
+      :fuzzy-match helm-locate-library-fuzzy-match
+      :keymap helm-generic-files-map
+      :search (unless helm-locate-library-fuzzy-match
+                (lambda (regexp)
+                  (re-search-forward
+                   (if helm-ff-transformer-show-only-basename
+                       (replace-regexp-in-string
+                        "\\`\\^" "" regexp)
+                     regexp)
+                   nil t)))
+      :match-part (lambda (candidate)
+                    (if helm-ff-transformer-show-only-basename
+                        (helm-basename candidate) candidate))
+      :filter-one-by-one (lambda (c)
+                           (if helm-ff-transformer-show-only-basename
+                               (cons (helm-basename c) c) c))
+      :action (helm-actions-from-type-file)))
 
-    (defvar helm-source-elisp-library
-      (helm-build-in-buffer-source  "Elisp libraries (Scan)"
-        :data #'helm-locate-library-scan-list
-        :fuzzy-match helm-locate-library-fuzzy-match
-        :keymap helm-generic-files-map
-        :search (unless helm-locate-library-fuzzy-match
-                  (lambda (regexp)
-                    (re-search-forward
-                     (if helm-ff-transformer-show-only-basename
-                         (replace-regexp-in-string
-                          "\\`\\^" "" regexp)
-                       regexp)
-                     nil t)))
-        :match-part (lambda (candidate)
-                      (if helm-ff-transformer-show-only-basename
-                          (helm-basename candidate) candidate))
-        :filter-one-by-one (lambda (c)
-                             (if helm-ff-transformer-show-only-basename
-                                 (cons (helm-basename c) c) c))
-        :action (helm-actions-from-type-file)))
-
-    ;; MacOS use spotlight instead locate.
-    (defvar helm-source-system
-      (if *is-a-mac*
-          helm-source-mac-spotlight
-        helm-source-locate))
-
-    (defun helm-dwim ()
-      (interactive)
-      (let ((helm-ff-transformer-show-only-basename nil)
-            helm-source-list)
-        (unless helm-source-buffers-list
-          (setq helm-source-buffers-list
-                (helm-make-source "Buffers" 'helm-source-buffers)))
-        (setq helm-source-list
-              '(
-                helm-source-buffers-list
-                helm-source-recentf
-                helm-source-kill-ring
-                helm-source-system
-                helm-source-elisp-library
-                helm-source-yasnippet
-                ))
-        (helm-other-buffer helm-source-list "*helm search*")))
-
-    (define-key helm-map (kbd "M-s-j") 'helm-next-source)
-    (define-key helm-map (kbd "M-s-k") 'helm-previous-source)
-    (define-key helm-map (kbd "M->") 'helm-scroll-other-window-down)
-    (define-key helm-map (kbd "M-<") 'helm-scroll-other-window)
-    (define-key helm-map (kbd "M-o") 'backward-delete-char-untabify)
-    (define-key helm-map (kbd "M-m") 'move-beginning-of-line)
-    (global-set-key (kbd "s-y") 'helm-dwim))
+  (define-key helm-map (kbd "M-s-j") 'helm-next-source)
+  (define-key helm-map (kbd "M-s-k") 'helm-previous-source)
+  (define-key helm-map (kbd "M->") 'helm-scroll-other-window-down)
+  (define-key helm-map (kbd "M-<") 'helm-scroll-other-window)
+  (define-key helm-map (kbd "M-o") 'backward-delete-char-untabify)
+  (define-key helm-map (kbd "M-m") 'move-beginning-of-line)
 
 
   (global-set-key (kbd "C-x C-f") #'helm-find-files)
-
+  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+  (global-set-key (kbd "C-c h") #'helm-mini)
 
   (when (maybe-require-package 'projectile)
     (when (maybe-require-package 'helm-projectile)
