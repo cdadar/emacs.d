@@ -7,6 +7,8 @@
 
 (when (maybe-require-package 'helm)
   (helm-mode 1)
+  (after-load 'diminish
+    (diminish 'helm-mode))
   (after-load 'helm
 
     (require 'helm-config)
@@ -17,6 +19,10 @@
     (require 'helm-ring)
     
     (setq helm-buffer-max-length 60) ; make filename has enough width to display full name
+
+    (setq helm-autoresize-max-height 0)
+    (setq helm-autoresize-min-height 30)
+    (helm-autoresize-mode 1)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
@@ -29,9 +35,6 @@
           helm-echo-input-in-header-line t)
 
 
-    (setq helm-autoresize-max-height 0)
-    (setq helm-autoresize-min-height 20)
-    (helm-autoresize-mode 1)
 
     (defvar helm-source-elisp-library
       (helm-build-in-buffer-source  "Elisp libraries (Scan)"
