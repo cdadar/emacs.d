@@ -13,11 +13,11 @@
 
     (require 'helm-config)
     (require 'helm-buffers)
+    (require-package 'helm-c-yasnippet)
+    (require-package 'helm-ls-git)
     (require 'helm-for-files)
     (require 'helm-x-files)
     (require 'helm-ring)
-    (require-package 'helm-c-yasnippet)
-    (require-package 'helm-ls-git)
     
     (setq helm-buffer-max-length 60) ; make filename has enough width to display full name
 
