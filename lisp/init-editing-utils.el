@@ -378,6 +378,9 @@ ORIG is the advised function, which is called with its ARGS."
             '(lambda ()
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
+(require-package 'sudo-edit)
+(after-load 'sudo-edit
+  (global-set-key (kbd "C-c C-r") 'sudo-edit))
 
 (require 'color-rg)
 
