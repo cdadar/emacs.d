@@ -18,24 +18,25 @@
     (add-hook 'go-mode-hook 'subword-mode)
 
     (add-hook 'go-mode-hook
-              (lambda () (setq-default tab-width 2))))
+              (lambda () (setq-default tab-width 2)))
+
+    ;;; Company-go
+    (when (maybe-require-package 'company-go)
+      (after-load 'company
+        (add-hook 'go-mode-hook
+                  (push 'company-go company-backends))))
+
+    ;;; Golang eldoc
+    (when (maybe-require-package 'go-eldoc)
+      (after-load 'go-eldoc
+        (add-hook 'go-mode-hook 'go-eldoc-setup)))
 
 
-  ;;; Company-go
-  (when (maybe-require-package 'company-go)
-    (after-load 'company
-      (add-hook 'go-mode-hook
-                (push 'company-go company-backends))))
-
-  ;;; Golang eldoc
-  (when (maybe-require-package 'go-eldoc)
-    (after-load 'go-eldoc
-      (add-hook 'go-mode-hook 'go-eldoc-setup)))
+    (when (maybe-require-package 'go-guru)
+      (after-load 'go-guru
+        (add-hook 'go-mode-hook 'go-guru-hl-identifier-mode)))
+    (maybe-require-package 'go-rename)))
 
 
-  (when (maybe-require-package 'go-guru)
-    (after-load 'go-guru
-      (add-hook 'go-mode-hook 'go-guru-hl-identifier-mode)))
-  (maybe-require-package 'go-rename))
 
 (provide 'init-golang)
