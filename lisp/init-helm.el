@@ -10,11 +10,13 @@
   (after-load 'diminish
     (diminish 'helm-mode))
   (after-load 'helm
+    (require-package 'helm-ls-git)
+    (require-package 'helm-c-yasnippet)
 
     (require 'helm-config)
     (require 'helm-buffers)
-    (require-package 'helm-c-yasnippet)
-    (require-package 'helm-ls-git)
+    (require 'helm-ls-git)
+    (require 'helm-c-yasnippet)
     (require 'helm-for-files)
     (require 'helm-x-files)
     (require 'helm-ring)
@@ -73,9 +75,13 @@
         (unless helm-source-buffers-list
           (setq helm-source-buffers-list
                 (helm-make-source "Buffers" 'helm-source-buffers)))
+        (unless helm-source-ls-git
+          (setq helm-source-ls-git
+                (helm-ls-git-build-ls-git-source)))
         (setq helm-source-list
               '(
 		helm-source-buffers-list
+                helm-source-ls-git
 		helm-source-recentf
 		helm-source-kill-ring
 		helm-source-system
