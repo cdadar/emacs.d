@@ -93,7 +93,7 @@
     :program "prettier"
     :args '("--parser=html"))
 
-  (add-hook 'web-mode 'prettier-html-on-save-mode))
+  (add-hook 'web-mode-hook 'prettier-html-on-save-mode))
 
 (after-load 'web-mode
   (require 'instant-rename-tag))
