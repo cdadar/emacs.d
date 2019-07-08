@@ -9,19 +9,16 @@
     (setq indent-tabs-mode nil)
     (setq c-basic-offset 2)
     (setq php-template-compatibility nil)
-    (subword-mode 1))
+    (subword-mode 1)
 
+    (maybe-require-package 'geben)
 
-  (maybe-require-package 'geben)
+    (when (maybe-require-package 'company-php)
+      (after-load 'company
+        (push 'company-ac-php-backend company-backends)))
 
-
-
-  (when (maybe-require-package 'php-refactor-mode)
-    (add-hook 'php-mode-hook 'php-refactor-mode))
-
-  (when (maybe-require-package 'company-php)
-    (after-load 'company
-      (push 'company-ac-php-backend company-backends))))
+    (when (maybe-require-package 'php-refactor-mode)
+      (add-hook 'php-mode-hook 'php-refactor-mode))))
 
 
 
