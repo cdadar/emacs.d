@@ -18,7 +18,7 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (require 'init-benchmarking) ;; Measure startup time
 
-(defconst *spell-check-support-enabled* t) ;; Enable with t if you prefer
+(defconst *spell-check-support-enabled* nil) ;; Enable with t if you prefer
 (defconst *is-a-mac* (eq system-type 'darwin))
 (setq *win64* (eq system-type 'windows-nt) )
 (setq *cygwin* (eq system-type 'cygwin) )
