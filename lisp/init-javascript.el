@@ -41,6 +41,11 @@
 
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
+  (when (maybe-require-package 'ac-js2)
+    (after-load 'company
+      (push 'ac-js2-company company-backends)))
+
+
   (js2-imenu-extras-setup))
 
 (setq-default js-indent-level 2)
@@ -118,6 +123,7 @@
 
   (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
   (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode))
+
 
 
 ;; (when (and (executable-find "tern")
