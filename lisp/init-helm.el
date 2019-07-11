@@ -93,8 +93,6 @@
 
     (define-key helm-map (kbd "M-s-j") 'helm-next-source)
     (define-key helm-map (kbd "M-s-k") 'helm-previous-source)
-    (define-key helm-map (kbd "M->") 'helm-scroll-other-window-down)
-    (define-key helm-map (kbd "M-<") 'helm-scroll-other-window)
     (define-key helm-map (kbd "M-o") 'backward-delete-char-untabify)
     (define-key helm-map (kbd "M-m") 'move-beginning-of-line)
 
