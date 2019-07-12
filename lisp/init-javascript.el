@@ -23,6 +23,11 @@
     (define-key rjsx-mode-map (kbd "C-d") nil)
     (define-key rjsx-mode-map ">" nil)))
 
+
+(when (maybe-require-package 'vue-mode)
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+  (after-load 'vue-mode))
+
 ;; js2-mode
 
 ;; Change some defaults: customize them to override
