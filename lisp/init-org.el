@@ -428,6 +428,7 @@ typical word processor."
         ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
         ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
         ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
+        ("wn" "未安排的任务" tags-todo "+PRIORITY=\"\"")
         ("b" "Blog" tags-todo "BLOG")
         ("p" . "项目安排")
         ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
