@@ -13,8 +13,8 @@
             (lambda ()
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode 'php-mode)
                 (ggtags-mode 1))))
-  (after-load 'diminish
-    (diminish 'ggtags-mode))
+  ;; (after-load 'diminish
+  ;;   (diminish 'ggtags-mode))
   (after-load 'ggtags
     '(progn
        (define-key ggtags-navigation-map (kbd "M-<") nil)

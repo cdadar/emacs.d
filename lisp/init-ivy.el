@@ -27,8 +27,9 @@
 
     (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
 
-    (when (maybe-require-package 'diminish)
-      (diminish 'ivy-mode)))
+    ;; (when (maybe-require-package 'diminish)
+    ;;   (diminish 'ivy-mode))
+    )
 
   (defun sanityinc/enable-ivy-flx-matching ()
     "Make `ivy' matching work more like IDO."
@@ -40,9 +41,9 @@
 (when (maybe-require-package 'counsel)
   (setq-default counsel-mode-override-describe-bindings t)
 
-  (when (maybe-require-package 'diminish)
-    (after-load 'counsel
-      (diminish 'counsel-mode)))
+  ;; (when (maybe-require-package 'diminish)
+  ;;   (after-load 'counsel
+  ;;     (diminish 'counsel-mode)))
   (add-hook 'after-init-hook 'counsel-mode)
 
   (when (maybe-require-package 'projectile)

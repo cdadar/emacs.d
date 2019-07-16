@@ -13,7 +13,7 @@
   (after-load 'company
     (dolist (backend '(company-eclim company-semantic))
       (delq backend company-backends))
-    (diminish 'company-mode)
+    ;; (diminish 'company-mode)
     (define-key company-mode-map (kbd "M-/") 'company-complete)
     (define-key company-active-map (kbd "M-/") 'company-other-backend)
     (define-key company-active-map (kbd "C-n") 'company-select-next)

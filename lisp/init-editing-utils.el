@@ -36,8 +36,8 @@
 (add-hook 'after-init-hook 'global-auto-revert-mode)
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
-(after-load 'autorevert
-  (diminish 'auto-revert-mode))
+;; (after-load 'autorevert
+;;   (diminish 'auto-revert-mode))
 
 (add-hook 'after-init-hook 'transient-mark-mode)
 
@@ -82,8 +82,8 @@
 
 
 
-(after-load 'subword
-  (diminish 'subword-mode))
+;; (after-load 'subword
+;;   (diminish 'subword-mode))
 
 
 
@@ -114,7 +114,7 @@
   (dolist (hook '(prog-mode-hook html-mode-hook yaml-mode-hook conf-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
   (after-load 'symbol-overlay
-    (diminish 'symbol-overlay-mode)
+    ;; (diminish 'symbol-overlay-mode)
     (define-key symbol-overlay-mode-map (kbd "M-i") 'symbol-overlay-put)
     (define-key symbol-overlay-mode-map (kbd "M-I") 'symbol-overlay-remove-all)
     (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
@@ -123,8 +123,8 @@
 
 (require-package 'undo-tree)
 (add-hook 'after-init-hook 'global-undo-tree-mode)
-(after-load 'undo-tree
-  (diminish 'undo-tree-mode))
+;; (after-load 'undo-tree
+;;   (diminish 'undo-tree-mode))
 
 
 ;;----------------------------------------------------------------------------
@@ -221,8 +221,9 @@
 ;;----------------------------------------------------------------------------
 (when (maybe-require-package 'page-break-lines)
   (add-hook 'after-init-hook 'global-page-break-lines-mode)
-  (after-load 'page-break-lines
-    (diminish 'page-break-lines-mode)))
+  ;; (after-load 'page-break-lines
+  ;;   (diminish 'page-break-lines-mode))
+  )
 
 ;;----------------------------------------------------------------------------
 ;; Shift lines up and down with M-up and M-down. When paredit is enabled,
@@ -258,8 +259,8 @@
 ;;----------------------------------------------------------------------------
 (require-package 'whole-line-or-region)
 (add-hook 'after-init-hook 'whole-line-or-region-global-mode)
-(after-load 'whole-line-or-region
-  (diminish 'whole-line-or-region-local-mode))
+;; (after-load 'whole-line-or-region
+;;   (diminish 'whole-line-or-region-local-mode))
 
 
 ;; Some local minor modes clash with CUA rectangle selection
@@ -343,8 +344,8 @@ With arg N, insert N newlines."
 (require-package 'guide-key)
 (setq guide-key/guide-key-sequence t)
 (add-hook 'after-init-hook 'guide-key-mode)
-(after-load 'guide-key
-  (diminish 'guide-key-mode))
+;; (after-load 'guide-key
+;;   (diminish 'guide-key-mode))
 
 
 (defun sanityinc/disable-features-during-macro-call (orig &rest args)

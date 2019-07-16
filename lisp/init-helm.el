@@ -7,8 +7,8 @@
 
 (when (maybe-require-package 'helm)
   (helm-mode 1)
-  (after-load 'diminish
-    (diminish 'helm-mode))
+  ;; (after-load 'diminish
+  ;;   (diminish 'helm-mode))
   (after-load 'helm
     (require-package 'helm-ls-git)
     (require-package 'helm-c-yasnippet)
@@ -41,24 +41,24 @@
 
     (defvar helm-source-elisp-library
       (helm-build-in-buffer-source  "Elisp libraries (Scan)"
-        :data #'helm-locate-library-scan-list
-        :fuzzy-match helm-locate-library-fuzzy-match
-        :keymap helm-generic-files-map
-        :search (unless helm-locate-library-fuzzy-match
-                  (lambda (regexp)
-                    (re-search-forward
-                     (if helm-ff-transformer-show-only-basename
-                         (replace-regexp-in-string
-                          "\\`\\^" "" regexp)
-                       regexp)
-                     nil t)))
-        :match-part (lambda (candidate)
-                      (if helm-ff-transformer-show-only-basename
-                          (helm-basename candidate) candidate))
-        :filter-one-by-one (lambda (c)
-                             (if helm-ff-transformer-show-only-basename
-                                 (cons (helm-basename c) c) c))
-        :action (helm-actions-from-type-file)))
+                                    :data #'helm-locate-library-scan-list
+                                    :fuzzy-match helm-locate-library-fuzzy-match
+                                    :keymap helm-generic-files-map
+                                    :search (unless helm-locate-library-fuzzy-match
+                                              (lambda (regexp)
+                                                (re-search-forward
+                                                 (if helm-ff-transformer-show-only-basename
+                                                     (replace-regexp-in-string
+                                                      "\\`\\^" "" regexp)
+                                                   regexp)
+                                                 nil t)))
+                                    :match-part (lambda (candidate)
+                                                  (if helm-ff-transformer-show-only-basename
+                                                      (helm-basename candidate) candidate))
+                                    :filter-one-by-one (lambda (c)
+                                                         (if helm-ff-transformer-show-only-basename
+                                                             (cons (helm-basename c) c) c))
+                                    :action (helm-actions-from-type-file)))
 
 
 
