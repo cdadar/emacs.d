@@ -70,6 +70,14 @@
   (after-load 'dimmer
     (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))))
 
+;; (when (maybe-require-package 'smart-mode-line)
+;;   (setq sml/hidden-modes nil)
+;;   (sml/setup))
+
+(when (maybe-require-package 'minions)
+  (minions-mode 1)
+  (after-load 'minions-mode
+    (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu)))
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
