@@ -6,4 +6,6 @@
 
 (require 'aweshell)
 
+;; (global-set-key (kbd "<f12>") #'aweshell-dedicated-toggle)
+
 (provide 'init-aweshell)
