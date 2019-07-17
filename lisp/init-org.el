@@ -28,6 +28,7 @@
 
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
+(define-key global-map (kbd "C-c C-x C-j") 'org-clock-goto)
 
 ;; Various preferences
 (setq org-log-done t
