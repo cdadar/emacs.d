@@ -374,7 +374,7 @@ typical word processor."
 (require-package 'org-pomodoro)
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 (after-load 'org-agenda
-  (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro)
+  (define-key org-agenda-mode-map (kbd "M-p") 'org-pomodoro)
   (define-key org-mode-map (kbd "M-p") 'org-pomodoro)
 
   (defun notify-send (title message)
