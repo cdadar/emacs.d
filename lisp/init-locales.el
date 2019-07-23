@@ -16,7 +16,7 @@
 (when (or window-system (sanityinc/locale-is-utf8-p))
   (set-language-environment 'utf-8)
   (setq locale-coding-system 'utf-8)
-  (set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16-le 'utf-8))
+  (set-selection-coding-system (if *win64* 'utf-16-le 'utf-8))
   (prefer-coding-system 'utf-8))
 
 (provide 'init-locales)

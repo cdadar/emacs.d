@@ -180,7 +180,7 @@
 (require-package 'dsvn)
 (when *is-a-mac*
   (require-package 'osx-location))
-(unless (eq system-type 'windows-nt)
+(unless *win64*
   (maybe-require-package 'daemons))
 (maybe-require-package 'dotenv-mode)
 
