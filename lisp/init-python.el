@@ -18,7 +18,7 @@
   (when (maybe-require-package 'company-anaconda)
     (after-load 'company
       (after-load 'python
-        (push 'company-anaconda company-backends)))))
+        (add-to-list 'company-backends 'company-anaconda)))))
 
 (after-load 'python
 

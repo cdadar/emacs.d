@@ -48,7 +48,7 @@
 
   (when (maybe-require-package 'ac-js2)
     (after-load 'company
-      (push 'ac-js2-company company-backends)))
+      (add-to-list 'company-backends 'ac-js2-company)))
 
 
   (js2-imenu-extras-setup))
@@ -141,7 +141,7 @@
 ;;     (define-key tern-mode-keymap (kbd "M-.") nil)
 ;;     (define-key tern-mode-keymap (kbd "M-,") nil)
 ;;     (when (maybe-require-package 'company-tern)
-;;       (push 'company-tern company-backends))))
+;;       (add-to-list 'company-backends 'company-tern))))
 
 
 

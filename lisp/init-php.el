@@ -15,7 +15,7 @@
 
     (when (maybe-require-package 'company-php)
       (after-load 'company
-        (push 'company-ac-php-backend company-backends)))
+        (add-to-list 'company-backends 'company-ac-php-backend)))
 
     (when (maybe-require-package 'php-refactor-mode)
       (add-hook 'php-mode-hook 'php-refactor-mode))))

@@ -46,19 +46,19 @@
       (when (maybe-require-package 'company-auctex)
         (after-load 'company
           (after-load 'LaTeX
-            (push 'company-auctex company-backends))))
+            (add-to-list 'company-backends 'company-auctex))))
       (when (maybe-require-package 'company-bibtex)
         (after-load 'company
           (after-load 'LaTeX
-            (push 'company-bibtex company-backends))))
+            (add-to-list 'company-backends 'company-bibtex))))
       (when (maybe-require-package 'company-reftex)
         (after-load 'company
           (after-load 'LaTeX
-            (push 'company-reftex company-backends))))
+            (add-to-list 'company-backends 'company-reftex))))
       (when (maybe-require-package 'company-math)
         (after-load 'company
           (after-load 'LaTeX
-            (push 'company-math company-backends)))))
+            (add-to-list 'company-backends 'company-math)))))
 
 ;;; Bibretrieve
     (setq bibretrieve-backends '(("msn" . 10) ("arxiv" . 5) ("zbm" . 5)))))

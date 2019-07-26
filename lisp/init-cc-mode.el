@@ -33,13 +33,13 @@ Includes support for Qt code (signal, slots and alikes)."
 
 
         (when (maybe-require-package 'company-c-headers)
-          (push #'company-c-headers company-backends)
+          (add-to-list 'company-backends #'company-c-headers)
 
           ;;  gcc -xc++ -E -v - 获取头文件路径
           (setq  company-c-headers-path-system '("." "/usr/include/"
                                                  "/usr/local/include/")))
         ;;company-clang
-        (push #'company-clang company-backends)
+        (add-to-list 'company-backends #'company-clang)
 
         ;; qt keywords and stuff ...
         ;; set up indenting correctly for new qt kewords

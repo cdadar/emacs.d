@@ -7,7 +7,7 @@
 (add-hook 'after-init-hook #'global-emojify-mode)
 (after-load 'emojify-mode
   (when (maybe-require-package 'company-emoji)
-    (push 'company-emoji company-backends)))
+    (add-to-list 'company-backends 'company-emoji)))
 
 
 (provide 'init-emojify)

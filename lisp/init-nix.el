@@ -17,7 +17,7 @@
               (let ((file-name (buffer-file-name (current-buffer))))
                 (and file-name (equal "nix" (file-name-extension file-name)))))))
 
-      (push  'company-nixos-options company-backends))))
+      (add-to-list 'company-backends  'company-nixos-options))))
 
 
 

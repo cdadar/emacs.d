@@ -24,7 +24,7 @@
     (when (maybe-require-package 'company-go)
       (after-load 'company
         (add-hook 'go-mode-hook
-                  (push 'company-go company-backends))))
+                  (add-to-list 'company-backends 'company-go))))
 
     ;;; Golang eldoc
     (when (maybe-require-package 'go-eldoc)

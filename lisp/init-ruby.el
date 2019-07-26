@@ -52,7 +52,7 @@
     (add-hook 'ruby-mode-hook 'robe-mode))
   (after-load 'robe
     (after-load 'company
-      (push 'company-robe company-backends))))
+      (add-to-list 'company-backends 'company-robe))))
 
 
 
