@@ -32,7 +32,6 @@
 
 ;; Various preferences
 (setq org-log-done t
-      org-startup-indented t
       org-edit-timestamp-down-means-later t
       org-hide-emphasis-markers t
       org-catch-invisible-edits 'show
