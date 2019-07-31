@@ -11,6 +11,10 @@
 (when (maybe-require-package 'company)
   (add-hook 'after-init-hook 'global-company-mode)
   (after-load 'company
+    ;; @see https://github.com/company-mode/company-mode/issues/348
+    (when (maybe-require-package 'company-statistics)
+      (company-statistics-mode))
+
     (dolist (backend '(company-eclim company-semantic))
       (delq backend company-backends))
     ;; (diminish 'company-mode)
@@ -18,10 +22,30 @@
     (define-key company-active-map (kbd "M-/") 'company-other-backend)
     (define-key company-active-map (kbd "C-n") 'company-select-next)
     (define-key company-active-map (kbd "C-p") 'company-select-previous)
-    (setq-default company-dabbrev-other-buffers 'all
-                  company-dabbrev-downcase nil
+
+    ;; can't work with TRAMP
+    (setq company-backends (delete 'company-ropemacs company-backends))
+
+    ;; I don't like the downcase word in company-dabbrev!
+    (setq-default company-dabbrev-downcase nil
+                  company-dabbrev-other-buffers 'all
+                  ;; make previous/next selection in the popup cycles
+                  company-selection-wrap-around t
+                  ;; Some languages use camel case naming convention,
+                  ;; so company should be case sensitive.
+                  company-dabbrev-ignore-case nil
+                  ;; press M-number to choose candidate
+                  company-show-numbers t
+                  company-idle-delay 0.2
+                  company-clang-insert-arguments nil
+                  company-require-match nil
+                  company-etags-ignore-case t
+                  ;; @see https://github.com/company-mode/company-mode/issues/146
                   company-tooltip-align-annotations t))
+
+
   (global-set-key (kbd "M-C-/") 'company-complete)
+
   (when (maybe-require-package 'company-quickhelp)
     (add-hook 'after-init-hook 'company-quickhelp-mode))
 
@@ -48,6 +72,30 @@
     (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable)))
 
 
+(after-load 'company-etags
+  '(progn
+     ;; insert major-mode not inherited from prog-mode
+     ;; to make company-etags work
+     (defadvice company-etags--candidates (around company-etags--candidates-hack activate)
+       (let* ((prefix (car (ad-get-args 0)))
+              (tags-table-list (company-etags-buffer-table))
+              (tags-file-name tags-file-name)
+              (completion-ignore-case company-etags-ignore-case))
+         (and (or tags-file-name tags-table-list)
+              (fboundp 'tags-completion-table)
+              (save-excursion
+                (unless (and company-etags-timer
+                             tags-completion-table
+                             (> (length tags-completion-table) 0)
+                             (< (- (float-time (current-time)) (float-time company-etags-timer))
+                                company-etags-update-interval))
+                  (setq company-etags-timer (current-time))
+                  ;; `visit-tags-table-buffer' will check the modified time of tags file. If it's
+                  ;; changed, the tags file is reloaded.
+                  (visit-tags-table-buffer))
+                ;; In function `tags-completion-table', cached variable `tags-completion-table' is
+                ;; accessed at first. If the variable is empty, it is set by parsing tags file
+                (all-completions prefix (tags-completion-table))))))))
 
 (provide 'init-company)
 ;;; init-company.el ends here
