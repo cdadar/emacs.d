@@ -81,21 +81,21 @@ instead."
 
 (when (maybe-require-package 'counsel-etags)
   (after-load 'ivy
-    (define-key ivy-mode-map (kbd "M-s ]") 'counsel-etags-find-tag-at-point)
-    (define-key ivy-mode-map (kbd "M-s [") 'counsel-etags-grep)))
+    (define-key ivy-mode-map (kbd "C-c e .") 'counsel-etags-find-tag-at-point)
+    (define-key ivy-mode-map (kbd "C-c e t") 'counsel-etags-recent-tag)
+    (define-key ivy-mode-map (kbd "C-c e r") 'counsel-etags-grep)))
 
 (when (maybe-require-package 'counsel-gtags)
   (add-hook 'c-mode-hook 'counsel-gtags-mode)
   (add-hook 'c++-mode-hook 'counsel-gtags-mode)
   (add-hook 'php-mode-hook 'counsel-gtags-mode)
   (after-load 'counsel-gtags
-    ;; (define-key counsel-gtags-mode-map (kbd "M-s t") 'counsel-gtags-find-definition)
-    ;; (define-key counsel-gtags-mode-map (kbd "M-s r") 'counsel-gtags-find-reference)
-    ;; (define-key counsel-gtags-mode-map (kbd "M-s ,") 'counsel-gtags-find-symbol)
+    (define-key counsel-gtags-mode-map (kbd "C-c g .") 'counsel-gtags-find-definition)
+    (define-key counsel-gtags-mode-map (kbd "C-c g r") 'counsel-gtags-find-reference)
+    (define-key counsel-gtags-mode-map (kbd "C-c g s") 'counsel-gtags-find-symbol)
     (add-hook 'after-save-hook 'counsel-gtags-update-tags)
     ))
-(when (maybe-require-package 'ivy-xref)
-  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
+
 
 (provide 'init-ivy)
 ;;; init-ivy.el ends here
