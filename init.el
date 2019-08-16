@@ -151,6 +151,7 @@
 ;; cc and gtags
 (require 'init-cc-mode)
 ;;(require 'init-gud)
+(require 'init-ctags)
 (require 'init-gtags)
 (require 'init-yasnippet)
 (require 'init-emmet)
@@ -174,6 +175,7 @@
 ;; Extra packages which don't require any configuration
 
 (maybe-require-package 'anki-editor)
+(maybe-require-package 'anki-mode)
 (require-package 'gnuplot)
 (require-package 'lua-mode)
 (require-package 'htmlize)
