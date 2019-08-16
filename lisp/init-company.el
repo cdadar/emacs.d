@@ -34,14 +34,17 @@
                   ;; Some languages use camel case naming convention,
                   ;; so company should be case sensitive.
                   company-dabbrev-ignore-case nil
-                  ;; press M-number to choose candidate
-                  company-show-numbers t
-                  company-idle-delay 0.2
-                  company-clang-insert-arguments nil
                   company-require-match nil
                   company-etags-ignore-case t
+                  company-idle-delay 0.2
+                  ;; press M-number to choose candidate
+                  company-show-numbers t
+                  company-tooltip-limit 10
+                  company-minimum-prefix-length 2
+                  company-clang-insert-arguments nil
                   ;; @see https://github.com/company-mode/company-mode/issues/146
-                  company-tooltip-align-annotations t))
+                  company-tooltip-align-annotations t
+                  company-tooltip-flip-when-above t))
 
 
   (global-set-key (kbd "M-C-/") 'company-complete)

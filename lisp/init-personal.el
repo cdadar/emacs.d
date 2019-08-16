@@ -102,12 +102,6 @@
 (after-load 'expand-region
   (global-set-key (kbd "C-|") 'er/contract-region))
 
-
-(after-load 'company
-  (setq-default company-minimum-prefix-length 2)
-  (setq-default company-idle-delay 0.1))
-
-
 ;; (windmove-default-keybindings 'super)
 
 (when (maybe-require-package 'keyfreq)
