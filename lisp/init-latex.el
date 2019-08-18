@@ -4,7 +4,7 @@
 
 ;; -*- lexical-binding: t -*-
 
-
+(maybe-require-package 'cdlatex)
 (when (maybe-require-package 'auctex)
   (after-load 'auctex
     (when (locate-library "auctex")
