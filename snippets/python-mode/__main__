@@ -1,0 +1,5 @@
+# key: __main__
+# name: __main__
+# --
+
+if __name__ == '__main__':
