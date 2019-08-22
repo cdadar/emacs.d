@@ -7,8 +7,6 @@
 
 (when (maybe-require-package 'helm)
   (helm-mode 1)
-  ;; (after-load 'diminish
-  ;;   (diminish 'helm-mode))
   (after-load 'helm
     (require-package 'helm-ls-git)
     (require-package 'helm-c-yasnippet)

@@ -62,8 +62,6 @@
                    (let editorconfig-config-path (expand-file-name "./.editorconfig" projectile-project-root ))
                    (when (file-exists-p editorconfig-config-path)
                      (setq editorconfig-exec-path editorconfig-config-path))))))
-  ;; (after-load 'diminish
-  ;;   (diminish 'editorconfig-mode))
   )
 
 ;;; personal.el ends here
@@ -121,7 +119,6 @@
   (setq super-save-idle-duration 300)
   (setq super-save-remote-files nil)
   (setq super-save-triggers (quote (other-window)))
-  ;; (diminish 'super-save-mode)
   )
 
 ;; (setq url-gateway-method 'socks)
@@ -131,7 +128,6 @@
 
 (when (maybe-require-package 'hl-todo)
   (global-hl-todo-mode)
-  ;; (diminish 'global-hl-todo-mode)
   (after-load 'hl-todo
     '(progn
        (define-key hl-todo-mode-map (kbd "C-c M-p") 'hl-todo-previous)
@@ -146,7 +142,6 @@
 (when (maybe-require-package 'dumb-jump)
   (after-load 'dumb-jump
     '(progn
-       ;; (diminish 'dumb-jump)
        (after-load 'ivy
          (setq dumb-jump-selector 'ivy))
        (after-load 'helm

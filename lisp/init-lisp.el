@@ -242,8 +242,6 @@
       (rainbow-mode)))
   (add-hook 'emacs-lisp-mode-hook 'sanityinc/enable-rainbow-mode-if-theme)
   (add-hook 'help-mode-hook 'rainbow-mode)
-  ;; (after-load 'rainbow-mode
-  ;;   (diminish 'rainbow-mode))
   )
 
 

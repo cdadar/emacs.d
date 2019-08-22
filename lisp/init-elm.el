@@ -4,7 +4,6 @@
 
 (when (maybe-require-package 'elm-mode)
   (after-load 'elm-mode
-    ;; (diminish 'elm-indent-mode)
     (after-load 'company
       (add-to-list 'company-backends 'company-elm))
     (when (executable-find "elm-format")

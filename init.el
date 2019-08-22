@@ -60,7 +60,6 @@
 
 (require-package 'wgrep)
 (require-package 'ripgrep)
-(require-package 'diminish)
 (maybe-require-package 'scratch)
 (require-package 'command-log-mode)
 

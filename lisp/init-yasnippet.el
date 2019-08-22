@@ -16,9 +16,6 @@
 
   (setf yas-indent-line 'fixed)
 
-  ;; (when (maybe-require-package 'diminish)
-  ;;   (after-load 'yasnippet
-  ;;     (diminish 'yas-minor-mode)))
   )
 
 (provide 'init-yasnippet)
