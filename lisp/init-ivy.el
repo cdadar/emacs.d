@@ -25,7 +25,7 @@
 
     (define-key ivy-occur-mode-map (kbd "C-c C-q") #'ivy-wgrep-change-to-wgrep-mode)
 
-    (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
+    ;; (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
 
     ;; (when (maybe-require-package 'diminish)
     ;;   (diminish 'ivy-mode))
@@ -100,6 +100,7 @@ instead."
     (define-key counsel-gtags-mode-map (kbd "C-c g s") 'counsel-gtags-find-symbol)
     (add-hook 'after-save-hook 'counsel-gtags-update-tags)
     ))
+
 
 
 (provide 'init-ivy)

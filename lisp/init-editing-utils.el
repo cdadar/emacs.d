@@ -359,6 +359,9 @@ ORIG is the advised function, which is called with its ARGS."
 (advice-add 'kmacro-call-macro :around 'sanityinc/disable-features-during-macro-call)
 
 
+(when (maybe-require-package 'imenu-anywhere)
+  (global-set-key (kbd "C-.") #'imenu-anywhere))
+
 (require-package 'string-inflection)
 (after-load 'string-inflection
   ;; default
