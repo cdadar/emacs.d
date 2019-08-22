@@ -347,7 +347,7 @@ ORIG is the advised function, which is called with its ARGS."
 
 
 (when (maybe-require-package 'imenu-anywhere)
-  (global-set-key (kbd "C-.") #'imenu-anywhere))
+  (global-set-key (kbd "M-s '") #'imenu-anywhere))
 
 (require-package 'string-inflection)
 (after-load 'string-inflection
