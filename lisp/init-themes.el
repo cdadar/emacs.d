@@ -6,51 +6,7 @@
 (require-package 'color-theme-sanityinc-tomorrow)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(sanityinc-solarized-light))
-
-
-
-;;------------------------------------------------------------------------------
-;; Toggle between light and dark
-;;------------------------------------------------------------------------------
-
-(defun light ()
-  "Activate a light color theme."
-  (interactive)
-  (setq custom-enabled-themes '(sanityinc-solarized-light))
-  (reapply-themes))
-
-(defun dark ()
-    "Activate a dark color theme."
-    (interactive)
-    (setq custom-enabled-themes '(sanityinc-solarized-dark))
-    (reapply-themes))
-
-(when (maybe-require-package 'solarized-theme)
-  (setq-default custom-enabled-themes '(solarized-light))
-  (defun light ()
-    "Activate a light color theme."
-    (interactive)
-    (setq custom-enabled-themes '(solarized-light))
-    (reapply-themes))
-
-  (defun dark ()
-    "Activate a dark color theme."
-    (interactive)
-    (setq custom-enabled-themes '(solarized-dark))
-    (reapply-themes)))
-
-(defun day ()
-  "Activate a light color theme."
-  (interactive)
-  (setq custom-enabled-themes '(sanityinc-tomorrow-day))
-  (reapply-themes))
-
-(defun night ()
-  "Activate a dark color theme."
-  (interactive)
-  (setq custom-enabled-themes '(sanityinc-tomorrow-night))
-  (reapply-themes))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-eighties))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -63,6 +19,22 @@
 (add-hook 'after-init-hook 'reapply-themes)
 
 
+;;------------------------------------------------------------------------------
+;; Toggle between light and dark
+;;------------------------------------------------------------------------------
+(defun light ()
+  "Activate a light color theme."
+  (interactive)
+  (setq custom-enabled-themes '(sanityinc-solarized-light))
+  (reapply-themes))
+
+(defun dark ()
+  "Activate a dark color theme."
+  (interactive)
+  (setq custom-enabled-themes '(sanityinc-solarized-dark))
+  (reapply-themes))
+
+
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
   (add-hook 'after-init-hook 'dimmer-mode)
@@ -70,9 +42,6 @@
   (after-load 'dimmer
     (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))))
 
-;; (when (maybe-require-package 'smart-mode-line)
-;;   (setq sml/hidden-modes nil)
-;;   (sml/setup))
 
 (when (maybe-require-package 'minions)
   (minions-mode 1)
