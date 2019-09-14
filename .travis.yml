@@ -1,5 +1,9 @@
 language: nix
 
+os:
+  - linux
+  - osx
+
 # Handle git submodules yourself
 git:
     submodules: false
@@ -14,9 +18,7 @@ before_install:
   - evm install $EVM_EMACS --use --skip
 
 install:
-  # Enable downloadable pre-built binaries stored on cachix
-  - nix-env -iA cachix -f https://cachix.org/api/v1/install
-  - cachix use emacs-ci
+  - bash <(curl https://raw.githubusercontent.com/purcell/nix-emacs-ci/master/travis-install)
   - nix-env -iA $EMACS_VER -f https://github.com/purcell/nix-emacs-ci/archive/master.tar.gz
 
 env:
