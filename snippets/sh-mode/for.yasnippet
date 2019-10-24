@@ -1,8 +1,9 @@
 # -*- coding: utf-8; mode: snippet -*-
-# name: setTimeout(...)
-# key: timeout
+# name: for i in {1..100}
+# key: for
 # contributor: Chen Bin <chenbin DOT sh AT gmail>
 # --
-setTimeout(() => {
-  $0
-}, 500);
+for i in {1..${1:100}}
+do
+    $0
+done

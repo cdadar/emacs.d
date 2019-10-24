@@ -1,8 +1,6 @@
 # -*- coding: utf-8; mode: snippet -*-
-# name: setTimeout(...)
-# key: timeout
+# name: param from user input
+# key: lo
 # contributor: Chen Bin <chenbin DOT sh AT gmail>
 # --
-setTimeout(() => {
-  $0
-}, 500);
+'${1:object}=', ${1:$(yas/substr yas-text "[^:=, ]*")}
