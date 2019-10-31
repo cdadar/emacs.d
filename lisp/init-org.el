@@ -154,7 +154,7 @@ typical word processor."
          "* %?\n  %i\n %U"
          :empty-lines 1)
         ("b" "Blog Ideas" entry (file+headline org-agenda-file-note "Blog Ideas")
-         "* TODO [#B] %?\n  %i\n %U"
+         "* TODO [#B] %?  :BLOG:\n  %i\n %U"
          :empty-lines 1)
         ("s" "Code Snippet" entry
          (file org-agenda-file-code-snippet)
