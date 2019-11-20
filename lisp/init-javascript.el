@@ -156,5 +156,17 @@
                 (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
                 (define-key js2-mode-map "@" 'js-doc-insert-tag))))
 
+
+;; Add NodeJS error format
+(after-load 'compile
+  '(progn
+     (add-to-list 'compilation-error-regexp-alist-alist
+                  (list 'node "^[  ]+at \\(?:[^\(\n]+ \(\\)?\\([a-zA-Z\.0-9_/-]+\\):\\([0-9]+\\):\\([0-9]+\\)\)?$"
+                        1 ;; file
+                        2 ;; line
+                        3 ;; column
+                        ))
+     (add-to-list 'compilation-error-regexp-alist 'node)))
+
 (provide 'init-javascript)
 ;;; init-javascript.el ends here
