@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: org_export_html
+# key: org_export_html
+# --
+
+#+options: html-postamble:nil toc:nil num:nil
+#+language: zh
+#+html_head: <link rel="stylesheet" type="text/css" href="sachac.css" />
+#+html_head: <link rel="stylesheet" type="text/css" href="pad.css" />
