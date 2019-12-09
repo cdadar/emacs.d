@@ -27,11 +27,13 @@ PROMPT sets the `read-string prompt."
 (prelude-install-search-engine "youtube"    "http://www.youtube.com/results?search_query=" "Search YouTube: ")
 (prelude-install-search-engine "github"     "https://github.com/search?q="                 "Search GitHub: ")
 (prelude-install-search-engine "duckduckgo" "https://duckduckgo.com/?t=lm&q="              "Search DuckDuckGo: ")
+(prelude-install-search-engine "codeif" "https://unbug.github.io/codelf/#"              "Codeif: ")
 
 
 
 (global-set-key (kbd "C-c g") 'prelude-google)
 (global-set-key (kbd "C-c G") 'prelude-github)
+(global-set-key (kbd "C-c E") 'prelude-codeif)
 (global-set-key (kbd "C-c y") 'prelude-youtube)
 (global-set-key (kbd "C-c U") 'prelude-duckduckgo)
 
