@@ -29,6 +29,8 @@
   (after-load 'vue-mode))
 
 (when (maybe-require-package 'ng2-mode)
+  (add-to-list 'auto-mode-alist '("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode))
+  (add-to-list 'auto-mode-alist '("*\\.component\\.html\\'" . ng2-mode))
   (after-load 'ng2-mode))
 
 ;; js2-mode
