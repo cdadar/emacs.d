@@ -380,5 +380,28 @@ ORIG is the advised function, which is called with its ARGS."
   (define-key global-map (kbd "M-s M-o") 'color-rg-search-input-in-project)
   (define-key global-map (kbd "M-s M-p") 'color-rg-search-symbol-in-project))
 
+(require-package 'comment-dwim-2)
+(after-load 'comment-dwim-2
+  (global-set-key (kbd "M-;") 'comment-dwim-2))
+
+(require-package 'comment-tags)
+(after-load 'comment-tags
+  (setq comment-tags-keymap-prefix (kbd "C-c #"))
+  (setq comment-tags-keyword-faces
+        `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
+          ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
+          ("BUG" . ,(list :weight 'bold :foreground "#DB3340"))
+          ("HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
+          ("KLUDGE" . ,(list :weight 'bold :foreground "#E8B71A"))
+          ("XXX" . ,(list :weight 'bold :foreground "#F7EAC8"))
+          ("INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
+          ("DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
+  (setq comment-tags-comment-start-only t
+        comment-tags-require-colon t
+        comment-tags-case-sensitive t
+        comment-tags-show-faces t
+        comment-tags-lighter nil)
+  (add-hook 'prog-mode-hook 'comment-tags-mode))
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
