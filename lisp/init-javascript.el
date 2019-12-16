@@ -28,6 +28,9 @@
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
   (after-load 'vue-mode))
 
+(when (maybe-require-package 'ng2-mode)
+  (after-load 'ng2-mode))
+
 ;; js2-mode
 
 ;; Change some defaults: customize them to override
