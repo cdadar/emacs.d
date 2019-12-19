@@ -402,6 +402,7 @@ ORIG is the advised function, which is called with its ARGS."
   (add-hook 'prog-mode-hook 'comment-tags-mode))
 
 (require 'advance-words-count)
+(require 'advance-wc-mode)
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
