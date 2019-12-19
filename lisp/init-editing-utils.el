@@ -401,5 +401,7 @@ ORIG is the advised function, which is called with its ARGS."
         comment-tags-lighter nil)
   (add-hook 'prog-mode-hook 'comment-tags-mode))
 
+(require 'advance-words-count)
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
