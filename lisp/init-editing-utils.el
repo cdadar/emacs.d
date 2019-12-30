@@ -404,5 +404,7 @@ ORIG is the advised function, which is called with its ARGS."
 (require 'advance-words-count)
 (require 'advance-wc-mode)
 
+(require 'delete-block)
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
