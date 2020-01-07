@@ -21,5 +21,7 @@
 
   (add-hook 'ledger-mode-hook 'goto-address-prog-mode))
 
+(require-package 'hledger-mode)
+
 (provide 'init-ledger)
 ;;; init-ledger.el ends here
