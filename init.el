@@ -165,7 +165,7 @@
 (require 'init-email)
 (require 'init-vimrc)
 (require 'init-elfeed)
-(require 'init-aweshell)
+(require 'init-eshell)
 (require 'init-rpm)
 (require 'init-shell)
 (require 'init-deft)

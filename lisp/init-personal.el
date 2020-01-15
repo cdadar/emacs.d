@@ -135,9 +135,7 @@
        (define-key hl-todo-mode-map (kbd "C-c M-o") 'hl-todo-occur))))
 
 
-(when (maybe-require-package 'esh-autosuggest)
-  (after-load 'eshell-mode
-    (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)))
+
 
 (when (maybe-require-package 'dumb-jump)
   (after-load 'dumb-jump
