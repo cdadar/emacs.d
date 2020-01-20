@@ -171,10 +171,10 @@
 (require 'init-deft)
 (require 'init-latex)
 (require 'init-perl)
+(require 'init-anki)
 ;; Extra packages which don't require any configuration
 
-(maybe-require-package 'anki-editor)
-(maybe-require-package 'anki-mode)
+
 (require-package 'gnuplot)
 (require-package 'lua-mode)
 (require-package 'htmlize)
