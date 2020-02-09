@@ -165,5 +165,6 @@
 
 (require 'insert-translated-name)
 
+(require 'clip2org)
 
 (provide 'init-personal)
