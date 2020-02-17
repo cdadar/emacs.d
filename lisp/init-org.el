@@ -565,10 +565,9 @@ typical word processor."
 (after-load 'org
   (maybe-require-package 'ox-ioslide))
 
-;; 已经在melpa上不能找到该包
 ;; generate mind map
-;; (after-load 'org
-;;   (maybe-require-package 'org-mind-map))
+(after-load 'org
+  (maybe-require-package 'org-mind-map))
 
 
 ;; used by org-clock-sum-today-by-tags
