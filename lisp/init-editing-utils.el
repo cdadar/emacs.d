@@ -406,7 +406,5 @@ ORIG is the advised function, which is called with its ARGS."
 
 (require 'delete-block)
 
-(require 'eaf)
-
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
