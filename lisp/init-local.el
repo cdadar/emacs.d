@@ -51,7 +51,8 @@
 (custom-set-variables
  '(markdown-command "pandoc")
  '(delete-selection-mode t)
- '(scroll-bar-mode nil))
+ '(scroll-bar-mode nil)
+ '(org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5))))
 
 
 
