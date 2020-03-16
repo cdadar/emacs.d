@@ -16,6 +16,6 @@
 
   (setf yas-indent-line 'fixed)
 
-  )
+  (add-to-list 'company-backends 'company-yasnippet))
 
 (provide 'init-yasnippet)
