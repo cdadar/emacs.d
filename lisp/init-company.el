@@ -71,7 +71,8 @@
         (page-break-lines-mode 1)))
 
     (add-hook 'company-completion-started-hook 'sanityinc/page-break-lines-disable)
-    (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable)))
+    (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable))
+  (global-set-key (kbd "C-c y") 'company-yasnippet))
 
 
 (after-load 'company-etags

@@ -14,8 +14,6 @@
   (setq yas/root-directory (expand-file-name "./snippets" user-emacs-directory))
   (yas/load-directory yas/root-directory)
 
-  (setf yas-indent-line 'fixed)
-
-  (add-to-list 'company-backends 'company-yasnippet))
+  (setf yas-indent-line 'fixed))
 
 (provide 'init-yasnippet)
