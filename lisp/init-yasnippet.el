@@ -9,11 +9,11 @@
 ;; but it's necessary cost
 
 (when (maybe-require-package 'yasnippet)
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode t)
   ;;加载模板位置
-  (setq yas/root-directory (expand-file-name "./snippets" user-emacs-directory))
-  (yas/load-directory yas/root-directory)
 
-  (setf yas-indent-line 'fixed))
+  (setf yas-indent-line 'fixed)
+  (maybe-require-package 'auto-yasnippet))
 
 (provide 'init-yasnippet)
