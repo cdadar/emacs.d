@@ -27,6 +27,11 @@ jobs:
       with:
         version: ${{ matrix.emacs_version }}
 
+    - name: Checkout submodules
+      uses: srt32/git-actions@v0.0.3
+      with:
+        args: git submodule update --init --recursive
+
     - uses: actions/checkout@v1
     - name: Check startup
       run: ./test-startup.sh
