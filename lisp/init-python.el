@@ -32,12 +32,16 @@
       (after-load 'python
         (add-to-list 'company-backends 'company-anaconda)))))
 
+(when (maybe-require-package 'toml-mode)
+  (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))
+
+
 (after-load 'python
 
   (when (maybe-require-package 'virtualenvwrapper)
 
     (venv-initialize-interactive-shells) ;; if you want interactive shell support
-    (venv-initialize-eshell) ;; if you want eshell support
+    (venv-initialize-eshell)             ;; if you want eshell support
     ;; note that setting `venv-location` is not necessary if you
     ;; use the default location (`~/.virtualenvs`), or if the
     ;; the environment variable `WORKON_HOME` points to the right place
@@ -60,6 +64,7 @@
     (when (maybe-require-package 'py-autopep8)
       (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
       (setq py-autopep8-options '("--max-line-length=100")))))
+
 
 (provide 'init-python)
 ;;; init-python.el ends here
