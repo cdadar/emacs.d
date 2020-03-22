@@ -24,6 +24,9 @@
 
 (setq deft-directory "~/org-mode/notes")
 
+(setq org-brain-path "~/org-mode/brain")
+
+
 ;; python
 ;; (setq python-shell-interpreter "python3")
 
