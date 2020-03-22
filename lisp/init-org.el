@@ -567,7 +567,8 @@ typical word processor."
 
 ;; generate mind map
 (after-load 'org
-  (maybe-require-package 'org-mind-map))
+  (when (maybe-require-package 'org-mind-map)
+    (require 'ox-org)))
 
 
 ;; used by org-clock-sum-today-by-tags
