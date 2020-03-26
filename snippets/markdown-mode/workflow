@@ -1,0 +1,154 @@
+# key: workflow
+# name: workflow
+# --
+## ${1:module_name}流程审核  ##
+
+    GET /api/bszb/${2:module_url}/nextActivity
+
+  * 请求参数
+
+|参数名称|说明|类型|是否必需|
+|---|---|---|---|
+|instanceUuid|流程uuid|string|string|
+
+
+  * 返回参数
+
+| 参数名称       | 说明                                                  | 类型   | 是否必需 |
+|----------------|-------------------------------------------------------|--------|----------|
+| uuid           | 节点uuid                                              | string | 否       |
+| name           | 节点名称                                              | strin  | 是       |
+| processorType  | 操作人类型(0:具体人员;1:变量获取)                     | byte   | 是       |
+| type           | 节点类型(0:正常;1:会签;2:或签)                        | byte   | 是       |
+| condition      | 节点条件(逻辑运算)                                    | string | 是       |
+| processor      | 操作人                                                | string | 是       |
+| timeOutFlag    | 超时操作标识(0:否；1:设置超时设置)                    | byte   | 是       |
+| timeOut        | 超时时间设置（单位分钟， 当超时操作标识为1时必填）    | int    | 否       |
+| timeOutHandler | 超时操作（0:不操作；1：超时自动提交；2:超时自动打回） | byte   | 否       |
+| isBanReturn    | 是否禁止打回（0:不禁止打回；1:禁止打回）              | byte   | 是       |
+| notification   | 是否通知（0:不通知；1:通知）                          | byte   | 是       |
+| deduplication  | 是否去重复（0:否；1:是）                              | byte   | 是       |
+| index          | 序号                                                  | string | 是       |
+
+  * 返回举例
+
+\`\`\` json
+{
+ "message":"",
+  "statusCode": 200,
+  "data": {
+      "uuid": "str",
+      "name": "str",
+      "processorType": 1,
+      "processor": "str",
+      "type": 1,
+      "condition": "str",
+      "index": 1,
+      "timeOutFlag": 1,
+      "timeOut": 0,
+      "timeOutHandler": 1,
+      "isBanReturn": 1,
+      "notification": 1
+    }
+}
+\`\`\`
+
+-------------------------------------------------------------------------------
+
+## ${1:$(yas/substr yas-text "[^ ]^")}流程打回 ##
+
+    POST /api/bszb/${2:$(yas/substr yas-text "[^ ]*")}/returnActivity
+
+  * 请求参数
+
+| 参数名称     | 说明         | 类型   | 是否必需 |
+|--------------|--------------|--------|----------|
+| instanceUuid | 流程实例uuid | string | 是       |
+| refuse       | 打回理由     | string | 是       |
+
+  * 返回举例
+
+\`\`\` josn
+{
+"message": "流程成功打回!",
+"statusCode": 200,
+"data": null
+}
+\`\`\`
+
+
+-------------------------------------------------------------------------------
+
+## 收回${1:$(yas/substr yas-text "[^ ]^")}流程 ##
+
+    POST /api/bszb/${2:$(yas/substr yas-text "[^ ]*")}/callbackActivity
+
+  * 请求参数
+
+| 参数名称     | 说明         | 类型   | 是否必需 |
+|--------------|--------------|--------|----------|
+| instanceUuid | 流程实例uuid | string | 是       |
+
+  * 返回举例
+
+\`\`\` josn
+{
+"message": "回收流程!",
+"statusCode": 200,
+"data": null
+}
+\`\`\`
+
+-------------------------------------------------------------------------------
+
+## ${1:$(yas/substr yas-text "[^ ]^")}流程申请流程 ##
+
+    GET /api/bszb/${2:$(yas/substr yas-text "[^ ]*")}/workflow
+
+  * 请求参数
+
+
+  * 返回参数
+
+| 参数名称       | 说明                                             | 类型   | 是否必需 |
+|----------------|--------------------------------------------------|--------|----------|
+| uuid           | uuid                                             | string | 是       |
+| name           | 节点名称                                         | string | 是       |
+| processorType  | 操作人类型(0:具体人员;1:变量获取)                | string | 是       |
+| processor      | 操作人                                           | string | 是       |
+| type           | 节点类型(0:正常;1:会签;2:或签)                   | string | 是       |
+| condition      | 节点条件(逻辑运算)                               | string | 是       |
+| index          | 排序号                                           | int    | 是       |
+| timeOutFlag    | 超时操作标识(0:否；1:设置超时设置)               | byte   | 是       |
+| timeOUt        | 超时时间设置(分)                                 | int    | 是       |
+| timeOutHandler | 超时操作(0:不操作;1:超时自动提交;2:超时自动打回) | byte   | 是       |
+| isBanReturn    | 是否禁止打回(0:不禁止打回;1:禁止打回;)           | byte   | 是       |
+| notification   | 是否通知(0:不通知;1:通知;)                       | byte   | 是       |
+| deduplication  | 是否去重复(0:否;1:是;)                           | byte   | 是       |
+
+
+  * 返回举例
+
+\`\`\`  json
+{
+  "message": "",
+  "statusCode": 200,
+  "data": [
+    {
+      "uuid": "str",
+      "name": "str",
+      "processorType": 1,
+      "processor": "str",
+      "type": 1,
+      "condition": "str",
+      "index": 1,
+      "timeOutFlag": 1,
+      "timeOut": 0,
+      "timeOutHandler": 1,
+      "isBanReturn": 1,
+      "notification": 1,
+      "deduplication": 1
+    }
+  ]
+}
+\`\`\`
