@@ -332,6 +332,7 @@ With arg N, insert N newlines."
 
 (require-package 'which-key)
 (add-hook 'after-init-hook 'which-key-mode)
+(which-key-setup-minibuffer)
 (setq-default which-key-idle-delay 1.5)
 
 
