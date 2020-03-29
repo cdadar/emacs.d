@@ -14,7 +14,7 @@
 (setq custom-safe-themes t)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-bright))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -39,7 +39,7 @@
 (defun dark ()
   "Activate a dark color theme."
   (interactive)
-  (setq custom-enabled-themes '(sanityinc-tomorrow-night))
+  (setq custom-enabled-themes '(sanityinc-tomorrow-bright))
   (reapply-themes))
 
 
@@ -50,11 +50,6 @@
   (after-load 'dimmer
     (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))))
 
-
-(when (maybe-require-package 'minions)
-  (minions-mode 1)
-  (after-load 'minions-mode
-    (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu)))
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
