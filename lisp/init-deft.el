@@ -15,7 +15,7 @@
         deft-org-mode-title-prefix t)
 
   (global-set-key (kbd "<f8>") 'deft)
-  (global-set-key (kbd "C-x C-g") 'deft-find-file))
+  (global-set-key (kbd "C-<f8>") 'deft-find-file))
 
 (provide 'init-deft)
 ;;; init-deft.el ends her
