@@ -25,3 +25,6 @@
 [submodule "site-lisp/clip2org"]
 	path = site-lisp/clip2org
 	url = git@github.com:thamer/clip2org.git
+[submodule "site-lisp/nox"]
+	path = site-lisp/nox
+	url = git@github.com:manateelazycat/nox.git
