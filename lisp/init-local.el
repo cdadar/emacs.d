@@ -56,7 +56,7 @@
  '(delete-selection-mode t)
  '(scroll-bar-mode nil)
  '(org-clock-clocked-in-display 'mode-line)
- '(org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5))))
+ '(org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 10))))
 
 
 
