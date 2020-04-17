@@ -23,6 +23,9 @@
 
     (define-key ivy-occur-mode-map (kbd "C-c C-q") #'ivy-wgrep-change-to-wgrep-mode)
 
+    ;; (when (maybe-require-package 'diminish)
+    ;;   (diminish 'ivy-mode))
+
     ;; (define-key ivy-mode-map (kbd "M-s '") 'counsel-imenu)
 
     )
