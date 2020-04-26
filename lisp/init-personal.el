@@ -119,6 +119,17 @@
   (setq super-save-idle-duration 300)
   (setq super-save-remote-files nil)
   (setq super-save-triggers (quote (other-window)))
+  (defun save-all-buffers ()
+    (save-excursion
+      (dolist (buf (buffer-list))
+        (set-buffer buf)
+        (when (and buffer-file-name
+                   (buffer-modified-p (current-buffer))
+                   (file-writable-p buffer-file-name)
+                   (if (file-remote-p buffer-file-name) super-save-remote-files t))
+          (save-buffer)))))
+
+  (advice-add 'super-save-command :override 'save-all-buffers)
   )
 
 ;; (setq url-gateway-method 'socks)
