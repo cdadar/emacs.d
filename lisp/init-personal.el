@@ -118,7 +118,19 @@
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 300)
   (setq super-save-remote-files nil)
-  (setq super-save-triggers (quote (other-window)))
+  (setq super-save-triggers (quote (other-window
+                                    balance-windows
+                                    next-buffer
+                                    org-babel-execute-src-block
+                                    previous-buffer
+                                    split-window-below
+                                    split-window-horizontally
+                                    start-process-shell-command
+                                    switch-to-buffer
+                                    windmove-down
+                                    windmove-left
+                                    windmove-right
+                                    windmove-up)))
   (defun save-all-buffers ()
     (save-excursion
       (dolist (buf (buffer-list))
