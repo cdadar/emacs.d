@@ -18,7 +18,7 @@
 (add-hook 'ruby-mode-hook 'subword-mode)
 
 (after-load 'page-break-lines
-  (push 'ruby-mode page-break-lines-modes))
+  (add-to-list 'page-break-lines-modes 'ruby-mode))
 
 (require-package 'rspec-mode)
 

@@ -55,7 +55,7 @@
     ;; according to frame type.
     (defun sanityinc/display-non-graphic-p ()
       (not (display-graphic-p)))
-    (push 'sanityinc/display-non-graphic-p dimmer-exclusion-predicates)))
+    (add-to-list 'dimmer-exclusion-predicates 'sanityinc/display-non-graphic-p)))
 
 
 (when (maybe-require-package 'minions)

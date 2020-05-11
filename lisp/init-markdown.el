@@ -6,7 +6,7 @@
   (add-auto-mode 'markdown-mode "\\.md\\..markdown\\.html\\'")
   (setq markdown-command "pandoc")
   (after-load 'whitespace-cleanup-mode
-    (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
+    (add-to-list 'whitespace-cleanup-mode-ignore-modes 'markdown-mode)))
 
 
 (provide 'init-markdown)

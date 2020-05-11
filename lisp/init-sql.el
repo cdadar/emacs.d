@@ -4,7 +4,7 @@
 
 (after-load 'sql
   ;; sql-mode pretty much requires your psql to be uncustomised from stock settings
-  (push "--no-psqlrc" sql-postgres-options))
+  (add-to-list 'sql-postgres-options "--no-psqlrc"))
 
 (defun sanityinc/fix-postgres-prompt-regexp ()
   "Work around https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22596.
@@ -123,7 +123,7 @@ This command currently blocks the UI, sorry."
 
 
 (after-load 'page-break-lines
-  (push 'sql-mode page-break-lines-modes))
+  (add-to-list 'page-break-lines-modes 'sql-mode))
 
 
 (setq sql-connection-alist
