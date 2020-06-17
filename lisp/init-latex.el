@@ -6,7 +6,7 @@
 
 (maybe-require-package 'cdlatex)
 (when (maybe-require-package 'auctex)
-  (after-load 'auctex
+  (with-eval-after-load 'auctex
     (when (locate-library "auctex")
       (setq TeX-auto-save t)
       (setq TeX-parse-self t)
@@ -44,20 +44,20 @@
 ;;; Company
     (when (maybe-require-package 'LaTeX-mode)
       (when (maybe-require-package 'company-auctex)
-        (after-load 'company
-          (after-load 'LaTeX
+        (with-eval-after-load 'company
+          (with-eval-after-load 'LaTeX
             (add-to-list 'company-backends 'company-auctex))))
       (when (maybe-require-package 'company-bibtex)
-        (after-load 'company
-          (after-load 'LaTeX
+        (with-eval-after-load 'company
+          (with-eval-after-load 'LaTeX
             (add-to-list 'company-backends 'company-bibtex))))
       (when (maybe-require-package 'company-reftex)
-        (after-load 'company
-          (after-load 'LaTeX
+        (with-eval-after-load 'company
+          (with-eval-after-load 'LaTeX
             (add-to-list 'company-backends 'company-reftex))))
       (when (maybe-require-package 'company-math)
-        (after-load 'company
-          (after-load 'LaTeX
+        (with-eval-after-load 'company
+          (with-eval-after-load 'LaTeX
             (add-to-list 'company-backends 'company-math)))))
 
 ;;; Bibretrieve

@@ -4,7 +4,7 @@
 
 (when (maybe-require-package 'ivy)
   (add-hook 'after-init-hook 'ivy-mode)
-  (after-load 'ivy
+  (with-eval-after-load 'ivy
     (setq-default ivy-use-virtual-buffers t
                   ivy-virtual-abbreviate 'fullpath
                   ivy-count-format ""
@@ -21,22 +21,18 @@
     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
     (define-key ivy-minibuffer-map (kbd "<down>") #'ivy-next-line-or-history)
 
-    (define-key ivy-occur-mode-map (kbd "C-c C-q") #'ivy-wgrep-change-to-wgrep-mode)
-
-    ;; (when (maybe-require-package 'diminish)
-    ;;   (diminish 'ivy-mode))
-    )
+    (define-key ivy-occur-mode-map (kbd "C-c C-q") #'ivy-wgrep-change-to-wgrep-mode))
   (when (maybe-require-package 'ivy-rich)
     (setq ivy-virtual-abbreviate 'abbreviate
           ivy-rich-switch-buffer-align-virtual-buffer nil
           ivy-rich-path-style 'abbrev)
-    (after-load 'ivy
+    (with-eval-after-load 'ivy
       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
     (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
 
 (when (maybe-require-package 'counsel)
   (setq-default counsel-mode-override-describe-bindings t)
-  (after-load 'counsel
+  (with-eval-after-load 'counsel
     (setq-default ivy-initial-inputs-alist
                   '((Man-completion-table . "^")
                     (woman . "^"))))
@@ -65,13 +61,13 @@ instead."
                            (projectile-project-root)
                          (error default-directory)))))
             (funcall search-function initial-input dir)))))
-    (after-load 'ivy
+    (with-eval-after-load 'ivy
       (add-to-list 'ivy-height-alist (cons 'counsel-ag 20)))
     (global-set-key (kbd "M-?") 'sanityinc/counsel-search-project)))
 
 
 (when (maybe-require-package 'swiper)
-  (after-load 'ivy
+  (with-eval-after-load 'ivy
     (define-key ivy-mode-map (kbd "M-s /") 'swiper-thing-at-point)))
 
 
@@ -81,7 +77,7 @@ instead."
             (lambda ()
               (add-hook 'after-save-hook
                         'counsel-etags-virtual-update-tags 'append 'local)))
-  (after-load 'ivy
+  (with-eval-after-load 'ivy
     (define-key ivy-mode-map (kbd "C-c e .") 'counsel-etags-find-tag-at-point)
     (define-key ivy-mode-map (kbd "C-c e t") 'counsel-etags-recent-tag)
     (define-key ivy-mode-map (kbd "C-c e r") 'counsel-etags-grep)))
@@ -90,7 +86,7 @@ instead."
   (add-hook 'c-mode-hook 'counsel-gtags-mode)
   (add-hook 'c++-mode-hook 'counsel-gtags-mode)
   (add-hook 'php-mode-hook 'counsel-gtags-mode)
-  (after-load 'counsel-gtags
+  (with-eval-after-load 'counsel-gtags
     (define-key counsel-gtags-mode-map (kbd "C-c g .") 'counsel-gtags-find-definition)
     (define-key counsel-gtags-mode-map (kbd "C-c g r") 'counsel-gtags-find-reference)
     (define-key counsel-gtags-mode-map (kbd "C-c g s") 'counsel-gtags-find-symbol)

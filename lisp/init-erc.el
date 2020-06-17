@@ -34,7 +34,7 @@
 ;;; Code:
 
 (require 'erc)
-(after-load 'erc
+(with-eval-after-load 'erc
   ;; Interpret mIRC-style color commands in IRC chats
   (setq erc-interpret-mirc-color t)
 
@@ -64,7 +64,7 @@
 
 
 (require 'erc-notify)
-(after-load 'erc-notify
+(with-eval-after-load 'erc-notify
   (defvar erc-notify-nick-alist nil
     "Alist of nicks and the last time they tried to trigger a
 notification")
@@ -91,7 +91,7 @@ that can occur between two notifications.  The default is
         t))))
 
 (require 'erc-autoaway)
-(after-load 'erc-autoaway
+(with-eval-after-load 'erc-autoaway
   ;; autoaway setup
   (setq erc-auto-discard-away t)
   (setq erc-autoaway-idle-seconds 600)
@@ -101,7 +101,7 @@ that can occur between two notifications.  The default is
 
 
 (require 'erc-spelling)
-(after-load 'erc-spelling
+(with-eval-after-load 'erc-spelling
   ;; enable spell checking
   ;; set different dictionaries by different servers/channels
   ;;(setq erc-spelling-dictionaries '(("#emacs" "american")))
@@ -109,7 +109,7 @@ that can occur between two notifications.  The default is
     (erc-spelling-mode 1)))
 
 (require 'erc-log)
-(after-load 'erc-log
+(with-eval-after-load 'erc-log
   ;; logging
   (setq erc-log-channels-directory "~/.erc/logs/")
   (if (not (file-exists-p erc-log-channels-directory))

@@ -51,7 +51,7 @@
        ))
     ))
 
-(after-load 'gud
+(with-eval-after-load 'gud
   '(progn
      (gud-def gud-kill "kill" "\C-k" "Kill the debugee")
      ))

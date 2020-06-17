@@ -6,7 +6,7 @@
 
 ;;; Basic golang setup
 (when (maybe-require-package 'go-mode)
-  (after-load 'go-mode
+  (with-eval-after-load 'go-mode
 
     (add-auto-mode 'go-mode "\\.go\\'")
 
@@ -22,18 +22,18 @@
 
     ;;; Company-go
     (when (maybe-require-package 'company-go)
-      (after-load 'company
+      (with-eval-after-load 'company
         (add-hook 'go-mode-hook
                   (add-to-list 'company-backends 'company-go))))
 
     ;;; Golang eldoc
     (when (maybe-require-package 'go-eldoc)
-      (after-load 'go-eldoc
+      (with-eval-after-load 'go-eldoc
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
 
 
     (when (maybe-require-package 'go-guru)
-      (after-load 'go-guru
+      (with-eval-after-load 'go-guru
         (add-hook 'go-mode-hook 'go-guru-hl-identifier-mode)))
     (maybe-require-package 'go-rename)))
 

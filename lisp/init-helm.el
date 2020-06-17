@@ -7,7 +7,7 @@
 
 (when (maybe-require-package 'helm)
   (helm-mode 1)
-  (after-load 'helm
+  (with-eval-after-load 'helm
     (require-package 'helm-ls-git)
     (require-package 'helm-c-yasnippet)
 
@@ -78,14 +78,14 @@
                 (helm-ls-git-build-ls-git-source)))
         (setq helm-source-list
               '(
-		helm-source-buffers-list
+                helm-source-buffers-list
                 helm-source-ls-git
-		helm-source-recentf
-		helm-source-kill-ring
-		helm-source-system
-		helm-source-elisp-library
-		helm-source-yasnippet
-		))
+                helm-source-recentf
+                helm-source-kill-ring
+                helm-source-system
+                helm-source-elisp-library
+                helm-source-yasnippet
+                ))
         (helm-other-buffer helm-source-list "*helm search*")))
 
 

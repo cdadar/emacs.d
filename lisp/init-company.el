@@ -10,7 +10,7 @@
 
 (when (maybe-require-package 'company)
   (add-hook 'after-init-hook 'global-company-mode)
-  (after-load 'company
+  (with-eval-after-load 'company
     ;; @see https://github.com/company-mode/company-mode/issues/348
     (when (maybe-require-package 'company-statistics)
       (company-statistics-mode))
@@ -58,8 +58,8 @@
 
 ;; Suspend page-break-lines-mode while company menu is active
 ;; (see https://github.com/company-mode/company-mode/issues/416)
-(after-load 'company
-  (after-load 'page-break-lines
+(with-eval-after-load 'company
+  (with-eval-after-load 'page-break-lines
     (defvar-local sanityinc/page-break-lines-on-p nil)
 
     (defun sanityinc/page-break-lines-disable (&rest ignore)
@@ -75,7 +75,7 @@
   (global-set-key (kbd "C-c y") 'company-yasnippet))
 
 
-(after-load 'company-etags
+(with-eval-after-load 'company-etags
   '(progn
      ;; insert major-mode not inherited from prog-mode
      ;; to make company-etags work

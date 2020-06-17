@@ -73,7 +73,7 @@
       (when (file-exists-p zip-temp)
         (delete-file zip-temp)))))
 
-(after-load 'ob-ditaa
+(with-eval-after-load 'ob-ditaa
   (unless (and (boundp 'org-ditaa-jar-path)
                (file-exists-p org-ditaa-jar-path))
     (let ((jar-name "ditaa0_9.jar")
@@ -82,7 +82,7 @@
       (unless (file-exists-p org-ditaa-jar-path)
         (sanityinc/grab-ditaa url jar-name)))))
 
-(after-load 'ob-plantuml
+(with-eval-after-load 'ob-plantuml
   (let ((jar-name "plantuml.jar")
         (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
     (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
@@ -91,7 +91,7 @@
 
 
 ;; Re-align tags when window shape changes
-(after-load 'org-agenda
+(with-eval-after-load 'org-agenda
   (add-hook 'org-agenda-mode-hook
             (lambda () (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))))
 
@@ -180,7 +180,7 @@ typical word processor."
 ;; Targets include this file and any file contributing to the agenda - up to 5 levels deep
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 
-(after-load 'org-agenda
+(with-eval-after-load 'org-agenda
   (add-to-list 'org-agenda-after-show-hook 'org-show-entry))
 
 (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
@@ -321,7 +321,7 @@ typical word processor."
 ;;; Org clock
 
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-(after-load 'org
+(with-eval-after-load 'org
   (org-clock-persistence-insinuate))
 (setq org-clock-persist t)
 (setq org-clock-in-resume t)
@@ -350,7 +350,7 @@ typical word processor."
 (add-hook 'org-clock-out-hook 'sanityinc/hide-org-clock-from-header-line)
 (add-hook 'org-clock-cancel-hook 'sanityinc/hide-org-clock-from-header-line)
 
-(after-load 'org-clock
+(with-eval-after-load 'org-clock
   (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
   (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
 
@@ -382,7 +382,7 @@ typical word processor."
 
 (require-package 'org-pomodoro)
 (setq org-pomodoro-keep-killed-pomodoro-time t)
-(after-load 'org-agenda
+(with-eval-after-load 'org-agenda
   (define-key org-agenda-mode-map (kbd "M-p") 'org-pomodoro)
   (define-key org-mode-map (kbd "M-p") 'org-pomodoro)
 
@@ -451,14 +451,14 @@ typical word processor."
 
 
 
-(after-load 'org
+(with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
   (when *is-a-mac*
     (define-key org-mode-map (kbd "M-h") nil)
     (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
 
 ;; org-latex
-(after-load 'org
+(with-eval-after-load 'org
   (require 'ox-md)
   (require 'ox-latex)
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
@@ -488,7 +488,7 @@ typical word processor."
 
 
 
-(after-load 'org
+(with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
    `(
@@ -511,7 +511,7 @@ typical word processor."
      (sql . t)
      (sqlite . t))))
 
-(after-load 'org
+(with-eval-after-load 'org
 
   (require 'org-crypt)
   ;; org-mode 設定
@@ -527,7 +527,7 @@ typical word processor."
   (setq org-crypt-key "6DF1ABB0"))
 
 
-(after-load 'org
+(with-eval-after-load 'org
   (defun cdadar/org-screenshot ()
     "Take a screenshot into a unique-named file in the current buffer file
  directory and insert a link to this file."
@@ -562,11 +562,11 @@ typical word processor."
   (define-key org-mode-map (kbd "C-c s c") 'cdadar/org-screenshot))
 
 ;; create ppt
-(after-load 'org
+(with-eval-after-load 'org
   (maybe-require-package 'ox-ioslide))
 
 ;; generate mind map
-(after-load 'org
+(with-eval-after-load 'org
   (when (maybe-require-package 'org-mind-map)
     (require 'ox-org)
     (setq org-mind-map-engine "dot")       ; Default. Directed Graph
@@ -578,7 +578,7 @@ typical word processor."
     ;; (setq org-mind-map-engine "circo")  ; Circular Layout
     ))
 
-(after-load 'org
+(with-eval-after-load 'org
   (when (maybe-require-package 'org-brain)
     (setq org-id-track-globally t)
     (setq org-id-locations-file "~/.emacs.d/.org-id-locations")

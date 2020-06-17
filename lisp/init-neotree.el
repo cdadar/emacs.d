@@ -5,7 +5,7 @@
   ;;   (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
   (when (maybe-require-package 'projectile)
-    (after-load 'projectile
+    (with-eval-after-load 'projectile
       (defun neotree-project-dir ()
         "Open NeoTree using the git root."
         (interactive)

@@ -1,5 +1,5 @@
 (require-package 'treemacs)
-(after-load 'treemacs
+(with-eval-after-load 'treemacs
   (setq treemacs-follow-after-init          t
         treemacs-width                      35
         treemacs-indentation                2

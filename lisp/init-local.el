@@ -34,7 +34,7 @@
 (setq erc-autojoin-channels-alist
       '(("freenode.net" "#lisp" "#opensuse-cn" "#fedora-zh" "#linuxba" "#emacs" "#java" "#javascript" "#python" "#python.cn" "#ruby")))
 
-(after-load 'company-c-headers
+(with-eval-after-load 'company-c-headers
   (setq  company-c-headers-path-system '("."
                                          "/usr/include/"
                                          "/usr/local/include/"
@@ -46,9 +46,9 @@
                                          "/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/include")))
 
 
-(after-load 'elfeed
+(with-eval-after-load 'elfeed
   (setq elfeed-db-directory "~/Nutstore/.elfeed"))
-(after-load 'elfeed-org
+(with-eval-after-load 'elfeed-org
   (setq rmh-elfeed-org-files (list rmh-elfeed-org-file)))
 
 (custom-set-variables

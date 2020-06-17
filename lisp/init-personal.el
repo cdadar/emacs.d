@@ -37,7 +37,7 @@
 
 ;;; projectile default keybinding
 
-(after-load 'projectile
+(with-eval-after-load 'projectile
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map))
 
 (when (maybe-require-package 'cnfonts)
@@ -55,7 +55,7 @@
 
 (when (maybe-require-package 'editorconfig)
   (editorconfig-mode)
-  (after-load 'projectile
+  (with-eval-after-load 'projectile
     '(progn
        (add-hook 'projectile-after-switch-project-hook
                  (lambda ()
@@ -97,7 +97,7 @@
 
 ;; 将所选区域缩小到其先前的带大小的快捷键
 
-(after-load 'expand-region
+(with-eval-after-load 'expand-region
   (global-set-key (kbd "C-|") 'er/contract-region))
 
 ;; (windmove-default-keybindings 'super)
@@ -151,7 +151,7 @@
 
 (when (maybe-require-package 'hl-todo)
   (global-hl-todo-mode)
-  (after-load 'hl-todo
+  (with-eval-after-load 'hl-todo
     '(progn
        (define-key hl-todo-mode-map (kbd "C-c M-p") 'hl-todo-previous)
        (define-key hl-todo-mode-map (kbd "C-c M-n") 'hl-todo-next)
@@ -161,11 +161,11 @@
 
 
 (when (maybe-require-package 'dumb-jump)
-  (after-load 'dumb-jump
+  (with-eval-after-load 'dumb-jump
     '(progn
-       (after-load 'ivy
+       (with-eval-after-load 'ivy
          (setq dumb-jump-selector 'ivy))
-       (after-load 'helm
+       (with-eval-after-load 'helm
          (setq dumb-jump-selector 'helm))
        (cond
         ((executable-find "pt") (setq dumb-jump-force-searcher 'pt))
@@ -175,14 +175,14 @@
   (add-hook 'after-init-hook #'dumb-jump-mode))
 
 
-(after-load 'grep
+(with-eval-after-load 'grep
   '(progn
      (define-key grep-mode-map
        (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)
      (define-key ag-mode-map
        (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)))
 
-(after-load 'wgrep
+(with-eval-after-load 'wgrep
   '(define-key grep-mode-map
      (kbd "C-c C-c") 'wgrep-finish-edit))
 

@@ -39,6 +39,7 @@
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
 
+
 (add-hook 'after-init-hook 'transient-mark-mode)
 
 
@@ -82,9 +83,6 @@
 
 
 
-
-
-
 (when (fboundp 'display-line-numbers-mode)
   (setq-default display-line-numbers-width 3)
   (add-hook 'prog-mode-hook 'display-line-numbers-mode))
@@ -106,7 +104,7 @@
 (when (maybe-require-package 'symbol-overlay)
   (dolist (hook '(prog-mode-hook html-mode-hook yaml-mode-hook conf-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
-  (after-load 'symbol-overlay
+  (with-eval-after-load 'symbol-overlay
     (define-key symbol-overlay-mode-map (kbd "M-i") 'symbol-overlay-put)
     (define-key symbol-overlay-mode-map (kbd "M-I") 'symbol-overlay-remove-all)
     (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
@@ -128,11 +126,11 @@
 (require-package 'browse-kill-ring)
 (setq browse-kill-ring-separator "\f")
 (global-set-key (kbd "M-Y") 'browse-kill-ring)
-(after-load 'browse-kill-ring
+(with-eval-after-load 'browse-kill-ring
   (define-key browse-kill-ring-mode-map (kbd "C-g") 'browse-kill-ring-quit)
   (define-key browse-kill-ring-mode-map (kbd "M-n") 'browse-kill-ring-forward)
   (define-key browse-kill-ring-mode-map (kbd "M-p") 'browse-kill-ring-previous))
-(after-load 'page-break-lines
+(with-eval-after-load 'page-break-lines
   (add-to-list 'page-break-lines-modes 'browse-kill-ring-mode))
 
 
@@ -210,8 +208,7 @@
 ;; Page break lines
 ;;----------------------------------------------------------------------------
 (when (maybe-require-package 'page-break-lines)
-  (add-hook 'after-init-hook 'global-page-break-lines-mode)
-  )
+  (add-hook 'after-init-hook 'global-page-break-lines-mode))
 
 ;;----------------------------------------------------------------------------
 ;; Shift lines up and down with M-up and M-down. When paredit is enabled,
@@ -348,7 +345,7 @@ ORIG is the advised function, which is called with its ARGS."
   (global-set-key (kbd "M-s '") #'imenu-anywhere))
 
 (require-package 'string-inflection)
-(after-load 'string-inflection
+(with-eval-after-load 'string-inflection
   ;; default
   (global-set-key (kbd "C-c C-u") 'string-inflection-all-cycle)
 
@@ -368,12 +365,12 @@ ORIG is the advised function, which is called with its ARGS."
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
 (require-package 'sudo-edit)
-(after-load 'sudo-edit
+(with-eval-after-load 'sudo-edit
   (global-set-key (kbd "C-c C-r") 'sudo-edit))
 
 (require 'color-rg)
 
-(after-load 'color-rg
+(with-eval-after-load 'color-rg
   (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg)
   (define-key global-map (kbd "M-s M-o") 'color-rg-search-input-in-project)
   (define-key global-map (kbd "M-s M-p") 'color-rg-search-symbol-in-project))

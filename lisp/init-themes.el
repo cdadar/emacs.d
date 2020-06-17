@@ -46,10 +46,10 @@
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
   (add-hook 'after-init-hook 'dimmer-mode)
-  (after-load 'dimmer
+  (with-eval-after-load 'dimmer
     ;; TODO: file upstream as a PR
     (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all))))
-  (after-load 'dimmer
+  (with-eval-after-load 'dimmer
     ;; Don't dim in terminal windows. Even with 256 colours it can
     ;; lead to poor contrast.  Better would be to vary dimmer-fraction
     ;; according to frame type.
@@ -60,7 +60,7 @@
 
 (when (maybe-require-package 'minions)
   (minions-mode 1)
-  (after-load 'minions-mode
+  (with-eval-after-load 'minions-mode
     (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu)))
 
 (provide 'init-themes)

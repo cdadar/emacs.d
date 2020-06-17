@@ -68,7 +68,7 @@
 (add-hook 'web-mode-hook 'web-mode-hook-setup)
 
 
-(after-load 'web-mode
+(with-eval-after-load 'web-mode
   '(progn
      ;; make org-mode export fail, I use evil and evil-matchit
      ;; to select text, so expand-region.el is not used
@@ -101,7 +101,7 @@
 
   (add-hook 'web-mode-hook 'prettier-html-on-save-mode))
 
-(after-load 'web-mode
+(with-eval-after-load 'web-mode
   (require 'instant-rename-tag))
 
 (provide 'init-web-mode)

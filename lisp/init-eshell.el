@@ -34,7 +34,7 @@ directory to make multiple eshell windows easier."
 (global-set-key (kbd "<f12>") #'aweshell-dedicated-toggle)
 
 (when (maybe-require-package 'esh-autosuggest)
-  (after-load 'eshell-mode
+  (with-eval-after-load 'eshell-mode
     (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)))
 
 (provide 'init-eshell)

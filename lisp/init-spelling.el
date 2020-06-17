@@ -58,7 +58,7 @@
 (put 'rjsx-mode 'flyspell-mode-predicate 'js-flyspell-verify)
 ;; }}
 
-(after-load 'flyspell
+(with-eval-after-load 'flyspell
   '(progn
      (require-package 'flyspell-lazy)
      (flyspell-lazy-mode 1)))
@@ -172,7 +172,7 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
 ;; @see http://frequal.com/Perspectives/EmacsTip03-FlyspellAutoCorrectWord.HTML
 (global-set-key (kbd "C-c s") 'flyspell-auto-correct-word)
 
-(after-load 'flyspell-mode
+(with-eval-after-load 'flyspell-mode
   (define-key flyspell-mode-map (kbd "C-.") nil))
 
 
@@ -203,7 +203,7 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
   ;; Add spell-checking in comments for all programming language modes
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
-  (after-load 'flyspell
+  (with-eval-after-load 'flyspell
     (define-key flyspell-mode-map (kbd "C-;") nil)
     (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
 

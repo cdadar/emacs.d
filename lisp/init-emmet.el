@@ -12,7 +12,7 @@
   (add-hook 'js-mode-hook 'emmet-mode))
 
 
-(after-load 'emmet-mode
+(with-eval-after-load 'emmet-mode
   (setq emmet-move-cursor-between-quotes t)
   (setq emmet-expand-jsx-className? nil)
   (setq emmet-self-closing-tag-style " /"))

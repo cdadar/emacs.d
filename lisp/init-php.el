@@ -5,7 +5,7 @@
 (when (maybe-require-package 'php-mode)
   (maybe-require-package 'smarty-mode)
 
-  (after-load 'php-mode
+  (with-eval-after-load 'php-mode
     (setq indent-tabs-mode nil)
     (setq c-basic-offset 2)
     (setq php-template-compatibility nil)
@@ -14,7 +14,7 @@
     (maybe-require-package 'geben)
 
     (when (maybe-require-package 'company-php)
-      (after-load 'company
+      (with-eval-after-load 'company
         (add-to-list 'company-backends 'company-ac-php-backend)))
 
     (when (maybe-require-package 'php-refactor-mode)

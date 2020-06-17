@@ -18,6 +18,7 @@
 (require-package 'whitespace-cleanup-mode)
 (add-hook 'after-init-hook 'global-whitespace-cleanup-mode)
 
+
 (global-set-key [remap just-one-space] 'cycle-spacing)
 
 

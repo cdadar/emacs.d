@@ -18,7 +18,7 @@
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
   (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
   (add-to-list 'auto-mode-alist '("src\\/routes\\/.*\\.js\\'" . rjsx-mode))
-  (after-load 'rjsx-mode
+  (with-eval-after-load 'rjsx-mode
     (define-key rjsx-mode-map "<" nil)
     (define-key rjsx-mode-map (kbd "C-d") nil)
     (define-key rjsx-mode-map ">" nil)))
@@ -26,18 +26,18 @@
 
 (when (maybe-require-package 'vue-mode)
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-  (after-load 'vue-mode))
+  (with-eval-after-load 'vue-mode))
 
 (when (maybe-require-package 'ng2-mode)
   (add-to-list 'auto-mode-alist '("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode))
   (add-to-list 'auto-mode-alist '("*\\.component\\.html\\'" . ng2-mode))
-  (after-load 'ng2-mode))
+  (with-eval-after-load 'ng2-mode))
 
 ;; js2-mode
 
 ;; Change some defaults: customize them to override
 (setq-default js2-bounce-indent-p nil)
-(after-load 'js2-mode
+(with-eval-after-load 'js2-mode
   ;; Disable js2 mode's syntax error highlighting by default...
   (setq-default js2-mode-show-parse-errors nil
                 js2-mode-show-strict-warnings nil)
@@ -52,7 +52,7 @@
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
   (when (maybe-require-package 'ac-js2)
-    (after-load 'company
+    (with-eval-after-load 'company
       (add-to-list 'company-backends 'ac-js2-company)))
 
 
@@ -69,7 +69,7 @@
 
 (when (and (executable-find "ag")
            (maybe-require-package 'xref-js2))
-  (after-load 'js2-mode
+  (with-eval-after-load 'js2-mode
     (define-key js2-mode-map (kbd "M-.") nil)
     (add-hook 'js2-mode-hook
               (lambda () (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))))
@@ -78,7 +78,7 @@
 
 ;;; Coffeescript
 
-(after-load 'coffee-mode
+(with-eval-after-load 'coffee-mode
   (setq-default coffee-js-mode 'js2-mode
                 coffee-tab-width js-indent-level))
 
@@ -108,16 +108,16 @@
 ;; ---------------------------------------------------------------------------
 
 (when (maybe-require-package 'skewer-mode)
-  (after-load 'skewer-mode
+  (with-eval-after-load 'skewer-mode
     (add-hook 'skewer-mode-hook
               (lambda () (inferior-js-keys-mode -1)))))
 
 
 
 (when (maybe-require-package 'add-node-modules-path)
-  (after-load 'typescript-mode
+  (with-eval-after-load 'typescript-mode
     (add-hook 'typescript-mode-hook 'add-node-modules-path))
-  (after-load 'js2-mode
+  (with-eval-after-load 'js2-mode
     (add-hook 'js2-mode-hook 'add-node-modules-path)))
 
 (when (maybe-require-package 'js2-refactor)
@@ -141,7 +141,7 @@
 ;;   (add-hook 'js2-mode-hook 'tern-mode)
 ;;   (add-hook 'rjsx-mode-hook 'tern-mode)
 ;;   (add-hook 'web-mode-hook 'tern-mode)
-;;   (after-load 'tern
+;;   (with-eval-after-load 'tern
 ;;     ;; Disable completion keybindings, as we use xref-js2 instead
 ;;     (define-key tern-mode-keymap (kbd "M-.") nil)
 ;;     (define-key tern-mode-keymap (kbd "M-,") nil)
@@ -163,7 +163,7 @@
 
 
 ;; Add NodeJS error format
-(after-load 'compile
+(with-eval-after-load 'compile
   '(progn
      (add-to-list 'compilation-error-regexp-alist-alist
                   (list 'node "^[  ]+at \\(?:[^\(\n]+ \(\\)?\\([a-zA-Z\.0-9_/-]+\\):\\([0-9]+\\):\\([0-9]+\\)\)?$"

@@ -5,7 +5,7 @@
 (when (maybe-require-package 'markdown-mode)
   (add-auto-mode 'markdown-mode "\\.md\\..markdown\\.html\\'")
   (setq markdown-command "pandoc")
-  (after-load 'whitespace-cleanup-mode
+  (with-eval-after-load 'whitespace-cleanup-mode
     (add-to-list 'whitespace-cleanup-mode-ignore-modes 'markdown-mode)))
 
 
