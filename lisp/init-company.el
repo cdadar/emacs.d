@@ -21,9 +21,13 @@
     (define-key company-active-map (kbd "M-/") 'company-other-backend)
     (define-key company-active-map (kbd "C-n") 'company-select-next)
     (define-key company-active-map (kbd "C-p") 'company-select-previous)
+    (define-key company-active-map (kbd "C-d") 'company-show-doc-buffer)
+    (define-key company-active-map (kbd "M-.") 'company-show-location)
+    (setq-default company-dabbrev-other-buffers 'all
+                  company-tooltip-align-annotations t))
 
-    ;; can't work with TRAMP
-    (setq company-backends (delete 'company-ropemacs company-backends))
+  ;; can't work with TRAMP
+  (setq company-backends (delete 'company-ropemacs company-backends))
 
     ;; I don't like the downcase word in company-dabbrev!
     (setq-default company-dabbrev-downcase nil
