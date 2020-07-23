@@ -25,31 +25,6 @@
     (define-key company-active-map (kbd "M-.") 'company-show-location)
     (setq-default company-dabbrev-other-buffers 'all
                   company-tooltip-align-annotations t))
-
-  ;; can't work with TRAMP
-  (setq company-backends (delete 'company-ropemacs company-backends))
-
-    ;; I don't like the downcase word in company-dabbrev!
-    (setq-default company-dabbrev-downcase nil
-                  company-dabbrev-other-buffers 'all
-                  ;; make previous/next selection in the popup cycles
-                  company-selection-wrap-around t
-                  ;; Some languages use camel case naming convention,
-                  ;; so company should be case sensitive.
-                  company-dabbrev-ignore-case nil
-                  company-require-match nil
-                  company-etags-ignore-case t
-                  company-idle-delay 0.2
-                  ;; press M-number to choose candidate
-                  company-show-numbers t
-                  company-tooltip-limit 10
-                  company-minimum-prefix-length 2
-                  company-clang-insert-arguments nil
-                  ;; @see https://github.com/company-mode/company-mode/issues/146
-                  company-tooltip-align-annotations t
-                  company-tooltip-flip-when-above t))
-
-
   (global-set-key (kbd "M-C-/") 'company-complete)
 
   (when (maybe-require-package 'company-quickhelp)
