@@ -26,6 +26,7 @@
     (setq-default company-dabbrev-other-buffers 'all
                   company-tooltip-align-annotations t))
   (global-set-key (kbd "M-C-/") 'company-complete)
+  (global-set-key (kbd "C-c y") 'company-yasnippet)
 
   (when (maybe-require-package 'company-quickhelp)
     (add-hook 'after-init-hook 'company-quickhelp-mode))
@@ -50,8 +51,7 @@
         (page-break-lines-mode 1)))
 
     (add-hook 'company-completion-started-hook 'sanityinc/page-break-lines-disable)
-    (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable))
-  (global-set-key (kbd "C-c y") 'company-yasnippet))
+    (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable)))
 
 
 (with-eval-after-load 'company-etags
