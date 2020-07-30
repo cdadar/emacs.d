@@ -332,7 +332,10 @@ typical word processor."
 (setq org-log-into-drawer t)
 ;; Removes clocked tasks with 0:00 duration
 (setq org-clock-out-remove-zero-time-clocks t)
-
+;; Clock out when moving task to a done state
+(setq org-clock-out-when-done t)
+(setq org-clock-clocked-in-display 'mode-line)
+(setq org-clock-mode-line-total 'today)
 ;; Show clock sums as hours and minutes, not "n days" etc.
 (setq org-time-clocksum-format
       '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
@@ -346,9 +349,9 @@ typical word processor."
 (defun sanityinc/hide-org-clock-from-header-line ()
   (setq-default header-line-format nil))
 
-(add-hook 'org-clock-in-hook 'sanityinc/show-org-clock-in-header-line)
-(add-hook 'org-clock-out-hook 'sanityinc/hide-org-clock-from-header-line)
-(add-hook 'org-clock-cancel-hook 'sanityinc/hide-org-clock-from-header-line)
+;; (add-hook 'org-clock-in-hook 'sanityinc/show-org-clock-in-header-line)
+;; (add-hook 'org-clock-out-hook 'sanityinc/hide-org-clock-from-header-line)
+;; (add-hook 'org-clock-cancel-hook 'sanityinc/hide-org-clock-from-header-line)
 
 (with-eval-after-load 'org-clock
   (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
@@ -631,6 +634,8 @@ typical word processor."
     (unless noinsert
       (insert output-string))
     output-string))
+
+
 
 (provide 'init-org)
 ;;; init-org.el ends here
