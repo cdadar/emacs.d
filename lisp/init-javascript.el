@@ -11,7 +11,7 @@
 ;; Need to first remove from list if present, since elpa adds entries too, which
 ;; may be in an arbitrary order
 
-(add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
 
 (when (maybe-require-package 'rjsx-mode)
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
@@ -45,7 +45,10 @@
   (defun sanityinc/enable-js2-checks-if-flycheck-inactive ()
     (unless (flycheck-get-checker-for-buffer)
       (setq-local js2-mode-show-parse-errors t)
-      (setq-local js2-mode-show-strict-warnings t)))
+      (setq-local js2-mode-show-strict-warnings t)
+      (when (derived-mode-p 'js-mode)
+        (js2-minor-mode 1))))
+  (add-hook 'js-mode-hook 'sanityinc/enable-js2-checks-if-flycheck-inactive)
   (add-hook 'js2-mode-hook 'sanityinc/enable-js2-checks-if-flycheck-inactive)
 
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
