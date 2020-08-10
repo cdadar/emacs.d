@@ -8,8 +8,8 @@
 
 (maybe-require-package 'indium)
 
-;; Need to first remove from list if present, since elpa adds entries too, which
-;; may be in an arbitrary order
+
+;;; Basic js-mode setup
 
 (add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
 
@@ -22,6 +22,7 @@
     (define-key rjsx-mode-map (kbd "C-d") nil)
     (define-key rjsx-mode-map ">" nil)))
 
+(setq-default js-indent-level 2)
 
 (when (maybe-require-package 'vue-mode)
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
@@ -60,19 +61,14 @@
 
   (js2-imenu-extras-setup))
 
-(setq-default js-indent-level 2)
 ;; In Emacs >= 25, the following is an alias for js-indent-level anyway
 (setq-default js2-basic-offset 2)
-
 
 (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
 
 (with-eval-after-load 'js2-mode
   (sanityinc/major-mode-lighter 'js2-mode "JS2")
   (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
-(with-eval-after-load 'js
-  (sanityinc/major-mode-lighter 'js-mode "JS")
-  (sanityinc/major-mode-lighter 'js-jsx-mode "JSX"))
 
 
 
