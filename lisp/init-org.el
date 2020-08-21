@@ -464,8 +464,17 @@ typical word processor."
 (with-eval-after-load 'org
   (require 'ox-md)
   (require 'ox-latex)
-  (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
-                                "xelatex -interaction nonstopmode %f"))
+  ;; {{ export org-mode in Chinese into PDF
+  ;; @see http://freizl.github.io/posts/tech/2012-04-06-export-orgmode-file-in-Chinese.html
+  ;; and you need install texlive-xetex on different platforms
+  ;; To install texlive-xetex:
+  ;;    `sudo USE="cjk" emerge texlive-xetex` on Gentoo Linux
+  (setq org-latex-pdf-process
+        '("xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f")) ;; org v8
+  ;; }}
+
   (add-to-list 'org-latex-classes
                '("ctexart"
                  "\\documentclass[UTF8]{ctexart}
