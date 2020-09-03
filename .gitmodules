@@ -28,3 +28,9 @@
 [submodule "site-lisp/nox"]
 	path = site-lisp/nox
 	url = git@github.com:manateelazycat/nox.git
+[submodule "site-lisp/awesome-tab"]
+	path = site-lisp/awesome-tab
+	url = git@github.com:manateelazycat/awesome-tab.git
+[submodule "site-lisp/awesome-tray"]
+	path = site-lisp/awesome-tray
+	url = git@github.com:manateelazycat/awesome-tray.git
