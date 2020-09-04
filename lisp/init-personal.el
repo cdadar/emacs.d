@@ -118,6 +118,7 @@
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 300)
   (setq super-save-remote-files nil)
+  (setq super-save-exclude '(".gpg"))
   (setq super-save-triggers (quote (other-window
                                     balance-windows
                                     next-buffer
