@@ -10,9 +10,9 @@
 
 (maybe-require-package 'list-unicode-display)
 
-;;----------------------------------------------------------------------------
-;; Some basic preferences
-;;----------------------------------------------------------------------------
+
+;;; Some basic preferences
+
 (setq-default
  blink-cursor-interval 0.4
  bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
@@ -122,9 +122,9 @@
 (add-hook 'after-init-hook 'global-undo-tree-mode)
 
 
-;;----------------------------------------------------------------------------
-;; Zap *up* to char is a handy pair for zap-to-char
-;;----------------------------------------------------------------------------
+
+;;; Zap *up* to char is a handy pair for zap-to-char
+
 (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
 (global-set-key (kbd "M-Z") 'zap-up-to-char)
 
@@ -141,35 +141,28 @@
   (add-to-list 'page-break-lines-modes 'browse-kill-ring-mode))
 
 
-;;----------------------------------------------------------------------------
 ;; Don't disable narrowing commands
-;;----------------------------------------------------------------------------
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-defun 'disabled nil)
-
-;;----------------------------------------------------------------------------
-;; Show matching parens
-;;----------------------------------------------------------------------------
-(add-hook 'after-init-hook 'show-paren-mode)
-
-;;----------------------------------------------------------------------------
-;; Expand region
-;;----------------------------------------------------------------------------
-(require-package 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
-
-
-;;----------------------------------------------------------------------------
 ;; Don't disable case-change functions
-;;----------------------------------------------------------------------------
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
 
-;;----------------------------------------------------------------------------
-;; Handy key bindings
-;;----------------------------------------------------------------------------
+;; Show matching parens
+(add-hook 'after-init-hook 'show-paren-mode)
+
+
+;;; Expand region
+
+(require-package 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+
+
+;;; Handy key bindings
+
 (global-set-key (kbd "C-.") 'set-mark-command)
 (global-set-key (kbd "C-x C-.") 'pop-global-mark)
 
@@ -188,12 +181,9 @@
 (global-set-key (kbd "C-c m e") 'mc/edit-ends-of-lines)
 (global-set-key (kbd "C-c m a") 'mc/edit-beginnings-of-lines)
 
-
 ;; Train myself to use M-f and M-b instead
 (global-unset-key [M-left])
 (global-unset-key [M-right])
-
-
 
 (defun kill-back-to-indentation ()
   "Kill from point back to the first non-whitespace character on the line."
@@ -205,17 +195,18 @@
 (global-set-key (kbd "C-M-<backspace>") 'kill-back-to-indentation)
 
 
-;;----------------------------------------------------------------------------
-;; Page break lines
-;;----------------------------------------------------------------------------
+
+;;; Page break lines
+
 (when (maybe-require-package 'page-break-lines)
   (add-hook 'after-init-hook 'global-page-break-lines-mode))
 
-;;----------------------------------------------------------------------------
+
+
 ;; Shift lines up and down with M-up and M-down. When paredit is enabled,
 ;; it will use those keybindings. For this reason, you might prefer to
 ;; use M-S-up and M-S-down, which will work even in lisp modes.
-;;----------------------------------------------------------------------------
+
 (require-package 'move-dup)
 (global-set-key [M-up] 'md-move-lines-up)
 (global-set-key [M-down] 'md-move-lines-down)
@@ -225,9 +216,9 @@
 (global-set-key (kbd "C-c d") 'md-duplicate-down)
 (global-set-key (kbd "C-c u") 'md-duplicate-up)
 
-;;----------------------------------------------------------------------------
-;; Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
-;;----------------------------------------------------------------------------
+
+;;; Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
+
 (defun sanityinc/backward-up-sexp (arg)
   "Jump up to the start of the ARG'th enclosing sexp."
   (interactive "p")
@@ -240,9 +231,8 @@
 (global-set-key [remap backward-up-list] 'sanityinc/backward-up-sexp) ; C-M-u, C-M-up
 
 
-;;----------------------------------------------------------------------------
-;; Cut/copy the current line if no region is active
-;;----------------------------------------------------------------------------
+
+;;; Cut/copy the current line if no region is active
 (require-package 'whole-line-or-region)
 (add-hook 'after-init-hook 'whole-line-or-region-global-mode)
 
@@ -295,7 +285,6 @@ With arg N, insert N newlines."
           ((inhibit-field-text-motion t))
         (sort-subr nil 'forward-line 'end-of-line nil nil
                    (lambda (s1 s2) (eq (random 2) 0)))))))
-
 
 
 
