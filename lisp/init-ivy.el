@@ -35,7 +35,10 @@
   (with-eval-after-load 'counsel
     (setq-default ivy-initial-inputs-alist
                   '((Man-completion-table . "^")
-                    (woman . "^"))))
+                    (woman . "^")))
+    ;; I prefer the default behaviour or cycling in place, or
+    ;; explicit use of browse-kill-ring
+    (define-key counsel-mode-map [remap yank-pop] nil))
   (add-hook 'after-init-hook 'counsel-mode)
 
   (when (maybe-require-package 'projectile)
