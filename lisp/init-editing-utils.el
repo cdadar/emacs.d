@@ -153,6 +153,12 @@
 ;; Show matching parens
 (add-hook 'after-init-hook 'show-paren-mode)
 
+
+;;; Expand region
+
+(require-package 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+
 
 
 ;;; Handy key bindings
