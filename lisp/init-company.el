@@ -98,5 +98,10 @@
   (require 'company-english-helper)
   (global-set-key (kbd "M-C-y") 'toggle-company-english-helper))
 
+(with-eval-after-load 'company
+  (when (maybe-require-package 'company-try-hard)
+    (global-set-key (kbd "C-z") #'company-try-hard)
+    (define-key company-active-map (kbd "C-z") #'company-try-hard)))
+
 (provide 'init-company)
 ;;; init-company.el ends here
