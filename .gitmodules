@@ -34,3 +34,6 @@
 [submodule "site-lisp/awesome-tray"]
 	path = site-lisp/awesome-tray
 	url = git@github.com:manateelazycat/awesome-tray.git
+[submodule "site-lisp/company-english-helper"]
+	path = site-lisp/company-english-helper
+	url = git@github.com:manateelazycat/company-english-helper.git

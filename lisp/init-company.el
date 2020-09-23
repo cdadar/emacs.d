@@ -94,5 +94,9 @@
                 ;; accessed at first. If the variable is empty, it is set by parsing tags file
                 (all-completions prefix (tags-completion-table))))))))
 
+(with-eval-after-load 'company
+  (require 'company-english-helper)
+  (global-set-key (kbd "M-C-y") 'toggle-company-english-helper))
+
 (provide 'init-company)
 ;;; init-company.el ends here
