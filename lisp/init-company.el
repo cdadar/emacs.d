@@ -95,6 +95,11 @@
                 (all-completions prefix (tags-completion-table))))))))
 
 (with-eval-after-load 'company
+  (when (maybe-require-package 'company-ctags)
+    (company-ctags-auto-setup)))
+
+
+(with-eval-after-load 'company
   (require 'company-english-helper)
   (global-set-key (kbd "M-C-y") 'toggle-company-english-helper))
 
