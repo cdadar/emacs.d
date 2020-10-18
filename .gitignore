@@ -62,3 +62,4 @@ company-statistics-cache.el
 /eaf
 /.lsp-session-v1
 /smex-items
+/eln-cache/
