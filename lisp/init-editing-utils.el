@@ -45,6 +45,9 @@
 
 ;; Huge files
 
+(when (fboundp 'so-long-enable)
+  (add-hook 'after-init-hook 'so-long-enable))
+
 (require-package 'vlf)
 
 (defun ffap-vlf ()
