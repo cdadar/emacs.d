@@ -38,13 +38,12 @@
   (setq  company-c-headers-path-system '("."
                                          "/usr/include/"
                                          "/usr/local/include/"
-                                         "/usr/include/c++/4.8/"
-                                         "/usr/include/c++/4.8/x86_64-suse-linux"
-                                         "/usr/include/c++/4.8/backward"
-                                         "/usr/lib64/gcc/x86_64-suse-linux/4.8/include"
-                                         "/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed"
-                                         "/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/include")))
-
+                                         "/usr/include/c++/7/"
+                                         "/usr/include/c++/7/x86_64-suse-linux"
+                                         "/usr/include/c++/7/backward"
+                                         "/usr/lib64/gcc/x86_64-suse-linux/7/include"
+                                         "/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed"
+                                         "/usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/include")))
 
 (with-eval-after-load 'elfeed
   (setq elfeed-db-directory "~/Nutstore/.elfeed"))
