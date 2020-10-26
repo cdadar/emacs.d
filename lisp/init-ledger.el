@@ -3,6 +3,8 @@
 ;;; Code:
 
 (when (maybe-require-package 'ledger-mode)
+  (add-to-list 'auto-mode-alist '("\\.\\(dat\\|ledger\\)\\'" . ledger-mode))
+
   (when (maybe-require-package 'flycheck-ledger)
     (with-eval-after-load 'flycheck
       (with-eval-after-load 'ledger-mode
