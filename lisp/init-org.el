@@ -393,7 +393,7 @@ typical word processor."
      (setq org-map-continue-from (outline-previous-heading)))
    "/CANCELLED" 'file))
 
-
+(add-to-list 'auto-mode-alist '("\\.\\(org|org_archive\\)\\'" . org-mode))
 
 
 
