@@ -62,6 +62,32 @@
       (ansi-color-apply-on-region compilation-filter-start (point-max))))
   (add-hook 'compilation-filter-hook 'sanityinc/colourise-compilation-buffer))
 
+(defun endless/send-input (input &optional nl)
+  "Send INPUT to the current process.
+Interactively also sends a terminating newline."
+  (interactive "MInput: \nd")
+  (let ((string (concat input (if nl "\n"))))
+    ;; This is just for visual feedback.
+    (let ((inhibit-read-only t))
+      (insert-before-markers string))
+    ;; This is the important part.
+    (process-send-string
+     (get-buffer-process (current-buffer))
+     string)))
+
+(defun endless/send-self ()
+  "Send the pressed key to the current process."
+  (interactive)
+  (endless/send-input
+   (apply #'string
+          (append (this-command-keys-vector) nil))))
+
+(define-key compilation-mode-map (kbd "C-c i")
+  #'endless/send-input)
+
+(dolist (key '("\C-d" "\C-j" "y" "n"))
+  (define-key compilation-mode-map key
+    #'endless/send-self))
 
 (provide 'init-compile)
 ;;; init-compile.el ends here
