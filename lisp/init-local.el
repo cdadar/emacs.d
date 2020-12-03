@@ -35,15 +35,13 @@
       '(("freenode.net" "#lisp" "#opensuse-cn" "#fedora-zh" "#linuxba" "#emacs" "#java" "#javascript" "#python" "#python.cn" "#ruby")))
 
 (with-eval-after-load 'company-c-headers
-  (setq  company-c-headers-path-system '("."
-                                         "/usr/include/"
-                                         "/usr/local/include/"
-                                         "/usr/include/c++/7/"
-                                         "/usr/include/c++/7/x86_64-suse-linux"
-                                         "/usr/include/c++/7/backward"
-                                         "/usr/lib64/gcc/x86_64-suse-linux/7/include"
-                                         "/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed"
-                                         "/usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/include")))
+  (setq company-c-headers-path-system
+        (append company-c-headers-path-system '("/usr/include/c++/7/"
+                                                "/usr/include/c++/7/x86_64-suse-linux"
+                                                "/usr/include/c++/7/backward"
+                                                "/usr/lib64/gcc/x86_64-suse-linux/7/include"
+                                                "/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed"
+                                                "/usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/include"))))
 
 (with-eval-after-load 'elfeed
   (setq elfeed-db-directory "~/Nutstore/.elfeed"))

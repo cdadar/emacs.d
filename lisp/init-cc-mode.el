@@ -37,7 +37,8 @@ Includes support for Qt code (signal, slots and alikes)."
 
           ;;  gcc -xc++ -E -v - 获取头文件路径
           (setq  company-c-headers-path-system '("." "/usr/include/"
-                                                 "/usr/local/include/")))
+                                                 "/usr/local/include/"
+                                                 "../*/include")))
         ;;company-clang
         (add-to-list 'company-backends #'company-clang)
 
