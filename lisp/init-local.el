@@ -44,7 +44,7 @@
                                                 "/usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/include"))))
 
 (with-eval-after-load 'elfeed
-  (setq elfeed-db-directory "~/Nutstore/.elfeed"))
+  (setq elfeed-db-directory "~/Nutstore Files/Nutstore/.elfeed"))
 (with-eval-after-load 'elfeed-org
   (setq rmh-elfeed-org-files (list rmh-elfeed-org-file)))
 
