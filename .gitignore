@@ -63,3 +63,4 @@ company-statistics-cache.el
 /.lsp-session-v1
 /smex-items
 /eln-cache/
+org-roam.db

@@ -659,6 +659,10 @@ typical word processor."
     output-string))
 
 
+(require-package 'org-roam)
+(require-package 'org-roam-server)
+(setq org-roam-directory "~/org-mode/roam")
+(add-hook 'after-init-hook 'org-roam-mode)
 
 (provide 'init-org)
 ;;; init-org.el ends here
