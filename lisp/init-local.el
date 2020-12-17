@@ -43,6 +43,9 @@
                                                 "/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed"
                                                 "/usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/include"))))
 
+(with-eval-after-load 'org-roam
+  (setq org-roam-directory "~/org-mode/roam"))
+
 (with-eval-after-load 'elfeed
   (setq elfeed-db-directory "~/Nutstore Files/Nutstore/.elfeed"))
 (with-eval-after-load 'elfeed-org

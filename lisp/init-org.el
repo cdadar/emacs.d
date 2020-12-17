@@ -659,10 +659,16 @@ typical word processor."
     output-string))
 
 
-(require-package 'org-roam)
-(require-package 'org-roam-server)
-(setq org-roam-directory "~/org-mode/roam")
-(add-hook 'after-init-hook 'org-roam-mode)
-
+(when (maybe-require-package 'org-roam)
+  (maybe-require-package 'org-roam-bibtex)
+  (maybe-require-package 'org-roam-server)
+  (maybe-require-package 'company-org-roam)
+  (add-hook 'after-init-hook 'org-roam-mode)
+  (with-eval-after-load 'org-roam-mode
+    (define-key org-roam-mode-map (kbd "C-c n l") 'org-roam)
+    (define-key org-roam-mode-map (kbd "C-c n f") 'org-roam-find-file)
+    (define-key org-roam-mode-map (kbd "C-c n g") 'org-roam-graph)
+    (define-key org-mode-map (kbd "C-c n i") 'org-roam-insert)
+    (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)))
 (provide 'init-org)
 ;;; init-org.el ends here
