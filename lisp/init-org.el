@@ -732,7 +732,7 @@ typical word processor."
       (insert output-string))
     output-string))
 
-
+(maybe-require-package 'org-ref)
 
 
 (when (maybe-require-package 'org-roam)

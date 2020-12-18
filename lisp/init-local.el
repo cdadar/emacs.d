@@ -45,6 +45,28 @@
                                                 "/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed"
                                                 "/usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/include"))))
 
+(with-eval-after-load 'org-ref
+  (setq reftex-default-bibliography '("~/Nutstore Files/Nutstore/bibliography/references.bib"))
+
+  ;; see org-ref for use of these variables
+  (setq org-ref-bibliography-notes "~/Nutstore Files/Nutstore/bibliography/notes.org"
+        org-ref-default-bibliography '("~/Nutstore Files/Nutstore/bibliography/references.bib")
+        org-ref-pdf-directory "~/Nutstore Files/Nutstore/bibliography/bibtex-pdfs/")
+
+  (setq bibtex-completion-bibliography "~/Nutstore Files/Nutstore/bibliography/references.bib"
+        bibtex-completion-library-path "~/Nutstore Files/Nutstore/bibliography/bibtex-pdfs"
+        bibtex-completion-notes-path "~/Nutstore Files/Nutstore/bibliography/helm-bibtex-notes")
+
+  ;; open pdf with system pdf viewer (works on mac)
+  (setq bibtex-completion-pdf-open-function
+        (lambda (fpath)
+          (start-process "open" "*open*" "open" fpath)))
+
+  ;; alternative
+  ;; (setq bibtex-completion-pdf-open-function 'org-open-file)
+
+  )
+
 (with-eval-after-load 'org-roam
   (setq org-roam-directory "~/org-mode/roam"))
 

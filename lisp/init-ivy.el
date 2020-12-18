@@ -28,7 +28,8 @@
           ivy-rich-path-style 'abbrev)
     (with-eval-after-load 'ivy
       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
-    (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
+    (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode))))
+  (maybe-require-package 'ivy-bibtex))
 
 (when (maybe-require-package 'counsel)
   (setq-default counsel-mode-override-describe-bindings t)
