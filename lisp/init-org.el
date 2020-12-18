@@ -222,6 +222,9 @@ typical word processor."
         ("w" "work" entry (file+headline org-agenda-file-work "Work")
          "* TODO [#A] %?\n  %i\n %U"
          :empty-lines 1)
+        ("W" "doing work" entry (file+headline org-agenda-file-work "Work")
+         "* TODO [#A] %?\n  %i\n %U"
+         :empty-lines 1 :clock-in t :clock-resume t)
         ("l" "links" entry (file+headline org-agenda-file-note "Quick notes")
          "* TODO [#C] %?\n  %i\n %a \n %U"
          :empty-lines 1)
