@@ -143,6 +143,66 @@ typical word processor."
 (setq org-support-shift-select t)
 
 ;;; Capturing
+(defun get-year-and-month ()
+  (list (format-time-string "%Y年") (format-time-string "%m月")))
+
+
+(defun find-month-tree ()
+  (let* ((path (get-year-and-month))
+         (level 1)
+         end)
+    (unless (derived-mode-p 'org-mode)
+      (error "Target buffer \"%s\" should be in Org mode" (current-buffer)))
+    (goto-char (point-min))             ;移动到 buffer 的开始位置
+    ;; 先定位表示年份的 headline，再定位表示月份的 headline
+    (dolist (heading path)
+      (let ((re (format org-complex-heading-regexp-format
+                        (regexp-quote heading)))
+            (cnt 0))
+        (if (re-search-forward re end t)
+            (goto-char (point-at-bol))  ;如果找到了 headline 就移动到对应的位置
+          (progn                        ;否则就新建一个 headline
+            (or (bolp) (insert "\n"))
+            (if (/= (point) (point-min)) (org-end-of-subtree t t))
+            (insert (make-string level ?*) " " heading "\n"))))
+      (setq level (1+ level))
+      (setq end (save-excursion (org-end-of-subtree t t))))
+    (org-end-of-subtree)))
+
+(defun org-capture-template-goto-link ()
+  (org-capture-put :target (list 'file+headline
+                                 (nth 1 (org-capture-get :target))
+                                 (org-capture-get :annotation)))
+  (org-capture-put-target-region-and-position)
+  (widen)
+  (let ((hd (nth 2 (org-capture-get :target))))
+    (goto-char (point-min))
+    (if (re-search-forward
+         (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
+        (org-end-of-subtree)
+      (goto-char (point-max))
+      (or (bolp) (insert "\n"))
+      (insert "* " hd "\n"))))
+
+(defun generate-anki-note-body ()
+  (interactive)
+  (message "Fetching note types...")
+  (let ((note-types (sort (anki-editor-note-types) #'string-lessp))
+        (decks (sort (anki-editor-deck-names) #'string-lessp))
+        deck note-type fields)
+    (setq deck (completing-read "Choose a deck: " decks))
+    (setq note-type (completing-read "Choose a note type: " note-types))
+    (message "Fetching note fields...")
+    (setq fields (anki-editor--anki-connect-invoke-result "modelFieldNames" `((modelName . ,note-type))))
+    (concat "  :PROPERTIES:\n"
+            "  :ANKI_DECK: " deck "\n"
+            "  :ANKI_NOTE_TYPE: " note-type "\n"
+            "  :END:\n\n"
+            (mapconcat (lambda (str) (concat "** " str))
+                       fields
+                       "\n\n"))))
+
+(require 'org-protocol)
 
 (global-set-key (kbd "C-c c") 'org-capture)
 
@@ -168,7 +228,21 @@ typical word processor."
         ("j" "Journal Entry"
          entry (file+datetree org-agenda-file-journal)
          "* %?"
-         :empty-lines 1)))
+         :empty-lines 1)
+        ("p" "Protocol")
+        ("pb" "Protocol Bookmarks" entry
+         (file+headline org-capture-web-bookmarks "Bookmarks")
+         "* %U - %:annotation" :immediate-finish t :kill-buffer t)
+        ("pn" "Protocol Bookmarks" entry
+         (file+headline org-capture-web-bookmarks "Notes")
+         "* %U - %:annotation %^g\n\n  %?" :empty-lines 1 :kill-buffer t)
+        ("pa" "Protocol Annotation" plain
+         (file+function org-capture-web-bookmarks org-capture-template-goto-link)
+         "  %U - %?\n\n  %:initial" :empty-lines 1)
+        ("v" "Vocabulary" entry
+         (file+headline org-capture-anki "Vocabulary")
+         ,(concat "* %^{heading} :note:\n"
+                  "%(generate-anki-note-body)\n"))))
 
 
 
@@ -659,16 +733,65 @@ typical word processor."
     output-string))
 
 
+
+
 (when (maybe-require-package 'org-roam)
-  (maybe-require-package 'org-roam-bibtex)
-  (maybe-require-package 'org-roam-server)
-  (maybe-require-package 'company-org-roam)
+
+  (when (maybe-require-package 'org-roam-server)
+    (setq org-roam-server-host "127.0.0.1"
+          org-roam-server-port 9090
+          org-roam-server-export-inline-images t
+          org-roam-server-authenticate nil
+          org-roam-server-network-label-truncate t
+          org-roam-server-network-label-truncate-length 60
+          org-roam-server-network-label-wrap-length 20)
+    (org-roam-server-mode))
+
   (add-hook 'after-init-hook 'org-roam-mode)
+
   (with-eval-after-load 'org-roam-mode
+    (require 'org-protocol)
     (define-key org-roam-mode-map (kbd "C-c n l") 'org-roam)
     (define-key org-roam-mode-map (kbd "C-c n f") 'org-roam-find-file)
     (define-key org-roam-mode-map (kbd "C-c n g") 'org-roam-graph)
     (define-key org-mode-map (kbd "C-c n i") 'org-roam-insert)
-    (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)))
+    (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)
+    (setq org-roam-capture-templates
+          '(
+            ("d" "default" plain (function org-roam-capture--get-point)
+             "%?"
+             :file-name "%<%Y%m%d%H%M%S>-${slug}"
+             :head "#+title: ${title}\n#+roam_alias:\n\n")
+            ("g" "group")
+            ("ga" "Group A" plain (function org-roam-capture--get-point)
+             "%?"
+             :file-name "%<%Y%m%d%H%M%S>-${slug}"
+             :head "#+title: ${title}\n#+roam_alias:\n\n")
+            ("gb" "Group B" plain (function org-roam-capture--get-point)
+             "%?"
+             :file-name "%<%Y%m%d%H%M%S>-${slug}"
+             :head "#+title: ${title}\n#+roam_alias:\n\n")))
+    (setq org-roam-capture-immediate-template
+          '("d" "default" plain (function org-roam-capture--get-point)
+            "%?"
+            :file-name "%<%Y%m%d%H%M%S>-${slug}"
+            :head "#+title: ${title}\n"
+            :unnarrowed t))
+    (setq org-roam-capture-ref-templates
+          '(("r" "ref" plain (function org-roam-capture--get-point)
+             ""
+             :file-name "${slug}"
+             :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+             :unnarrowed t)
+            '("a" "Annotation" plain (function org-roam-capture--get-point)
+              "%U ${body}\n"
+              :file-name "${slug}"
+              :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+              :immediate-finish t
+              :unnarrowed t))))
+
+  (maybe-require-package 'org-roam-bibtex)
+  (maybe-require-package 'company-org-roam))
+
 (provide 'init-org)
 ;;; init-org.el ends here
