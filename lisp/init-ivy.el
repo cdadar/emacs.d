@@ -26,6 +26,13 @@
     (setq ivy-virtual-abbreviate 'abbreviate
           ivy-rich-switch-buffer-align-virtual-buffer nil
           ivy-rich-path-style 'abbrev)
+    (with-eval-after-load 'ivy-rich
+      (setq ivy-rich-display-transformers-list
+            (plist-put ivy-rich-display-transformers-list 'counsel-bookmark
+                       '(:columns ((ivy-rich-bookmark-type)
+                                   (ivy-rich-candidate (:width 40))
+                                   (ivy-rich-bookmark-info)))
+                       )))
     (with-eval-after-load 'ivy
       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
     (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode))))
