@@ -229,6 +229,10 @@ typical word processor."
          entry (file+datetree org-agenda-file-journal)
          "* %?"
          :empty-lines 1)
+        ("v" "Vocabulary" entry
+         (file+headline org-capture-anki "Vocabulary")
+         ,(concat "* %^{heading} :note:\n"
+                  "%(generate-anki-note-body)\n"))
         ("p" "Protocol")
         ("pb" "Protocol Bookmarks" entry
          (file+headline org-capture-web-bookmarks "Bookmarks")
@@ -238,11 +242,7 @@ typical word processor."
          "* %U - %:annotation %^g\n\n  %?" :empty-lines 1 :kill-buffer t)
         ("pa" "Protocol Annotation" plain
          (file+function org-capture-web-bookmarks org-capture-template-goto-link)
-         "  %U - %?\n\n  %:initial" :empty-lines 1)
-        ("v" "Vocabulary" entry
-         (file+headline org-capture-anki "Vocabulary")
-         ,(concat "* %^{heading} :note:\n"
-                  "%(generate-anki-note-body)\n"))))
+         "  %U - %?\n\n  %:initial" :empty-lines 1)))
 
 
 
@@ -757,8 +757,7 @@ typical word processor."
     (define-key org-mode-map (kbd "C-c n i") 'org-roam-insert)
     (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)
     (setq org-roam-capture-templates
-          '(
-            ("d" "default" plain (function org-roam-capture--get-point)
+          '(("d" "default" plain (function org-roam-capture--get-point)
              "%?"
              :file-name "%<%Y%m%d%H%M%S>-${slug}"
              :head "#+title: ${title}\n#+roam_alias:\n\n")
@@ -789,9 +788,11 @@ typical word processor."
               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
               :immediate-finish t
               :unnarrowed t))))
-
-  (maybe-require-package 'org-roam-bibtex)
-  (maybe-require-package 'company-org-roam))
+  (when (maybe-require-package 'company-org-roam)
+    (with-eval-after-load 'company
+      (add-to-list 'company-backends 'company-org-roam)))
+  (when (maybe-require-package 'org-roam-bibtex)
+    (add-hook 'org-roam-mode-hook 'org-roam-bibtex-mode)))
 
 (provide 'init-org)
 ;;; init-org.el ends here
