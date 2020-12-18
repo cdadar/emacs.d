@@ -737,7 +737,6 @@ typical word processor."
 
 (maybe-require-package 'org-ref)
 
-
 (when (maybe-require-package 'org-roam)
 
   (when (maybe-require-package 'org-roam-server)
@@ -748,7 +747,7 @@ typical word processor."
           org-roam-server-network-label-truncate t
           org-roam-server-network-label-truncate-length 60
           org-roam-server-network-label-wrap-length 20)
-    (org-roam-server-mode))
+    (ignore-error (org-roam-server-mode)))
 
   (add-hook 'after-init-hook 'org-roam-mode)
 
