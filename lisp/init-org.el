@@ -89,7 +89,6 @@
     (unless (file-exists-p org-plantuml-jar-path)
       (url-copy-file url org-plantuml-jar-path))))
 
-
 ;; Re-align tags when window shape changes
 (with-eval-after-load 'org-agenda
   (add-hook 'org-agenda-mode-hook
@@ -313,6 +312,15 @@ typical word processor."
   (setq org-stuck-projects
         `(,active-project-match ("NEXT")))
 
+  (setq org-tag-alist
+        '(("@office" . ?o)
+          ("@home" . ?h)
+          ("@trailing" . ?t)
+          ("bug" . ?b)
+          ("demand" . ?d)
+          ("video" . ?v)
+          ("book" . ?B)))
+
   (setq org-agenda-compact-blocks t
         org-agenda-sticky t
         org-agenda-start-on-weekday nil
@@ -389,7 +397,31 @@ typical word processor."
             ;; (tags-todo "-NEXT"
             ;;            ((org-agenda-overriding-header "All other TODOs")
             ;;             (org-match-list-sublevels t)))
-            )))))
+            ))
+
+          ;;An entry without a cookie is treated just like priority ' B '.
+          ;;So when create new task, they are default 重要且紧急
+          ("w" . "任务安排")
+          ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
+          ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
+          ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
+          ;; ("wd" "不重要且不紧急的任务" tags-todo "+PRIORITY=\"\"")
+          ("b" "Blog" tags-todo "BLOG")
+          ("p" . "项目安排")
+          ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
+          ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"chens\"")
+          ("W" "Weekly Review"
+           ((stuck "") ;; review stuck projects as designated by org-stuck-projects
+            (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
+            ))
+          ("c" . "特定标签")
+          ("co" "At the office" tags-todo "@office")
+          ("ch" "At the home" tags-todo "@home")
+          ("ct" "At the travelling" tags-todo "@travelling")
+          ("cb" "bug" tags-todo "bug" )
+          ("cd" "demand" tags-todo "demand")
+          ("cB" "book" tags-todo "book")
+          ("cv" "video" tags-todo "video"))))
 
 
 (add-hook 'org-agenda-mode-hook 'hl-line-mode)
@@ -522,26 +554,6 @@ typical word processor."
 ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
 ;;                 (insert (match-string 0))))))
 
-
-
-
-;;An entry without a cookie is treated just like priority ' B '.
-;;So when create new task, they are default 重要且紧急
-(setq org-agenda-custom-commands
-      '(
-        ("w" . "任务安排")
-        ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
-        ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
-        ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
-        ;; ("wd" "不重要且不紧急的任务" tags-todo "+PRIORITY=\"\"")
-        ("b" "Blog" tags-todo "BLOG")
-        ("p" . "项目安排")
-        ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
-        ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"chens\"")
-        ("W" "Weekly Review"
-         ((stuck "") ;; review stuck projects as designated by org-stuck-projects
-          (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
-          ))))
 
 
 
