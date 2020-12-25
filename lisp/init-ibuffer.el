@@ -54,5 +54,16 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+(ensure-lib-from-url 'tempbuf "https://www.emacswiki.org/emacs/download/tempbuf.el")
+
+(require 'tempbuf)
+
+(add-hook 'custom-mode-hook 'turn-on-tempbuf-mode)
+(add-hook 'w3-mode-hook 'turn-on-tempbuf-mode)
+(add-hook 'Man-mode-hook 'turn-on-tempbuf-mode)
+(add-hook 'view-mode-hook 'turn-on-tempbuf-mode)
+
+
+
 (provide 'init-ibuffer)
 ;;; init-ibuffer.el ends here
