@@ -26,6 +26,10 @@
 
 (add-hook 'after-init-hook 'reapply-themes)
 
+(defun +toggle-theme ()
+  "Toggle light"
+  (interactive)
+  (if (equal custom-enabled-themes '(sanityinc-tomorrow-night)) (light) (dark)))
 
 ;;------------------------------------------------------------------------------
 ;; Toggle between light and dark
