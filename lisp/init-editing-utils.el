@@ -346,7 +346,7 @@ ORIG is the advised function, which is called with its ARGS."
   (define-key global-map (kbd "M-s M-o") 'color-rg-search-input-in-project)
   (define-key global-map (kbd "M-s M-p") 'color-rg-search-symbol-in-project))
 
-(maybe-require-package 'deadgrep)
+(when (executable-find "rg") (maybe-require-package 'deadgrep))
 
 (when (maybe-require-package 'comment-dwim-2)
   (global-set-key (kbd "M-;") 'comment-dwim-2))
