@@ -348,6 +348,9 @@ ORIG is the advised function, which is called with its ARGS."
 
 (when (executable-find "rg") (maybe-require-package 'deadgrep))
 
+;; (when (maybe-require-package 'rime)
+;;   (setq default-input-method "rime"))
+
 (when (maybe-require-package 'comment-dwim-2)
   (global-set-key (kbd "M-;") 'comment-dwim-2))
 
