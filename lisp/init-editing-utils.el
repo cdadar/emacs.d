@@ -372,6 +372,8 @@ ORIG is the advised function, which is called with its ARGS."
         comment-tags-lighter nil)
   (add-hook 'prog-mode-hook 'comment-tags-mode))
 
+(maybe-require-package 'iedit)
+
 (require 'advance-words-count)
 (require 'advance-wc-mode)
 
