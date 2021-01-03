@@ -21,6 +21,12 @@
     (when (memq window-system '(mac ns))
       (exec-path-from-shell-copy-env "LEDGER_FILE")))
 
+
+  (when (maybe-require-package 'company-ledger)
+    (with-eval-after-load 'company
+      (with-eval-after-load 'ledger-mode
+        (add-to-list 'company-backends 'company-ledger))))
+
   (add-hook 'ledger-mode-hook 'goto-address-prog-mode))
 
 (require-package 'hledger-mode)
