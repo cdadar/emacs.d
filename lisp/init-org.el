@@ -802,9 +802,7 @@ typical word processor."
               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
               :immediate-finish t
               :unnarrowed t))))
-  (when (maybe-require-package 'company-org-roam)
-    (with-eval-after-load 'company
-      (add-to-list 'company-backends 'company-org-roam)))
+  (when (maybe-require-package 'company-org-roam))
   (when (maybe-require-package 'org-roam-bibtex)
     (add-hook 'org-roam-mode-hook 'org-roam-bibtex-mode)))
 
