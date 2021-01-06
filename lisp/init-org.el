@@ -747,8 +747,6 @@ typical word processor."
       (insert output-string))
     output-string))
 
-(maybe-require-package 'org-ref)
-
 (when (maybe-require-package 'org-roam)
 
   (when (maybe-require-package 'org-roam-server)
@@ -801,10 +799,7 @@ typical word processor."
               :file-name "${slug}"
               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
               :immediate-finish t
-              :unnarrowed t))))
-  (when (maybe-require-package 'company-org-roam))
-  (when (maybe-require-package 'org-roam-bibtex)
-    (add-hook 'org-roam-mode-hook 'org-roam-bibtex-mode)))
+              :unnarrowed t)))))
 
 (provide 'init-org)
 ;;; init-org.el ends here
