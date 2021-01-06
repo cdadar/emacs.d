@@ -85,7 +85,6 @@
 (require 'init-mmm)
 
 (require 'init-editing-utils)
-(require 'init-meow)
 (require 'init-whitespace)
 
 (require 'init-vc)
