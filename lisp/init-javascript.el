@@ -138,7 +138,7 @@
 
   (reformatter-define prettier-javascript
     :program "prettier"
-    :args '("--parser=babylon"))
+    :args '("--parser=babel"))
 
   (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
   (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode))
