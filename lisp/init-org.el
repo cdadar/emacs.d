@@ -643,7 +643,7 @@ typical word processor."
 
 
 (with-eval-after-load 'org
-  (defun cdadar/org-screenshot ()
+  (defun +org-screenshot ()
     "Take a screenshot into a unique-named file in the current buffer file
  directory and insert a link to this file."
     (interactive)
@@ -674,7 +674,7 @@ typical word processor."
         (insert (concat "[[file:" filename "]]")))
     (org-display-inline-images))
 
-  (define-key org-mode-map (kbd "C-c s c") 'cdadar/org-screenshot))
+  (define-key org-mode-map (kbd "C-c s c") '+org-screenshot))
 
 ;; create ppt
 (with-eval-after-load 'org
