@@ -24,7 +24,7 @@
 
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 
-(setq deft-directory "~/org-mode/notes")
+(setq deft-directory "~/org-mode/roam")
 
 (setq org-brain-path "~/org-mode/brain")
 
