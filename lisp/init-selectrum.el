@@ -37,7 +37,6 @@
     (global-set-key (kbd "C-M-#") 'consult-register)
     ;; M-g bindings (goto-map)
     (global-set-key (kbd "M-g g") 'consult-goto-line)
-    (global-set-key (kbd "M-g M-g") 'consult-goto-line)
     (global-set-key (kbd "M-g o") 'consult-outline)
     (global-set-key (kbd "M-g m") 'consult-mark)
     (global-set-key (kbd "M-g k") 'consult-global-mark)
