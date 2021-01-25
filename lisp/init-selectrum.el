@@ -26,7 +26,7 @@
     (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
     (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
     (global-set-key (kbd "C-c h") 'consult-history)
-    (global-set-key (kbd "C-c m") 'consult-mode-command)
+    (global-set-key (kbd "C-c M-m") 'consult-mode-command)
     (global-set-key (kbd "C-c b") 'consult-bookmark)
     (global-set-key (kbd "C-c k") 'consult-kmacro)
     (global-set-key (kbd "C-x M-:") 'consult-complex-command)
