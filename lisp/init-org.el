@@ -801,5 +801,13 @@ typical word processor."
               :immediate-finish t
               :unnarrowed t)))))
 
+(when (maybe-require-package 'org-download)
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (add-hook 'org-mode-hook 'org-download-enable)
+  (setq-default org-download-heading-lvl nil
+                org-download-image-dir "./img"
+                org-download-screenshot-method "pngpaste %s"
+                org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
+
 (provide 'init-org)
 ;;; init-org.el ends here
