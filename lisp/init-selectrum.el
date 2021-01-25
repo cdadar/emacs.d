@@ -25,6 +25,36 @@
     (global-set-key [remap switch-to-buffer] 'consult-buffer)
     (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
     (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
+    (global-set-key (kbd "C-c h") 'consult-history)
+    (global-set-key (kbd "C-c m") 'consult-mode-command)
+    (global-set-key (kbd "C-c b") 'consult-bookmark)
+    (global-set-key (kbd "C-c k") 'consult-kmacro)
+    (global-set-key (kbd "C-x M-:") 'consult-complex-command)
+    (global-set-key (kbd "C-x b") 'consult-buffer)
+    ;; Custom M-# bindings for fast register access
+    (global-set-key (kbd "M-#") 'consult-register-load)
+    (global-set-key (kbd "M-'") 'consult-register-store)
+    (global-set-key (kbd "C-M-#") 'consult-register)
+    ;; M-g bindings (goto-map)
+    (global-set-key (kbd "M-g g") 'consult-goto-line)
+    (global-set-key (kbd "M-g M-g") 'consult-goto-line)
+    (global-set-key (kbd "M-g o") 'consult-outline)
+    (global-set-key (kbd "M-g m") 'consult-mark)
+    (global-set-key (kbd "M-g k") 'consult-global-mark)
+    (global-set-key (kbd "M-g i") 'consult-project-imenu) ;; Alternative: consult-imenu
+    (global-set-key (kbd "M-g e") 'consult-error)
+    ;; M-s bindings (search-map)
+    (global-set-key (kbd "M-s g") 'consult-git-grep)      ;; Alternatives: consult-grep, consult-ripgrep
+    (global-set-key (kbd "M-s f") 'consult-find)          ;; Alternatives: consult-locate, find-fd
+    (global-set-key (kbd "M-s l") 'consult-line)
+    (global-set-key (kbd "M-s m") 'consult-multi-occur)
+    (global-set-key (kbd "M-s k") 'consult-keep-lines)
+    (global-set-key (kbd "M-s u") 'consult-focus-lines)
+    (global-set-key (kbd "M-s s") 'consult-isearch)
+    ;; Other bindings
+    (global-set-key (kbd "M-y") 'consult-yank-pop)
+    (global-set-key (kbd "<help> a") 'consult-apropos)
+
     (when (maybe-require-package 'embark-consult)
       (with-eval-after-load 'embark
         (require 'embark-consult)
