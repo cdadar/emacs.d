@@ -158,24 +158,6 @@
        (define-key hl-todo-mode-map (kbd "C-c M-n") 'hl-todo-next)
        (define-key hl-todo-mode-map (kbd "C-c M-o") 'hl-todo-occur))))
 
-
-
-
-;; (when (maybe-require-package 'dumb-jump)
-;;   (with-eval-after-load 'dumb-jump
-;;     '(progn
-;;        (with-eval-after-load 'ivy
-;;          (setq dumb-jump-selector 'ivy))
-;;        (with-eval-after-load 'helm
-;;          (setq dumb-jump-selector 'helm))
-;;        (cond
-;;         ((executable-find "pt") (setq dumb-jump-force-searcher 'pt))
-;;         ((executable-find "ack") (setq dumb-jump-force-searcher 'ack))
-;;         ((executable-find "ag") (setq dumb-jump-force-searcher 'ag))
-;;         ((executable-find "rg") (setq dumb-jump-force-searcher 'rg)))))
-;;   (add-hook 'after-init-hook #'dumb-jump-mode))
-
-
 (with-eval-after-load 'grep
   '(progn
      (define-key grep-mode-map
