@@ -12,6 +12,8 @@
   (add-hook 'after-init-hook 'global-company-mode)
   (with-eval-after-load 'company
     (when (maybe-require-package 'company-perscient)
+      (require 'prescient)
+      (prescient-persist-mode 1)
       (company-prescient-mode))
 
     (dolist (backend '(company-eclim company-semantic))
