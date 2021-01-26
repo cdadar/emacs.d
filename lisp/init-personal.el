@@ -59,10 +59,9 @@
     '(progn
        (add-hook 'projectile-after-switch-project-hook
                  (lambda ()
-                   (let editorconfig-config-path (expand-file-name "./.editorconfig" projectile-project-root ))
-                   (when (file-exists-p editorconfig-config-path)
-                     (setq editorconfig-exec-path editorconfig-config-path))))))
-  )
+                   (let ((editorconfig-config-path (expand-file-name ".editorconfig" (projectile-project-root))))
+                     (when (file-exists-p editorconfig-config-path)
+                       (setq-local editorconfig-exec-path editorconfig-config-path))))))))
 
 ;;; personal.el ends here
 
