@@ -2,7 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-;; -*- lexical-binding: t -*-
+(when (maybe-require-package 'ggtags)
+  (require 'ggtags)
+  (ggtags-mode 1)
+  (add-hook 'after-init-hook #'ggtags-mode))
 
 (defun gtags-ext-produce-tags-if-needed (dir)
   (if (not (= 0 (call-process "global" nil nil nil " -p"))) ; tagfile doesn't exist?
@@ -39,12 +42,5 @@
   "print the GTAGSLIBPATH (for debug purpose)"
   (interactive)
   (message "GTAGSLIBPATH=%s" (getenv "GTAGSLIBPATH")))
-
-(when (maybe-require-package 'ggtags)
-  (ggtags-mode 1)
-  (define-key ggtags-mode-map (kbd "M-.")  nil)
-  (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)
-  (define-key ggtags-mode-map (kbd "C-M-.") nil)
-  (define-key ggtags-mode-map (kbd "C-c C-M-.") 'ggtags-find-tag-regexp))
 
 (provide 'init-gtags)
