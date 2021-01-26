@@ -33,14 +33,18 @@
     (setq libdir (directory-file-name libdir)) ;remove final slash
     (setq sl (split-string (if (getenv "GTAGSLIBPATH") (getenv "GTAGSLIBPATH") "")  ":" t))
     (if del (setq sl (delete libdir sl)) (add-to-list 'sl libdir t))
-    (setenv "GTAGSLIBPATH" (mapconcat 'identity sl ":"))
-    ))
+    (setenv "GTAGSLIBPATH" (mapconcat 'identity sl ":"))))
 
 (defun gtags-ext-print-gtagslibpath ()
   "print the GTAGSLIBPATH (for debug purpose)"
   (interactive)
   (message "GTAGSLIBPATH=%s" (getenv "GTAGSLIBPATH")))
 
-
+(when (maybe-require-package 'ggtags)
+  (add-hook 'after-init-hook 'ggtags-mode)
+  (define-key ggtags-mode-map (kbd "M-.")  nil)
+  (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)
+  (define-key ggtags-mode-map (kbd "C-M-.") nil)
+  (define-key ggtags-mode-map (kbd "C-c C-M-.") 'ggtags-find-tag-regexp))
 
 (provide 'init-gtags)
