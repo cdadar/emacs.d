@@ -11,7 +11,7 @@
 (when (maybe-require-package 'company)
   (add-hook 'after-init-hook 'global-company-mode)
   (with-eval-after-load 'company
-    (when (maybe-require-package 'company-perscient)
+    (when (maybe-require-package 'company-prescient)
       (require 'prescient)
       (prescient-persist-mode 1)
       (company-prescient-mode))
