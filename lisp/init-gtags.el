@@ -5,7 +5,7 @@
 (when (maybe-require-package 'ggtags)
   (require 'ggtags)
   ;; 开启ggtags-mode
-  (ggtags-mode 1)
+  (add-hook 'prog-mode-hook 'ggtags-mode)
 
   ;; 全量更新
   (defun gtags-root-dir ()
@@ -49,11 +49,6 @@
         (gtags-update-current-file))))
 
   (add-hook 'after-save-hook #'gtags-update-hook)
-
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                (ggtags-mode 1))))
 
   (define-key global-map (kbd "C-c g") ggtags-mode-prefix-map))
 
