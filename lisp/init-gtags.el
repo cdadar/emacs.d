@@ -41,7 +41,7 @@
   (message "GTAGSLIBPATH=%s" (getenv "GTAGSLIBPATH")))
 
 (when (maybe-require-package 'ggtags)
-  (add-hook 'after-init-hook (lambda () (ggtags-mode 1)))
+  (ggtags-mode 1)
   (define-key ggtags-mode-map (kbd "M-.")  nil)
   (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)
   (define-key ggtags-mode-map (kbd "C-M-.") nil)
