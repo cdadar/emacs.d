@@ -31,10 +31,10 @@ PROMPT sets the `read-string prompt."
 
 
 
-(global-set-key (kbd "C-c g") 'prelude-google)
-(global-set-key (kbd "C-c G") 'prelude-github)
-(global-set-key (kbd "C-c E") 'prelude-codeif)
+(global-set-key (kbd "C-c s g") 'prelude-google)
+(global-set-key (kbd "C-c s G") 'prelude-github)
+(global-set-key (kbd "C-c s E") 'prelude-codeif)
 ;; (global-set-key (kbd "C-c y") 'prelude-youtube)
-(global-set-key (kbd "C-c U") 'prelude-duckduckgo)
+(global-set-key (kbd "C-c s U") 'prelude-duckduckgo)
 
 (provide 'init-search)

@@ -4,43 +4,57 @@
 
 (when (maybe-require-package 'ggtags)
   (require 'ggtags)
+  ;; 开启ggtags-mode
   (ggtags-mode 1)
-  (add-hook 'after-init-hook #'ggtags-mode))
 
-(defun gtags-ext-produce-tags-if-needed (dir)
-  (if (not (= 0 (call-process "global" nil nil nil " -p"))) ; tagfile doesn't exist?
-      (let ((default-directory dir))
-        (shell-command "gtags")
-        (message "tagfile created by GNU Global"))
-    ;;  tagfile already exists; update it
-    (shell-command "global -u")
-    (message "tagfile updated by GNU Global")))
+  ;; 全量更新
+  (defun gtags-root-dir ()
+    "Returns GTAGS root directory or nil if doesn't exist."
+    (with-temp-buffer
+      (if (zerop (call-process "global" nil t nil "-pr"))
+          (buffer-substring (point-min) (1- (point-max)))
+        nil)))
 
-;; @see http://emacs-fu.blogspot.com.au/2008/01/navigating-through-source-code-using.html
-(defun gtags-ext-create-or-update ()
-  "create or update the gnu global tag file"
-  (interactive)
-  (gtags-ext-produce-tags-if-needed (read-directory-name
-                                     "gtags: top of source tree:" default-directory)))
+  (defun gtags-update ()
+    "Make GTAGS incremental update"
+    (call-process "global" nil nil nil "-u"))
 
-(defun gtags-ext-add-gtagslibpath (libdir &optional del)
-  "add external library directory to environment variable GTAGSLIBPATH.\ngtags will can that directory if needed.\nC-u M-x add-gtagslibpath will remove the directory from GTAGSLIBPATH."
-  (interactive "DDirectory containing GTAGS:\nP")
-  (let (sl)
-    (if (not (file-exists-p (concat (file-name-as-directory libdir) "GTAGS")))
-        ;; create tags
-        (let ((default-directory libdir))
-          (shell-command "gtags")
-          (message "tagfile created by GNU Global")))
+  (defun gtags-update-hook-all ()
+    (when (gtags-root-dir)
+      (gtags-update)))
 
-    (setq libdir (directory-file-name libdir)) ;remove final slash
-    (setq sl (split-string (if (getenv "GTAGSLIBPATH") (getenv "GTAGSLIBPATH") "")  ":" t))
-    (if del (setq sl (delete libdir sl)) (add-to-list 'sl libdir t))
-    (setenv "GTAGSLIBPATH" (mapconcat 'identity sl ":"))))
+  ;; 单文件更新
+  (defun gtags-update-single(filename)
+    "Update Gtags database for changes in a single file"
+    (interactive)
+    (start-process
+     "update-gtags"
+     "update-gtags"
+     "bash" "-c"
+     (concat "cd " (gtags-root-dir)
+             " ; gtags --single-update "
+             filename )))
 
-(defun gtags-ext-print-gtagslibpath ()
-  "print the GTAGSLIBPATH (for debug purpose)"
-  (interactive)
-  (message "GTAGSLIBPATH=%s" (getenv "GTAGSLIBPATH")))
+  (defun gtags-update-current-file()
+    (interactive)
+    (defvar filename)
+    (setq filename (replace-regexp-in-string (gtags-root-dir) "." (buffer-file-name (current-buffer))))
+    (gtags-update-single filename)
+    (message "Gtags updated for %s" filename))
+
+  (defun gtags-update-hook()
+    "Update GTAGS file incrementally upon saving a file"
+    (when ggtags-mode
+      (when (gtags-root-dir)
+        (gtags-update-current-file))))
+
+  (add-hook 'after-save-hook #'gtags-update-hook)
+
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1))))
+
+  (define-key global-map (kbd "C-c g") ggtags-mode-prefix-map))
 
 (provide 'init-gtags)
