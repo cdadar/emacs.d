@@ -5,6 +5,7 @@
 (when (maybe-require-package 'ggtags)
   (require 'ggtags)
   ;; 开启ggtags-mode
+  (add-hook 'text-mode-hook 'ggtags-mode)
   (add-hook 'prog-mode-hook 'ggtags-mode)
 
   ;; 全量更新
