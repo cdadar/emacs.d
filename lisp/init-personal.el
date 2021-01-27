@@ -63,8 +63,6 @@
                      (when (file-exists-p editorconfig-config-path)
                        (setq-local editorconfig-exec-path editorconfig-config-path))))))))
 
-;;; personal.el ends here
-
 ;; (require-package 'recentf)
 ;; (recentf-mode 1)
 ;; (setq recentf-max-menu-item 10)
@@ -75,7 +73,6 @@
 ;; (setq auto-save-default nil)
 
 ;; (require-package 'auto-save-buffers-enhanced)
-
 
 ;; (setq auto-save-buffers-enhanced-interval 1)
 
@@ -113,24 +110,27 @@
 (when (maybe-require-package 'super-save)
   (super-save-mode +1)
   (setq auto-save-default nil)
-  (setq super-save-hook-triggers (quote (focus-out-hook find-file-hook)))
+  (setq super-save-hook-triggers
+        (quote (focus-out-hook find-file-hook)))
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 300)
   (setq super-save-remote-files nil)
   (setq super-save-exclude '(".gpg"))
-  (setq super-save-triggers (quote (other-window
-                                    balance-windows
-                                    next-buffer
-                                    org-babel-execute-src-block
-                                    previous-buffer
-                                    split-window-below
-                                    split-window-horizontally
-                                    start-process-shell-command
-                                    switch-to-buffer
-                                    windmove-down
-                                    windmove-left
-                                    windmove-right
-                                    windmove-up)))
+  (setq super-save-triggers
+        (quote (other-window
+                balance-windows
+                next-buffer
+                org-babel-execute-src-block
+                previous-buffer
+                split-window-below
+                split-window-horizontally
+                start-process-shell-command
+                switch-to-buffer
+                windmove-down
+                windmove-left
+                windmove-right
+                windmove-up)))
+
   (defun save-all-buffers ()
     (save-excursion
       (dolist (buf (buffer-list))
@@ -141,8 +141,7 @@
                    (if (file-remote-p buffer-file-name) super-save-remote-files t))
           (save-buffer)))))
 
-  (advice-add 'super-save-command :override 'save-all-buffers)
-  )
+  (advice-add 'super-save-command :override 'save-all-buffers))
 
 ;; (setq url-gateway-method 'socks)
 ;; (setq socks-server '("Default server" "127.0.0.1" 7070 5))
@@ -173,3 +172,4 @@
 (require 'clip2org)
 
 (provide 'init-personal)
+;;; personal.el ends here
