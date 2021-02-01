@@ -5,11 +5,12 @@
 
 #+OPTIONS: toc:nil  H:10 tex:t
 #+OPTIONS: author:nil date:nil title:nil
-#+STARTUP: hidestars indent
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
-#+LaTeX_CLASS_OPTIONS: [letterpaper]
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,9in}, truedimen]{geometry}
 #+LaTeX_HEADER: \usepackage{enumitem}
-#+LaTeX_HEADER: \setlist{leftmargin=0.25in,nosep}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \setCJKmainfont{Noto Serif SC}
+#+LaTeX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
 #+LATEX_HEADER: \renewcommand\maketitle{}
+#+LATEX_HEADER: \usepackage{indentfirst}
+#+LATEX_HEADER: \setlength{\parindent}{2em}
+#+LATEX_HEADER: \setlength{\parskip}{1em}
