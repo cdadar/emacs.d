@@ -54,24 +54,6 @@
     (make-local-variable 'company-backends)
     (add-to-list 'company-backends backend)))
 
-;; Suspend page-break-lines-mode while company menu is active
-;; (see https://github.com/company-mode/company-mode/issues/416)
-(with-eval-after-load 'company
-  (with-eval-after-load 'page-break-lines
-    (defvar-local sanityinc/page-break-lines-on-p nil)
-
-    (defun sanityinc/page-break-lines-disable (&rest ignore)
-      (when (setq sanityinc/page-break-lines-on-p (bound-and-true-p page-break-lines-mode))
-        (page-break-lines-mode -1)))
-
-    (defun sanityinc/page-break-lines-maybe-reenable (&rest ignore)
-      (when sanityinc/page-break-lines-on-p
-        (page-break-lines-mode 1)))
-
-    (add-hook 'company-completion-started-hook 'sanityinc/page-break-lines-disable)
-    (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable)))
-
-
 (with-eval-after-load 'company-etags
   '(progn
      ;; insert major-mode not inherited from prog-mode
