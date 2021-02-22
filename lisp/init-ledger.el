@@ -23,9 +23,24 @@
 
 
   (when (maybe-require-package 'company-ledger)
-    (with-eval-after-load 'company
-      (with-eval-after-load 'ledger-mode
-        (add-to-list 'company-backends 'company-ledger))))
+    (with-eval-after-load 'ledger-mode
+      (defvar company-ledger-active-p nil
+        "The status of company-ledger plugins. Default is disable.")
+
+      (defun +toggle-company-ledger ()
+        "Toggle company ledger"
+        (interactive)
+        (when (boundp 'company-backends)
+          (if company-ledger-active-p
+              (progn
+                (setq company-backends (delete 'company-ledger company-backends))
+                (setq company-ledger-active-p nil)
+                (message "company ledger has disable."))
+            (if (not company-mode)
+                (company-mode t))
+            (add-to-list 'company-backends 'company-ledger)
+            (setq company-ledger-active-p t)
+            (message "company ledger has enable."))))))
 
   (add-hook 'ledger-mode-hook 'goto-address-prog-mode))
 
