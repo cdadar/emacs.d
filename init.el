@@ -163,7 +163,6 @@
 (require 'init-golang)
 (require 'init-personal)
 ;;(require 'init-awesome-tab)
-(require 'init-email)
 (require 'init-vimrc)
 (require 'init-elfeed)
 (require 'init-eshell)
