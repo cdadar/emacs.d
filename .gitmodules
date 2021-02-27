@@ -13,9 +13,6 @@
 [submodule "site-lisp/instant-rename-tag"]
 	path = site-lisp/instant-rename-tag
 	url = git@github.com:manateelazycat/instant-rename-tag.git
-[submodule "site-lisp/snails"]
-	path = site-lisp/snails
-	url = git@github.com:manateelazycat/snails.git
 [submodule "site-lisp/advance-words-count"]
 	path = site-lisp/advance-words-count
 	url = git@github.com:LdBeth/advance-words-count.el.git
