@@ -1,6 +1,11 @@
 ;;; init-meow.el --- meow plugin -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
+
+(require-package 'meow)
+
+(meow-global-mode 1)
+
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-dvp)
   (meow-leader-define-key
@@ -124,9 +129,6 @@
    '("<escape>" . meow-last-buffer)
    '("$" . apply-macro-to-region-lines)
    '("'" . quoted-insert)))
-
-(require 'meow)
-(meow-global-mode 1)
 
 (with-eval-after-load 'meow
   (setq meow-esc-delay 0.001

@@ -31,6 +31,3 @@
 [submodule "site-lisp/company-english-helper"]
 	path = site-lisp/company-english-helper
 	url = git@github.com:manateelazycat/company-english-helper.git
-[submodule "site-lisp/meow"]
-	path = site-lisp/meow
-	url = git@github.com:DogLooksGood/meow.git
