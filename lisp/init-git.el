@@ -34,6 +34,10 @@
           (magit-log-buffer-file t))
       (vc-print-log)))
 
+  (defun magit-submodule-remove+ ()
+    (interactive)
+    (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
+
   (with-eval-after-load 'vc
     (define-key vc-prefix-map (kbd "l") 'sanityinc/magit-or-vc-log-file)))
 
@@ -96,12 +100,6 @@
   (let* ((default-directory (vc-git-root dir))
          (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
     (compile (concat "git svn " command))))
-
-
-
-(require 'magit-extension)
-
-
 
 (provide 'init-git)
 ;;; init-git.el ends here
