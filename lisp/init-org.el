@@ -788,47 +788,47 @@ typical word processor."
           org-roam-server-network-label-wrap-length 20)
     (ignore-error (org-roam-server-mode)))
 
-  (add-hook 'after-init-hook 'org-roam-mode)
+  (add-hook 'after-init-hook 'org-roam-mode))
 
-  (with-eval-after-load 'org-roam-mode
-    (require 'org-protocol)
-    (define-key org-roam-mode-map (kbd "C-c n l") 'org-roam)
-    (define-key org-roam-mode-map (kbd "C-c n f") 'org-roam-find-file)
-    (define-key org-roam-mode-map (kbd "C-c n g") 'org-roam-graph)
-    (define-key org-mode-map (kbd "C-c n i") 'org-roam-insert)
-    (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)
-    (setq org-roam-capture-templates
-          '(("d" "default" plain (function org-roam-capture--get-point)
-             "%?"
-             :file-name "%<%Y%m%d%H%M%S>-${slug}"
-             :head "#+title: ${title}\n#+roam_alias:\n\n")
-            ("g" "group")
-            ("ga" "Group A" plain (function org-roam-capture--get-point)
-             "%?"
-             :file-name "%<%Y%m%d%H%M%S>-${slug}"
-             :head "#+title: ${title}\n#+roam_alias:\n\n")
-            ("gb" "Group B" plain (function org-roam-capture--get-point)
-             "%?"
-             :file-name "%<%Y%m%d%H%M%S>-${slug}"
-             :head "#+title: ${title}\n#+roam_alias:\n\n")))
-    (setq org-roam-capture-immediate-template
-          '("d" "default" plain (function org-roam-capture--get-point)
-            "%?"
-            :file-name "%<%Y%m%d%H%M%S>-${slug}"
-            :head "#+title: ${title}\n"
-            :unnarrowed t))
-    (setq org-roam-capture-ref-templates
-          '(("r" "ref" plain (function org-roam-capture--get-point)
-             ""
-             :file-name "${slug}"
-             :head "#+title: ${title}\n#+roam_key: ${ref}\n"
-             :unnarrowed t)
-            '("a" "Annotation" plain (function org-roam-capture--get-point)
-              "%U ${body}\n"
-              :file-name "${slug}"
-              :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
-              :immediate-finish t
-              :unnarrowed t)))))
+(with-eval-after-load 'org-roam
+  (require 'org-protocol)
+  (define-key org-roam-mode-map (kbd "C-c n l") 'org-roam)
+  (define-key org-roam-mode-map (kbd "C-c n f") 'org-roam-find-file)
+  (define-key org-roam-mode-map (kbd "C-c n g") 'org-roam-graph)
+  (define-key org-mode-map (kbd "C-c n i") 'org-roam-insert)
+  (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)
+  (setq org-roam-capture-templates
+        '(("d" "default" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n#+roam_alias:\n\n")
+          ("g" "group")
+          ("ga" "Group A" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n#+roam_alias:\n\n")
+          ("gb" "Group B" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n#+roam_alias:\n\n")))
+  (setq org-roam-capture-immediate-template
+        '("d" "default" plain (function org-roam-capture--get-point)
+          "%?"
+          :file-name "%<%Y%m%d%H%M%S>-${slug}"
+          :head "#+title: ${title}\n"
+          :unnarrowed t))
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           ""
+           :file-name "${slug}"
+           :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+           :unnarrowed t)
+          '("a" "Annotation" plain (function org-roam-capture--get-point)
+            "%U ${body}\n"
+            :file-name "${slug}"
+            :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+            :immediate-finish t
+            :unnarrowed t))))
 
 (when (maybe-require-package 'org-download)
   (add-hook 'dired-mode-hook 'org-download-enable)
