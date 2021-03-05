@@ -51,7 +51,8 @@
       org-enforce-todo-dependencies t
       org-enforce-todo-checkbox-dependencies t
       org-image-actual-width '(400)
-      org-tags-column 80)
+      org-tags-column 80
+      org-lowest-priority 68)
 
 
 ;; Lots of stuff from http://doc.norang.ca/org-mode.html
@@ -442,7 +443,7 @@ typical word processor."
           ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
           ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
           ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
-          ;; ("wd" "不重要且不紧急的任务" tags-todo "+PRIORITY=\"\"")
+          ("wd" "不重要且不紧急的任务" tags-todo "+PRIORITY=\"D\"")
           ("b" "Blog" tags-todo "BLOG")
           ("p" . "项目安排")
           ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
