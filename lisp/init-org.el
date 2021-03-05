@@ -28,7 +28,6 @@
 
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
-;; (define-key global-map (kbd "C-c C-x C-j") 'org-clock-goto)
 
 (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
   "A keymap for handy global access to org helpers, particularly clocking.")
@@ -324,6 +323,15 @@ typical word processor."
               (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
               (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
       org-todo-repeat-to-state "NEXT")
+
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 (setq org-todo-keyword-faces
       (quote (("NEXT" :inherit warning)
@@ -635,8 +643,7 @@ typical word processor."
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
-   `(
-     (R . t)
+   `((R . t)
      (ditaa . t)
      (dot . t)
      (emacs-lisp . t)
@@ -656,7 +663,6 @@ typical word processor."
      (sqlite . t))))
 
 (with-eval-after-load 'org
-
   (require 'org-crypt)
   ;; org-mode 設定
   ;; 當被加密的部份要存入硬碟時，自動加密回去
@@ -777,7 +783,6 @@ typical word processor."
     output-string))
 
 (when (maybe-require-package 'org-roam)
-
   (when (maybe-require-package 'org-roam-server)
     (setq org-roam-server-host "127.0.0.1"
           org-roam-server-port 9090
