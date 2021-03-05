@@ -354,10 +354,11 @@ typical word processor."
   (setq org-tag-alist
         '(("@office" . ?o)
           ("@home" . ?h)
+          ("@way" . ?w)
+          ("@trailing" . ?t)
           ("@computer" . ?c)
           ("@phone" . ?p)
           ("@kindle" . ?k)
-          ("@trailing" . ?t)
           ("bug" . ?b)
           ("demand" . ?d)
           ("video" . ?v)
@@ -461,6 +462,10 @@ typical word processor."
           ("co" "At the office" tags-todo "@office")
           ("ch" "At the home" tags-todo "@home")
           ("ct" "At the travelling" tags-todo "@travelling")
+          ("cw" "At the way" tags-todo "@way")
+          ("cc" "At the computer" tags-todo "@computer")
+          ("cp" "At the phone" tags-todo "@phone")
+          ("ck" "At the kindle" tags-todo "@kindle")
           ("cb" "bug" tags-todo "bug" )
           ("cd" "demand" tags-todo "demand")
           ("cB" "book" tags-todo "book")
@@ -747,6 +752,7 @@ typical word processor."
           org-brain-file-entries-use-title nil)))
 
 ;; used by org-clock-sum-today-by-tags
+;; used by org-clock-sum-today-by-tags
 (defun filter-by-tags ()
   (let ((head-tags (org-get-tags-at)))
     (member current-tag head-tags)))
@@ -755,8 +761,7 @@ typical word processor."
   (interactive "P")
   (let* ((timerange-numeric-value (prefix-numeric-value timerange))
          (files (org-add-archive-files (org-agenda-files)))
-         (include-tags '("ACADEMIC" "ENGLISH" "SCHOOL"
-                         "LEARNING" "OUTPUT" "OTHER"))
+         (include-tags '("work" "@office" "@home" "@computer" "@phone" "@kindle" "@trailing" "bug" "demand" "video" "book" "game"))
          (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
          (output-string "")
          (tstart (or tstart
@@ -787,7 +792,6 @@ typical word processor."
     (unless noinsert
       (insert output-string))
     output-string))
-
 (when (maybe-require-package 'org-roam)
   (when (maybe-require-package 'org-roam-server)
     (setq org-roam-server-host "127.0.0.1"
