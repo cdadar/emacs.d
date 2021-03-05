@@ -356,7 +356,7 @@ typical word processor."
         org-agenda-span 'day
         org-agenda-include-diary nil
         org-agenda-sorting-strategy
-        '((agenda habit-down time-up user-defined-up effort-up priority-down category-keep)
+        '((agenda habit-down deadline-up scheduled-up priority-down effort-up  category-keep  )
           (todo priority-down category-up effort-up)
           (tags priority-down category-up effort-up)
           (search category-up))
@@ -385,12 +385,12 @@ typical word processor."
                                 (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
                         (org-tags-match-list-sublevels t)
                         (org-agenda-sorting-strategy
-                         '(todo-state-down effort-up category-keep))))
+                         '(todo-state-down priority-down effort-up category-keep))))
             (tags-todo ,active-project-match
                        ((org-agenda-overriding-header "Projects")
                         (org-tags-match-list-sublevels t)
                         (org-agenda-sorting-strategy
-                         '(category-keep))))
+                         '(priority-down category-keep))))
             (tags-todo "-INBOX/-NEXT"
                        ((org-agenda-overriding-header "Orphaned Tasks")
                         (org-agenda-tags-todo-honor-ignore-options t)
@@ -401,19 +401,19 @@ typical word processor."
                                 (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
                         (org-tags-match-list-sublevels t)
                         (org-agenda-sorting-strategy
-                         '(category-keep))))
+                         '(priority-down category-keep))))
             (tags-todo "/WAITING"
                        ((org-agenda-overriding-header "Waiting")
                         (org-agenda-tags-todo-honor-ignore-options t)
                         (org-agenda-todo-ignore-scheduled 'future)
                         (org-agenda-sorting-strategy
-                         '(category-keep))))
+                         '(priority-down category-keep))))
             (tags-todo "/DELEGATED"
                        ((org-agenda-overriding-header "Delegated")
                         (org-agenda-tags-todo-honor-ignore-options t)
                         (org-agenda-todo-ignore-scheduled 'future)
                         (org-agenda-sorting-strategy
-                         '(category-keep))))
+                         '(priority-down category-keep))))
             (tags-todo "-INBOX"
                        ((org-agenda-overriding-header "On Hold")
                         (org-agenda-skip-function
@@ -422,7 +422,7 @@ typical word processor."
                                 (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
                         (org-tags-match-list-sublevels nil)
                         (org-agenda-sorting-strategy
-                         '(category-keep))))
+                         '(priority-down category-keep))))
             ;; (tags-todo "-NEXT"
             ;;            ((org-agenda-overriding-header "All other TODOs")
             ;;             (org-match-list-sublevels t)))
