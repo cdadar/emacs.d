@@ -52,6 +52,7 @@
       org-enforce-todo-checkbox-dependencies t
       org-image-actual-width '(400)
       org-tags-column 80
+      org-deadline-warning-days 30
       org-lowest-priority 68)
 
 
@@ -353,6 +354,9 @@ typical word processor."
   (setq org-tag-alist
         '(("@office" . ?o)
           ("@home" . ?h)
+          ("@computer" . ?c)
+          ("@phone" . ?p)
+          ("@kindle" . ?k)
           ("@trailing" . ?t)
           ("bug" . ?b)
           ("demand" . ?d)
