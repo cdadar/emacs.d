@@ -3,12 +3,13 @@
 
 
 ;; define the refile targets
+(setq org-agenda-file-inbox (expand-file-name "inbox.org" org-directory))
 (setq org-agenda-file-note (expand-file-name "notes.org" org-directory))
 (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-directory))
 (setq org-agenda-file-work (expand-file-name "work.org" org-directory))
 (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
 (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
-(setq org-default-notes-file (expand-file-name "gtd.org" org-directory))
+(setq org-default-notes-file (expand-file-name "inbox.org" org-directory))
 (setq org-agenda-file-blogposts (expand-file-name "all-posts.org" org-directory))
 (setq org-capture-web-bookmarks (expand-file-name "web.org" org-directory))
 (setq org-capture-anki (expand-file-name "anki.org" org-directory))

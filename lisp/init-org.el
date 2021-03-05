@@ -234,7 +234,7 @@ typical word processor."
 (global-set-key (kbd "C-c c") 'org-capture)
 
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Workspace")
+      '(("t" "Todo" entry (file org-agenda-file-inbox)
          "* TODO [#B] %?\n  %i\n %U"
          :empty-lines 1)
         ("n" "notes" entry (file+headline org-agenda-file-note "Quick notes")
@@ -364,7 +364,7 @@ typical word processor."
         org-agenda-span 'day
         org-agenda-include-diary nil
         org-agenda-sorting-strategy
-        '((agenda habit-down deadline-up scheduled-up priority-down effort-up  category-keep  )
+        '((agenda habit-down time-up deadline-up scheduled-up priority-down effort-up category-keep)
           (todo priority-down category-up effort-up)
           (tags priority-down category-up effort-up)
           (search category-up))
