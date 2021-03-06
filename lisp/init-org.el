@@ -752,8 +752,7 @@ typical word processor."
           org-brain-file-entries-use-title nil)))
 
 ;; used by org-clock-sum-today-by-tags
-;; used by org-clock-sum-today-by-tags
-(defun filter-by-tags ()
+(defun filter-by-tags (current-tag)
   (let ((head-tags (org-get-tags-at)))
     (member current-tag head-tags)))
 
@@ -761,15 +760,21 @@ typical word processor."
   (interactive "P")
   (let* ((timerange-numeric-value (prefix-numeric-value timerange))
          (files (org-add-archive-files (org-agenda-files)))
-         (include-tags '("work" "@office" "@home" "@computer" "@phone" "@kindle" "@trailing" "bug" "demand" "video" "book" "game"))
+         ;;(include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING" "LEARN"))
+         ;;                         "LEARNING" "OUTPUT" "OTHER"))
+         (include-tags '("work" "@office" "@home" "@computer" "@phone" "@kindle" "@trailing"
+                         "bug" "demand" "video" "book" "game"))
          (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
          (output-string "")
          (tstart (or tstart
-                     (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
-                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+                     (and timerange (equal timerange-numeric-value 4)
+                          (- (org-time-today) 86400))
+                     (and timerange (equal timerange-numeric-value 16)
+                          (org-read-date nil nil nil "Start Date/Time:"))
                      (org-time-today)))
          (tend (or tend
-                   (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+                   (and timerange (equal timerange-numeric-value 16)
+                        (org-read-date nil nil nil "End Date/Time:"))
                    (+ tstart 86400)))
          h m file item prompt donesomething)
     (while (setq file (pop files))
@@ -778,7 +783,7 @@ typical word processor."
                                 (error "No such file %s" file)))
       (with-current-buffer org-agenda-buffer
         (dolist (current-tag include-tags)
-          (org-clock-sum tstart tend 'filter-by-tags)
+          (org-clock-sum tstart tend #'(lambda() (filter-by-tags current-tag)))
           (setcdr (assoc current-tag tags-time-alist)
                   (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
     (while (setq item (pop tags-time-alist))
@@ -792,6 +797,7 @@ typical word processor."
     (unless noinsert
       (insert output-string))
     output-string))
+
 (when (maybe-require-package 'org-roam)
   (when (maybe-require-package 'org-roam-server)
     (setq org-roam-server-host "127.0.0.1"
