@@ -46,6 +46,7 @@
     (global-set-key (kbd "M-g m") 'consult-mark)
     (global-set-key (kbd "M-g k") 'consult-global-mark)
     (global-set-key (kbd "M-g i") 'consult-project-imenu) ;; Alternative: consult-imenu
+    (global-set-key (kbd "M-g I") 'consult-imenu)
     (global-set-key (kbd "M-g e") 'consult-error)
     ;; M-s bindings (search-map)
     (global-set-key (kbd "M-s g") 'consult-git-grep)      ;; Alternatives: consult-grep, consult-ripgrep
