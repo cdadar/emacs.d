@@ -9,10 +9,6 @@
 ;;; make cursor style bar
 (setq-default cursor-type 'box)
 
-;;; projectile default keybinding
-(with-eval-after-load 'projectile
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map))
-
 (when (maybe-require-package 'cnfonts)
   ;; 让 cnfonts 随着 Emacs 自动生效。
   (cnfonts-enable)
