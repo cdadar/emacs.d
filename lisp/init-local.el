@@ -38,6 +38,9 @@
        (shell-command-to-string
         (concat "locate --limit 1 emacs-" emacs-version "/src"))))
 
+(setq find-function-C-source-directory
+      (concat source-directory "src/"))
+
 ;; erc autojoin
 (setq erc-autojoin-channels-alist
       '(("freenode.net" "#lisp" "#opensuse-cn" "#fedora-zh" "#linuxba" "#emacs" "#java" "#javascript" "#python" "#python.cn" "#ruby")))
