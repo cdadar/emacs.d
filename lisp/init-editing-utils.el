@@ -416,7 +416,7 @@ ORIG is the advised function, which is called with its ARGS."
   (super-save-mode +1)
   (setq auto-save-default nil)
   (setq super-save-auto-save-when-idle t)
-  (setq super-save-idle-duration 300)
+  (setq super-save-idle-duration 5)
   (setq super-save-remote-files nil)
   (setq super-save-exclude '(".gpg"))
   (setq super-save-hook-triggers
