@@ -423,10 +423,11 @@ ORIG is the advised function, which is called with its ARGS."
         '(focus-out-hook find-file-hook))
   (setq super-save-triggers
         '(other-window
+          ace-window
           balance-windows
           next-buffer
-          org-babel-execute-src-block
           previous-buffer
+          org-babel-execute-src-block
           split-window-below
           split-window-horizontally
           start-process-shell-command
@@ -435,7 +436,8 @@ ORIG is the advised function, which is called with its ARGS."
           windmove-left
           windmove-right
           windmove-up
-          magit-status))
+          magit-status
+          projectile-vc))
 
   (defun save-all-buffers ()
     (save-excursion
