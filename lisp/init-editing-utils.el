@@ -415,12 +415,12 @@ ORIG is the advised function, which is called with its ARGS."
 (when (maybe-require-package 'super-save)
   (super-save-mode +1)
   (setq auto-save-default nil)
-  (setq super-save-hook-triggers
-        (quote (focus-out-hook find-file-hook)))
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 300)
   (setq super-save-remote-files nil)
   (setq super-save-exclude '(".gpg"))
+  (setq super-save-hook-triggers
+        '(focus-out-hook find-file-hook))
   (setq super-save-triggers
         '(other-window
           balance-windows
