@@ -129,7 +129,8 @@
                 windmove-down
                 windmove-left
                 windmove-right
-                windmove-up)))
+                windmove-up
+                magit-status)))
 
   (defun save-all-buffers ()
     (save-excursion
