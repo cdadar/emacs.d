@@ -39,7 +39,6 @@
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
 
-
 (add-hook 'after-init-hook 'transient-mark-mode)
 
 
@@ -413,8 +412,8 @@ ORIG is the advised function, which is called with its ARGS."
   (global-set-key (kbd "C-c C-S-d") 'define-word))
 
 (when (maybe-require-package 'super-save)
-  (super-save-mode +1)
-  (setq auto-save-default nil)
+  (add-hook 'after-init-hook #'super-save-mode)
+  (setq-default auto-save-default nil)
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 5)
   (setq super-save-remote-files nil)
