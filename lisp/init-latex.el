@@ -9,11 +9,13 @@
   (when (locate-library "auctex")
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
+    (setq TeX-close-quote "")
+    (setq TeX-open-quote "")
     ;; Going to see if we actually need these
-    ;; (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+    (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
     ;; (add-hook 'LaTeX-mode-hook 'visual-line-mode)
     ;; (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-    ;; (add-hook 'LaTeX-mode-hook 'abbrev-mode)
+    (add-hook 'LaTeX-mode-hook 'abbrev-mode)
 
     (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
