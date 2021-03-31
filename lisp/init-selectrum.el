@@ -30,6 +30,7 @@
     (global-set-key [remap switch-to-buffer] 'consult-buffer)
     (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
     (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
+    (global-set-key [remap goto-line] 'consult-goto-line)
     (global-set-key (kbd "C-c h") 'consult-history)
     (global-set-key (kbd "C-c M-m") 'consult-mode-command)
     (global-set-key (kbd "C-c b") 'consult-bookmark)
