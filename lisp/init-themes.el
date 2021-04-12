@@ -32,9 +32,9 @@
   (interactive)
   (if (equal custom-enabled-themes '(sanityinc-tomorrow-night)) (light) (dark)))
 
-;;------------------------------------------------------------------------------
+
 ;; Toggle between light and dark
-;;------------------------------------------------------------------------------
+
 (defun light ()
   "Activate a light color theme."
   (interactive)

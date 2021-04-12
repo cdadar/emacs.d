@@ -96,9 +96,8 @@
   (when (fboundp 'coffee-mode)
     (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode))))
 
-;; ---------------------------------------------------------------------------
+
 ;; Run and interact with an inferior JS via js-comint.el
-;; ---------------------------------------------------------------------------
 
 (when (maybe-require-package 'js-comint)
   (setq js-comint-program-command "node")
@@ -114,9 +113,8 @@
   (dolist (hook '(js2-mode-hook js-mode-hook))
     (add-hook hook 'inferior-js-keys-mode)))
 
-;; ---------------------------------------------------------------------------
+
 ;; Alternatively, use skewer-mode
-;; ---------------------------------------------------------------------------
 
 (when (maybe-require-package 'skewer-mode)
   (with-eval-after-load 'skewer-mode
