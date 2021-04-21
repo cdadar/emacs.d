@@ -371,7 +371,7 @@ typical word processor."
         org-agenda-include-diary nil
         org-agenda-skip-scheduled-delay-if-deadline t
         org-agenda-sorting-strategy
-        '((agenda habit-down time-up deadline-up scheduled-up priority-down effort-up category-keep)
+        '((agenda habit-down time-up deadline-up scheduled-up effort-up category-keep)
           (todo priority-down category-up effort-up)
           (tags priority-down category-up effort-up)
           (search category-up))
