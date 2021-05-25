@@ -15,9 +15,6 @@
       (require 'prescient)
       (prescient-persist-mode 1)
       (company-prescient-mode))
-
-    (dolist (backend '(company-eclim company-semantic))
-      (delq backend company-backends))
     (define-key company-mode-map (kbd "M-/") 'company-complete)
     (define-key company-mode-map [remap completion-at-point] 'company-complete)
     (define-key company-mode-map [remap indent-for-tab-command] 'company-indent-or-complete-common)
