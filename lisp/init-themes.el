@@ -15,7 +15,7 @@
 (setq custom-safe-themes t)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(sanityinc-tomorrow-day))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
