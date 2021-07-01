@@ -28,3 +28,6 @@
 [submodule "site-lisp/company-english-helper"]
 	path = site-lisp/company-english-helper
 	url = git@github.com:manateelazycat/company-english-helper.git
+[submodule "site-lisp/one-key"]
+	path = site-lisp/one-key
+	url = git@github.com:manateelazycat/one-key.git
