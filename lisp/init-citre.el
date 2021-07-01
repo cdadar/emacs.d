@@ -6,6 +6,7 @@
 ;;; Code:
 
 (when (maybe-require-package 'citre)
+  (require 'citre-config)
   (add-hook 'prog-mode-hook 'citre-auto-enable-citre-mode)
   (with-eval-after-load 'citre
 
