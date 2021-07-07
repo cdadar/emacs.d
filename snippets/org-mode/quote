@@ -1,0 +1,7 @@
+# key: q
+# name: q
+# expand-env: ((yas/indent-line 'fixed) (yas/wrap-around-region 'nil))
+# --
+#+begin_quote
+$0
+#+end_quote

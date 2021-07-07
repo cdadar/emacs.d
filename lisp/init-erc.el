@@ -118,7 +118,7 @@ that can occur between two notifications.  The default is
   "Connect to IRC."
   (interactive)
   (when (y-or-n-p "Do you want to start IRC? ")
-    (erc :server "irc.freenode.net" :port 6667 :nick erc-nick)))
+    (erc :server "irc.libera.chat" :port 6667 :nick erc-nick)))
 
 (defun filter-server-buffers ()
   (delq nil
