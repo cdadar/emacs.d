@@ -5,12 +5,12 @@
 (setq-default debugger-bury-or-kill 'kill)
 
 (require-package 'elisp-slime-nav)
-(with-eval-after-load 'ggtags-mode
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (progn
-                (define-key ggtags-mode-map (kbd "M-.")  nil)
-                (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)))))
+;; (with-eval-after-load 'ggtags-mode
+;;   (add-hook 'emacs-lisp-mode-hook
+;;             (lambda ()
+;;               (progn
+;;                 (define-key ggtags-mode-map (kbd "M-.")  nil)
+;;                 (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)))))
 (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
   (add-hook hook 'turn-on-elisp-slime-nav-mode))
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "ELisp")))
