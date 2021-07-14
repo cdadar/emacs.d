@@ -42,19 +42,22 @@
           '(("tex" . "kpsewhich -format=.tex %f")
             ("bib" . "kpsewhich -format=.bib %f")))
 
-    ;; Company
-    (with-eval-after-load 'company
-      (when (maybe-require-package 'company-auctex)
-        (add-to-list 'company-backends 'company-auctex))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                ;; Company
+                (with-eval-after-load 'company
+                  (when (maybe-require-package 'company-auctex)
+                    (add-to-list 'company-backends 'company-auctex))
 
-      (when (maybe-require-package 'company-bibtex)
-        (add-to-list 'company-backends 'company-bibtex))
+                  (when (maybe-require-package 'company-bibtex)
+                    (add-to-list 'company-backends 'company-bibtex))
 
-      (when (maybe-require-package 'company-reftex)
-        (add-to-list 'company-backends 'company-reftex))
+                  (when (maybe-require-package 'company-reftex)
+                    (add-to-list 'company-backends 'company-reftex))
 
-      (when (maybe-require-package 'company-math)
-        (add-to-list 'company-backends 'company-math)))
+                  (when (maybe-require-package 'company-math)
+                    (add-to-list 'company-backends 'company-math)))))
+
 
     ;; Bibretrieve
     (setq bibretrieve-backends '(("msn" . 10) ("arxiv" . 5) ("zbm" . 5)))))
