@@ -178,7 +178,37 @@
                         2 ;; line
                         3 ;; column
                         ))
-     (add-to-list 'compilation-error-regexp-alist 'node)))
+     (add-to-list 'compilation-error-regexp-alist 'node)
+
+     (defun compile-eslint--find-filename ()
+       "Find the filename for current error."
+       (save-match-data
+         (save-excursion
+           (when (re-search-backward (rx bol (group "/" (+ any)) eol))
+             (list (match-string 1))))))
+
+     (let ((form `(eslint
+                   ,(rx-to-string
+                     '(and (group (group (+ digit)) ":" (group (+ digit)))
+                           (+ " ") (or "error" "warning")))
+                   compile-eslint--find-filename
+                   2 3 2 1)))
+       (if (assq 'eslint compilation-error-regexp-alist-alist)
+           (setf (cdr (assq 'eslint compilation-error-regexp-alist-alist)) (cdr form))
+         (push form compilation-error-regexp-alist-alist)))))
+
+
+;; Add eslint --fix
+(defun eslint-fix-file ()
+  (interactive)
+  (message "eslint --fixing the file" (buffer-file-name))
+  (ignore-errors
+    (shell-command (concat "eslint --fix " (buffer-file-name)))))
+
+(defun eslint-fix-file-and-revert ()
+  (interactive)
+  (eslint-fix-file)
+  (revert-buffer t t))
 
 (provide 'init-javascript)
 ;;; init-javascript.el ends here

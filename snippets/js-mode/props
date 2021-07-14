@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: props
+# key: props
+# --
+
+static defaultProps = {
+};
+
+static propTypes = {
+};
