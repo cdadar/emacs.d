@@ -534,7 +534,7 @@ typical word processor."
 ;;; Archiving
 
 (setq org-archive-mark-done nil)
-(setq org-archive-location "%s_archive::datetree/* Archive")
+(setq org-archive-location "%s_archive::datetree/")
 
 (defun org-archive-done-tasks ()
   "archive of DNONE AND CANCELLED in current buffer"
