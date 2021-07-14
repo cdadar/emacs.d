@@ -89,7 +89,6 @@
              ;; angular imenu
              (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
      ))
-
 (when (and (executable-find "prettier")
            (maybe-require-package 'reformatter))
   (reformatter-define prettier-css
@@ -100,6 +99,21 @@
     :args '("--parser=html"))
 
   (add-hook 'web-mode-hook 'prettier-html-on-save-mode))
+
+(when (maybe-require-package 'vue-mode)
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+  (with-eval-after-load 'vue-mode
+    (when (functionp 'prettier-html-on-save-mode)
+      (add-hook 'vue-mode-hook 'prettier-html-on-save-mode))))
+
+(when (maybe-require-package 'ng2-mode)
+  (add-to-list 'auto-mode-alist '("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode))
+  (add-to-list 'auto-mode-alist '("*\\.component\\.html\\'" . ng2-mode))
+  (with-eval-after-load 'ng2-mode
+    (when (functionp 'prettier-html-on-save-mode)
+      (add-hook 'ng2-mode 'prettier-html-on-save-mode))))
+
+
 
 (with-eval-after-load 'web-mode
   (require 'instant-rename-tag))

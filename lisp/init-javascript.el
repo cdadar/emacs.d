@@ -4,7 +4,18 @@
 
 (maybe-require-package 'json-mode)
 (maybe-require-package 'js2-mode)
-(maybe-require-package 'typescript-mode)
+
+(when (maybe-require-package 'typescript-mode)
+  (when (maybe-require-package 'tide)
+    (add-to-list 'auto-mode-alist '("*\\.d.ts\\'" . typescript-mode))
+    (defun setup-tide-mode ()
+      (interactive)
+      (tide-setup)
+      (tide-hl-identifier-mode +1))
+    (add-hook 'typescript-mode-hook #'setup-tide-mode)
+    (with-eval-after-load 'tide
+      ;; formats the buffer before saving
+      (add-hook 'before-save-hook 'tide-format-before-save))))
 
 (maybe-require-package 'indium)
 
@@ -20,14 +31,6 @@
 
 (setq-default js-indent-level 2)
 
-(when (maybe-require-package 'vue-mode)
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-  (with-eval-after-load 'vue-mode))
-
-(when (maybe-require-package 'ng2-mode)
-  (add-to-list 'auto-mode-alist '("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode))
-  (add-to-list 'auto-mode-alist '("*\\.component\\.html\\'" . ng2-mode))
-  (with-eval-after-load 'ng2-mode))
 
 ;; js2-mode
 
@@ -92,6 +95,7 @@
   (when (fboundp 'coffee-mode)
     (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode))))
 
+
 
 ;; Run and interact with an inferior JS via js-comint.el
 
@@ -132,7 +136,7 @@
 
   (reformatter-define prettier-javascript
     :program "prettier"
-    :args '("--parser=babel"))
+    :args '("--parser=babel"  "--arrowParens=avoid"))
 
   (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
   (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode))
