@@ -15,7 +15,7 @@
 
 (when (maybe-require-package 'rjsx-mode)
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (add-to-list 'auto-mode-alist '("*\\.{components|pages}\\/.*\\.js\\'" . rjsx-mode))
   (add-to-list 'auto-mode-alist '("src\\/routes\\/.*\\.js\\'" . rjsx-mode))
   (with-eval-after-load 'rjsx-mode
     (define-key rjsx-mode-map "<" nil)
