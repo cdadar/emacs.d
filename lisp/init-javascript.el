@@ -134,6 +134,7 @@
 (when (and (executable-find "prettier")
            (maybe-require-package 'reformatter))
 
+;;;###autoload (autoload 'prettier-javascript-on-save-mode "prettier-javascript" nil t)
   (reformatter-define prettier-javascript
     :program "prettier"
     :args '("--parser=babel" "--arrowParens=avoid"))

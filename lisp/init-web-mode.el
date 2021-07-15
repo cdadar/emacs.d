@@ -94,6 +94,8 @@
   (reformatter-define prettier-css
     :program "prettier"
     :args '("--parser=css"))
+
+;;;###autoload (autoload 'prettier-html-on-save-mode "prettier-html" nil t)
   (reformatter-define prettier-html
     :program "prettier"
     :args '("--parser=html"))
