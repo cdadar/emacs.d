@@ -838,5 +838,12 @@ typical word processor."
                 org-download-screenshot-method "pngpaste %s"
                 org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 
+(when (maybe-require-package 'org-tree-slide)
+  (with-eval-after-load "org-tree-slide"
+    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
+    (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
+    (define-key org-mode-map (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
+    (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)))
+
 (provide 'init-org)
 ;;; init-org.el ends here
