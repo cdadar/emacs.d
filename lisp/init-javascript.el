@@ -124,7 +124,7 @@
 
 
 (when (maybe-require-package 'add-node-modules-path)
-  (dolist (mode '(typescript-mode js-mode js2-mode coffee-mode))
+  (dolist (mode '(typescript-mode js-mode js2-mode coffee-mode rjsx-mode))
     (add-hook (derived-mode-hook-name mode) 'add-node-modules-path)))
 
 (when (maybe-require-package 'js2-refactor)
