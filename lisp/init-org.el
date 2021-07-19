@@ -778,25 +778,33 @@ typical word processor."
     output-string))
 
 (when (maybe-require-package 'org-roam)
+  (with-eval-after-load 'org-mode
+    (define-key org-mode-map (kbd "C-c n l") 'org-roam-buffer-toggle)
+    (define-key org-mode-map (kbd "C-c n f") 'org-roam-node-find)
+    (define-key org-mode-map (kbd "C-c n g") 'org-roam-graph)
+    (define-key org-mode-map (kbd "C-c n i") 'org-roam-node-insert)
+    (define-key org-mode-map (kbd "C-c n c") 'org-roam-capture)
+    ;; Dailies
+    (define-key org-mode-map (kbd "C-c n j") 'org-roam-dailies-capture-today))
+  
   (when (maybe-require-package 'org-roam-server)
     (setq org-roam-server-host "127.0.0.1"
-          org-roam-server-port 9090
-          org-roam-server-export-inline-images t
+          org-roam-server-port 8080
           org-roam-server-authenticate nil
+          org-roam-server-export-inline-images t
+          org-roam-server-serve-files nil
+          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+          org-roam-server-network-poll t
+          org-roam-server-network-arrows nil
           org-roam-server-network-label-truncate t
           org-roam-server-network-label-truncate-length 60
           org-roam-server-network-label-wrap-length 20)
     (ignore-error (org-roam-server-mode)))
 
-  (add-hook 'after-init-hook 'org-roam-mode))
+  (add-hook 'after-init-hook 'org-roam-setup))
 
 (with-eval-after-load 'org-roam
-  (require 'org-protocol)
-  (define-key org-roam-mode-map (kbd "C-c n l") 'org-roam)
-  (define-key org-roam-mode-map (kbd "C-c n f") 'org-roam-find-file)
-  (define-key org-roam-mode-map (kbd "C-c n g") 'org-roam-graph)
-  (define-key org-mode-map (kbd "C-c n i") 'org-roam-insert)
-  (define-key org-mode-map (kbd "C-c n I") 'org-roam-insert-immediate)
+  (require 'org-roam-protocol)
   (setq org-roam-capture-templates
         '(("d" "default" plain (function org-roam-capture--get-point)
            "%?"
