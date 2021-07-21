@@ -800,7 +800,7 @@ typical word processor."
           org-roam-server-network-label-truncate-length 60
           org-roam-server-network-label-wrap-length 20)
     (ignore-error (org-roam-server-mode)))
-
+  (setq org-roam-v2-ack t)
   (add-hook 'after-init-hook 'org-roam-setup))
 
 (with-eval-after-load 'org-roam
