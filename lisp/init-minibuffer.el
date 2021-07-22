@@ -94,6 +94,13 @@
     (setq register-preview-delay 0
           register-preview-function #'consult-register-preview)
 
+    (require 'consult-xref)
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+
+    (with-eval-after-load 'flycheck
+      (maybe-require-package 'consult-flycheck))
+
     ;; Optionally tweak the register preview window.
     ;; * Sort the registers
     ;; * Hide the mode line
