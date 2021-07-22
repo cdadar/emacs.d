@@ -99,7 +99,8 @@
           xref-show-definitions-function #'consult-xref)
 
     (with-eval-after-load 'flycheck
-      (maybe-require-package 'consult-flycheck))
+      (when (maybe-require-package 'consult-flycheck)
+        (global-set-key (kbd "M-s e") 'consult-flycheck)))
 
     ;; Optionally tweak the register preview window.
     ;; * Sort the registers
