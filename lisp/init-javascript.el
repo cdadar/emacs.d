@@ -146,6 +146,28 @@
                 (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
                 (define-key js2-mode-map "@" 'js-doc-insert-tag))))
 
+
+;; Compilation mode for ESLint
+;; Copied from https://github.com/Fuco1/compile-eslint/blob/master/compile-eslint.el
+(defun compile-eslint--find-filename ()
+  "Find the filename for current error."
+  (save-match-data
+    (save-excursion
+      (when (re-search-backward (rx bol (group "/" (+ any)) eol))
+        (list (match-string 1))))))
+
+(let ((form `(eslint
+              ,(rx-to-string
+                '(and (group (group (+ digit)) ":" (group (+ digit)))
+                      (+ " ") (or "error" "warning")))
+              compile-eslint--find-filename
+              2 3 2 1)))
+  (if (assq 'eslint compilation-error-regexp-alist-alist)
+      (setf (cdr (assq 'eslint compilation-error-regexp-alist-alist)) (cdr form))
+    (push form compilation-error-regexp-alist-alist)))
+
+(push 'eslint compilation-error-regexp-alist)
+
 ;; Add eslint --fix
 (defun eslint-fix-file ()
   (interactive)
