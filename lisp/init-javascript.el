@@ -24,10 +24,6 @@
 
 (add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
 
-(when (maybe-require-package 'rjsx-mode)
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("*\\.{components|pages}\\/.*\\.js\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("src\\/routes\\/.*\\.js\\'" . rjsx-mode)))
 
 (setq-default js-indent-level 2)
 
@@ -124,7 +120,7 @@
 
 
 (when (maybe-require-package 'add-node-modules-path)
-  (dolist (mode '(typescript-mode js-mode js2-mode coffee-mode rjsx-mode))
+  (dolist (mode '(typescript-mode js-mode js2-mode coffee-mode))
     (add-hook (derived-mode-hook-name mode) 'add-node-modules-path)))
 
 (when (maybe-require-package 'js2-refactor)
@@ -137,26 +133,7 @@
 ;;;###autoload (autoload 'prettier-javascript-on-save-mode "prettier-javascript" nil t)
   (reformatter-define prettier-javascript
     :program "prettier"
-    :args '("--parser=babel" "--arrow-parens=avoid"))
-
-  (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
-  (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode))
-
-
-
-;; (when (and (executable-find "tern")
-;;            (maybe-require-package 'tern))
-;;   (add-hook 'js2-mode-hook 'tern-mode)
-;;   (add-hook 'rjsx-mode-hook 'tern-mode)
-;;   (add-hook 'web-mode-hook 'tern-mode)
-;;   (with-eval-after-load 'tern
-;;     ;; Disable completion keybindings, as we use xref-js2 instead
-;;     (define-key tern-mode-keymap (kbd "M-.") nil)
-;;     (define-key tern-mode-keymap (kbd "M-,") nil)
-;;     (when (maybe-require-package 'company-tern)
-;;       (add-to-list 'company-backends 'company-tern))))
-
-
+    :args '("--parser=babel" "--arrow-parens=avoid")))
 
 (when (maybe-require-package 'js-doc)
   (setq js-doc-mail-address "your email address"

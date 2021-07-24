@@ -51,11 +51,8 @@
               font-lock-variable-name-face
               font-lock-string-face
               font-lock-function-name-face
-              font-lock-builtin-face
-              rjsx-tag
-              rjsx-attr))))
+              font-lock-builtin-face))))
 (put 'js2-mode 'flyspell-mode-predicate 'js-flyspell-verify)
-(put 'rjsx-mode 'flyspell-mode-predicate 'js-flyspell-verify)
 ;; }}
 
 (with-eval-after-load 'flyspell
