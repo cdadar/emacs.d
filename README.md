@@ -66,6 +66,14 @@ encounter any errors at that stage, try restarting Emacs, and possibly
 running `M-x package-refresh-contents` before doing so.
 
 
+**Note**: Start Emacs with the minimal configuration for fast startup and
+troubleshooting.
+
+``` shell
+emacs -Q --l ~/.emacs.d/init-mini.el
+```
+
+
 ## Updates
 
 Update the config with `git pull`. You'll probably also want/need to
