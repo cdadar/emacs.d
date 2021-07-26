@@ -205,5 +205,10 @@
   (eslint-fix-file)
   (revert-buffer t t))
 
+
+;; Run Mocha or Jasmine tests
+(when (maybe-require-package 'mocha)
+  (maybe-require-package 'mocha-snippets))
+
 (provide 'init-javascript)
 ;;; init-javascript.el ends here
