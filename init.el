@@ -152,6 +152,7 @@
 ;; (require 'init-gud)
 ;; (require 'init-gtags)
 (require 'init-ctags)
+(require 'init-citre)
 (require 'init-yasnippet)
 (require 'init-emmet)
 (require 'init-latex)

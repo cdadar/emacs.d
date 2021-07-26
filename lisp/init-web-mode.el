@@ -115,9 +115,10 @@
     (when (functionp 'prettier-html-on-save-mode)
       (add-hook 'ng2-mode 'prettier-html-on-save-mode))))
 
-
-
 (with-eval-after-load 'web-mode
   (require 'instant-rename-tag))
+
+
+
 
 (provide 'init-web-mode)

@@ -19,7 +19,12 @@
     (interactive)
     (with-current-buffer (get-buffer-create "*restclient*")
       (restclient-mode)
-      (pop-to-buffer (current-buffer)))))
+      (pop-to-buffer (current-buffer))))
+
+  (with-eval-after-load 'restclient
+    (with-eval-after-load 'company
+      (when (maybe-require-package 'company-restclient)
+        (add-to-list 'company-backends 'company-restclient)))))
 
 
 (provide 'init-http)
