@@ -780,6 +780,7 @@ typical word processor."
 (when (maybe-require-package 'org-roam)
   (global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
   (global-set-key (kbd "C-c n s") 'org-roam-db-sync)
+  (global-set-key (kbd "C-c n t") 'org-roam-tag-add)
   (global-set-key (kbd "C-c n f") 'org-roam-node-find)
   (global-set-key (kbd "C-c n g") 'org-roam-graph)
   (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
