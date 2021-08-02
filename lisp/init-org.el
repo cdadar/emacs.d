@@ -778,15 +778,27 @@ typical word processor."
     output-string))
 
 (when (maybe-require-package 'org-roam)
-  (with-eval-after-load 'org-mode
-    (define-key org-mode-map (kbd "C-c n l") 'org-roam-buffer-toggle)
-    (define-key org-mode-map (kbd "C-c n f") 'org-roam-node-find)
-    (define-key org-mode-map (kbd "C-c n g") 'org-roam-graph)
-    (define-key org-mode-map (kbd "C-c n i") 'org-roam-node-insert)
-    (define-key org-mode-map (kbd "C-c n c") 'org-roam-capture)
-    ;; Dailies
-    (define-key org-mode-map (kbd "C-c n j") 'org-roam-dailies-capture-today))
+  (global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
+  (global-set-key (kbd "C-c n f") 'org-roam-node-find)
+  (global-set-key (kbd "C-c n g") 'org-roam-graph)
+  (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+  (global-set-key (kbd "C-c n c") 'org-roam-capture)
+  ;; Dailies
+  (global-set-key (kbd "C-c n j") 'org-roam-dailies-capture-today)
   
+  (setq org-roam-v2-ack t)
+  (setq org-id-link-to-org-use-id t)
+  (setq org-roam-completion-everywhere t)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol)
+  
+  (add-hook 'after-init-hook 'org-roam-setup))
+
+(with-eval-after-load 'org-roam
+  (when (maybe-require-package 'org-roam-bibtex)
+    (require 'org-ref)))
+
+(with-eval-after-load 'org-roam
   (when (maybe-require-package 'org-roam-server)
     (setq org-roam-server-host "127.0.0.1"
           org-roam-server-port 8080
@@ -798,45 +810,8 @@ typical word processor."
           org-roam-server-network-arrows nil
           org-roam-server-network-label-truncate t
           org-roam-server-network-label-truncate-length 60
-          org-roam-server-network-label-wrap-length 20)
-    (ignore-error (org-roam-server-mode)))
-  (setq org-roam-v2-ack t)
-  (add-hook 'after-init-hook 'org-roam-setup))
+          org-roam-server-network-label-wrap-length 20)))
 
-(with-eval-after-load 'org-roam
-  (require 'org-roam-protocol)
-  (setq org-roam-capture-templates
-        '(("d" "default" plain (function org-roam-capture--get-point)
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n#+roam_alias:\n\n")
-          ("g" "group")
-          ("ga" "Group A" plain (function org-roam-capture--get-point)
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n#+roam_alias:\n\n")
-          ("gb" "Group B" plain (function org-roam-capture--get-point)
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n#+roam_alias:\n\n")))
-  (setq org-roam-capture-immediate-template
-        '("d" "default" plain (function org-roam-capture--get-point)
-          "%?"
-          :file-name "%<%Y%m%d%H%M%S>-${slug}"
-          :head "#+title: ${title}\n"
-          :unnarrowed t))
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain (function org-roam-capture--get-point)
-           ""
-           :file-name "${slug}"
-           :head "#+title: ${title}\n#+roam_key: ${ref}\n"
-           :unnarrowed t)
-          '("a" "Annotation" plain (function org-roam-capture--get-point)
-            "%U ${body}\n"
-            :file-name "${slug}"
-            :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
-            :immediate-finish t
-            :unnarrowed t))))
 
 (when (maybe-require-package 'org-download)
   (add-hook 'dired-mode-hook 'org-download-enable)
