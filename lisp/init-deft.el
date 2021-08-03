@@ -13,7 +13,11 @@
         deft-recursive t
         deft-file-naming-rules '((nospace . "-"))
         deft-org-mode-title-prefix t
-        deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n")
+        deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n"
+        deft-strip-title-regexp (concat
+                                 "\\(?:^%+\\|^#\\+TITLE: *\\|^[#* ]+\\|-\\*-[[:alpha:]]+-\\*-\\|^Title:[	 ]*\\|#+$\\)"
+                                 ":PROPERTIES:\n\\(.+\n\\)+:END:"
+                                 ))
 
   (global-set-key (kbd "<f8>") 'deft)
   (global-set-key (kbd "C-<f8>") 'deft-find-file))
