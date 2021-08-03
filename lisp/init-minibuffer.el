@@ -24,6 +24,23 @@
       `(with-eval-after-load 'consult
          (consult-customize ,@cmds :preview-key (kbd "M-P"))))
 
+    (defun consult-hide-lines ()
+      (interactive)
+      (consult-focus-lines nil (consult--completion-filter 'consult-location nil) "! "))
+
+    (defun consult-reset-lines ()
+      (interactive)
+      (consult-focus-lines t))
+
+    (defun vmacs-grep-mode-hook ()
+      (evil-local-mode)
+      (define-key grep-mode-map "g" nil)
+      (evil-define-key 'normal 'local "/" #'consult-focus-lines)
+      (evil-define-key 'normal 'local "z" #'consult-hide-lines)
+      (evil-define-key 'normal 'local "r" #'consult-reset-lines))
+
+    (add-hook 'grep-mode-hook 'vmacs-grep-mode-hook)
+
     (sanityinc/no-consult-preview
      consult-ripgrep
      consult-git-grep consult-grep
