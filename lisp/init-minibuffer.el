@@ -10,6 +10,7 @@
   (with-eval-after-load 'vertico
     (require 'orderless))
 
+
   (defun sanityinc/use-orderless-in-minibuffer ()
     (setq-local completion-styles '(substring orderless)))
   (add-hook 'minibuffer-setup-hook 'sanityinc/use-orderless-in-minibuffer)
@@ -138,7 +139,23 @@
         (require 'embark-consult)
         (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode)))
 
-    (maybe-require-package 'consult-flycheck)))
+    (maybe-require-package 'consult-flycheck))
+
+
+  (when (maybe-require-package 'bibtex-actions)
+    (with-eval-after-load 'bibtex-actions
+      (global-set-key (kbd "C-c B") 'bibtex-actions-insert-citation)
+      (define-key minibuffer-local-map (kbd "M-b") 'bibtex-actions-insert-preset))
+    (with-eval-after-load 'embark
+      (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+      (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))
+      (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))
+      ;; Make sure to set this to ensure 'bibtex-actions-open-link' command works correctly.
+      (bibtex-completion-additional-search-fields '(doi url)))
+
+    ;; use consult-completing-read for enhanced interface
+    (with-eval-after-load 'consult
+      (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple))))
 
 (when (maybe-require-package 'marginalia)
   (add-hook 'after-init-hook 'marginalia-mode))
