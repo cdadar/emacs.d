@@ -12,7 +12,8 @@
         deft-use-filter-string-for-filename t
         deft-recursive t
         deft-file-naming-rules '((nospace . "-"))
-        deft-org-mode-title-prefix t)
+        deft-org-mode-title-prefix t
+        deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n")
 
   (global-set-key (kbd "<f8>") 'deft)
   (global-set-key (kbd "C-<f8>") 'deft-find-file))
