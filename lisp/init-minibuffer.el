@@ -79,7 +79,9 @@
     (global-set-key (kbd "M-g E") 'consult-compile-error)
     ;; M-s bindings (search-map)
     (global-set-key (kbd "M-s g") 'consult-git-grep)      ;; Alternatives: consult-grep, consult-ripgrep
+    (global-set-key (kbd "M-s G") 'consult-grep)      ;; Alternatives: consult-grep, consult-ripgrep
     (global-set-key (kbd "M-s f") 'consult-find)          ;; Alternatives: consult-locate, find-fd
+    (global-set-key (kbd "M-s F") 'find-fd)          ;; Alternatives: consult-locate, find-fd
     (global-set-key (kbd "M-s l") 'consult-line)
     (global-set-key (kbd "M-s m") 'consult-multi-occur)
     (global-set-key (kbd "M-s k") 'consult-keep-lines)
