@@ -54,6 +54,20 @@
 (when (maybe-require-package 'git-commit)
   (add-hook 'git-commit-mode-hook 'goto-address-mode))
 
+(when (maybe-require-package 'vc-msg)
+  (eval-after-load 'vc-msg-git
+    '(progn
+       ;; show code of commit
+       (setq vc-msg-git-show-commit-function 'magit-show-commit)
+       ;; open file of certain revision
+       (push '("m"
+               "[m]agit-find-file"
+               (lambda ()
+                 (let* ((info vc-msg-previous-commit-info)
+                        (git-dir (locate-dominating-file default-directory ".git")))
+                   (magit-find-file (plist-get info :id )
+                                    (concat git-dir (plist-get info :filename))))))
+             vc-msg-git-extra))))
 
 (when *is-a-mac*
   (with-eval-after-load 'magit
