@@ -798,10 +798,6 @@ typical word processor."
   (add-hook 'after-init-hook 'org-roam-setup))
 
 (with-eval-after-load 'org-roam
-  (when (maybe-require-package 'org-roam-bibtex)
-    (require 'org-ref)))
-
-(with-eval-after-load 'org-roam
   (when (maybe-require-package 'org-roam-server)
     (setq org-roam-server-host "127.0.0.1"
           org-roam-server-port 8080
