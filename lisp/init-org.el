@@ -792,8 +792,6 @@ typical word processor."
   (setq org-roam-v2-ack t)
   (setq org-id-link-to-org-use-id t)
   (setq org-roam-completion-everywhere t)
-  ;; If using org-roam-protocol
-  (require 'org-roam-protocol)
   
   (add-hook 'after-init-hook 'org-roam-setup))
 
