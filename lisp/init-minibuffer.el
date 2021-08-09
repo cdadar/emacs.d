@@ -100,12 +100,6 @@
       (let ((consult-find-command "fd --color=never --full-path ARG OPTS"))
         (consult-find dir initial)))
 
-    ;; Optionally configure the register preview function. This gives a
-    ;; consistent display for both `consult-register', `consult-register-load',
-    ;; `consult-register-store' and the Emacs built-ins.
-    (setq register-preview-delay 0
-          register-preview-function #'consult-register-preview)
-
     (require 'consult-xref)
     (setq xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref)
