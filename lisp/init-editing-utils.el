@@ -472,13 +472,14 @@ ORIG is the advised function, which is called with its ARGS."
 
 (defun move-file (new-location)
   "Write this file to NEW-LOCATION, and delete the old one."
-  (interactive (list (expand-file-name
-                      (if buffer-file-name
-                          (read-file-name "Move file to: ")
-                        (read-file-name "Move file to: "
-                                        default-directory
-                                        (expand-file-name (file-name-nondirectory (buffer-name))
-                                                          default-directory))))))
+  (interactive
+   (list (expand-file-name
+          (if buffer-file-name
+              (read-file-name "Move file to: ")
+            (read-file-name "Move file to: "
+                            default-directory
+                            (expand-file-name (file-name-nondirectory (buffer-name))
+                                              default-directory))))))
   (when (file-exists-p new-location)
     (delete-file new-location))
   (let ((old-location (expand-file-name (buffer-file-name))))
