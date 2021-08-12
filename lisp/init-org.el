@@ -793,7 +793,7 @@ typical word processor."
   (setq org-id-link-to-org-use-id t)
   (setq org-roam-completion-everywhere t)
   
-  (add-hook 'after-init-hook 'org-roam-setup))
+  (add-hook 'after-init-hook 'org-roam-db-autosync-mode))
 
 (with-eval-after-load 'org-roam
   (when (maybe-require-package 'org-roam-server)
