@@ -30,6 +30,7 @@
  scroll-preserve-screen-position 'always
  set-mark-command-repeat-pop t
  tooltip-delay 1.5
+ fill-column 120
  truncate-lines nil
  truncate-partial-width-windows nil)
 
