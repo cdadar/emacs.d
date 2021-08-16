@@ -459,6 +459,9 @@ ORIG is the advised function, which is called with its ARGS."
   '(define-key grep-mode-map
      (kbd "C-c C-c") 'wgrep-finish-edit))
 
+(when (maybe-require-package 'elisp-demos)
+  (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
+
 (require 'insert-translated-name)
 
 (require 'clip2org)
