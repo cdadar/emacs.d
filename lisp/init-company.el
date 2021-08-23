@@ -90,5 +90,9 @@
     (global-set-key (kbd "C-z") #'company-try-hard)
     (define-key company-active-map (kbd "C-z") #'company-try-hard)))
 
+(with-eval-after-load 'company
+  (when (maybe-require-package 'company-tabnine)
+    (add-to-list 'company-backends 'company-tabnine)))
+
 (provide 'init-company)
 ;;; init-company.el ends here
