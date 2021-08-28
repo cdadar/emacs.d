@@ -6,6 +6,7 @@
 (require-package 'color-theme-sanityinc-tomorrow)
 (require-package 'solarized-theme)
 (require-package 'dracula-theme)
+(require-package 'nord-theme)
 (require-package 'zenburn-theme)
 (require-package 'monokai-theme)
 (require-package 'base16-theme)
