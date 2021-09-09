@@ -327,8 +327,8 @@ ORIG is the advised function, which is called with its ARGS."
                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
 (require-package 'sudo-edit)
-(with-eval-after-load 'sudo-edit
-  (global-set-key (kbd "C-c C-r") 'sudo-edit))
+(global-set-key (kbd "C-c C-r") 'sudo-edit)
+
 
 (require 'color-rg)
 
