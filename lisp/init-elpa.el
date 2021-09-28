@@ -8,8 +8,7 @@
 
 ;;; Install into separate package dirs for each Emacs version, to prevent bytecode incompatibility
 (setq package-user-dir
-      (expand-file-name (format "elpa-%s.%s" emacs-major-version emacs-minor-version)
-                        user-emacs-directory))
+      (locate-user-emacs-file (format "elpa-%s.%s" emacs-major-version emacs-minor-version)))
 
 
 
