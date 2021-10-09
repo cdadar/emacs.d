@@ -127,10 +127,26 @@
         (require 'embark-consult)
         (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode)))
 
-    (maybe-require-package 'consult-flycheck)))
+    (maybe-require-package 'consult-flycheck))
+
+  ;; (with-eval-after-load 'company
+  ;;   (when (maybe-require-package 'consult-company)
+  ;;     (define-key company-mode-map [remap completion-at-point] #'consult-company)))
+
+  (with-eval-after-load 'yasnippet
+    (when (maybe-require-package 'consult-yasnippet)
+      (global-set-key (kbd "M-Y") 'consult-yasnippet)))
+
+  ;; (when (maybe-require-package 'consult-dir)
+  ;;   (define-key global-map (kbd "C-x C-d") #'consult-dir)
+  ;;   (define-key minibuffer-local-completion-map (kbd "C-x C-d") #'consult-dir)
+  ;;   (define-key minibuffer-local-completion-map (kbd "C-x C-j") #'consult-dir-jump-file))
+  )
 
 (when (maybe-require-package 'marginalia)
   (add-hook 'after-init-hook 'marginalia-mode))
+
+
 
 
 (provide 'init-minibuffer)
