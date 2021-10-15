@@ -17,7 +17,7 @@
 (setq custom-safe-themes t)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
+(setq-default custom-enabled-themes '(modus-vivendi))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -69,6 +69,20 @@
   (minions-mode 1)
   (with-eval-after-load 'minions-mode
     (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu)))
+
+
+;; Add all your customizations prior to loading the themes
+(setq modus-themes-italic-constructs t
+      modus-themes-bold-constructs nil
+      modus-themes-region '(bg-only no-extend))
+
+;; Load the theme files before enabling a theme
+(modus-themes-load-themes)
+
+;; Load the theme of your choice:
+;; (modus-themes-load-operandi)
+(modus-themes-load-vivendi)
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
