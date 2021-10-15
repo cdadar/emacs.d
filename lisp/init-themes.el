@@ -10,6 +10,7 @@
 (require-package 'zenburn-theme)
 (require-package 'monokai-theme)
 (require-package 'base16-theme)
+(require-package 'modus-themes)
 
 ;; Don't prompt to confirm theme safety. This avoids problems with
 ;; first-time startup on Emacs > 26.3.
