@@ -796,6 +796,10 @@ typical word processor."
   (setq org-roam-v2-ack t)
   (setq org-id-link-to-org-use-id t)
   (setq org-roam-completion-everywhere t)
+  ;; (setq org-roam-capture-templates
+  ;;       '(("d" "default" plain "%?" :target
+  ;;          (file+head "${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
+  ;;          :unnarrowed t)))
   
   (add-hook 'after-init-hook 'org-roam-db-autosync-mode))
 
