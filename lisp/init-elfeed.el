@@ -6,6 +6,8 @@
 
 (when (maybe-require-package 'elfeed)
   (global-set-key (kbd "C-x w") 'elfeed)
+  (setq elfeed-use-curl 't)
+  (setq rmh-elfeed-org-auto-ignore-invalid-feeds t)
   (with-eval-after-load 'elfeed
 
     (define-key elfeed-search-mode-map "q" 'bjm/elfeed-save-db-and-bury)
