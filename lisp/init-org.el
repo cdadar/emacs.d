@@ -802,27 +802,27 @@ typical word processor."
                               "#+title: ${title}\n")
            :unnarrowed t)
           ("b" "bible" plain "%?"
-           :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}"
+           :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
           ("p" "program" plain "%?"
-           :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}"
+           :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
           ("B" "Booknotes" plain "%?"
-           :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}"
+           :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
           ("i" "investment" plain "%?"
-           :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}"
+           :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
           ("o" "other" plain "%?"
-           :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}"
+           :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
           ("w" "work" plain "%?"
-           :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}"
+           :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)))
   

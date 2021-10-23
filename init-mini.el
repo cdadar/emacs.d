@@ -69,6 +69,8 @@
               tab-width        4
               indent-tabs-mode nil)
 
+(setq fill-column 120)
+
 ;; UI
 (load-theme 'wombat t)
 
