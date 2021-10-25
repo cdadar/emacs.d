@@ -11,6 +11,8 @@
 (require-package 'monokai-theme)
 (require-package 'base16-theme)
 (require-package 'modus-themes)
+(modus-themes-load-themes)
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 ;; Don't prompt to confirm theme safety. This avoids problems with
 ;; first-time startup on Emacs > 26.3.
@@ -69,9 +71,6 @@
   (minions-mode 1)
   (with-eval-after-load 'minions-mode
     (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu)))
-
-
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
