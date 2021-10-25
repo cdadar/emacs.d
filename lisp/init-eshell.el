@@ -29,10 +29,6 @@ directory to make multiple eshell windows easier."
   (eshell-send-input)
   (delete-window))
 
-(require 'aweshell)
-
-(global-set-key (kbd "<f12>") #'aweshell-dedicated-toggle)
-
 (when (maybe-require-package 'esh-autosuggest)
   (with-eval-after-load 'eshell-mode
     (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)))
