@@ -278,6 +278,16 @@ typical word processor."
 
 
 
+(defun cdadar/org-kill-link-at-point ()
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (let* ((context (org-element-context))
+           (type (org-element-type context))
+           (beg (org-element-property :begin context))
+           (end (org-element-property :end context)))
+      (when (eq type 'link)
+        (kill-region beg end)))))
+
 
 ;;; Refiling
 
