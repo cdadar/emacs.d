@@ -9,6 +9,20 @@
 ;;; make cursor style bar
 (setq-default cursor-type 'box)
 
+(defun cdadar/reset-frame-size (&optional frame)
+  "重设窗体大小"
+  (interactive)
+  (when frame
+    (select-frame frame))
+  (set-frame-width (selected-frame) 120)
+  (set-frame-height (selected-frame) 50))
+
+(cdadar/reset-frame-size)
+
+(add-hook 'after-make-frame-functions 'cdadar/reset-frame-size)
+(add-hook 'window-setup-hook 'cdadar/reset-frame-size)
+
+
 (when (maybe-require-package 'cnfonts)
   ;; 让 cnfonts 随着 Emacs 自动生效。
   (cnfonts-enable)
