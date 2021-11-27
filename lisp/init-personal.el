@@ -14,8 +14,8 @@
   (interactive)
   (when frame
     (select-frame frame))
-  (set-frame-width (selected-frame) 120)
-  (set-frame-height (selected-frame) 50))
+  (progn (set-frame-width (selected-frame) 120)
+         (set-frame-height (selected-frame) 50)))
 
 (cdadar/reset-frame-size)
 
