@@ -37,7 +37,7 @@
     (set-fontset-font
      "fontset-default"
      charset
-     (font-spec :name "Noto Serif SC"
+     (font-spec :name "思源黑体 CN"
                 :weight 'normal
                 :slant 'normal
                 :size 12.0))))
