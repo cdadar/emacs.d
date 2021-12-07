@@ -12,7 +12,7 @@
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \setlist[description]{labelwidth=25em,font=\normalfont\itshape\space }
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
+#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{1em}
