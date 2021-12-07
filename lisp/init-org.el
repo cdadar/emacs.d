@@ -715,11 +715,16 @@ typical word processor."
 (with-eval-after-load 'org
   (maybe-require-package 'ox-ioslide))
 
+;; org-appear
+(with-eval-after-load 'org
+  (when (maybe-require-package 'org-appear)
+    (add-hook 'org-mode-hook 'org-appear-mode)))
+
 ;; generate mind map
 (with-eval-after-load 'org
   (when (maybe-require-package 'org-mind-map)
     (require 'ox-org)
-    (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+    (setq org-mind-map-engine "dot")    ; Default. Directed Graph
     ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
     ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
     ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
