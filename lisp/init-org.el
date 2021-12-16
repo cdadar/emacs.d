@@ -837,7 +837,8 @@ typical word processor."
                               "#+title: ${title}\n")
            :unnarrowed t)))
   
-  (add-hook 'after-init-hook 'org-roam-db-autosync-mode)
+  (with-eval-after-load 'org-roam
+    (add-hook 'after-init-hook 'org-roam-db-autosync-mode))
 
   (when (maybe-require-package 'org-roam-ui)
     (setq org-roam-ui-sync-theme t
