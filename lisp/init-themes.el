@@ -11,7 +11,10 @@
 (require-package 'monokai-theme)
 (require-package 'base16-theme)
 (require-package 'modus-themes)
-(modus-themes-load-themes)
+
+(with-eval-after-load 'modus-themes
+  (modus-themes-load-themes))
+
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 ;; Don't prompt to confirm theme safety. This avoids problems with
