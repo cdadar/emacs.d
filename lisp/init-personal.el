@@ -32,7 +32,7 @@
    :font (font-spec :name "Hack"
                     :weight 'normal
                     :slant 'normal
-                    :size 10.0))
+                    :size 9.0))
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font
      "fontset-default"
@@ -40,7 +40,7 @@
      (font-spec :name "思源黑体 CN"
                 :weight 'normal
                 :slant 'normal
-                :size 12.0))))
+                :size 10.5))))
 
 
 (provide 'init-personal)
