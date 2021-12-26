@@ -6,23 +6,15 @@
 (require-package 'color-theme-sanityinc-tomorrow)
 (require-package 'solarized-theme)
 (require-package 'dracula-theme)
-(require-package 'nord-theme)
 (require-package 'zenburn-theme)
-(require-package 'monokai-theme)
-(require-package 'base16-theme)
 (require-package 'modus-themes)
-
-(with-eval-after-load 'modus-themes
-  (modus-themes-load-themes))
-
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 ;; Don't prompt to confirm theme safety. This avoids problems with
 ;; first-time startup on Emacs > 26.3.
 (setq custom-safe-themes t)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(modus-vivendi))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
