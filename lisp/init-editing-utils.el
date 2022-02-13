@@ -496,5 +496,13 @@ ORIG is the advised function, which is called with its ARGS."
                (not (string-equal old-location new-location)))
       (delete-file old-location))))
 
+
+(defun remove-it (it list)
+  (if (null list) 0
+    (if (= it (car list))
+        (delete (car list))
+      (remove-it (cdr list)))))
+
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
