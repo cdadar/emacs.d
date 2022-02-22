@@ -750,6 +750,9 @@ typical word processor."
   (let ((head-tags (org-get-tags-at)))
     (member current-tag head-tags)))
 
+(when (maybe-require-package 'org-plus-conrib)
+  (require 'org-checklist))
+
 (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
   (interactive "P")
   (let* ((timerange-numeric-value (prefix-numeric-value timerange))
