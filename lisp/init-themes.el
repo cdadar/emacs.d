@@ -7,7 +7,7 @@
 ;; Toggle between light and dark
 (with-eval-after-load 'modus-themes
   (modus-themes-load-themes)
-  (modus-themes-load-operandi))
+  (modus-themes-load-vivendi))
 
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
