@@ -116,6 +116,7 @@
 (require-package 'undo-tree)
 (add-hook 'after-init-hook 'global-undo-tree-mode)
 
+(setq undo-tree-auto-save-history nil)
 
 
 ;;; Zap *up* to char is a handy pair for zap-to-char
