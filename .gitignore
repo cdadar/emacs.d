@@ -64,3 +64,4 @@ company-statistics-cache.el
 /smex-items
 /eln-cache/
 org-roam.db
+/projects
