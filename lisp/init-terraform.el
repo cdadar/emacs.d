@@ -3,18 +3,7 @@
 ;;; Code:
 
 ;;; Terraform
-
-(when (maybe-require-package 'terraform-mode)
-  (when (maybe-require-package 'company-terraform)
-    (with-eval-after-load 'terraform-mode
-      (company-terraform-init)
-
-      ;; I find formatters based on "reformatter" to be more reliable
-      ;; so I redefine `terraform-format-on-save-mode' here.
-      (when (maybe-require-package 'reformatter)
-        (reformatter-define terraform-format
-          :program "terraform" :args '("fmt" "-"))))))
+(maybe-require-package 'terraform-mode)
 
 (provide 'init-terraform)
-;;; init-terraform.el ends here
 ;;; init-terraform.el ends here
