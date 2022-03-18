@@ -23,6 +23,13 @@
       ;; (setq-local corfu-auto nil) Enable/disable auto completion
       (corfu-mode 1)))
 
+  (defun corfu-enable-always-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+    (unless (or (bound-and-true-p mct--active)
+                (bound-and-true-p vertico--input))
+      ;; (setq-local corfu-auto nil) Enable/disable auto completion
+      (corfu-mode 1)))
+
   (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
 
   ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
@@ -33,7 +40,6 @@
     (setq completion-styles '(orderless partial-completion)
           completion-category-defaults nil
           completion-category-overrides '((file (styles . (partial-completion)))))))
-
 
 (with-eval-after-load 'corfu
   (when (maybe-require-package 'cape)
@@ -58,7 +64,7 @@
   (when (maybe-require-package 'corfu-doc)
     (add-hook 'corfu-mode-hook #'corfu-doc-mode)
     (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-down) ;; corfu-next
-    (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)  ;; corfu-previous
+    (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)   ;; corfu-previous
     ))
 
 (provide 'init-corfu)
