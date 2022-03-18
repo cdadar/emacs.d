@@ -55,11 +55,6 @@
 
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
-  (when (maybe-require-package 'ac-js2)
-    (with-eval-after-load 'company
-      (add-to-list 'company-backends 'ac-js2-company)))
-
-
   (js2-imenu-extras-setup))
 
 ;; In Emacs >= 25, the following is an alias for js-indent-level anyway
@@ -143,22 +138,6 @@
 
   (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
   (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode))
-
-
-
-;; (when (and (executable-find "tern")
-;;            (maybe-require-package 'tern))
-;;   (add-hook 'js2-mode-hook 'tern-mode)
-;;   (add-hook 'rjsx-mode-hook 'tern-mode)
-;;   (add-hook 'web-mode-hook 'tern-mode)
-;;   (with-eval-after-load 'tern
-;;     ;; Disable completion keybindings, as we use xref-js2 instead
-;;     (define-key tern-mode-keymap (kbd "M-.") nil)
-;;     (define-key tern-mode-keymap (kbd "M-,") nil)
-;;     (when (maybe-require-package 'company-tern)
-;;       (add-to-list 'company-backends 'company-tern))))
-
-
 
 (when (maybe-require-package 'js-doc)
   (setq js-doc-mail-address "your email address"

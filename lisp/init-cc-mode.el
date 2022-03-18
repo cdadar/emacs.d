@@ -31,17 +31,6 @@ Includes support for Qt code (signal, slots and alikes)."
         ;; base-style
         (c-set-style "stroustrup")
 
-
-        (when (maybe-require-package 'company-c-headers)
-          (add-to-list 'company-backends #'company-c-headers)
-
-          ;;  gcc -xc++ -E -v - 获取头文件路径
-          (setq  company-c-headers-path-system '("." "/usr/include/"
-                                                 "/usr/local/include/"
-                                                 "../*/include")))
-        ;;company-clang
-        (add-to-list 'company-backends #'company-clang)
-
         ;; qt keywords and stuff ...
         ;; set up indenting correctly for new qt kewords
         (setq c-protection-key (concat "\\<\\(public\\|public slot\\|protected"
