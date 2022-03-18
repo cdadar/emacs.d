@@ -32,6 +32,12 @@
 
   (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
 
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (let (completion-cycle-threshold completion-cycling)
+      (apply #'consult-completion-in-region completion-in-region--data)))
+  (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
+
   ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
   ;; in the Consult wiki for an advanced Orderless style dispatcher.
   ;; Enable `partial-completion' for files to allow path expansion.
