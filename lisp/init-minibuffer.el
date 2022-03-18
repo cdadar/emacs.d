@@ -129,10 +129,6 @@
 
     (maybe-require-package 'consult-flycheck))
 
-  ;; (with-eval-after-load 'company
-  ;;   (when (maybe-require-package 'consult-company)
-  ;;     (define-key company-mode-map [remap completion-at-point] #'consult-company)))
-
   (with-eval-after-load 'yasnippet
     (when (maybe-require-package 'consult-yasnippet)
       (global-set-key (kbd "M-Y") 'consult-yasnippet)))

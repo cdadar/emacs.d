@@ -4,9 +4,7 @@
 
 (when (maybe-require-package 'rust-mode)
   (when (maybe-require-package 'racer)
-    (add-hook 'rust-mode-hook #'racer-mode))
-  (when (maybe-require-package 'company)
-    (add-hook 'racer-mode-hook #'company-mode)))
+    (add-hook 'rust-mode-hook #'racer-mode)))
 
 (when (maybe-require-package 'flycheck-rust)
   (with-eval-after-load 'rust-mode
