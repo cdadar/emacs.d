@@ -52,14 +52,7 @@
 
   (when (maybe-require-package 'consult-lsp)
     (with-eval-after-load 'consult-lsp
-      (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols)))
-
-
-  (when (maybe-require-package 'company-lsp)
-    (push 'company-lsp company-backends))
-
-
-  )
+      (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))))
 
 
 (provide 'init-lsp)

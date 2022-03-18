@@ -45,14 +45,21 @@
                    (add-to-list 'completion-at-point-functions #'cape-tex)
                    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
                    (add-to-list 'completion-at-point-functions #'cape-keyword)
+                   (add-to-list 'completion-at-point-functions #'cape-symbol)
                    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
                    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
                    ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
                    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
                    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-                   ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
                    ;;(add-to-list 'completion-at-point-functions #'cape-line)
                    )))))
+
+(with-eval-after-load 'corfu
+  (when (maybe-require-package 'corfu-doc)
+    (add-hook 'corfu-mode-hook #'corfu-doc-mode)
+    (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-down) ;; corfu-next
+    (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)  ;; corfu-previous
+    ))
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here

@@ -27,11 +27,7 @@
               (lambda ()
                 (anaconda-eldoc-mode (if anaconda-mode 1 0)))))
   (with-eval-after-load 'anaconda-mode
-    (define-key anaconda-mode-map (kbd "M-?") nil))
-  (when (maybe-require-package 'company-anaconda)
-    (with-eval-after-load 'company
-      (with-eval-after-load 'python
-        (add-to-list 'company-backends 'company-anaconda)))))
+    (define-key anaconda-mode-map (kbd "M-?") nil)))
 
 (when (maybe-require-package 'toml-mode)
   (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))

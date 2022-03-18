@@ -20,12 +20,6 @@
     (add-hook 'go-mode-hook
               (lambda () (setq-default tab-width 2)))
 
-    ;;; Company-go
-    (when (maybe-require-package 'company-go)
-      (with-eval-after-load 'company
-        (add-hook 'go-mode-hook
-                  (add-to-list 'company-backends 'company-go))))
-
     ;;; Golang eldoc
     (when (maybe-require-package 'go-eldoc)
       (with-eval-after-load 'go-eldoc
