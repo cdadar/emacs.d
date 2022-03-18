@@ -65,6 +65,12 @@
     (global-set-key (kbd "C-c e &")  'cape-sgml)
     (global-set-key (kbd "C-c e r")  'cape-rfc1345)
 
+
+    ;; Use Company backends as Capfs.
+    ;; (setq-local completion-at-point-functions
+    ;;             (mapcar #'cape-company-to-capf
+    ;;                     (list #'company-files #'company-ispell #'company-dabbrev)))
+
     (add-hook 'after-init-hook
               '(lambda ()
                  (progn
