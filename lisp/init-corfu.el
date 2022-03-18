@@ -49,6 +49,22 @@
 
 (with-eval-after-load 'corfu
   (when (maybe-require-package 'cape)
+    (global-set-key (kbd "C-c e p")  'completion-at-point) ;; capf
+    (global-set-key (kbd "C-c e t")  'complete-tag)        ;; etags
+    (global-set-key (kbd "C-c e d")  'cape-dabbrev)        ;; or dabbrev-completion
+    (global-set-key (kbd "C-c e f")  'cape-file)
+    (global-set-key (kbd "C-c e k")  'cape-keyword)
+    (global-set-key (kbd "C-c e s")  'cape-symbol)
+    (global-set-key (kbd "C-c e a")  'cape-abbrev)
+    (global-set-key (kbd "C-c e i")  'cape-ispell)
+    (global-set-key (kbd "C-c e l")  'cape-line)
+    (global-set-key (kbd "C-c e w")  'cape-dict)
+    (global-set-key (kbd "C-c e \\")  'cape-tex)
+    (global-set-key (kbd "C-c e _")  'cape-tex)
+    (global-set-key (kbd "C-c e ^")  'cape-tex)
+    (global-set-key (kbd "C-c e &")  'cape-sgml)
+    (global-set-key (kbd "C-c e r")  'cape-rfc1345)
+
     (add-hook 'after-init-hook
               '(lambda ()
                  (progn
@@ -72,6 +88,7 @@
     (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-down) ;; corfu-next
     (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)   ;; corfu-previous
     ))
+
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
