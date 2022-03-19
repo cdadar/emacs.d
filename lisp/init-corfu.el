@@ -97,10 +97,11 @@
     (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)   ;; corfu-previous
     ))
 
-(with-eval-after-load 'corfu
-  (when (maybe-require-package 'kind-icon)
-    (setq kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+;; (with-eval-after-load 'corfu
+;;   (when (maybe-require-package 'kind-icon)
+;;     (setq kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+;;     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+
 
 
 (provide 'init-corfu)
