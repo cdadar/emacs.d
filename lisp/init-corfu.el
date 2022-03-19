@@ -24,7 +24,8 @@
   (with-eval-after-load 'orderless
     (setq completion-styles '(orderless partial-completion)
           completion-category-defaults nil
-          completion-category-overrides '((file (styles . (partial-completion)))))))
+          completion-category-overrides '((file (styles . (partial-completion)))
+                                          (eglot (styles . (orderless flex)))))))
 
 (with-eval-after-load 'corfu
   (defun corfu-enable-in-minibuffer ()
