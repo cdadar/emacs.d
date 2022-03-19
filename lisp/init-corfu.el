@@ -17,6 +17,16 @@
 (when (maybe-require-package 'corfu)
   (add-hook 'after-init-hook 'corfu-global-mode)
 
+  ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
+  ;; in the Consult wiki for an advanced Orderless style dispatcher.
+  ;; Enable `partial-completion' for files to allow path expansion.
+  ;; You may prefer to use `initials' instead of `partial-completion'.
+  (with-eval-after-load 'orderless
+    (setq completion-styles '(orderless partial-completion)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles . (partial-completion)))))))
+
+(with-eval-after-load 'corfu
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
     (when (where-is-internal #'completion-at-point (list (current-local-map)))
@@ -36,16 +46,7 @@
     (interactive)
     (let (completion-cycle-threshold completion-cycling)
       (apply #'consult-completion-in-region completion-in-region--data)))
-  (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
-
-  ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
-  ;; in the Consult wiki for an advanced Orderless style dispatcher.
-  ;; Enable `partial-completion' for files to allow path expansion.
-  ;; You may prefer to use `initials' instead of `partial-completion'.
-  (with-eval-after-load 'orderless
-    (setq completion-styles '(orderless partial-completion)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles . (partial-completion)))))))
+  (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer))
 
 (with-eval-after-load 'corfu
   (when (maybe-require-package 'cape)
