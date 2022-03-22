@@ -807,6 +807,7 @@ typical word processor."
   (setq org-roam-v2-ack t)
   (setq org-id-link-to-org-use-id t)
   (setq org-roam-completion-everywhere t)
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?"
            :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
