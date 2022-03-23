@@ -6,10 +6,9 @@
 
 ;;; Basic golang setup
 (when (maybe-require-package 'go-mode)
+  (add-auto-mode 'go-mode "\\.go\\'")
+
   (with-eval-after-load 'go-mode
-
-    (add-auto-mode 'go-mode "\\.go\\'")
-
     (add-hook 'before-save-hook 'gofmt-before-save)
     (setq gofmt-command "goimports")
     (add-hook 'go-mode-hook (lambda ()
@@ -20,7 +19,7 @@
     (add-hook 'go-mode-hook
               (lambda () (setq-default tab-width 2)))
 
-    ;;; Golang eldoc
+;;; Golang eldoc
     (when (maybe-require-package 'go-eldoc)
       (with-eval-after-load 'go-eldoc
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
