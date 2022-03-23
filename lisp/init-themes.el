@@ -2,19 +2,19 @@
 ;;; Commentary:
 ;;; Code:
 
-(require-package 'modus-themes)
+(when (maybe-require-package 'modus-themes)
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-region '(bg-only no-extend))
+
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
+  (modus-themes-load-vivendi)
+
+  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
+
 
-
-;; Add all your customizations prior to loading the themes
-(setq modus-themes-italic-constructs t
-      modus-themes-bold-constructs nil
-      modus-themes-region '(bg-only no-extend))
-
-;; Load the theme files before enabling a theme
-(modus-themes-load-themes)
-(modus-themes-load-vivendi)
-
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
