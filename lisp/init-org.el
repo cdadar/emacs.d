@@ -265,6 +265,14 @@ typical word processor."
          (file+headline org-capture-anki "Vocabulary")
          ,(concat "* %^{heading} :note:\n"
                   "%(generate-anki-note-body)\n"))
+        ("a" "Anki basic"
+         entry
+         (file+headline org-capture-anki "Dispatch Shelf")
+         "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Basic\n:ANKI_DECK: Mega\n:END:\n** Front\n%?\n** Back\n%x\n")
+        ("A" "Anki cloze"
+         entry
+         (file+headline org-capture-anki "Dispatch Shelf")
+         "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Cloze\n:ANKI_DECK: Mega\n:END:\n** Text\n%x\n** Extra\n")
         ("p" "Protocol")
         ("pb" "Protocol Bookmarks" entry
          (file+headline org-capture-web-bookmarks "Bookmarks")
