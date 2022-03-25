@@ -75,18 +75,18 @@
     (global-set-key (kbd "M-g k") 'consult-global-mark)
     (global-set-key (kbd "M-g i") 'consult-project-imenu) ;; Alternative: consult-imenu
     (global-set-key (kbd "M-g I") 'consult-imenu)
-    (global-set-key (kbd "M-g e") 'consult-error)
+    (global-set-key (kbd "M-g e") 'consult-flymake)
     (global-set-key (kbd "M-g E") 'consult-compile-error)
     ;; M-s bindings (search-map)
     (global-set-key (kbd "M-s g") 'consult-git-grep)      ;; Alternatives: consult-grep, consult-ripgrep
     (global-set-key (kbd "M-s G") 'consult-grep)      ;; Alternatives: consult-grep, consult-ripgrep
+    (global-set-key (kbd "M-s r") 'consult-ripgrep)      ;; Alternatives: consult-grep, consult-ripgrep
     (global-set-key (kbd "M-s f") 'consult-find)          ;; Alternatives: consult-locate, find-fd
     (global-set-key (kbd "M-s F") 'find-fd)          ;; Alternatives: consult-locate, find-fd
     (global-set-key (kbd "M-s l") 'consult-line)
     (global-set-key (kbd "M-s m") 'consult-multi-occur)
     (global-set-key (kbd "M-s k") 'consult-keep-lines)
     (global-set-key (kbd "M-s u") 'consult-focus-lines)
-    (global-set-key (kbd "M-s s") 'consult-isearch)
     ;; Other bindings
     (global-set-key (kbd "M-y") 'consult-yank-pop)
     (global-set-key (kbd "<help> a") 'consult-apropos)
@@ -104,11 +104,7 @@
     (setq xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref)
 
-    (with-eval-after-load 'flycheck
-      (when (maybe-require-package 'consult-flycheck)
-        (global-set-key (kbd "M-s e") 'consult-flycheck)))
-
-    ;; Optionally tweak the register preview window.
+    ;; Optionallye tweak the register preview window.
     ;; * Sort the registers
     ;; * Hide the mode line
     ;; * Resize the window, such that the contents fit exactly
