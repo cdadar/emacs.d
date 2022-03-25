@@ -41,10 +41,10 @@
               (lambda () (shell-command "pip install pyflakes")))
     )
 
-  (when (maybe-require-package 'flycheck-pyflakes)
-    (require 'flycheck-pyflakes)
-    (add-to-list 'flycheck-disabled-checkers 'python-flake8)
-    (add-to-list 'flycheck-disabled-checkers 'python-pylint))
+
+  (with-eval-after-load 'flymake
+    (when (maybe-require-package 'flymake-python-pyflakes)
+      (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)))
 
   (when (executable-find "autopep8")
     (when (maybe-require-package 'py-autopep8)

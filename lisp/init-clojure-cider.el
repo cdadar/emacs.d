@@ -5,17 +5,11 @@
 (require 'init-clojure)
 
 (when (maybe-require-package 'cider)
-  (setq nrepl-popup-stacktraces nil)
+  (setq nrepl-popup-stacktraces nil))
 
-  (with-eval-after-load 'cider
-    (add-hook 'cider-repl-mode-hook 'subword-mode)
-    (add-hook 'cider-repl-mode-hook 'paredit-mode))
-
-  (require-package 'flycheck-clojure)
-  (with-eval-after-load 'clojure-mode
-    (with-eval-after-load 'cider
-      (with-eval-after-load 'flycheck
-        (flycheck-clojure-setup)))))
+(with-eval-after-load 'cider
+  (add-hook 'cider-repl-mode-hook 'subword-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode))
 
 
 (provide 'init-clojure-cider)

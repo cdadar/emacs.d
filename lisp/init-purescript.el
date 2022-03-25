@@ -20,9 +20,6 @@
 
   (when (maybe-require-package 'psc-ide)
     (add-hook 'purescript-mode-hook 'psc-ide-mode)
-    (add-hook 'psc-ide-mode-hook
-              (lambda ()
-                (setq-local flycheck-check-syntax-automatically '(save mode-enabled))))
 
     (defun psc-ide-foreign-js-after-save-handler ()
       "Call `psc-ide-rebuild' in any neighbouring purescript file buffer, if `psc-ide-rebuild-on-save' is set.
@@ -38,10 +35,7 @@ corresponding .purs file is open."
                   (cond
                    (psc-ide-rebuild-on-save
                     (message "Triggering rebuild of %s" purs-path)
-                    (psc-ide-rebuild))
-                   (flycheck-mode
-                    (message "Flychecking %s" purs-path)
-                    (flycheck-buffer))))))))))
+                    (psc-ide-rebuild))))))))))
 
     (define-minor-mode psc-ide-foreign-js-mode
       "Rebuild corresponding purescript file."

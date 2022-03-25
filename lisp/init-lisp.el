@@ -287,10 +287,6 @@ there is no current file, eval the current buffer."
 (maybe-require-package 'cl-libify)
 
 
-(maybe-require-package 'flycheck-relint)
-
-
-
 (maybe-require-package 'cask-mode)
 
 (provide 'init-lisp)
