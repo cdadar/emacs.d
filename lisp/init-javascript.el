@@ -44,8 +44,9 @@
   (when (derived-mode-p 'js-mode)
     (js2-minor-mode 1))
 
-  (when (maybe-require-package 'flymake-eslint)
-    (flymake-eslint-enable))
+  (when (executable-find "eslint")
+    (when (maybe-require-package 'flymake-eslint)
+      (flymake-eslint-enable)))
 
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
