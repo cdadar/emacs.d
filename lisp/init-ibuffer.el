@@ -54,8 +54,6 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(ensure-lib-from-url 'tempbuf "https://www.emacswiki.org/emacs/download/tempbuf.el")
-
 (require 'tempbuf)
 
 (add-hook 'custom-mode-hook 'turn-on-tempbuf-mode)
