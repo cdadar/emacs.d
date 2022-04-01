@@ -13,7 +13,7 @@
 (setq org-agenda-file-blogposts (expand-file-name "all-posts.org" org-directory))
 (setq org-capture-web-bookmarks (expand-file-name "web.org" org-directory))
 (setq org-capture-anki (expand-file-name "anki.org" org-directory))
-(setq org-agenda-files (list org-directory))
+;; (setq org-agenda-files (list org-directory))
 
 ;; exec-path setting
 (setq exec-path-from-shell-arguments '("-i"))
