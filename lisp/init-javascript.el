@@ -6,16 +6,7 @@
 (maybe-require-package 'js2-mode)
 
 (when (maybe-require-package 'typescript-mode)
-  (when (maybe-require-package 'tide)
-    (add-to-list 'auto-mode-alist '("*\\.d.ts\\'" . typescript-mode))
-    (defun setup-tide-mode ()
-      (interactive)
-      (tide-setup)
-      (tide-hl-identifier-mode +1))
-    (add-hook 'typescript-mode-hook #'setup-tide-mode)
-    (with-eval-after-load 'tide
-      ;; formats the buffer before saving
-      (add-hook 'before-save-hook 'tide-format-before-save))))
+  (add-to-list 'auto-mode-alist '("*\\.d.ts\\'" . typescript-mode)))
 
 (maybe-require-package 'indium)
 
