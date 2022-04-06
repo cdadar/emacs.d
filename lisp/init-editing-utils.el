@@ -314,18 +314,18 @@ ORIG is the advised function, which is called with its ARGS."
 
   ;; for ruby
   (add-hook 'ruby-mode-hook
-            '(lambda ()
-               (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+            #'(lambda ()
+                (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
 
   ;; for java
   (add-hook 'java-mode-hook
-            '(lambda ()
-               (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+            #'(lambda ()
+                (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
 
   ;; for python
   (add-hook 'python-mode-hook
-            '(lambda ()
-               (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
+            #'(lambda ()
+                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
 (require-package 'sudo-edit)
 (global-set-key (kbd "C-c C-r") 'sudo-edit)
