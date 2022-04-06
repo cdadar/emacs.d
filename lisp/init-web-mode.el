@@ -86,8 +86,8 @@
              ("^[ \t]*<\\([@a-z]+\\)[^>]*>? *$" 1 " id=\"\\([a-zA-Z0-9_]+\\)\"" "#" ">")
              ("^[ \t]*<\\(@[a-z.]+\\)[^>]*>? *$" 1 " contentId=\"\\([a-zA-Z0-9_]+\\)\"" "=" ">")
              ;; angular imenu
-             (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
-     ))
+             (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))))
+
 (when (and (executable-find "prettier")
            (maybe-require-package 'reformatter))
   (reformatter-define prettier-css
