@@ -8,15 +8,6 @@
 ;;; make cursor style bar
 (setq-default cursor-type 'box)
 
-(defun cdadar/reset-frame-size (&optional frame)
-  "重设窗体大小"
-  (interactive)
-  (when frame
-    (select-frame frame))
-  (progn (set-frame-width (selected-frame) 120)
-         (set-frame-height (selected-frame) 50)))
-
-(add-hook 'after-make-frame-functions 'cdadar/reset-frame-size)
 
 
 ;; 如果配置好了， 下面20个汉字与40个英文字母应该等长
@@ -69,15 +60,48 @@
 ;;   (set-fontset-font (frame-parameter nil 'font) charset
 ;;                     (font-spec :family (car (cdr fonts)))))
 
-(when (display-graphic-p)
-  (progn
-    (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Sarasa Mono SC" 16)) ;; 11 13 17 19 23
-    ;; chinese font
-    (dolist (charset '(kana han symbol cjk-misc bopomofo))
-      (set-fontset-font (frame-parameter nil 'font)
-                        charset
-                        (font-spec :family "Sarasa Mono SC")))) ;; 14 16 20 22 28
-  )
+
+;; if gui do something in whatver type of emacs instance we are using
+(defun apply-if-gui (&rest action)
+  "Do specified ACTION if we're in a gui regardless of daemon or not."
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions
+                (lambda (frame)
+                  (select-frame frame)
+                  (if (display-graphic-p frame)
+                      (apply action))))
+    (if (display-graphic-p)
+        (apply action))))
+
+;; Default font (cant be font with hyphen in the name like Inconsolata-g)
+(setq initial-frame-alist '((font . "Sarasa Mono SC")))
+(setq default-frame-alist '((font . "Sarasa Mono SC")))
+
+(defun cdadar/set-backup-fonts()
+  "Set the emoji and glyph fonts."
+  (when (display-graphic-p)
+    (progn
+      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Sarasa Mono SC" 16)) ;; 11 13 17 19 23
+      ;; chinese font
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset
+                          (font-spec :family "Sarasa Mono SC")))) ;; 14 16 20 22 28
+    ))
+
+;; respect default terminal fonts
+;; if we're in a gui set the fonts appropriately
+;; for daemon sessions and and nondaemons
+(apply-if-gui 'cdadar/set-backup-fonts)
+
+(defun cdadar/reset-frame-size (&optional frame)
+  "重设窗体大小"
+  (interactive)
+  (progn (add-to-list 'default-frame-alist '(height . 40))
+         (add-to-list 'default-frame-alist '(width . 120))))
+
+(apply-if-gui 'cdadar/reset-frame-size)
+
 
 (provide 'init-personal)
 ;;; init-personal.el ends here
