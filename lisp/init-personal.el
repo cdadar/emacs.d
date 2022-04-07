@@ -1,11 +1,10 @@
- ;;; personal.el --- Emacs Prelude: Personal settings
+;;; init-personal.el --- Emacs Prelude: Personal settings
 ;;
 ;;; Commentary:
 ;; Personal settings to augment those of Prelude
 ;; Install Emacs through homebrew with --cocoa --srgb
 
 ;;; Code:
-
 ;;; make cursor style bar
 (setq-default cursor-type 'box)
 
@@ -48,6 +47,28 @@
 ;;                       (font-spec :family (car (cdr fonts))))))
 
 
+;; (when (eq system-type 'darwin)
+;;   (setq fonts '("Monaco" "STKaiti"))
+;;   (set-face-attribute 'default nil :font
+;;                       (format "%s:pixelsize=%d" (car fonts) 15))
+;;   (setq face-font-rescale-alist '(("STKaiti". 1.2))))
+
+;; (when (eq system-type 'windows-nt)
+;;   (setq fonts '("Inconsolata" "华文楷体"))
+;;   (set-face-attribute 'default nil :font
+;;                       (format "%s:pixelsize=%d" (car fonts) 20))
+;;   (setq face-font-rescale-alist '(("华文楷体". 1.0))))
+
+;; (when (eq system-type 'gnu/linux)
+;;   (setq fonts '("Inconsolata" "STKaiti"))
+;;   (set-face-attribute 'default nil :font
+;;                       (format "%s:pixelsize=%d" (car fonts) 18))
+;;   (setq face-font-rescale-alist '(("STKaiti". 1.0))))
+
+;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
+;;   (set-fontset-font (frame-parameter nil 'font) charset
+;;                     (font-spec :family (car (cdr fonts)))))
+
 (when (display-graphic-p)
   (progn
     (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Sarasa Mono SC" 16)) ;; 11 13 17 19 23
@@ -57,8 +78,6 @@
                         charset
                         (font-spec :family "Sarasa Mono SC")))) ;; 14 16 20 22 28
   )
-
-
 
 (provide 'init-personal)
 ;;; init-personal.el ends here
