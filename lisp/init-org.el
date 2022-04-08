@@ -828,7 +828,7 @@ typical word processor."
            :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
-          ("B" "Booknotes" plain "%?"
+          ("n" "Booknotes" plain "%?"
            :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)
@@ -842,6 +842,10 @@ typical word processor."
            :unnarrowed t)
           ("w" "work" plain "%?"
            :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("B" "blog" plain "%?"
+           :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)))
   
