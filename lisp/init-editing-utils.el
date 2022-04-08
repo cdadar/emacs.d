@@ -504,6 +504,9 @@ ORIG is the advised function, which is called with its ARGS."
         (delete (car list))
       (remove-it (cdr list)))))
 
+(defun timestamp ()
+  (interactive)
+  (insert (format-time-string "%Y%m%d%H%M%S")))
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
