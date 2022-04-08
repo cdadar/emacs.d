@@ -10,6 +10,7 @@
 
 (maybe-require-package 'indium)
 
+(maybe-require-package 'js-import)
 
 ;;; Basic js-mode setup
 
