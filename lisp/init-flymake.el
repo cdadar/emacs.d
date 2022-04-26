@@ -15,5 +15,12 @@
 
 (setq eldoc-documentation-function 'eldoc-documentation-compose)
 
+(with-eval-after-load 'flymake
+  (when (maybe-require-package 'flymake-collection)
+    (add-hook 'python-mode-hook
+              (defun python-mode-setup-flymake ()
+                (add-hook 'flymake-diagnostic-functions 'flymake-collection-pycodestyle nil t)
+                (flymake-mode +1)))))
+
 (provide 'init-flymake)
 ;;; init-flymake.el ends here
