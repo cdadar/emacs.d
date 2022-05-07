@@ -15,7 +15,7 @@
 (setq tab-always-indent 'complete)
 
 (when (maybe-require-package 'corfu)
-  (add-hook 'after-init-hook 'corfu-global-mode)
+  (add-hook 'after-init-hook 'global-corfu-mode)
 
   ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
   ;; in the Consult wiki for an advanced Orderless style dispatcher.
