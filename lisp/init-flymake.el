@@ -13,7 +13,8 @@
   (define-key flymake-mode-map (kbd "C-c ! p") 'flymake-goto-prev-error)
   (define-key flymake-mode-map (kbd "C-c ! c") 'flymake-start))
 
-(setq eldoc-documentation-function 'eldoc-documentation-compose)
+(unless (version< emacs-version "28.1")
+  (setq eldoc-documentation-function 'eldoc-documentation-compose))
 
 (with-eval-after-load 'flymake
   (when (maybe-require-package 'flymake-collection)
