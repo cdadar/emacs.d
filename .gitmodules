@@ -4,9 +4,6 @@
 [submodule "site-lisp/grep-dired"]
 	path = site-lisp/grep-dired
 	url = git@github.com:manateelazycat/grep-dired.git
-[submodule "site-lisp/color-rg"]
-	path = site-lisp/color-rg
-	url = git@github.com:manateelazycat/color-rg.git
 [submodule "site-lisp/instant-rename-tag"]
 	path = site-lisp/instant-rename-tag
 	url = git@github.com:manateelazycat/instant-rename-tag.git
