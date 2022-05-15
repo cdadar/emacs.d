@@ -100,12 +100,14 @@
     (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)   ;; corfu-previous
     ))
 
+(with-eval-after-load 'corfu
+  (require 'corfu-english-helper)
+  (global-set-key (kbd "C-c e E") 'corfu-english-helper-search))
+
 ;; (with-eval-after-load 'corfu
 ;;   (when (maybe-require-package 'kind-icon)
 ;;     (setq kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
 ;;     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
-
-
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
