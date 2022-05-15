@@ -15,7 +15,6 @@
 (setq tab-always-indent 'complete)
 
 (when (maybe-require-package 'corfu)
-  (corfu-history-mode 1)
   (add-hook 'after-init-hook 'global-corfu-mode)
 
   ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
@@ -27,6 +26,9 @@
           completion-category-defaults nil
           completion-category-overrides '((file (styles . (partial-completion)))
                                           (eglot (styles . (orderless flex)))))))
+
+(with-eval-after-load 'corfu
+  (corfu-history-mode 1))
 
 (with-eval-after-load 'corfu
   (defun corfu-enable-in-minibuffer ()
