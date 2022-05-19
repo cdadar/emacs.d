@@ -127,6 +127,17 @@
     (when (maybe-require-package 'consult-yasnippet)
       (global-set-key (kbd "M-Y") 'consult-yasnippet)))
 
+  (with-eval-after-load 'org-mode
+    (when (maybe-require-package 'consult-org-roam)
+      (consult-org-roam-mode 1)
+      ;; Eventually suppress previewing for certain functions
+      (consult-customize
+       consult-org-roam-forward-links
+       :preview-key (kbd "M-."))
+      (global-set-key (kbd "C-c n e") 'consult-org-roam-file-find)
+      (global-set-key (kbd "C-c n b") 'consult-org-roam-backlinks)
+      (global-set-key (kbd "C-c n r") 'consult-org-roam-search)))
+
   ;; (when (maybe-require-package 'consult-dir)
   ;;   (define-key global-map (kbd "C-x C-d") #'consult-dir)
   ;;   (define-key minibuffer-local-completion-map (kbd "C-x C-d") #'consult-dir)
@@ -135,9 +146,6 @@
 
 (when (maybe-require-package 'marginalia)
   (add-hook 'after-init-hook 'marginalia-mode))
-
-
-
 
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here
