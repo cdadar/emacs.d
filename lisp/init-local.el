@@ -25,9 +25,12 @@
 
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 
+(setq org-roam-directory "~/org-mode/roam")
+
 (setq deft-directory "~/org-mode/roam")
 
 (setq org-brain-path "~/org-mode/brain")
+
 
 
 ;; python
