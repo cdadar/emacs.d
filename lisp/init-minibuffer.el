@@ -138,11 +138,10 @@
       (global-set-key (kbd "C-c n b") 'consult-org-roam-backlinks)
       (global-set-key (kbd "C-c n r") 'consult-org-roam-search)))
 
-  ;; (when (maybe-require-package 'consult-dir)
-  ;;   (define-key global-map (kbd "C-x C-d") #'consult-dir)
-  ;;   (define-key minibuffer-local-completion-map (kbd "C-x C-d") #'consult-dir)
-  ;;   (define-key minibuffer-local-completion-map (kbd "C-x C-j") #'consult-dir-jump-file))
-  )
+  (when (maybe-require-package 'consult-dir)
+    (define-key global-map (kbd "C-x C-d") #'consult-dir)
+    (define-key minibuffer-local-completion-map (kbd "C-x C-d") #'consult-dir)
+    (define-key minibuffer-local-completion-map (kbd "C-x C-j") #'consult-dir-jump-file)))
 
 (when (maybe-require-package 'marginalia)
   (add-hook 'after-init-hook 'marginalia-mode))
