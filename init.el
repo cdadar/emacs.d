@@ -212,7 +212,6 @@
 (require 'init-local nil t)
 
 (provide 'init)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t
