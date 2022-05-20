@@ -32,14 +32,9 @@
     ;; use the default location (`~/.virtualenvs`), or if the
     ;; the environment variable `WORKON_HOME` points to the right place
     (setq venv-dirlookup-names '(".venv" "pyenv" ".virtual" "venv"))
-    (setq projectile-switch-project-action
-          '(lambda ()
-             (venv-projectile-auto-workon)
-             (projectile-find-file)))
 
     (add-hook 'venv-postmkvirtualenv-hook
-              (lambda () (shell-command "pip install pyflakes")))
-    )
+              (lambda () (shell-command "pip install pyflakes"))))
 
   (when (executable-find "autopep8")
     (when (maybe-require-package 'py-autopep8)

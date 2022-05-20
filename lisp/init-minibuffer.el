@@ -39,8 +39,8 @@
      consult-bookmark consult-recent-file consult-xref
      consult--source-recent-file consult--source-project-recent-file consult--source-bookmark)
 
-    (when (maybe-require-package 'projectile)
-      (setq-default consult-project-root-function 'projectile-project-root))
+    (when (maybe-require-package 'project)
+      (setq-default consult-project-root-function 'project-root))
 
     (when (and (executable-find "rg") (maybe-require-package 'affe))
       (defun sanityinc/affe-grep-at-point (&optional dir initial)
@@ -127,13 +127,15 @@
     (when (maybe-require-package 'consult-yasnippet)
       (global-set-key (kbd "M-Y") 'consult-yasnippet)))
 
+  (with-eval-after-load 'project
+    (when (maybe-require-package 'consult-project-extra)
+      (global-set-key (kbd "C-c p f") 'consult-project-extra-find)
+      (global-set-key (kbd "C-c p o") 'consult-project-extra-find-other-window)))
+
   (with-eval-after-load 'org-mode
     (when (maybe-require-package 'consult-org-roam)
       (consult-org-roam-mode 1)
       ;; Eventually suppress previewing for certain functions
-      (consult-customize
-       consult-org-roam-forward-links
-       :preview-key (kbd "M-."))
       (global-set-key (kbd "C-c n e") 'consult-org-roam-file-find)
       (global-set-key (kbd "C-c n b") 'consult-org-roam-backlinks)
       (global-set-key (kbd "C-c n r") 'consult-org-roam-search)))
