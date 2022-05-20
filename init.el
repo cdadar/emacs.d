@@ -78,7 +78,6 @@
 (require 'init-recentf)
 (require 'init-minibuffer)
 (require 'init-hippie-expand)
-;; (require 'init-company)
 (require 'init-corfu)
 (require 'init-windows)
 (require 'init-sessions)
@@ -92,11 +91,8 @@
 (require 'init-git)
 (require 'init-github)
 
-(require 'init-projectile)
-
 (require 'init-compile)
 (require 'init-crontab)
-;; (require 'init-textile)
 (require 'init-markdown)
 (require 'init-csv)
 (require 'init-erlang)
@@ -113,7 +109,6 @@
 (require 'init-elm)
 (require 'init-purescript)
 (require 'init-ruby)
-(require 'init-rails)
 (require 'init-sql)
 (require 'init-ocaml)
 (require 'init-j)

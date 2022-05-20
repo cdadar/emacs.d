@@ -20,15 +20,7 @@
   (define-key global-map (kbd "M-m") nil)
   (define-key global-map (kbd "M-m ft") 'treemacs-toggle)
   (define-key global-map (kbd "M-m fT") 'treemacs)
-  (define-key global-map (kbd "M-m f C-t") 'treemacs-find-file)
-
-  (when (maybe-require-package 'projectile)
-    (require-package 'treemacs-projectile)
-    (setq treemacs-header-function #'treemacs-projectile-create-header)
-    (define-key global-map (kbd "M-m fP") 'treemacs-projectile)
-    (define-key global-map (kbd "M-m fp") 'treemacs-projectile-toggle)
-    )
-  )
+  (define-key global-map (kbd "M-m f C-t") 'treemacs-find-file))
 
 
 

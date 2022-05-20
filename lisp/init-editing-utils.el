@@ -367,14 +367,7 @@ ORIG is the advised function, which is called with its ARGS."
 ;; (global-set-key (kbd "M-s e") 'iedit-mode)
 
 (when (maybe-require-package 'editorconfig)
-  (editorconfig-mode)
-  (with-eval-after-load 'projectile
-    '(progn
-       (add-hook 'projectile-after-switch-project-hook
-                 (lambda ()
-                   (let ((editorconfig-config-path (expand-file-name ".editorconfig" (projectile-project-root))))
-                     (when (file-exists-p editorconfig-config-path)
-                       (setq-local editorconfig-exec-path editorconfig-config-path))))))))
+  (editorconfig-mode))
 
 ;;禁止 Emacs 自动生成备份文件
 (setq make-backup-files nil)
@@ -415,8 +408,7 @@ ORIG is the advised function, which is called with its ARGS."
           windmove-left
           windmove-right
           windmove-up
-          magit-status
-          projectile-vc))
+          magit-status))
 
   (defun save-all-buffers ()
     (save-excursion
