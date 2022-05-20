@@ -16,6 +16,7 @@
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-copy-env "LEDGER_FILE"))
+
   (with-eval-after-load 'flymake
     (when (maybe-require-package 'ledger-flymake)
       (ledger-flymake-enable))))

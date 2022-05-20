@@ -17,6 +17,7 @@
 
 (with-eval-after-load 'flymake
   (when (maybe-require-package 'flymake-collection)
+    (add-hook 'after-init-hook 'flymake-collection-hook-setup)
     (add-hook 'python-mode-hook
               (defun python-mode-setup-flymake ()
                 (add-hook 'flymake-diagnostic-functions 'flymake-collection-pycodestyle nil t)

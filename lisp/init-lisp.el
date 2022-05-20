@@ -274,11 +274,7 @@ there is no current file, eval the current buffer."
   (add-hook 'emacs-lisp-mode-hook 'highlight-quoted-mode))
 
 
-(when (maybe-require-package 'package-lint-flymake)
-  (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
 
-
-
 ;; ERT
 (with-eval-after-load 'ert
   (define-key ert-results-mode-map (kbd "g") 'ert-results-rerun-all-tests))
