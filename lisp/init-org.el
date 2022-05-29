@@ -249,10 +249,10 @@ typical word processor."
          (file org-agenda-file-code-snippet)
          "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
         ("w" "work" entry (file+headline org-agenda-file-work "Work")
-         "* TODO [#A] %?\n  %i\n %U"
+         "* TODO [#B] %?\n  %i\n %U"
          :empty-lines 1)
         ("W" "doing work" entry (file+headline org-agenda-file-work "Work")
-         "* TODO [#A] %?\n  %i\n %U"
+         "* TODO [#B] %?\n  %i\n %U"
          :empty-lines 1 :clock-in t :clock-resume t)
         ("l" "links" entry (file+headline org-agenda-file-note "Quick notes")
          "* TODO [#C] %?\n  %i\n %a \n %U"
