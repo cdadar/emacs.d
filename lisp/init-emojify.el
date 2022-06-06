@@ -3,6 +3,6 @@
 ;;; Code:
 
 ;; -*- lexical-binding: t -*-
-(maybe-require-package 'emojify)
+(use-package emojify)
 
 (provide 'init-emojify)

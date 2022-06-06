@@ -1,14 +1,14 @@
-;;; init-editing-utils.el --- Day-to-day editing helpers -*- lexical-binding: t -*-
+;;; init-editing-utils.el --- Day-to-day editing helpers -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
-(require-package 'unfill)
+(use-package unfill)
 
 (when (fboundp 'electric-pair-mode)
   (add-hook 'after-init-hook 'electric-pair-mode))
 (add-hook 'after-init-hook 'electric-indent-mode)
 
-(maybe-require-package 'list-unicode-display)
+(use-package list-unicode-display)
 
 
 ;;; Some basic preferences
@@ -49,28 +49,32 @@
 (when (fboundp 'so-long-enable)
   (add-hook 'after-init-hook 'so-long-enable))
 
-(require-package 'vlf)
+(use-package vlf
+  :config
+  (defun ffap-vlf ()
+    "Find file at point with VLF."
+    (interactive)
+    (let ((file (ffap-file-at-point)))
+      (unless (file-exists-p file)
+        (error "File does not exist: %s" file))
+      (vlf file))))
 
-(defun ffap-vlf ()
-  "Find file at point with VLF."
-  (interactive)
-  (let ((file (ffap-file-at-point)))
-    (unless (file-exists-p file)
-      (error "File does not exist: %s" file))
-    (vlf file)))
+
 
 
 ;;; A simple visible bell which works in all terminal types
-(require-package 'mode-line-bell)
-(add-hook 'after-init-hook 'mode-line-bell-mode)
+(use-package mode-line-bell
+  :hook
+  (after-init . mode-line-bell-mode))
 
 
 
-(when (maybe-require-package 'beacon)
+(use-package beacon
+  :config
   (setq-default beacon-lighter "")
   (setq-default beacon-size 20)
-  (add-hook 'after-init-hook 'beacon-mode))
-
+  :hook
+  (after-init . beacon-mode))
 
 
 ;;; Newline behaviour
@@ -99,24 +103,30 @@
 
 
 
-(when (require-package 'rainbow-delimiters)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
 
 
-(when (maybe-require-package 'symbol-overlay)
-  (dolist (hook '(prog-mode-hook html-mode-hook yaml-mode-hook conf-mode-hook))
-    (add-hook hook 'symbol-overlay-mode))
-  (with-eval-after-load 'symbol-overlay
-    (define-key symbol-overlay-mode-map (kbd "M-i") 'symbol-overlay-put)
-    (define-key symbol-overlay-mode-map (kbd "M-I") 'symbol-overlay-remove-all)
-    (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
-    (define-key symbol-overlay-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)))
+(use-package symbol-overlay
+  :hook
+  ((prog-mode-hook html-mode-hook yaml-mode-hook conf-mode-hook) . symbol-overlay-mode)
+  :bind
+  (:map symbol-overlay-mode-map
+        ("M-i" . symbol-overlay-put)
+        ("M-I" . symbol-overlay-remove-all)
+        ("M-n" . symbol-overlay-jump-next)
+        ("M-p" . symbol-overlay-jump-prev)))
 
 
-(require-package 'undo-tree)
-(add-hook 'after-init-hook 'global-undo-tree-mode)
+(use-package undo-tree
+  :hook
+  (after-init . global-undo-tree-mode)
+  :config
+  (setq undo-tree-auto-save-history nil))
 
-(setq undo-tree-auto-save-history nil)
+
+
 
 
 ;;; Zap *up* to char is a handy pair for zap-to-char
@@ -124,16 +134,17 @@
 
 
 
-(require-package 'browse-kill-ring)
-(setq browse-kill-ring-separator "\f")
-(global-set-key (kbd "M-Y") 'browse-kill-ring)
-(with-eval-after-load 'browse-kill-ring
-  (define-key browse-kill-ring-mode-map (kbd "C-g") 'browse-kill-ring-quit)
-  (define-key browse-kill-ring-mode-map (kbd "M-n") 'browse-kill-ring-forward)
-  (define-key browse-kill-ring-mode-map (kbd "M-p") 'browse-kill-ring-previous))
-(with-eval-after-load 'page-break-lines
-  (add-to-list 'page-break-lines-modes 'browse-kill-ring-mode))
-
+(use-package browse-kill-ring
+  :config
+  (setq browse-kill-ring-separator "\f")
+  (with-eval-after-load 'page-break-lines
+    (add-to-list 'page-break-lines-modes 'browse-kill-ring-mode))
+  :bind
+  (("M-Y" . browse-kill-ring)
+   :map browse-kill-ring-mode-map
+   ("C-g" . browse-kill-ring-quit)
+   ("M-n" . browse-kill-ring-forward)
+   ("M-p" . browse-kill-ring-previous)))
 
 ;; Don't disable narrowing commands
 (put 'narrow-to-region 'disabled nil)
@@ -149,31 +160,32 @@
 
 
 ;;; Expand region
-
-(require-package 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
-
+(use-package expand-region
+  :bind
+  (("C-=" . er/expand-region)))
 
 
 ;;; Handy key bindings
-
 (global-set-key (kbd "C-.") 'set-mark-command)
 (global-set-key (kbd "C-x C-.") 'pop-global-mark)
 
-(when (maybe-require-package 'avy)
-  (global-set-key (kbd "C-;") 'avy-goto-char-timer))
+(use-package avy
+  :bind
+  (("C-;" . avy-goto-char-timer)))
 
-(require-package 'multiple-cursors)
-;; multiple-cursors
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-+") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-;; From active region to multiple cursors:
-(global-set-key (kbd "C-c m r") 'set-rectangular-region-anchor)
-(global-set-key (kbd "C-c m c") 'mc/edit-lines)
-(global-set-key (kbd "C-c m e") 'mc/edit-ends-of-lines)
-(global-set-key (kbd "C-c m a") 'mc/edit-beginnings-of-lines)
+(use-package multiple-cursors
+  :bind (
+         ;; multiple-cursors
+         ("C-<" . mc/mark-previous-like-this)
+         ("C->" . mc/mark-next-like-this)
+         ("C-+" . mc/mark-next-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
+         ;; From active region to multiple cursors:
+         ("C-c m r" . set-rectangular-region-anchor)
+         ("C-c m c" . mc/edit-lines)
+         ("C-c m e" . mc/edit-ends-of-lines)
+         ("C-c m a" . mc/edit-beginnings-of-lines)
+         ))
 
 ;; Train myself to use M-f and M-b instead
 (global-unset-key [M-left])
@@ -191,9 +203,9 @@
 
 
 ;;; Page break lines
-
-(when (maybe-require-package 'page-break-lines)
-  (add-hook 'after-init-hook 'global-page-break-lines-mode))
+(use-package page-break-lines
+  :hook
+  (after-init . global-page-break-lines-mode))
 
 
 
@@ -201,15 +213,17 @@
 ;; it will use those keybindings. For this reason, you might prefer to
 ;; use M-S-up and M-S-down, which will work even in lisp modes.
 
-(require-package 'move-dup)
-(move-dup-mode)
-(global-set-key [M-up] 'move-dup-move-lines-up)
-(global-set-key [M-down] 'move-dup-move-lines-down)
-(global-set-key [M-S-up] 'move-dup-move-lines-up)
-(global-set-key [M-S-down] 'move-dup-move-lines-down)
+(use-package move-dup
+  :config
+  (move-dup-mode)
+  :bind
+  (([M-up] . move-dup-move-lines-up)
+   ([M-down] . move-dup-move-lines-down)
+   ([M-S-up] . move-dup-move-lines-up)
+   ([M-S-down] . move-dup-move-lines-down)
+   ("C-c d" . move-dup-duplicate-down)
+   ("C-c u" . move-dup-duplicate-up)))
 
-(global-set-key (kbd "C-c d") 'move-dup-duplicate-down)
-(global-set-key (kbd "C-c u") 'move-dup-duplicate-up)
 
 
 ;;; Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
@@ -228,8 +242,9 @@
 
 
 ;;; Cut/copy the current line if no region is active
-(require-package 'whole-line-or-region)
-(add-hook 'after-init-hook 'whole-line-or-region-global-mode)
+(use-package whole-line-or-region
+  :hook
+  (after-init . whole-line-or-region-global-mode))
 
 
 
@@ -283,14 +298,17 @@ With arg N, insert N newlines."
 
 
 
-(require-package 'highlight-escape-sequences)
-(add-hook 'after-init-hook 'hes-mode)
+(use-package highlight-escape-sequences
+  :hook
+  (after-init . hes-mode))
 
 
-(require-package 'which-key)
-(add-hook 'after-init-hook 'which-key-mode)
-(which-key-setup-side-window-bottom)
-(setq-default which-key-idle-delay 1.5)
+(use-package which-key
+  :hook
+  (after-init . which-key-mode)
+  :config
+  (which-key-setup-side-window-bottom)
+  (setq-default which-key-idle-delay 1.5))
 
 
 (defun sanityinc/disable-features-during-macro-call (orig &rest args)
@@ -304,38 +322,34 @@ ORIG is the advised function, which is called with its ARGS."
 (advice-add 'kmacro-call-macro :around 'sanityinc/disable-features-during-macro-call)
 
 
-(when (maybe-require-package 'imenu-anywhere)
-  (global-set-key (kbd "M-s '") #'imenu-anywhere))
+(use-package imenu-anywhere
+  :bind
+  (("M-s '" . imenu-anywhere)))
 
-(require-package 'string-inflection)
-(with-eval-after-load 'string-inflection
-  ;; default
-  (global-set-key (kbd "C-c C-u") 'string-inflection-all-cycle)
+(use-package string-inflection
+  :bind
+  (("C-c C-u" . string-inflection-all-cycle))
+  :hook
+  (ruby-mode . (lambda ()
+                 (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+  (java-mode . (lambda ()
+                 (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+  (python-mode . (lambda ()
+                   (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
-  ;; for ruby
-  (add-hook 'ruby-mode-hook
-            #'(lambda ()
-                (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+(when (executable-find "rg") (use-package deadgrep))
 
-  ;; for java
-  (add-hook 'java-mode-hook
-            #'(lambda ()
-                (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+;; (use-package rime
+;;   :config
+;;   (setq default-input-method "rime")
+;;   )
 
-  ;; for python
-  (add-hook 'python-mode-hook
-            #'(lambda ()
-                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
+(when (use-package comment-dwim-2
+        :bind
+        (("M-;" . comment-dwim-2))))
 
-(when (executable-find "rg") (maybe-require-package 'deadgrep))
-
-;; (when (maybe-require-package 'rime)
-;;   (setq default-input-method "rime"))
-
-(when (maybe-require-package 'comment-dwim-2)
-  (global-set-key (kbd "M-;") 'comment-dwim-2))
-
-(when (maybe-require-package 'comment-tags)
+(use-package comment-tags
+  :config
   (setq comment-tags-keymap-prefix (kbd "C-c #"))
   (setq comment-tags-keyword-faces
         `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
@@ -351,23 +365,21 @@ ORIG is the advised function, which is called with its ARGS."
         comment-tags-case-sensitive t
         comment-tags-show-faces t
         comment-tags-lighter nil)
-  (add-hook 'prog-mode-hook 'comment-tags-mode))
+  :hook
+  (prog-mode . comment-tags-mode)
+  )
 
-(maybe-require-package 'iedit)
+(use-package iedit)
 
 ;; 删除多余空白插件
-(when (maybe-require-package 'hungry-delete)
-  (require-package 'hungry-delete)
+(use-package hungry-delete
+  :config
   (global-hungry-delete-mode))
 
-
-
-;;同时编辑多个区域的插件
-;; (require-package 'iedit)
-;; (global-set-key (kbd "M-s e") 'iedit-mode)
-
-(when (maybe-require-package 'editorconfig)
-  (editorconfig-mode))
+(use-package editorconfig
+  :config
+  (editorconfig-mode)
+  )
 
 ;;禁止 Emacs 自动生成备份文件
 (setq make-backup-files nil)
@@ -376,16 +388,21 @@ ORIG is the advised function, which is called with its ARGS."
 (with-eval-after-load 'expand-region
   (global-set-key (kbd "C-|") 'er/contract-region))
 
-(when (maybe-require-package 'keyfreq)
+(use-package keyfreq
+  :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
-(when (maybe-require-package 'define-word)
-  (global-set-key (kbd "C-c C-d") 'define-word-at-point)
-  (global-set-key (kbd "C-c C-S-d") 'define-word))
+(use-package define-word
+  :bind
+  (("C-c C-d" . define-word-at-point)
+   ("C-c C-S-d" . define-word)))
 
-(when (maybe-require-package 'super-save)
-  (add-hook 'after-init-hook #'super-save-mode)
+
+(use-package super-save
+  :hook
+  (after-init . super-save-mode)
+  :config
   (setq-default auto-save-default nil)
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 5)
@@ -422,13 +439,14 @@ ORIG is the advised function, which is called with its ARGS."
 
   (advice-add 'super-save-command :override 'save-all-buffers))
 
-(when (maybe-require-package 'hl-todo)
+(use-package hl-todo
+  :config
   (global-hl-todo-mode)
-  (with-eval-after-load 'hl-todo
-    '(progn
-       (define-key hl-todo-mode-map (kbd "C-c M-p") 'hl-todo-previous)
-       (define-key hl-todo-mode-map (kbd "C-c M-n") 'hl-todo-next)
-       (define-key hl-todo-mode-map (kbd "C-c M-o") 'hl-todo-occur))))
+  :bind
+  (:map hl-todo-mode-map
+        ("C-c M-p" . hl-todo-previous)
+        ("C-c M-n" . hl-todo-next)
+        ("C-c M-o" . hl-todo-occur)))
 
 (with-eval-after-load 'grep
   '(progn
@@ -437,11 +455,8 @@ ORIG is the advised function, which is called with its ARGS."
      (define-key ag-mode-map
        (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)))
 
-(with-eval-after-load 'wgrep
-  '(define-key grep-mode-map
-     (kbd "C-c C-c") 'wgrep-finish-edit))
-
-(when (maybe-require-package 'elisp-demos)
+(use-package elisp-demos
+  :config
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 (require 'insert-translated-name)
@@ -453,8 +468,6 @@ ORIG is the advised function, which is called with its ARGS."
 (require 'advance-wc-mode)
 
 (require 'delete-block)
-
-
 
 (defun move-file (new-location)
   "Write this file to NEW-LOCATION, and delete the old one."

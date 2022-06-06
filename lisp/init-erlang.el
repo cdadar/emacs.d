@@ -2,9 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (maybe-require-package 'erlang)
+(use-package erlang
+  :config
   (require 'erlang-start))
-
 
 (provide 'init-erlang)
 ;;; init-erlang.el ends here

@@ -3,8 +3,10 @@
 ;;; Code:
 
 ;; -*- lexical-binding: t -*-
-(when (maybe-require-package 'youdao-dictionary)
+(use-package youdao-dictionary
+  :config
   (setq url-automatic-caching t)
-  (global-set-key (kbd "C-c C-y") 'youdao-dictionary-search-at-point))
+  :bind
+  (("C-c C-y" . youdao-dictionary-search-at-point)))
 
 (provide 'init-dict)

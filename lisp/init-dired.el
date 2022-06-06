@@ -8,7 +8,8 @@
 (let ((gls (executable-find "gls")))
   (when gls (setq insert-directory-program gls)))
 
-(when (maybe-require-package 'diredfl)
+(use-package diredfl
+  :config
   (with-eval-after-load 'dired
     (diredfl-global-mode)
     (require 'dired-x)))
@@ -22,7 +23,8 @@
   (define-key dired-mode-map [mouse-2] 'dired-find-file)
   (define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode))
 
-(when (maybe-require-package 'diff-hl)
+(use-package diff-hl
+  :config
   (with-eval-after-load 'dired
     (add-hook 'dired-mode-hook 'diff-hl-dired-mode)))
 

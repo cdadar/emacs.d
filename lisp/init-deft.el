@@ -4,7 +4,8 @@
 
 
 
-(when (maybe-require-package 'deft)
+(use-package deft
+  :config
   (setq deft-extensions '("md" "org")
         deft-default-extension "org"
         deft-text-mode 'org-mode
@@ -18,9 +19,9 @@
                                  "\\(?:^%+\\|^#\\+TITLE: *\\|^[#* ]+\\|-\\*-[[:alpha:]]+-\\*-\\|^Title:[	 ]*\\|#+$\\)"
                                  ":PROPERTIES:\n\\(.+\n\\)+:END:"
                                  ))
-
-  (global-set-key (kbd "<f8>") 'deft)
-  (global-set-key (kbd "C-<f8>") 'deft-find-file))
+  :bind
+  (("<f8>" . deft)
+   ("C-<f8>" . deft-find-file)))
 
 (provide 'init-deft)
 ;;; init-deft.el ends her

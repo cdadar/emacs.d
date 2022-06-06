@@ -7,23 +7,28 @@
 
 ;; TODO: link commits from vc-log to magit-show-commit
 ;; TODO: smerge-mode
-(require-package 'git-blamed)
-(require-package 'git-modes)
-(when (maybe-require-package 'git-timemachine)
-  (global-set-key (kbd "C-x v t") 'git-timemachine-toggle))
+(use-package git-blamed)
+(use-package git-modes)
+(use-package git-timemachine
+  :bind
+  ("C-x v t" . git-timemachine-toggle))
 
-(require-package 'git-link)
+(use-package git-link)
 
-(when (maybe-require-package 'magit)
+(use-package magit
+  :bind
+  (
+   ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+   ;; quickly open magit on any one of your projects.
+   ([(meta f12)] . magit-status)
+   ("C-x g" . magit-status)
+   ("C-x M-g" . magit-dispatch)
+   ("C-x M-f" . magit-file-dispatch)
+   :map magit-status-mode-map
+   ("C-M-<up>" . magit-section-up)
+   )
+  :config
   (setq-default magit-diff-refine-hunk t)
-
-  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
-  ;; quickly open magit on any one of your projects.
-  (global-set-key [(meta f12)] 'magit-status)
-  (global-set-key (kbd "C-x g") 'magit-status)
-  (global-set-key (kbd "C-x M-g") 'magit-dispatch)
-  (global-set-key (kbd "C-x M-f") 'magit-file-dispatch)
-
   (defun sanityinc/magit-or-vc-log-file (&optional prompt)
     (interactive "P")
     (if (and (buffer-file-name)
@@ -33,51 +38,45 @@
           (magit-log-buffer-file t))
       (vc-print-log)))
 
+  (with-eval-after-load 'vc
+    (define-key vc-prefix-map (kbd "l") 'sanityinc/magit-or-vc-log-file))
+
   (defun magit-submodule-remove+ ()
     (interactive)
     (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
+  (use-package fullframe
+    (fullframe magit-status magit-mode-quit-window)))
 
-  (with-eval-after-load 'vc
-    (define-key vc-prefix-map (kbd "l") 'sanityinc/magit-or-vc-log-file)))
 
+(use-package magit-todos)
 
-(with-eval-after-load 'magit
-  (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-section-up))
+(use-package git-commit
+  :hook
+  (git-commit-mode . goto-address-mode))
 
-(maybe-require-package 'magit-todos)
-
-(require-package 'fullframe)
-(with-eval-after-load 'magit
-  (fullframe magit-status magit-mode-quit-window))
-
-(when (maybe-require-package 'git-commit)
-  (add-hook 'git-commit-mode-hook 'goto-address-mode))
-
-(when (maybe-require-package 'vc-msg)
-  (eval-after-load 'vc-msg-git
-    '(progn
-       ;; show code of commit
-       (setq vc-msg-git-show-commit-function 'magit-show-commit)
-       ;; open file of certain revision
-       (push '("m"
-               "[m]agit-find-file"
-               (lambda ()
-                 (let* ((info vc-msg-previous-commit-info)
-                        (git-dir (locate-dominating-file default-directory ".git")))
-                   (magit-find-file (plist-get info :id )
-                                    (concat git-dir (plist-get info :filename))))))
-             vc-msg-git-extra))))
+(when (use-package vc-msg
+        :config
+        (progn
+          ;; show code of commit
+          (setq vc-msg-git-show-commit-function 'magit-show-commit)
+          ;; open file of certain revision
+          (push '("m"
+                  "[m]agit-find-file"
+                  (lambda ()
+                    (let* ((info vc-msg-previous-commit-info)
+                           (git-dir (locate-dominating-file default-directory ".git")))
+                      (magit-find-file (plist-get info :id )
+                                       (concat git-dir (plist-get info :filename))))))
+                vc-msg-git-extra))))
 
 (when *is-a-mac*
   (with-eval-after-load 'magit
     (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
-
 
 ;; Convenient binding for vc-git-grep
 (with-eval-after-load 'vc
   (define-key vc-prefix-map (kbd "f") 'vc-git-grep))
-
 
 
 ;;; git-svn support

@@ -29,8 +29,8 @@ directory to make multiple eshell windows easier."
   (eshell-send-input)
   (delete-window))
 
-(when (maybe-require-package 'esh-autosuggest)
-  (with-eval-after-load 'eshell-mode
-    (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)))
+(use-package esh-autosuggest
+  :hook
+  (eshell-mode . esh-autosuggest-mode))
 
 (provide 'init-eshell)
