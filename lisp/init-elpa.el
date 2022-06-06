@@ -117,7 +117,7 @@ advice for `require-package', to which ARGS are passed."
 
 
 (use-package fullframe
-  :cofnig
+  :config
   (fullframe list-packages quit-window))
 
 

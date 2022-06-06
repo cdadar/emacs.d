@@ -8,20 +8,24 @@
 (when *is-a-mac*
   (setq-default locate-command "mdfind"))
 
-(require-package 'wgrep)
-(with-eval-after-load 'grep
-  (dolist (key (list (kbd "C-c C-q") (kbd "w")))
-    (define-key grep-mode-map key 'wgrep-change-to-wgrep-mode)))
+(use-package wgrep
+  :config
+  (with-eval-after-load 'grep
+    (dolist (key (list (kbd "C-c C-q") (kbd "w")))
+      (define-key grep-mode-map key 'wgrep-change-to-wgrep-mode))))
 
-(when (and (executable-find "ag")
-           (maybe-require-package 'ag))
-  (require-package 'wgrep-ag)
-  (setq-default ag-highlight-search t)
-  (global-set-key (kbd "M-?") 'ag-project))
 
-(when (and (executable-find "rg")
-           (maybe-require-package 'rg))
-  (global-set-key (kbd "M-?") 'rg-project))
+(when (executable-find "ag")
+  (use-package ag
+    :config
+    (global-set-key (kbd "M-?") 'ag-project)
+    (setq-default ag-highlight-search t))
+  (use-package wgrep-ag))
+
+(when (executable-find "rg")
+  (use-package rg
+    :config
+    (global-set-key (kbd "M-?") 'rg-project)))
 
 
 (require 'grep-dired)

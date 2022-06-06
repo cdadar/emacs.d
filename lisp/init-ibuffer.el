@@ -6,18 +6,23 @@
 
 ;;; Code:
 
-(require-package 'fullframe)
-(with-eval-after-load 'ibuffer
- (fullframe ibuffer ibuffer-quit))
+(use-package fullframe
+  :config
+  (fullframe ibuffer ibuffer-quit)
+  )
 
-(require-package 'ibuffer-vc)
+(use-package ibuffer-vc
+  :config
+  (defun ibuffer-set-up-preferred-filters ()
+    (ibuffer-vc-set-filter-groups-by-vc-root)
+    (unless (eq ibuffer-sorting-mode 'filename/process)
+      (ibuffer-do-sort-by-filename/process)))
+  :hook
+  (ibuffer . ibuffer-set-up-preferred-filters))
 
-(defun ibuffer-set-up-preferred-filters ()
-  (ibuffer-vc-set-filter-groups-by-vc-root)
-  (unless (eq ibuffer-sorting-mode 'filename/process)
-    (ibuffer-do-sort-by-filename/process)))
 
-(add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)
+
+
 
 (setq-default ibuffer-show-empty-filter-groups nil)
 

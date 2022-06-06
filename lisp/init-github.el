@@ -4,13 +4,15 @@
 
 (require 'init-git)
 
-(maybe-require-package 'yagist)
-(require-package 'bug-reference-github)
-(add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+(use-package yagist)
+(use-package bug-reference-github
+  :hook
+  (prog-mode . bug-reference-prog-mode))
 
-(maybe-require-package 'github-clone)
-(maybe-require-package 'forge)
-(maybe-require-package 'github-review)
+
+(use-package github-clone)
+(use-package forge)
+(use-package github-review)
 
 (provide 'init-github)
 ;;; init-github.el ends here

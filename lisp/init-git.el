@@ -25,8 +25,7 @@
    ("C-x M-g" . magit-dispatch)
    ("C-x M-f" . magit-file-dispatch)
    :map magit-status-mode-map
-   ("C-M-<up>" . magit-section-up)
-   )
+   ("C-M-<up>" . magit-section-up))
   :config
   (setq-default magit-diff-refine-hunk t)
   (defun sanityinc/magit-or-vc-log-file (&optional prompt)
@@ -45,6 +44,7 @@
     (interactive)
     (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
   (use-package fullframe
+    :config
     (fullframe magit-status magit-mode-quit-window)))
 
 
@@ -80,14 +80,17 @@
 
 
 ;;; git-svn support
-
-;; (when (maybe-require-package 'magit-svn)
-;;   (require-package 'magit-svn)
+;; (use-package magit-svn
+;;   :config
 ;;   (autoload 'magit-svn-enabled "magit-svn")
 ;;   (defun sanityinc/maybe-enable-magit-svn-mode ()
 ;;     (when (magit-svn-enabled)
 ;;       (magit-svn-mode)))
-;;   (add-hook 'magit-status-mode-hook #'sanityinc/maybe-enable-magit-svn-mode))
+;;   :hook
+;;   (magit-stash-mode . sanityinc/maybe-enable-magit-svn-mode))
+
+
+
 
 (with-eval-after-load 'compile
   (dolist (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)

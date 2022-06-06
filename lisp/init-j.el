@@ -2,10 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(require-package 'j-mode)
-
-(setq-default j-console-cmd "jconsole")
-(add-hook 'inferior-j-mode-hook (lambda () (electric-pair-mode -1)))
+(use-package j-mode
+  :config
+  (setq-default j-console-cmd "jconsole")
+  :hook
+  (inferior-j-mode-hook . (lambda () (electric-pair-mode -1))))
 
 
 (provide 'init-j)

@@ -2,11 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (maybe-require-package 'ggtags)
+(use-package ggtags
+  :hook
+  ((text-mode prog-mode) . ggtags-mode)
+  (after-save . gtags-update-hook)
+  :bind
+  (:map global-map
+        ("C-c g" . ggtags-mode-prefix-map))
+  :config
   (require 'ggtags)
-  ;; 开启ggtags-mode
-  (add-hook 'text-mode-hook 'ggtags-mode)
-  (add-hook 'prog-mode-hook 'ggtags-mode)
 
   ;; 全量更新
   (defun gtags-root-dir ()
@@ -47,10 +51,6 @@
     "Update GTAGS file incrementally upon saving a file"
     (when ggtags-mode
       (when (gtags-root-dir)
-        (gtags-update-current-file))))
-
-  (add-hook 'after-save-hook #'gtags-update-hook)
-
-  (define-key global-map (kbd "C-c g") ggtags-mode-prefix-map))
+        (gtags-update-current-file)))))
 
 (provide 'init-gtags)
