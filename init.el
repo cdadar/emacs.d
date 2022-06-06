@@ -57,10 +57,10 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
-(require-package 'wgrep)
-(require-package 'ripgrep)
-(maybe-require-package 'scratch)
-(require-package 'command-log-mode)
+(use-package wgrep)
+(use-package ripgrep)
+(use-package scratch)
+(use-package command-log-mode)
 
 (require 'init-frame-hooks)
 (require 'init-xterm)
@@ -119,13 +119,11 @@
 (require 'init-docker)
 (require 'init-terraform)
 (require 'init-nix)
-(maybe-require-package 'nginx-mode)
+(use-package nginx-mode)
 
 (require 'init-paredit)
 (require 'init-lisp)
 (require 'init-slime)
-(require 'init-clojure)
-(require 'init-clojure-cider)
 (require 'init-common-lisp)
 
 (when *spell-check-support-enabled*
@@ -170,17 +168,19 @@
 (require 'init-anki)
 ;; Extra packages which don't require any configuration
 
-(require-package 'gnuplot)
-(require-package 'lua-mode)
-(require-package 'htmlize)
+(use-package gnuplot)
+(use-package lua-mode)
+(use-package htmlize)
 (when *is-a-mac*
-  (require-package 'osx-location))
-(maybe-require-package 'dotenv-mode)
-(maybe-require-package 'shfmt)
+  (use-package osx-location))
+(use-package dotenv-mode)
+(use-package shfmt)
 
-(when (maybe-require-package 'uptimes)
-  (setq-default uptimes-keep-count 200)
-  (add-hook 'after-init-hook (lambda () (require 'uptimes))))
+(use-package uptimes
+  :hook
+  (after-init . (lambda () (require 'uptimes)))
+  :config
+  (setq-default uptimes-keep-count 200))
 
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))

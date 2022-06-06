@@ -4,21 +4,20 @@
 
 (setq-default compilation-scroll-output t)
 
-(require-package 'alert)
-
-;; Customize `alert-default-style' to get messages after compilation
-
-(defun sanityinc/alert-after-compilation-finish (buf result)
-  "Use `alert' to report compilation RESULT if BUF is hidden."
-  (when (buffer-live-p buf)
-    (unless (catch 'is-visible
-              (walk-windows (lambda (w)
-                              (when (eq (window-buffer w) buf)
-                                (throw 'is-visible t))))
-              nil)
-      (alert (concat "Compilation " result)
-             :buffer buf
-             :category 'compilation))))
+(use-package alert
+  :config
+  ;; Customize `alert-default-style' to get messages after compilation
+  (defun sanityinc/alert-after-compilation-finish (buf result)
+    "Use `alert' to report compilation RESULT if BUF is hidden."
+    (when (buffer-live-p buf)
+      (unless (catch 'is-visible
+                (walk-windows (lambda (w)
+                                (when (eq (window-buffer w) buf)
+                                  (throw 'is-visible t))))
+                nil)
+        (alert (concat "Compilation " result)
+               :buffer buf
+               :category 'compilation)))))
 
 (with-eval-after-load 'compile
   (add-hook 'compilation-finish-functions
@@ -45,7 +44,6 @@
   (advice-add 'recompile :around 'sanityinc/find-prev-compilation))
 
 (global-set-key [f6] 'recompile)
-
 
 (defun sanityinc/shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
   "Put \"*Shell Command Output*\" buffers into view-mode."

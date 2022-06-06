@@ -2,151 +2,261 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package vertico
+  :hook (after-init . vertico-mode)
+  :config
+  (setq vertico-resize nil
+        vertico-count 17
+        vertico-cycle t)
+  ;; Cleans up path when moving directories with shadowed paths syntax, e.g.
+  ;; cleans ~/foo/bar/// to /, and ~/foo/bar/~/ to ~/.
+  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+  (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+  (define-key vertico-map (kbd "C-j") 'vertico-next)
+  (define-key vertico-map (kbd "C-'") 'vertico-quick-jump)
+  (define-key vertico-map (kbd "C-k") 'vertico-previous)
+  (define-key vertico-map [backspace] #'vertico-directory-delete-char)
+  (define-key vertico-map (kbd "s-SPC") #'+vertico/embark-preview)
 
-(when (maybe-require-package 'vertico)
-  (add-hook 'after-init-hook 'vertico-mode)
+  )
 
-  (require-package 'orderless)
-  (with-eval-after-load 'vertico
-    (require 'orderless))
+(use-package orderless
+  :demand t
+  ;;       orderless-component-separator "[ &]")
+  ;; ...otherwise find-file gets different highlighting than other commands
+  ;; (set-face-attribute 'completions-first-difference nil :inherit nil)
+  :config
+  (defvar +orderless-dispatch-alist
+    '((?% . char-fold-to-regexp)
+      (?! . orderless-without-literal)
+      (?`. orderless-initialism)
+      (?= . orderless-literal)
+      (?~ . orderless-flex)))
+
+  (defun +orderless-dispatch (pattern index _total)
+    (cond
+     ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
+     ((string-suffix-p "$" pattern)
+      `(orderless-regexp . ,(concat (substring pattern 0 -1) "[\x100000-\x10FFFD]*$")))
+     ;; File extensions
+     ((and
+       ;; Completing filename or eshell
+       (or minibuffer-completing-file-name
+           (derived-mode-p 'eshell-mode))
+       ;; File extension
+       (string-match-p "\\`\\.." pattern))
+      `(orderless-regexp . ,(concat "\\." (substring pattern 1) "[\x100000-\x10FFFD]*$")))
+     ;; Ignore single !
+     ((string= "!" pattern) `(orderless-literal . ""))
+     ;; Prefix and suffix
+     ((if-let (x (assq (aref pattern 0) +orderless-dispatch-alist))
+          (cons (cdr x) (substring pattern 1))
+        (when-let (x (assq (aref pattern (1- (length pattern))) +orderless-dispatch-alist))
+          (cons (cdr x) (substring pattern 0 -1)))))))
+
+  ;; Define orderless style with initialism by default
+  (orderless-define-completion-style +orderless-with-initialism
+    (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+
+  (setq completion-styles '(orderless partial-completion)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)) ;; partial-completion is tried first
+                                        (command (styles +orderless-with-initialism))
+                                        (variable (styles +orderless-with-initialism))
+                                        (symbol (styles +orderless-with-initialism)))
+        orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
+        orderless-style-dispatchers '(+orderless-dispatch))
+  )
+
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (;; C-c bindings (mode-specific-map)
+         ("C-c h" . consult-history)
+         ("C-c M" . consult-mode-command)
+         ("C-c k" . consult-kmacro)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("<help> a" . consult-apropos)            ;; orig. apropos-command
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s m" . consult-multi-occur)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key (kbd "M-."))
+  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme
+   :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-recent-file
+   consult--source-project-recent-file
+   :preview-key (kbd "M-."))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; (kbd "C-+")
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;; There are multiple reasonable alternatives to chose from.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 3. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 4. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  )
 
 
-  (defun sanityinc/use-orderless-in-minibuffer ()
-    (setq-local completion-styles '(substring orderless)))
-  (add-hook 'minibuffer-setup-hook 'sanityinc/use-orderless-in-minibuffer)
+(use-package consult-dir
+  :bind (([remap list-directory] . consult-dir)
+         :map vertico-map
+         ("s-d" . consult-dir)))
 
-  (when (maybe-require-package 'embark)
-    (with-eval-after-load 'vertico
-      (define-key vertico-map (kbd "C-c C-o") 'embark-export)
-      (define-key vertico-map (kbd "C-c C-c") 'embark-act)))
+(use-package embark
+  :defer t
+  :init
+  (setq which-key-use-C-h-commands nil
+        ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
+        prefix-help-command #'embark-prefix-help-command)
 
-  (when (maybe-require-package 'consult)
-    (defmacro sanityinc/no-consult-preview (&rest cmds)
-      `(with-eval-after-load 'consult
-         (consult-customize ,@cmds :preview-key (kbd "M-P"))))
+  (setq
+   embark-verbose-indicator-display-action
+   '((display-buffer-at-bottom)
+     (window-parameters (mode-line-format . none))
+     (window-height . fit-window-to-buffer)))
 
-    (defun consult-hide-lines ()
-      (interactive)
-      (consult-focus-lines nil (consult--completion-filter 'consult-location nil) "! "))
+  (define-key minibuffer-local-map (kbd "C-;") 'embark-act)
+  (define-key minibuffer-local-map (kbd "C-c C-;") 'embark-export)
+  (define-key minibuffer-local-map (kbd "C-c C-e") '+vertico/embark-export-write)
 
-    (defun consult-reset-lines ()
-      (interactive)
-      (consult-focus-lines t))
+  (with-eval-after-load 'popwin
+    (progn
+      (push '(occur-mode :position right :width 100) popwin:special-display-config)
+      (push '(grep-mode :position right :width 100) popwin:special-display-config)
+      (push '(special-mode :position right :width 100) popwin:special-display-config)))
 
-    (sanityinc/no-consult-preview
-     consult-ripgrep
-     consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     consult--source-recent-file consult--source-project-recent-file consult--source-bookmark)
+  (global-set-key (kbd "C-;") 'embark-act)
 
-    (when (maybe-require-package 'project)
-      (setq-default consult-project-root-function 'project-root))
+  :config
+  (define-key minibuffer-local-map (kbd "C-'") #'embark-become)
+  ;; list all the keybindings in this buffer
+  (global-set-key (kbd "C-h B") 'embark-bindings)
+  ;; add the package! target finder before the file target finder,
+  ;; so we don't get a false positive match.
+  :config
+  (define-key embark-identifier-map "R" #'consult-ripgrep)
+  (define-key embark-identifier-map (kbd "C-s") #'consult-line)
 
-    (when (and (executable-find "rg") (maybe-require-package 'affe))
-      (defun sanityinc/affe-grep-at-point (&optional dir initial)
-        (interactive (list prefix-arg (when-let ((s (symbol-at-point)))
-                                        (symbol-name s))))
-        (affe-grep dir initial))
-      (global-set-key (kbd "M-?") 'sanityinc/affe-grep-at-point)
-      (sanityinc/no-consult-preview sanityinc/affe-grep-at-point)
-      (with-eval-after-load 'affe (sanityinc/no-consult-preview affe-grep)))
+  (define-key embark-file-map (kbd "E") #'consult-directory-externally)
+  (define-key embark-file-map (kbd "U") #'consult-snv-unlock)
+  )
 
-    (global-set-key [remap switch-to-buffer] 'consult-buffer)
-    (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
-    (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
-    (global-set-key [remap goto-line] 'consult-goto-line)
+(use-package marginalia
+  :hook (after-init . marginalia-mode)
+  :init
+  :config
+  )
 
+(use-package embark-consult
+  :after (embark consult)
+  :demand
+  :config
+  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
+(use-package wgrep
+  :commands wgrep-change-to-wgrep-mode
+  :config (setq wgrep-auto-save-buffer t))
 
-    (global-set-key (kbd "C-c h") 'consult-history)
-    (global-set-key (kbd "C-c M-m") 'consult-mode-command)
-    (global-set-key (kbd "C-c b") 'consult-bookmark)
-    (global-set-key (kbd "C-c k") 'consult-kmacro)
-    (global-set-key (kbd "C-x M-:") 'consult-complex-command)
-    (global-set-key (kbd "C-x b") 'consult-buffer)
-    ;; Custom M-# bindings for fast register access
-    (global-set-key (kbd "M-#") 'consult-register-load)
-    (global-set-key (kbd "M-'") 'consult-register-store)
-    (global-set-key (kbd "C-M-#") 'consult-register)
-    ;; M-g bindings (goto-map)
-    (global-set-key (kbd "M-g g") 'consult-goto-line)
-    (global-set-key (kbd "M-g o") 'consult-outline)
-    (global-set-key (kbd "M-g m") 'consult-mark)
-    (global-set-key (kbd "M-g k") 'consult-global-mark)
-    (global-set-key (kbd "M-g i") 'consult-project-imenu) ;; Alternative: consult-imenu
-    (global-set-key (kbd "M-g I") 'consult-imenu)
-    (global-set-key (kbd "M-g e") 'consult-flymake)
-    (global-set-key (kbd "M-g E") 'consult-compile-error)
-    ;; M-s bindings (search-map)
-    (global-set-key (kbd "M-s g") 'consult-git-grep)      ;; Alternatives: consult-grep, consult-ripgrep
-    (global-set-key (kbd "M-s G") 'consult-grep)      ;; Alternatives: consult-grep, consult-ripgrep
-    (global-set-key (kbd "M-s r") 'consult-ripgrep)      ;; Alternatives: consult-grep, consult-ripgrep
-    (global-set-key (kbd "M-s f") 'consult-find)          ;; Alternatives: consult-locate, find-fd
-    (global-set-key (kbd "M-s F") 'find-fd)          ;; Alternatives: consult-locate, find-fd
-    (global-set-key (kbd "M-s l") 'consult-line)
-    (global-set-key (kbd "M-s m") 'consult-multi-occur)
-    (global-set-key (kbd "M-s k") 'consult-keep-lines)
-    (global-set-key (kbd "M-s u") 'consult-focus-lines)
-    ;; Other bindings
-    (global-set-key (kbd "M-y") 'consult-yank-pop)
-    (global-set-key (kbd "<help> a") 'consult-apropos)
+(with-eval-after-load 'yasnippet
+  (use-package consult-yasnippet
+    :bind (("M-Y" . consult-yasnippet))))
 
-    ;; Custom command wrappers. It is generally encouraged to write your own
-    ;; commands based on the Consult commands. Some commands have arguments which
-    ;; allow tweaking. Furthermore global configuration variables can be set
-    ;; locally in a let-binding.
-    (defun find-fd (&optional dir initial)
-      (interactive "P")
-      (let ((consult-find-command "fd --color=never --full-path ARG OPTS"))
-        (consult-find dir initial)))
-
-    (require 'consult-xref)
-    (setq xref-show-xrefs-function #'consult-xref
-          xref-show-definitions-function #'consult-xref)
-
-    ;; Optionallye tweak the register preview window.
-    ;; * Sort the registers
-    ;; * Hide the mode line
-    ;; * Resize the window, such that the contents fit exactly
-    (advice-add #'register-preview :around
-                (lambda (fun buffer &optional show-empty)
-                  (let ((register-alist (seq-sort #'car-less-than-car register-alist)))
-                    (funcall fun buffer show-empty))
-                  (when-let (win (get-buffer-window buffer))
-                    (with-selected-window win
-                      (setq-local mode-line-format nil)
-                      (setq-local window-min-height 1)
-                      (fit-window-to-buffer)))))
-
-    (when (maybe-require-package 'embark-consult)
-      (with-eval-after-load 'embark
-        (require 'embark-consult)
-        (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))))
-
-  (with-eval-after-load 'yasnippet
-    (when (maybe-require-package 'consult-yasnippet)
-      (global-set-key (kbd "M-Y") 'consult-yasnippet)))
-
-  (with-eval-after-load 'project
-    (when (maybe-require-package 'consult-project-extra)
-      (global-set-key (kbd "C-c p f") 'consult-project-extra-find)
-      (global-set-key (kbd "C-c p o") 'consult-project-extra-find-other-window)))
-
-  (with-eval-after-load 'org-mode
-    (when (maybe-require-package 'consult-org-roam)
-      (consult-org-roam-mode 1)
-      ;; Eventually suppress previewing for certain functions
-      (global-set-key (kbd "C-c n e") 'consult-org-roam-file-find)
-      (global-set-key (kbd "C-c n b") 'consult-org-roam-backlinks)
-      (global-set-key (kbd "C-c n r") 'consult-org-roam-search)))
-
-  (when (maybe-require-package 'consult-dir)
-    (define-key global-map (kbd "C-x C-d") #'consult-dir)
-    (define-key minibuffer-local-completion-map (kbd "C-x C-d") #'consult-dir)
-    (define-key minibuffer-local-completion-map (kbd "C-x C-j") #'consult-dir-jump-file)))
-
-(when (maybe-require-package 'marginalia)
-  (add-hook 'after-init-hook 'marginalia-mode))
+(with-eval-after-load 'org-mode
+  (use-package consult-org-roam
+    :config
+    (consult-org-roam-mode 1)
+    :bind
+    (("C-c n e" . consult-org-roam-file-find)
+     ("C-c n b" . consult-org-roam-backlinks)
+     ("C-c n r" . consult-org-roam-search))))
 
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here
