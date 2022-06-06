@@ -63,7 +63,8 @@
 
 
 (when *is-a-mac*
-  (when (maybe-require-package 'ns-auto-titlebar)
+  (use-package ns-auto-titlebar
+    :config
     (ns-auto-titlebar-mode)))
 
 
@@ -81,12 +82,12 @@
 
 ;; Change global font size easily
 
-(require-package 'default-text-scale)
-(add-hook 'after-init-hook 'default-text-scale-mode)
-
+(use-package default-text-scale
+  :hook
+  (after-init . default-text-scale-mode))
 
 
-(require-package 'disable-mouse)
+(use-package disable-mouse)
 
 
 (provide 'init-gui-frames)

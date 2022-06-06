@@ -3,11 +3,14 @@
 ;;; Code:
 
 ;; Show number of matches while searching
-(when (maybe-require-package 'anzu)
-  (add-hook 'after-init-hook 'global-anzu-mode)
+(use-package anzu
+  :hook
+  (after-init . global-anzu-mode)
+  :config
   (setq anzu-mode-lighter "")
-  (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
-  (global-set-key [remap query-replace] 'anzu-query-replace))
+  :bind
+  (([remap query-replace-regexp] . anzu-query-replace-regexp)
+   ([remap query-replace] . anzu-query-replace)))
 
 (with-eval-after-load 'isearch
   ;; DEL during isearch should edit the search string, not jump back to the previous result

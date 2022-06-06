@@ -502,5 +502,7 @@ ORIG is the advised function, which is called with its ARGS."
   (interactive)
   (insert (format-time-string "%Y%m%d%H%M%S")))
 
+(use-package restart-emacs)
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
