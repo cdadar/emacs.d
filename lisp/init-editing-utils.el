@@ -376,9 +376,9 @@ ORIG is the advised function, which is called with its ARGS."
   (global-hungry-delete-mode))
 
 (use-package editorconfig
+  :diminish
   :config
-  (editorconfig-mode)
-  )
+  (editorconfig-mode))
 
 ;;禁止 Emacs 自动生成备份文件
 (setq make-backup-files nil)
