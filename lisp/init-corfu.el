@@ -26,6 +26,7 @@
   (setq corfu-auto-delay 0.2)
   (setq corfu-auto-prefix 1)
   (global-corfu-mode)
+
   :hook (prog-mode . cdadar/setup-corfu)
   :config
   ;; (defun corfu-enable-in-minibuffer ()
@@ -34,6 +35,8 @@
   ;;     ;; (setq-local corfu-auto nil) Enable/disable auto completion
   ;;     (corfu-mode 1)))
   ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+
+  (corfu-history-mode)
 
   (defun corfu-move-to-minibuffer ()
     (interactive)
