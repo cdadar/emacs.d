@@ -18,7 +18,6 @@
  bookmark-default-file (locate-user-emacs-file ".bookmarks.el")
  buffers-menu-max-size 30
  case-fold-search t
- column-number-mode t
  ediff-split-window-function 'split-window-horizontally
  ediff-window-setup-function 'ediff-setup-windows-plain
  indent-tabs-mode nil
@@ -447,6 +446,21 @@ ORIG is the advised function, which is called with its ARGS."
         ("C-c M-p" . hl-todo-previous)
         ("C-c M-n" . hl-todo-next)
         ("C-c M-o" . hl-todo-occur)))
+
+
+(use-package simple
+  :ensure nil
+  :hook (after-init . size-indication-mode)
+  :init
+  (progn
+    (setq column-number-mode t)))
+
+;;modeline上显示我的所有的按键和执行的命令
+(use-package keycast
+  :init
+  (keycast-mode t)
+  :config
+  (add-to-list 'global-mode-string '("" keycast-mode-line)))
 
 (with-eval-after-load 'grep
   '(progn
