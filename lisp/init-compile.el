@@ -17,11 +17,10 @@
                 nil)
         (alert (concat "Compilation " result)
                :buffer buf
-               :category 'compilation)))))
-
-(with-eval-after-load 'compile
-  (add-hook 'compilation-finish-functions
-            'sanityinc/alert-after-compilation-finish))
+               :category 'compilation))))
+  (with-eval-after-load 'compile
+    (add-hook 'compilation-finish-functions
+              'sanityinc/alert-after-compilation-finish)))
 
 (defvar sanityinc/last-compilation-buffer nil
   "The last buffer in which compilation took place.")
