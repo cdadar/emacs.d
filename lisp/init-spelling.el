@@ -59,9 +59,9 @@
 ;; }}
 
 (with-eval-after-load 'flyspell
-  '(progn
-     (require-package 'flyspell-lazy)
-     (flyspell-lazy-mode 1)))
+  (use-package flyspell-lazy
+    :config
+    (flyspell-lazy-mode 1)))
 
 ;; better performance
 (setq flyspell-issue-message-flag nil)

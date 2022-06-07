@@ -25,10 +25,10 @@
    (normal-mode)))
 
 
-(when (maybe-require-package 'info-colors)
+(use-package info-colors
+  :config
   (with-eval-after-load 'info
     (add-hook 'Info-selection-hook 'info-colors-fontify-node)))
-
 
 ;; Handle the prompt pattern for the 1password command-line interface
 (with-eval-after-load 'comint
@@ -37,9 +37,8 @@
          comint-password-prompt-regexp
          "\\|^Please enter your password for user .*?:\\s *\\'")))
 
-
-
-(when (maybe-require-package 'regex-tool)
+(use-package regex-tool
+  :config
   (setq-default regex-tool-backend 'perl))
 
 (with-eval-after-load 're-builder

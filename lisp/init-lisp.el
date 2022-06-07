@@ -4,15 +4,19 @@
 
 (setq-default debugger-bury-or-kill 'kill)
 
-(require-package 'elisp-slime-nav)
+(use-package elisp-slime-nav
+  :hook
+  ((emacs-lisp-mode-hook ielm-mode-hook) . turn-on-elisp-slime-nav-mode)
+
+
+  )
 ;; (with-eval-after-load 'ggtags-mode
 ;;   (add-hook 'emacs-lisp-mode-hook
 ;;             (lambda ()
 ;;               (progn
 ;;                 (define-key ggtags-mode-map (kbd "M-.")  nil)
 ;;                 (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)))))
-(dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-  (add-hook hook 'turn-on-elisp-slime-nav-mode))
+
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "ELisp")))
 
 (setq-default initial-scratch-message
@@ -49,9 +53,9 @@
   (define-key emacs-lisp-mode-map (kbd "C-x C-e") 'sanityinc/eval-last-sexp-or-region)
   (define-key emacs-lisp-mode-map (kbd "C-c C-e") 'pp-eval-expression))
 
-(when (maybe-require-package 'ipretty)
-  (add-hook 'after-init-hook 'ipretty-mode))
-
+(use-package ipretty
+  :hook
+  (after-init . ipretty-mode))
 
 (defun sanityinc/make-read-only (expression out-buffer-name)
   "Enable `view-mode' in the output buffer - if any - so it can be closed with `\"q\"."
@@ -133,10 +137,12 @@ there is no current file, eval the current buffer."
 
 ;; Automatic byte compilation
 
-(when (maybe-require-package 'auto-compile)
-  (setq auto-compile-delete-stray-dest nil)
-  (add-hook 'after-init-hook 'auto-compile-on-save-mode)
-  (add-hook 'after-init-hook 'auto-compile-on-load-mode))
+(use-package auto-compile
+  :hook
+  (after-init . auto-compile-on-save-mode)
+  (after-init . auto-compile-on-load-mode)
+  :config
+  (setq auto-compile-delete-stray-dest nil))
 
 
 ;; Load .el if newer than corresponding .elc
@@ -145,8 +151,9 @@ there is no current file, eval the current buffer."
 
 
 
-(require-package 'immortal-scratch)
-(add-hook 'after-init-hook 'immortal-scratch-mode)
+(use-package immortal-scratch
+  :hook
+  (after-init . immortal-scratch-mode))
 
 
 ;;; Support byte-compilation in a sub-process, as
@@ -178,7 +185,8 @@ there is no current file, eval the current buffer."
   "Hook run in all Lisp modes.")
 
 
-(when (maybe-require-package 'aggressive-indent)
+(use-package aggressive-indent
+  :config
   (add-to-list 'sanityinc/lispy-modes-hook 'aggressive-indent-mode))
 
 (defun sanityinc/lisp-setup ()
@@ -248,7 +256,7 @@ there is no current file, eval the current buffer."
 
 
 
-(require-package 'macrostep)
+(use-package macrostep)
 
 (with-eval-after-load 'lisp-mode
   (define-key emacs-lisp-mode-map (kbd "C-c x") 'macrostep-expand))
@@ -261,17 +269,21 @@ there is no current file, eval the current buffer."
 
 
 ;; Extras for theme editing
-(when (maybe-require-package 'rainbow-mode)
+(use-package rainbow-mode
+  :config
   (defun sanityinc/enable-rainbow-mode-if-theme ()
     (when (and (buffer-file-name) (string-match-p "\\(color-theme-\\|-theme\\.el\\)" (buffer-file-name)))
       (rainbow-mode)))
-  (add-hook 'emacs-lisp-mode-hook 'sanityinc/enable-rainbow-mode-if-theme)
-  (add-hook 'help-mode-hook 'rainbow-mode))
+  :hook
+  (emacs-lisp-mode . sanityinc/enable-rainbow-mode-if-theme)
+  (help-mode . rainbow-mode))
+
 
 
 
-(when (maybe-require-package 'highlight-quoted)
-  (add-hook 'emacs-lisp-mode-hook 'highlight-quoted-mode))
+(use-package highlight-quoted
+  :hook
+  (emacs-lisp-mode . highlight-quoted-mode))
 
 
 
@@ -280,10 +292,10 @@ there is no current file, eval the current buffer."
   (define-key ert-results-mode-map (kbd "g") 'ert-results-rerun-all-tests))
 
 
-(maybe-require-package 'cl-libify)
+(use-package cl-libify)
 
 
-(maybe-require-package 'cask-mode)
+(use-package cask-mode)
 
 (provide 'init-lisp)
 ;;; init-lisp.el ends here

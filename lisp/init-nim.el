@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(maybe-require-package 'nim-mode)
+(use-package nim-mode)
 
 (provide 'init-nim)
 

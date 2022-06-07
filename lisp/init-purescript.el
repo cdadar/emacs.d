@@ -2,25 +2,24 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (maybe-require-package 'purescript-mode)
-  (add-hook 'purescript-mode-hook 'turn-on-purescript-indentation)
-
-  (add-hook 'purescript-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook 'purescript-sort-imports nil t)))
-
-  (add-hook 'purescript-mode-hook (apply-partially 'prettify-symbols-mode -1))
-
-  (with-eval-after-load 'purescript-mode
-    (define-key purescript-mode-map (kbd "C-o") 'open-line))
-
-  (when (maybe-require-package 'reformatter)
+(use-package purescript-mode
+  :bind
+  (:map purescript-mode-map ("C-o" . open-line))
+  :hook
+  ((purescript-mode . turn-on-purescript-indentation)
+   (purescript-mode . (lambda ()
+                        (add-hook 'before-save-hook 'purescript-sort-imports nil t)))
+   (purescript-mode . (lambda () (apply-partially 'prettify-symbols-mode -1))))
+  :config
+  (use-package reformatter
+    :config
     (reformatter-define purty
       :program "purty" :lighter " purty"))
 
-  (when (maybe-require-package 'psc-ide)
-    (add-hook 'purescript-mode-hook 'psc-ide-mode)
-
+  (use-package psc-ide
+    :hook
+    (purescript-mode . psc-ide-mode)
+    :config
     (defun psc-ide-foreign-js-after-save-handler ()
       "Call `psc-ide-rebuild' in any neighbouring purescript file buffer, if `psc-ide-rebuild-on-save' is set.
 This is a little magical because it only works if the
@@ -46,13 +45,14 @@ corresponding .purs file is open."
           (add-hook 'after-save-hook 'psc-ide-foreign-js-after-save-handler nil t)
         (remove-hook 'after-save-hook 'psc-ide-foreign-js-after-save-handler t))))
 
-  (when (maybe-require-package 'psci)
-    (add-hook 'purescript-mode-hook 'inferior-psci-mode))
-
-  (when (maybe-require-package 'add-node-modules-path)
-    (with-eval-after-load 'purescript-mode
-      (add-hook 'purescript-mode-hook 'add-node-modules-path))
-    (with-eval-after-load 'psci
+  (use-package psci
+    :hook
+    (purescript-mode . inferior-psci-mode)
+    :config
+    (use-package add-node-modules-path
+      :hook
+      (purescript-mode . add-node-modules-path)
+      :config
       (advice-add 'psci :around (lambda (oldfun &rest args)
                                   (let ((psci/purs-path (or (executable-find "purs")
                                                             psci/purs-path)))
