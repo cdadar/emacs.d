@@ -2,10 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (maybe-require-package 'yaml-mode)
-  (add-auto-mode 'yaml-mode "\\.yml\\.erb\\'")
-  (add-hook 'yaml-mode-hook 'goto-address-prog-mode))
-
+(use-package yaml-mode
+  :hook
+  (yaml-mode . goto-address-prog-mode)
+  :config
+  (add-auto-mode 'yaml-mode "\\.yml\\.erb\\'"))
 
 (provide 'init-yaml)
 ;;; init-yaml.el ends here

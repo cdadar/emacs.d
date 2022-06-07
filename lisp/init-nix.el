@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (maybe-require-package 'nix-mode)
-  (maybe-require-package 'nixpkgs-fmt)
-  (maybe-require-package 'nix-sandbox)
-  (maybe-require-package 'nix-buffer)
-
-  (when (maybe-require-package 'nixos-options)))
-
+(use-package nix-mode)
+(use-package nixpkgs-fmt)
+(use-package nix-sandbox)
+(use-package nix-buffer)
+(use-package nixos-options)
 
 (provide 'init-nix)
 ;;; init-nix.el ends here

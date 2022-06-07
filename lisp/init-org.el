@@ -22,12 +22,11 @@
 ;;; Code:
 
 (when *is-a-mac*
-  (maybe-require-package 'grab-mac-link))
+  (use-package grab-mac-link))
 
-(maybe-require-package 'org-cliplink)
-
-(define-key global-map (kbd "C-c l") 'org-store-link)
-(define-key global-map (kbd "C-c a") 'org-agenda)
+(use-package org-cliplink
+  :bind
+  (("C-c l" . org-store-link) ("C-c a" . org-agenda)))
 
 (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
   "A keymap for handy global access to org helpers, particularly clocking.")
@@ -127,7 +126,7 @@
 
 
 
-(maybe-require-package 'writeroom-mode)
+(use-package writeroom-mode)
 
 (define-minor-mode prose-mode
   "Set up a buffer for prose editing.
@@ -603,18 +602,20 @@ typical word processor."
 
 
 
-(require-package 'org-pomodoro)
-(setq org-pomodoro-keep-killed-pomodoro-time t)
-(with-eval-after-load 'org-agenda
-  (define-key org-agenda-mode-map (kbd "M-p") 'org-pomodoro)
-  (define-key org-mode-map (kbd "M-p") 'org-pomodoro)
+(use-package org-pomodoro
+  :config
+  (setq org-pomodoro-keep-killed-pomodoro-time t)
 
+  (with-eval-after-load 'org-agenda
+    (define-key org-agenda-mode-map (kbd "M-p") 'org-pomodoro)
+    (define-key org-mode-map (kbd "M-p") 'org-pomodoro))
+  
   (defun notify-send (title message)
     (call-process "notify-send"
                   nil 0 nil
                   title
                   message))
-
+  
   (add-hook 'org-pomodoro-finished-hook
             (lambda ()
               (notify-send "Pomodoro completed!" "Time for a break.")))
@@ -626,10 +627,7 @@ typical word processor."
               (notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
   (add-hook 'org-pomodoro-killed-hook
             (lambda ()
-              (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))
-
-  )
-
+              (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!"))))
 
 ;; ;; Show iCal calendars in the org agenda
 ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
@@ -751,16 +749,18 @@ typical word processor."
 
 ;; create ppt
 (with-eval-after-load 'org
-  (maybe-require-package 'ox-ioslide))
+  (use-package ox-ioslide))
 
 ;; org-appear
 (with-eval-after-load 'org
-  (when (maybe-require-package 'org-appear)
-    (add-hook 'org-mode-hook 'org-appear-mode)))
+  (use-package org-appear
+    :hook
+    (org-mode . org-appear-mode)))
 
 ;; generate mind map
 (with-eval-after-load 'org
-  (when (maybe-require-package 'org-mind-map)
+  (use-package org-mind-map
+    :config
     (require 'ox-org)
     (setq org-mind-map-engine "dot")    ; Default. Directed Graph
     ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
@@ -772,7 +772,8 @@ typical word processor."
     ))
 
 (with-eval-after-load 'org
-  (when (maybe-require-package 'org-brain)
+  (use-package org-brain
+    :config
     (setq org-id-track-globally t)
     (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
     (push '("b" "Brain" plain (function org-brain-goto-end)
@@ -830,18 +831,22 @@ typical word processor."
       (insert output-string))
     output-string))
 
-(when (maybe-require-package 'org-roam)
-  (global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
-  (global-set-key (kbd "C-c n s") 'org-roam-db-sync)
-  (global-set-key (kbd "C-c n t") 'org-roam-tag-add)
-  (global-set-key (kbd "C-c n T") 'org-roam-tag-remove)
-  (global-set-key (kbd "C-c n f") 'org-roam-node-find)
-  (global-set-key (kbd "C-c n g") 'org-roam-graph)
-  (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
-  (global-set-key (kbd "C-c n c") 'org-roam-capture)
-  ;; Dailies
-  (global-set-key (kbd "C-c n j") 'org-roam-dailies-capture-today)
-  
+(use-package org-roam
+  :bind
+  (("C-c n l" . org-roam-buffer-toggle)
+   ("C-c n s" . org-roam-db-sync)
+   ("C-c n t" . org-roam-tag-add)
+   ("C-c n T" . org-roam-tag-remove)
+   ("C-c n f" . org-roam-node-find)
+   ("C-c n g" . org-roam-graph)
+   ("C-c n i" . org-roam-node-insert)
+   ("C-c n c" . org-roam-capture)
+   ;; Dailies
+   ("C-c n j" . org-roam-dailies-capture-today)
+   )
+  :hook
+  (after-init . org-roam-db-autosync-mode)
+  :config
   (setq org-roam-v2-ack t)
   (setq org-id-link-to-org-use-id t)
   (setq org-roam-completion-everywhere t)
@@ -878,46 +883,35 @@ typical word processor."
           ("B" "blog" plain "%?"
            :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
-           :unnarrowed t)))
-  
-  (with-eval-after-load 'org-roam
-    (add-hook 'after-init-hook 'org-roam-db-autosync-mode))
+           :unnarrowed t))))
 
-  (when (maybe-require-package 'org-roam-ui)
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t)))
+(use-package org-roam-ui
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
-;; (with-eval-after-load 'org-roam
-;;   (when (maybe-require-package 'org-roam-server)
-;;     (setq org-roam-server-host "127.0.0.1"
-;;           org-roam-server-port 8080
-;;           org-roam-server-authenticate nil
-;;           org-roam-server-export-inline-images t
-;;           org-roam-server-serve-files nil
-;;           org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-;;           org-roam-server-network-poll t
-;;           org-roam-server-network-arrows nil
-;;           org-roam-server-network-label-truncate t
-;;           org-roam-server-network-label-truncate-length 60
-;;           org-roam-server-network-label-wrap-length 20)))
-
-
-(when (maybe-require-package 'org-download)
-  (add-hook 'dired-mode-hook 'org-download-enable)
-  (add-hook 'org-mode-hook 'org-download-enable)
+(use-package org-download
+  :hook
+  (dired-mode-hook . org-download-enable)
+  (org-mode-hook . org-download-enable)
+  :config
   (setq-default org-download-heading-lvl nil
                 org-download-image-dir "./img"
                 org-download-screenshot-method "pngpaste %s"
                 org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 
-(when (maybe-require-package 'org-tree-slide)
-  (with-eval-after-load "org-tree-slide"
-    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
-    (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
-    (define-key org-mode-map (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
-    (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)))
+
+(use-package org-tree-slide
+  :bind
+  (:map
+   org-tree-slide-mode-map
+   ("<f9>" . org-tree-slide-move-previous-tree)
+   ("<f10>" . org-tree-slide-move-next-tree)
+   :map org-mode-map
+   ("<f8>" . org-tree-slide-mode)
+   ("S-<f8>" . org-tree-slide-skip-done-toggle)))
 
 (provide 'init-org)
 ;;; init-org.el ends here

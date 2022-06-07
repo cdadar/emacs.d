@@ -3,7 +3,7 @@
 ;;; Code:
 
 ;;; Terraform
-(maybe-require-package 'terraform-mode)
+(use-package terraform-mode)
 
 (provide 'init-terraform)
 ;;; init-terraform.el ends here

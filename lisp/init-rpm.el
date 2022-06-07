@@ -4,7 +4,8 @@
 
 ;; -*- lexical-binding: t -*-
 
-(when (maybe-require-package 'rpm-spec-mode)
+(use-package rpm-spec-mode
+  :config
   (add-to-list 'auto-mode-alist '("\\.spec\\'" . rpm-spec-mode)))
 
 (provide 'init-rpm)

@@ -14,18 +14,21 @@
 
 (setq python-shell-interpreter "python3")
 
-(require-package 'pip-requirements)
+(use-package pip-requirements)
 
-(when (maybe-require-package 'toml-mode)
+(use-package toml-mode
+  :config
   (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))
 
-(when (maybe-require-package 'reformatter)
+
+(use-package reformatter
+  :config
   (reformatter-define black :program "black" :args '("-")))
 
+
 (with-eval-after-load 'python
-
-  (when (maybe-require-package 'virtualenvwrapper)
-
+  (use-package virtualenvwrapper
+    :config
     (venv-initialize-interactive-shells) ;; if you want interactive shell support
     (venv-initialize-eshell)             ;; if you want eshell support
     ;; note that setting `venv-location` is not necessary if you
@@ -37,8 +40,10 @@
               (lambda () (shell-command "pip install pyflakes"))))
 
   (when (executable-find "autopep8")
-    (when (maybe-require-package 'py-autopep8)
-      (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+    (use-package py-autopep8
+      :hook
+      (python-mode . py-autopep8-enable-on-save)
+      :config
       (setq py-autopep8-options '("--max-line-length=120")))))
 
 

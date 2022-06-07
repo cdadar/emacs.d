@@ -4,7 +4,9 @@
 
 ;; -*- lexical-binding: t -*-
 
-(when (maybe-require-package 'vimrc-mode)
+(use-package vimrc-mode
+  :config
   (add-to-list 'auto-mode-alist '("\\.vimrc\\'" . vimrc-mode)))
+
 
 (provide 'init-vimrc)

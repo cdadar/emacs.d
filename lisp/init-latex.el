@@ -4,37 +4,33 @@
 
 ;; -*- lexical-binding: t -*-
 
-(maybe-require-package 'cdlatex)
-(when (maybe-require-package 'auctex)
+(use-package cdlatex)
+(use-package auctex
+  :hook
+  ;; Going to see if we actually need these
+  (LaTeX-mode . auto-fill-mode)
+  (LaTeX-mode . abbrev-mode)
+  (LaTeX-mode . LaTeX-math-mode)
+  (LaTeX-mode . turn-on-reftex)
+  (LaTeX-mode-hook . (lambda ()
+                       (LaTeX-add-environments
+                        '("theorem" LaTeX-env-label)
+                        '("proposition" LaTeX-env-label)
+                        '("lemma" LaTeX-env-label)
+                        '("definition" LaTeX-env-label)
+                        '("example" LaTeX-env-label)
+                        '("remark" LaTeX-env-label))))
+  (LaTeX-mode-hook . (lambda ()
+                       (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
+                       (setq TeX-command-default "XeLaTeX")
+                       (setq TeX-save-query  nil )
+                       (setq TeX-show-compilation t)))
+  :config
   (when (locate-library "auctex")
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
     (setq TeX-close-quote "")
     (setq TeX-open-quote "")
-    ;; Going to see if we actually need these
-    (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-    ;; (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-    ;; (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-    (add-hook 'LaTeX-mode-hook 'abbrev-mode)
-
-    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-    (add-hook 'LaTeX-mode-hook
-              (lambda ()
-                (LaTeX-add-environments
-                 '("theorem" LaTeX-env-label)
-                 '("proposition" LaTeX-env-label)
-                 '("lemma" LaTeX-env-label)
-                 '("definition" LaTeX-env-label)
-                 '("example" LaTeX-env-label)
-                 '("remark" LaTeX-env-label))))
-
-    (add-hook 'LaTeX-mode-hook
-              (lambda ()
-                (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
-                (setq TeX-command-default "XeLaTeX")
-                (setq TeX-save-query  nil )
-                (setq TeX-show-compilation t)))
 
     (setq reftex-plug-into-AUCTeX t)
     (setq reftex-use-external-file-finders t)
@@ -44,6 +40,7 @@
 
     ;; Bibretrieve
     (setq bibretrieve-backends '(("msn" . 10) ("arxiv" . 5) ("zbm" . 5)))))
+
 
 (provide 'init-latex)
 ;;; init-latex.el ends here
