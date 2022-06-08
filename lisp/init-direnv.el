@@ -3,6 +3,7 @@
 ;;; Code:
 
 (use-package envrc
+  :diminish
   :config
   (defun sanityinc/maybe-enable-envrc-global-mode ()
     "Enable `envrc-global-mode' if `direnv' is installed."
