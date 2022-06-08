@@ -33,10 +33,10 @@
   (add-to-list 'dimmer-exclusion-predicates 'sanityinc/display-non-graphic-p))
 
 (use-package minions
-  :config
-  (minions-mode 1)
   :bind
-  (([S-down-mouse-3] . minions-minor-modes-menu)))
+  (([S-down-mouse-3] . minions-minor-modes-menu))
+  :hook
+  (after-init . minions-mode))
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
