@@ -3,6 +3,7 @@
 ;;; Code:
 
 (use-package paredit
+  :diminish
   :config
   (defun sanityinc/maybe-map-paredit-newline ()
     (unless (or (memq major-mode '(inferior-emacs-lisp-mode cider-repl-mode))

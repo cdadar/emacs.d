@@ -119,6 +119,7 @@
 
 
 (use-package undo-tree
+  :diminish
   :hook
   (after-init . global-undo-tree-mode)
   :config
@@ -203,6 +204,7 @@
 
 ;;; Page break lines
 (use-package page-break-lines
+  :diminish
   :hook
   (after-init . global-page-break-lines-mode))
 
@@ -242,6 +244,7 @@
 
 ;;; Cut/copy the current line if no region is active
 (use-package whole-line-or-region
+  :diminish
   :hook
   (after-init . whole-line-or-region-global-mode))
 
@@ -399,6 +402,7 @@ ORIG is the advised function, which is called with its ARGS."
 
 
 (use-package super-save
+  :diminish
   :hook
   (after-init . super-save-mode)
   :config
@@ -454,13 +458,6 @@ ORIG is the advised function, which is called with its ARGS."
   :init
   (progn
     (setq column-number-mode t)))
-
-;;modeline上显示我的所有的按键和执行的命令
-(use-package keycast
-  :init
-  (keycast-mode t)
-  :config
-  (add-to-list 'global-mode-string '("" keycast-mode-line)))
 
 (with-eval-after-load 'grep
   '(progn
