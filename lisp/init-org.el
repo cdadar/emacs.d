@@ -824,10 +824,6 @@ typical word processor."
          (insert output-string))
        output-string))
 
-   
-
-   
-
    (use-package org-download
      :hook
      (dired-mode-hook . org-download-enable)
@@ -838,8 +834,15 @@ typical word processor."
                    org-download-screenshot-method "pngpaste %s"
                    org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 
-
-   ))
+   (use-package org-tree-slide
+     :bind
+     (:map
+      org-tree-slide-mode-map
+      ("<f9>" . org-tree-slide-move-previous-tree)
+      ("<f10>" . org-tree-slide-move-next-tree)
+      :map org-mode-map
+      ("<f8>" . org-tree-slide-mode)
+      ("S-<f8>" . org-tree-slide-skip-done-toggle)))))
 
 (use-package org-roam
   :bind
@@ -893,24 +896,14 @@ typical word processor."
           ("B" "blog" plain "%?"
            :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n")
-           :unnarrowed t))))
+           :unnarrowed t)))
 
-(use-package org-roam-ui
-     :config
-     (setq org-roam-ui-sync-theme t
-           org-roam-ui-follow t
-           org-roam-ui-update-on-save t
-           org-roam-ui-open-on-start t))
-
-(use-package org-tree-slide
-     :bind
-     (:map
-      org-tree-slide-mode-map
-      ("<f9>" . org-tree-slide-move-previous-tree)
-      ("<f10>" . org-tree-slide-move-next-tree)
-      :map org-mode-map
-      ("<f8>" . org-tree-slide-mode)
-      ("S-<f8>" . org-tree-slide-skip-done-toggle)))
+  (use-package org-roam-ui
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t)))
 
 
 (provide 'init-org)
