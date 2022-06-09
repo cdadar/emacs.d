@@ -226,8 +226,33 @@
   (define-key embark-identifier-map (kbd "C-s") #'consult-line)
 
   (define-key embark-file-map (kbd "E") #'consult-directory-externally)
-  (define-key embark-file-map (kbd "U") #'consult-snv-unlock)
-  )
+  (define-key embark-file-map (kbd "U") #'consult-snv-unlock))
+
+(defun +vertico/embark-export-write ()
+  "Export the current vertico results to a writable buffer if possible.
+Supports exporting consult-grep to wgrep, file to wdeired, and consult-location to occur-edit"
+  (interactive)
+  (require 'embark)
+  (require 'wgrep)
+  (pcase-let ((`(,type . ,candidates)
+               (run-hook-with-args-until-success 'embark-candidate-collectors)))
+    (pcase type
+      ('consult-grep (let ((embark-after-export-hook #'wgrep-change-to-wgrep-mode))
+                       (embark-export)))
+      ('file (let ((embark-after-export-hook #'wdired-change-to-wdired-mode))
+               (embark-export)))
+      ('consult-location (let ((embark-after-export-hook #'occur-edit-mode))
+                           (embark-export)))
+      (x (user-error "embark category %S doesn't support writable export" x)))))
+
+(defun +vertico/embark-preview ()
+  "Previews candidate in vertico buffer, unless it's a consult command"
+  (interactive)
+  (unless (bound-and-true-p consult--preview-function)
+    (save-selected-window
+      (let ((embark-quit-after-action nil))
+        (embark-dwim)))))
+
 
 (use-package marginalia
   :hook (after-init . marginalia-mode)
@@ -241,9 +266,7 @@
   :config
   (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
-(use-package wgrep
-  :commands wgrep-change-to-wgrep-mode
-  :config (setq wgrep-auto-save-buffer t))
+
 
 (with-eval-after-load 'yasnippet
   (use-package consult-yasnippet
