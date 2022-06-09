@@ -459,12 +459,18 @@ ORIG is the advised function, which is called with its ARGS."
   (progn
     (setq column-number-mode t)))
 
-(with-eval-after-load 'grep
-  '(progn
-     (define-key grep-mode-map
-       (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)
-     (define-key ag-mode-map
-       (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode)))
+(use-package wgrep
+  :commands wgrep-change-to-wgrep-mode
+  :init
+  (setq wgrep-auto-save-buffer t
+        wgrep-change-readonly-file t)
+  :bind
+  (:map grep-mode-map
+   ("C-c C-q" . wgrep-change-to-wgrep-mode)
+   :map occur-mode-map
+   ("C-c C-q" . wgrep-change-to-wgrep-mode))
+  :config
+  (setq wgrep-auto-save-buffer t))
 
 (use-package elisp-demos
   :config

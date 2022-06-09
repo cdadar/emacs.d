@@ -26,7 +26,7 @@
       (pop-to-buffer tuareg-previous-tuareg-buffer)))
   :bind
   (
-   :map tuareg-mode-mpa
+   :map tuareg-mode-map
    ("C-c C-z" . sanityinc/tuareg-repl-switch)
    :map tuareg-interactive-mode-map
    ("C-c C-z" . sanityinc/tuareg-repl-switch-back)))

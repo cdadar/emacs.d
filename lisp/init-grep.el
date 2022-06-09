@@ -8,11 +8,7 @@
 (when *is-a-mac*
   (setq-default locate-command "mdfind"))
 
-(use-package wgrep
-  :config
-  (with-eval-after-load 'grep
-    (dolist (key (list (kbd "C-c C-q") (kbd "w")))
-      (define-key grep-mode-map key 'wgrep-change-to-wgrep-mode))))
+
 
 
 (when (executable-find "ag")

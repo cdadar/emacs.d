@@ -860,50 +860,51 @@ typical word processor."
   :hook
   (after-init . org-roam-db-autosync-mode)
   :config
-  (setq org-roam-v2-ack t)
-  (setq org-id-link-to-org-use-id t)
-  (setq org-roam-completion-everywhere t)
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?"
-           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("b" "bible" plain "%?"
-           :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("p" "program" plain "%?"
-           :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("n" "Booknotes" plain "%?"
-           :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("i" "investment" plain "%?"
-           :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("o" "other" plain "%?"
-           :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("w" "work" plain "%?"
-           :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("B" "blog" plain "%?"
-           :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)))
+  (progn
+    (setq org-roam-v2-ack t)
+    (setq org-id-link-to-org-use-id t)
+    (setq org-roam-completion-everywhere t)
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (setq org-roam-capture-templates
+          '(("d" "default" plain "%?"
+             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("b" "bible" plain "%?"
+             :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("p" "program" plain "%?"
+             :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("n" "Booknotes" plain "%?"
+             :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("i" "investment" plain "%?"
+             :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("o" "other" plain "%?"
+             :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("w" "work" plain "%?"
+             :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("B" "blog" plain "%?"
+             :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)))
 
-  (use-package org-roam-ui
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t)))
+    (use-package org-roam-ui
+      :config
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t))))
 
 
 (provide 'init-org)

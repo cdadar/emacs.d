@@ -20,7 +20,7 @@
 
 (defconst *spell-check-support-enabled* nil) ;; Enable with t if you prefer
 (defconst *is-a-mac* (eq system-type 'darwin))
-(defconst *win64* (eq system-type 'windows-nt) )
+(defconst *win64* (eq system-type 'windows-nt))
 (defconst *cygwin* (eq system-type 'cygwin) )
 (defconst *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
 (defconst *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
@@ -57,7 +57,6 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
-(use-package wgrep)
 (use-package ripgrep)
 (use-package scratch)
 (use-package command-log-mode)
