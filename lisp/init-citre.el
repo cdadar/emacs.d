@@ -1,4 +1,4 @@
-;;; init-lsp.el --- Initialize Citre configurations. -*- lexical-binding: t -*-
+;;; init-citre.el --- Initialize Citre configurations. -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; Language Server Protocol (LSP) configurations.
