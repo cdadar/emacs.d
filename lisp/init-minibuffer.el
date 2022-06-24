@@ -12,13 +12,9 @@
   ;; cleans ~/foo/bar/// to /, and ~/foo/bar/~/ to ~/.
   (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
   (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
-  (define-key vertico-map (kbd "C-j") 'vertico-next)
   (define-key vertico-map (kbd "C-'") 'vertico-quick-jump)
-  (define-key vertico-map (kbd "C-k") 'vertico-previous)
   (define-key vertico-map [backspace] #'vertico-directory-delete-char)
-  (define-key vertico-map (kbd "s-SPC") #'+vertico/embark-preview)
-
-  )
+  (define-key vertico-map (kbd "s-SPC") #'+vertico/embark-preview))
 
 (use-package orderless
   :demand t
