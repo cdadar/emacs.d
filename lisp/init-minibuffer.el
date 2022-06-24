@@ -199,30 +199,35 @@
      (window-parameters (mode-line-format . none))
      (window-height . fit-window-to-buffer)))
 
-  (define-key minibuffer-local-map (kbd "C-;") 'embark-act)
-  (define-key minibuffer-local-map (kbd "C-c C-;") 'embark-export)
-  (define-key minibuffer-local-map (kbd "C-c C-e") '+vertico/embark-export-write)
-
   (with-eval-after-load 'popwin
     (progn
       (push '(occur-mode :position right :width 100) popwin:special-display-config)
       (push '(grep-mode :position right :width 100) popwin:special-display-config)
       (push '(special-mode :position right :width 100) popwin:special-display-config)))
-
-  (global-set-key (kbd "C-;") 'embark-act)
-
   :config
-  (define-key minibuffer-local-map (kbd "C-'") #'embark-become)
-  ;; list all the keybindings in this buffer
-  (global-set-key (kbd "C-h B") 'embark-bindings)
-  ;; add the package! target finder before the file target finder,
-  ;; so we don't get a false positive match.
-  :config
-  (define-key embark-identifier-map "R" #'consult-ripgrep)
-  (define-key embark-identifier-map (kbd "C-s") #'consult-line)
-
-  (define-key embark-file-map (kbd "E") #'consult-directory-externally)
-  (define-key embark-file-map (kbd "U") #'consult-snv-unlock))
+  (defun embark-on-last-message (arg)
+    "Act on the last message displayed in the echo area."
+    (interactive "P")
+    (with-current-buffer "*Messages*"
+      (goto-char (1- (point-max)))
+      (embark-act arg)))
+  :bind ((("C-h E" . embark-on-last-message))
+         :map minibuffer-local-map
+         (("C-;" . embark-act)
+          ("C-c C-;" . embark-export)
+          ("C-c C-e" . +vertico/embark-export-write)
+          ("C-c M-." . embark-dwim)
+          ("C-h b" . embark-bindings)
+          ("C-h B" . embark-bindings-at-point)
+          ("C-c M-n" . embark-next-symbol)
+          ("C-c M-p" . embark-previous-symbol)
+          ("C-'" . embark-become))
+         :map embark-identifier-map
+         (("R" . consult-ripgrep)
+          ("C-s" . consult-line))
+         :map embark-file-map
+         (("E" . consult-directory-externally)
+          ("U" . consult-snv-unlock))))
 
 (defun +vertico/embark-export-write ()
   "Export the current vertico results to a writable buffer if possible.
