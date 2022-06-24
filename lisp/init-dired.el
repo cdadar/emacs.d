@@ -2,31 +2,40 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq-default dired-dwim-target t)
-
-;; Prefer g-prefixed coreutils version of standard utilities when available
-(let ((gls (executable-find "gls")))
-  (when gls (setq insert-directory-program gls)))
+(use-package dired
+  :ensure nil
+  :bind (:map ctl-x-map
+              (("C-j" . dired-jump))
+         :map ctl-x-4-map
+         (("C-j" . dired-jump-other-window))
+         :map dired-mode-map
+              (("e" . dired-open-externally)
+               ([mouse-2] . dired-find-file)
+               ("C-c C-q" . wdired-change-to-wdired-mode)))
+  :custom
+  (dired-dwim-target t)
+  (dired-listing-switches "-alGh")
+  (dired-recursive-copies 'always)
+  (dired-kill-when-opening-new-dired-buffer t)
+  :config
+  (setq dired-recursive-deletes 'top)
+  (defun dired-open-externally (&optional arg)
+    "Open marked or current file in operating system's default application."
+    (interactive "P")
+    (dired-map-over-marks
+     (consult-file-externally (dired-get-filename))
+     arg)))
 
 (use-package diredfl
+  :after dired
   :config
-  (with-eval-after-load 'dired
-    (diredfl-global-mode)
-    (require 'dired-x)))
-
-;; Hook up dired-x global bindings without loading it up-front
-(define-key ctl-x-map "\C-j" 'dired-jump)
-(define-key ctl-x-4-map "\C-j" 'dired-jump-other-window)
-
-(with-eval-after-load 'dired
-  (setq dired-recursive-deletes 'top)
-  (define-key dired-mode-map [mouse-2] 'dired-find-file)
-  (define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode))
+  (diredfl-global-mode)
+  (require 'dired-x))
 
 (use-package diff-hl
-  :config
-  (with-eval-after-load 'dired
-    (add-hook 'dired-mode-hook 'diff-hl-dired-mode)))
+  :after dired
+  :hook
+  (dired-mode . diff-hl-dired-mode))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here
