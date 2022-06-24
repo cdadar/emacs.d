@@ -14,7 +14,7 @@
   (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
   (define-key vertico-map (kbd "C-'") 'vertico-quick-jump)
   (define-key vertico-map [backspace] #'vertico-directory-delete-char)
-  (define-key vertico-map (kbd "s-SPC") #'+vertico/embark-preview))
+  (define-key vertico-map (kbd "M-SPC") #'+vertico/embark-preview))
 
 (use-package orderless
   :demand t
