@@ -273,7 +273,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   (use-package consult-yasnippet
     :bind (("M-Y" . consult-yasnippet))))
 
-(with-eval-after-load 'org-mode
+(with-eval-after-load 'org-roam
   (use-package consult-org-roam
     :config
     (consult-org-roam-mode 1)
