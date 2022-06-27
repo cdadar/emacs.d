@@ -84,6 +84,7 @@
   :bind (("C-c p p" . completion-at-point) ;; capf
          ("C-c p t" . complete-tag)        ;; etags
          ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+         ("C-c p h" . cape-history)
          ("C-c p f" . cape-file)
          ("C-c p k" . cape-keyword)
          ("C-c p s" . cape-symbol)
@@ -103,8 +104,7 @@
   (add-to-list 'completion-at-point-functions #'cape-tex)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (setq cape-dabbrev-check-other-buffers nil)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  )
+  (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package corfu-english-helper
   :after corfu
