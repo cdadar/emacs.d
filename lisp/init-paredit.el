@@ -34,7 +34,8 @@
     (if (memq this-command paredit-minibuffer-commands)
         (enable-paredit-mode)))
 
-  (require 'paredit-extension))
+  (use-package paredit-extension
+    :load-path "site-lisp/paredit-extension"))
 
 (provide 'init-paredit)
 ;;; init-paredit.el ends here

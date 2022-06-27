@@ -59,13 +59,10 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(require 'tempbuf)
-
-(add-hook 'custom-mode-hook 'turn-on-tempbuf-mode)
-(add-hook 'w3-mode-hook 'turn-on-tempbuf-mode)
-(add-hook 'Man-mode-hook 'turn-on-tempbuf-mode)
-(add-hook 'view-mode-hook 'turn-on-tempbuf-mode)
-
+(use-package tempbuf
+  :load-path "site-lisp/tempbuf"
+  :hook
+  ((custom-mode w3-mode Man-mode view-mode) . turn-on-tempbuf-mode))
 
 
 (provide 'init-ibuffer)

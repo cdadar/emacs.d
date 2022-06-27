@@ -106,9 +106,11 @@
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   )
 
-(with-eval-after-load 'corfu
-  (require 'corfu-english-helper)
-  (global-set-key (kbd "C-c e E") 'corfu-english-helper-search))
+(use-package corfu-english-helper
+  :after corfu
+  :load-path "site-lisp/corfu-english-helper"
+  :bind
+  (("C-c p E" . corfu-english-helper-search)))
 
 ;; (with-eval-after-load 'corfu
 ;;   (use-package kind-icon
