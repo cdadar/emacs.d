@@ -20,9 +20,9 @@
       (tide-hl-identifier-mode +1))))
 
 
-(use-package indium)
+;; (use-package indium) ;; because this depend company
 
-(use-package js-import)
+;; (use-package js-import) ;; because this depend projectile
 
 ;;; Basic js-mode setup
 
