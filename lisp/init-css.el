@@ -4,9 +4,8 @@
 
 ;;; Colourise CSS colour literals
 (use-package rainbow-mode
-  :config
-  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-    (add-hook hook 'rainbow-mode)))
+  :hook
+  ((css-mode html-mode sass-mode) . rainbow-mode))
 
 
 ;;; Embedding in html
