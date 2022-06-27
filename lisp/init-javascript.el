@@ -3,7 +3,6 @@
 ;;; Code:
 
 (use-package json-mode)
-(use-package js2-mode)
 
 (use-package typescript-mode
   :config
@@ -12,8 +11,8 @@
     (typescript-mode . setup-tide-mode)
     ;; formats the buffer before saving
     (before-save . tide-format-before-save)
+    :mode "*\\.d.ts\\'"
     :config
-    (add-to-list 'auto-mode-alist '("*\\.d.ts\\'" . typescript-mode))
     (defun setup-tide-mode ()
       (interactive)
       (tide-setup)
@@ -25,38 +24,35 @@
 ;; (use-package js-import) ;; because this depend projectile
 
 ;;; Basic js-mode setup
-
-(add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
+(use-package js-mode
+  :ensure nil
+  :mode ("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode)
+  :config
+  (setq-default js-indent-level 2))
 
 (use-package rjsx-mode
+  :mode (("\\.jsx\\'" . rjsx-mode)
+         ("*\\.{components|pages}\\/.*\\.js\\'" . rjsx-mode)
+         ("src\\/routes\\/.*\\.js\\'" . rjsx-mode))
   :config
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("*\\.{components|pages}\\/.*\\.js\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("src\\/routes\\/.*\\.js\\'" . rjsx-mode))
   (advice-add 'js-jsx-mode :override #'rjsx-mode))
-
-(setq-default js-indent-level 2)
 
 
 ;; js2-mode
-
-;; Change some defaults: customize them to override
-(setq-default js2-bounce-indent-p nil)
-(with-eval-after-load 'js2-mode
+(use-package js2-mode
+  :hook
+  (js2-mode . (lambda () (setq mode-name "JS2")))
+  :interpreter ("node" . js2-mode)
+  :config
+  ;; Change some defaults: customize them to override
+  (setq-default js2-bounce-indent-p nil)
   (setq-local js2-mode-show-parse-errors t)
   (setq-local js2-mode-show-strict-warnings t)
   (when (derived-mode-p 'js-mode)
     (js2-minor-mode 1))
-
-  (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
-
-  (js2-imenu-extras-setup))
-
-(add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
-
-(with-eval-after-load 'js2-mode
-  (sanityinc/major-mode-lighter 'js2-mode "JS2")
-  (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
+  (js2-imenu-extras-setup)
+    (sanityinc/major-mode-lighter 'js2-mode "JS2")
+      (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
 
 
 
@@ -78,9 +74,9 @@
 
 ;;; Coffeescript
 (use-package coffee-mode
+  :mode ("\\.coffee\\.erb\\'" . coffee-mode)
   :config
-  (setq-default coffee-tab-width js-indent-level)
-  (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode)))
+  (setq-default coffee-tab-width js-indent-level))
 
 
 ;; Run and interact with an inferior JS via js-comint.el
@@ -139,9 +135,6 @@
                 (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
                 (define-key js2-mode-map "@" 'js-doc-insert-tag))))
 
-
-
-
 (with-eval-after-load 'compile
   ;; Compilation mode for ESLint
   ;; Copied from https://github.com/Fuco1/compile-eslint/blob/master/compile-eslint.el
@@ -175,7 +168,6 @@
   (interactive)
   (eslint-fix-file)
   (revert-buffer t t))
-
 
 ;; Run Mocha or Jasmine tests
 (use-package mocha
