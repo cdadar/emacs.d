@@ -4,7 +4,6 @@
 
 ;; -*- lexical-binding: t -*-
 (use-package plantuml-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode)))
+  :mode ("\\.plantuml\\'" . plantuml-mode))
 
 (provide 'init-puml)

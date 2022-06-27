@@ -5,8 +5,7 @@
 ;; -*- lexical-binding: t -*-
 
 (use-package vimrc-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.vimrc\\'" . vimrc-mode)))
+  :mode ("\\.vimrc\\'" . vimrc-mode))
 
 
 (provide 'init-vimrc)
