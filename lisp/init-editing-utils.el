@@ -109,7 +109,7 @@
 
 (use-package symbol-overlay
   :hook
-  ((prog-mode-hook html-mode-hook yaml-mode-hook conf-mode-hook) . symbol-overlay-mode)
+  ((prog-mode html-mode yaml-mode conf-mode) . symbol-overlay-mode)
   :bind
   (:map symbol-overlay-mode-map
         ("M-i" . symbol-overlay-put)
