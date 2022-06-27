@@ -476,15 +476,20 @@ ORIG is the advised function, which is called with its ARGS."
   :config
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
-(require 'insert-translated-name)
+(use-package insert-translated-name
+  :load-path "site-lisp/insert-translated-name")
 
-(require 'clip2org)
+(use-package clip2org
+  :load-path "site-lisp/clip2org")
 
-(require 'advance-words-count)
+(use-package advance-words-count
+  :load-path "site-lisp/advance-words-count"
+  :config
+  (require 'advance-wc-mode))
 
-(require 'advance-wc-mode)
 
-(require 'delete-block)
+(use-package delete-block
+  :load-path "site-lisp/delete-block")
 
 (defun move-file (new-location)
   "Write this file to NEW-LOCATION, and delete the old one."

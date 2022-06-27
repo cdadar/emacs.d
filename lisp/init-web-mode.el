@@ -49,8 +49,8 @@
           ("^[ \t]*<\\(@[a-z.]+\\)[^>]*>? *$" 1 " contentId=\"\\([a-zA-Z0-9_]+\\)\"" "=" ">")
           ;; angular imenu
           (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
-  (require 'instant-rename-tag)
-  )
+  (use-package instant-rename-tag
+    :load-path "site-lisp/instant-rename-tag"))
 
 
 (when (executable-find "prettier")

@@ -24,7 +24,8 @@
     (global-set-key (kbd "M-?") 'rg-project)))
 
 
-(require 'grep-dired)
+(use-package grep-dired
+  :load-path "site-lisp/grep-dired")
 
 
 (provide 'init-grep)
