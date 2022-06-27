@@ -6,30 +6,32 @@
 
 
 (use-package web-mode
+  :mode
+  (("\\.phtml\\'" . web-mode)
+   ("\\.cmp\\'" . web-mode)           ; salesforce
+   ("\\.app\\'" . web-mode)           ; salesforce
+   ("\\.page\\'" . web-mode)          ; salesforce
+   ("\\.component\\'" . web-mode)     ; salesforce
+   ("\\.wp\\'" . web-mode)
+   ("\\.vue\\'" . web-mode)
+   ("\\.tmpl\\'" . web-mode)
+   ("\\.module\\'" . web-mode)
+   ("\\.inc\\'" . web-mode)
+   ("\\.hbs\\'" . web-mode)
+   ("\\.tpl\\'" . web-mode)
+   ("\\.[gj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)
+   ("\\.ftl\\'" . web-mode)
+   ("\\.html?\\'" . web-mode)
+   ("\\.xul?\\'" . web-mode)
+   ("\\.eex?\\'" . web-mode)
+   ("\\.xml?\\'" . web-mode)
+   ("\\.\\(jst\\|ejs\\|rhtml\\)\\(\\.erb\\)?\\'"  . web-mode) ; ruby
+   )
   :config
-  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.cmp\\'" . web-mode)) ; salesforce
-  (add-to-list 'auto-mode-alist '("\\.app\\'" . web-mode)) ; salesforce
-  (add-to-list 'auto-mode-alist '("\\.page\\'" . web-mode)) ; salesforce
-  (add-to-list 'auto-mode-alist '("\\.component\\'" . web-mode)) ; salesforce
-  (add-to-list 'auto-mode-alist '("\\.wp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.module\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.inc\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.ftl\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.xul?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.eex?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.\\(jst\\|ejs\\|rhtml\\)\\(\\.erb\\)?\\'"  . web-mode)) ; ruby
   ;; make org-mode export fail, I use evil and evil-matchit
   ;; to select text, so expand-region.el is not used
 
@@ -65,11 +67,11 @@
 
 
 (when (use-package ng2-mode
+        :mode  (("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode)
+                ("*\\.component\\.html\\'" . ng2-mode))
         :config
-        (add-to-list 'auto-mode-alist '("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode))
-        (add-to-list 'auto-mode-alist '("*\\.component\\.html\\'" . ng2-mode))
         (when (functionp 'prettier-html-on-save-mode)
-          (add-hook 'ng2-mode 'prettier-html-on-save-mode)))  )
+          (add-hook 'ng2-mode 'prettier-html-on-save-mode))))
 
 (provide 'init-web-mode)
 ;;; init-web-mode.el ends here

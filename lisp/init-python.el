@@ -17,8 +17,7 @@
 (use-package pip-requirements)
 
 (use-package toml-mode
-  :config
-  (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))
+  :mode ("poetry\\.lock\\'" . toml-mode))
 
 
 (use-package reformatter

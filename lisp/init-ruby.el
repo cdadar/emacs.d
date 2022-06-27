@@ -77,6 +77,7 @@
 
 ;;; ERB
 (use-package mmm-mode
+  :mode  ("\\.jst\\.ejs\\'"  . html-erb-mode)
   :config
   (require 'derived)
 
@@ -95,7 +96,6 @@
   (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
 
   (add-auto-mode 'html-erb-mode "\\.rhtml\\'" "\\.html\\.erb\\'")
-  (add-to-list 'auto-mode-alist '("\\.jst\\.ejs\\'"  . html-erb-mode))
 
   (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\(\\.erb\\)?\\'" 'erb)
   (sanityinc/set-up-mode-for-erb 'yaml-mode)

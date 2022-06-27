@@ -24,6 +24,7 @@
 (use-package org
   :bind
   ((("C-c c" . org-capture)))
+  :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :config
   (progn
    (when *is-a-mac*
@@ -601,8 +602,6 @@ typical word processor."
         (org-archive-subtree)
         (setq org-map-continue-from (outline-previous-heading)))
       "/CANCELLED" 'file))
-
-   (add-to-list 'auto-mode-alist '("\\.\\(org|org_archive\\)\\'" . org-mode))
 
    
 

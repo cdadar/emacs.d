@@ -9,9 +9,8 @@
   (:map ledger-mode-map
         ("RET" . newline)
         ("C-o" . open-line))
+  :mode ("\\.\\(dat\\|ledger\\)\\'" . ledger-mode)
   :config
-  (add-to-list 'auto-mode-alist '("\\.\\(dat\\|ledger\\)\\'" . ledger-mode))
-
   (setq ledger-highlight-xact-under-point nil
         ledger-use-iso-dates nil)
 
