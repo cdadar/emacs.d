@@ -22,3 +22,6 @@
 [submodule "site-lisp/corfu-english-helper"]
 	path = site-lisp/corfu-english-helper
 	url = git@github.com:manateelazycat/corfu-english-helper.git
+[submodule "site-lisp/color-rg"]
+	path = site-lisp/color-rg
+	url = git@github.com:manateelazycat/color-rg.git
