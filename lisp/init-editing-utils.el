@@ -490,6 +490,13 @@ ORIG is the advised function, which is called with its ARGS."
 (use-package delete-block
   :load-path "site-lisp/delete-block")
 
+
+(use-package color-rg
+  :load-path "site-lisp/color-rg"
+  :bind
+  (("M-s M-r" . color-rg-search-input)
+   :map isearch-mode-map ("M-s M-s" . isearch-toggle-color-rg)))
+
 (defun move-file (new-location)
   "Write this file to NEW-LOCATION, and delete the old one."
   (interactive
