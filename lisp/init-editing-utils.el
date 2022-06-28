@@ -181,11 +181,10 @@
          ("C-+" . mc/mark-next-like-this)
          ("C-c C-<" . mc/mark-all-like-this)
          ;; From active region to multiple cursors:
-         ("C-c m r" . set-rectangular-region-anchor)
-         ("C-c m c" . mc/edit-lines)
-         ("C-c m e" . mc/edit-ends-of-lines)
-         ("C-c m a" . mc/edit-beginnings-of-lines)
-         ))
+         ("C-c M r" . set-rectangular-region-anchor)
+         ("C-c M c" . mc/edit-lines)
+         ("C-c M e" . mc/edit-ends-of-lines)
+         ("C-c M a" . mc/edit-beginnings-of-lines)))
 
 ;; Train myself to use M-f and M-b instead
 (global-unset-key [M-left])

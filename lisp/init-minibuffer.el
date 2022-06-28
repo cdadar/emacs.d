@@ -68,7 +68,7 @@
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings (mode-specific-map)
          ("C-c h" . consult-history)
-         ("C-c M" . consult-mode-command)
+         ("C-c m" . consult-mode-command)
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
@@ -271,7 +271,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 
 (with-eval-after-load 'yasnippet
   (use-package consult-yasnippet
-    :bind (("M-Y" . consult-yasnippet))))
+    :bind (("M-+" . consult-yasnippet))))
 
 (with-eval-after-load 'org-roam
   (use-package consult-org-roam
