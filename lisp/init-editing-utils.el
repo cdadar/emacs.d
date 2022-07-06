@@ -476,7 +476,8 @@ ORIG is the advised function, which is called with its ARGS."
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 (use-package insert-translated-name
-  :load-path "site-lisp/insert-translated-name")
+  :load-path "site-lisp/insert-translated-name"
+  :commands insert-translated-name-insert)
 
 (use-package clip2org
   :load-path "site-lisp/clip2org")
