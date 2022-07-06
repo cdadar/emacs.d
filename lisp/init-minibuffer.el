@@ -269,9 +269,9 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 
 
 
-(with-eval-after-load 'yasnippet
-  (use-package consult-yasnippet
-    :bind (("M-+" . consult-yasnippet))))
+(use-package consult-yasnippet
+  :commands consult-yasnippet
+  :bind (("M-+" . consult-yasnippet)))
 
 (with-eval-after-load 'org-roam
   (use-package consult-org-roam
