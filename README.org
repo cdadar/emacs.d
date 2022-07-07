@@ -1,0 +1,17 @@
+* 简介
+
+** 配置理念
+
+- forked [[https://github.com/purcell/emacs.d][purcell/emacs.d]]
+- 添加了写自己个人使用的配置
+
+** 使用配置说明
+首先clone仓库，然后在仓库根目录运行以下命令更新submodule：
+
+#+begin_src bash
+git submodule update --init --recursive
+#+end_src
+
+** 安装外部依赖
+- ripgrep (https://github.com/BurntSushi/ripgrep)  very very very fast!!!
+- libnotify-tools 提供 org-pomodoro 的通知命令 =notify-send=
