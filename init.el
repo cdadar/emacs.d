@@ -191,11 +191,20 @@
 
 
 ;; Allow access from emacsclient
-(add-hook 'after-init-hook
-          (lambda ()
-            (require 'server)
-            (unless (server-running-p)
-              (server-start))))
+;; (add-hook 'after-init-hook
+;;           (lambda ()
+;;             (require 'server)
+;;             (unless (server-running-p)
+;;               (server-start))))
+
+(use-package server
+  :ensure nil
+  :init
+  (require 'server)
+  :hook
+  (after-init . (lambda ()
+                  (unless (server-running-p)
+                    (server-start)))))
 
 ;; Variables configured via the interactive 'customize' interface
 (when (file-exists-p custom-file)
