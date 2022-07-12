@@ -920,6 +920,11 @@ typical word processor."
 
 (use-package org-ql)
 
+(use-package org-super-links
+  :bind (("C-c s s" . org-super-links-link)
+	   ("C-c s l" . org-super-links-store-link)
+	   ("C-c s C-l" . org-super-links-insert-link)))
+
 
 (provide 'init-org)
 ;;; init-org.el ends here
