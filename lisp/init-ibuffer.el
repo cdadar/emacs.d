@@ -60,6 +60,7 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (use-package tempbuf
+  :ensure nil
   :load-path "site-lisp/tempbuf"
   :hook
   ((custom-mode w3-mode Man-mode view-mode) . turn-on-tempbuf-mode))

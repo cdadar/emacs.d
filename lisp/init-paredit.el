@@ -35,6 +35,7 @@
         (enable-paredit-mode)))
 
   (use-package paredit-extension
+    :ensure nil
     :load-path "site-lisp/paredit-extension"))
 
 (provide 'init-paredit)

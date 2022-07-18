@@ -25,6 +25,7 @@
 
 
 (use-package grep-dired
+  :ensure nil
   :load-path "site-lisp/grep-dired")
 
 

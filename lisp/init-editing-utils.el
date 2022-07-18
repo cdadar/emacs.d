@@ -476,23 +476,28 @@ ORIG is the advised function, which is called with its ARGS."
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 (use-package insert-translated-name
+  :ensure nil
   :load-path "site-lisp/insert-translated-name"
   :commands insert-translated-name-insert)
 
 (use-package clip2org
+  :ensure nil
   :load-path "site-lisp/clip2org")
 
 (use-package advance-words-count
+  :ensure nil
   :load-path "site-lisp/advance-words-count"
   :config
   (require 'advance-wc-mode))
 
 
 (use-package delete-block
+  :ensure nil
   :load-path "site-lisp/delete-block")
 
 
 (use-package color-rg
+  :ensure nil
   :load-path "site-lisp/color-rg"
   :bind
   (("M-s M-r" . color-rg-search-input)
