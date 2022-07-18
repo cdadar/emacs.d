@@ -50,6 +50,7 @@
           ;; angular imenu
           (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
   (use-package instant-rename-tag
+    :ensure nil
     :load-path "site-lisp/instant-rename-tag"))
 
 

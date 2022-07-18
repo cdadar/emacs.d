@@ -107,6 +107,7 @@
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package corfu-english-helper
+  :ensure nil
   :after corfu
   :load-path "site-lisp/corfu-english-helper"
   :bind
