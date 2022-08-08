@@ -1,6 +1,7 @@
 ;; org setting
 (setq org-directory "~/org-mode/")
 
+(setq system-time-locale "en_US")
 
 ;; define the refile targets
 (setq org-agenda-file-inbox (expand-file-name "inbox.org" org-directory))
@@ -22,6 +23,7 @@
 ;;(setq org-mobile-files (list "~/org-mode/plan.org"))
 (setq org-mobile-inbox-for-pull "~/MobileOrg/index.org")
 (setq org-mobile-directory "~/MobileOrg")
+
 
 
 
