@@ -5,8 +5,7 @@
 ;;
 ;;; Code:
 
-(when (executable-find "/usr/local/bin/readtags")
-  (use-package citre
+(use-package citre
     :diminish
     :bind (("C-x c j" . citre-jump+)
            ("C-x c J" . citre-jump-back)
@@ -23,7 +22,7 @@ Fallback to `xref-find-definitions'."
       (interactive)
       (condition-case _
           (citre-jump)
-        (error (call-interactively #'xref-find-definitions))))))
+        (error (call-interactively #'xref-find-definitions)))))
 
 (provide 'init-citre)
 ;;; init-citre.el ends here
