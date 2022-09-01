@@ -836,6 +836,7 @@ typical word processor."
 
 (use-package org-download
   :after org
+  :init (require 'org-download)
   :hook
   (dired-mode-hook . org-download-enable)
   (org-mode-hook . org-download-enable)
