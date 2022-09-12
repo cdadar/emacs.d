@@ -13,7 +13,14 @@
         ("C-c ! c" . flymake-start))
   :config
   (unless (version< emacs-version "28.1")
-    (setq eldoc-documentation-function 'eldoc-documentation-compose))
+    (setq eldoc-documentation-function 'eldoc-documentation-compose)
+
+    (add-hook 'flymake-mode-hook
+            (lambda ()
+              (setq eldoc-documentation-functions
+                    (cons 'flymake-eldoc-function
+                          (delq 'flymake-eldoc-function eldoc-documentation-functions))))))
+
   (use-package flymake-collection
     :hook
     (after-init  . flymake-collection-hook-setup)
@@ -22,6 +29,9 @@
     (defun python-mode-setup-flymake ()
       (add-hook 'flymake-diagnostic-functions 'flymake-collection-pycodestyle nil t)
       (flymake-mode +1))))
+
+
+
 
 (provide 'init-flymake)
 ;;; init-flymake.el ends here
