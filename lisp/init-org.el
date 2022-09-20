@@ -883,7 +883,16 @@ typical word processor."
              :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
-            ("b" "bible" plain "%?"
+            ("b" "bible")
+            ("bo" "other" plain "%?"
+             :target (file+head "bible/other/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("by" "yisila" plain "%?"
+             :target (file+head "bible/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
+            ("bb" "bible" plain "%?"
              :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
