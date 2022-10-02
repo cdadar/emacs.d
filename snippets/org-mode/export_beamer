@@ -1,0 +1,13 @@
+# key: export_beamer
+# name: export_beamer
+# --
+#+OPTIONS:   num:t toc:nil
+
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+
+#+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
+#+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
+#+LaTeX_HEADER: \usetheme{metropolis}
+#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
