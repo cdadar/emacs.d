@@ -487,7 +487,7 @@ ORIG is the advised function, which is called with its ARGS."
 (use-package advance-words-count
   :ensure nil
   :load-path "site-lisp/advance-words-count"
-  :config
+  :init
   (require 'advance-wc-mode))
 
 
