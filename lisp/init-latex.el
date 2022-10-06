@@ -12,7 +12,7 @@
   (LaTeX-mode . abbrev-mode)
   (LaTeX-mode . LaTeX-math-mode)
   (LaTeX-mode . turn-on-reftex)
-  (LaTeX-mode-hook . (lambda ()
+  (LaTeX-mode . (lambda ()
                        (LaTeX-add-environments
                         '("theorem" LaTeX-env-label)
                         '("proposition" LaTeX-env-label)
@@ -20,7 +20,7 @@
                         '("definition" LaTeX-env-label)
                         '("example" LaTeX-env-label)
                         '("remark" LaTeX-env-label))))
-  (LaTeX-mode-hook . (lambda ()
+  (LaTeX-mode . (lambda ()
                        (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
                        (setq TeX-command-default "XeLaTeX")
                        (setq TeX-save-query  nil )
