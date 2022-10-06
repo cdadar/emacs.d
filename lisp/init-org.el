@@ -884,17 +884,21 @@ typical word processor."
                                 "#+title: ${title}\n")
              :unnarrowed t)
             ("b" "bible")
-            ("bo" "other" plain "%?"
+            ("bo" "听道" plain "%?"
              :target (file+head "bible/other/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
+                                "#+title: ${title}\n#+tags: 听道")
              :unnarrowed t)
-            ("by" "yisila" plain "%?"
+            ("by" "以斯拉学习" plain "%?"
              :target (file+head "bible/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
-            ("bb" "bible" plain "%?"
+            ("bb" "个人" plain "%?"
              :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
+             :unnarrowed t)
+            ("be" "例证" plain "%?"
+             :target (file+head "bible/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n#+tags: 例证")
              :unnarrowed t)
             ("p" "program" plain "%?"
              :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
