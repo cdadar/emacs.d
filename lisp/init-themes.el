@@ -12,7 +12,7 @@
   (modus-themes-load-themes)
   :config
   ;; Load the theme of your choice:
-  (modus-themes-load-operandi)  ;; OR (modus-themes-load-vivendi)
+  (modus-themes-load-vivendi)    ;; OR(modus-themes-load-operandi)
   :bind ("<f5>" . modus-themes-toggle))
 
 
