@@ -538,5 +538,10 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package restart-emacs)
 
+(use-package pangu-spacing
+  :init
+  (setq pangu-spacing-real-insert-separtor t)
+  (global-pangu-spacing-mode 1))
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
