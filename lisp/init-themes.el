@@ -1,7 +1,7 @@
 ;;; init-themes.el --- Defaults for themes -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
-(use-package modus-themes
+(use-package emacs
   :ensure nil
   :init
   ;; Add all your customizations prior to loading the themes
@@ -9,8 +9,9 @@
         modus-themes-bold-constructs nil
         modus-themes-region '(bg-only no-extend))
   :config
-  ;; Load the theme of your choice:
-  (modus-themes-load-vivendi)    ;; OR(modus-themes-load-operandi)
+  (progn
+    ;; Load the theme of your choice:
+    (load-theme 'modus-vivendi))
   :bind ("<f5>" . modus-themes-toggle))
 
 
