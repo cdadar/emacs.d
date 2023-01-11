@@ -10,7 +10,7 @@
 
 
 
-;; 如果配置好了， 下面20个汉字与40个英文字母应该等长
+;; 如果配置好了， 下面 20 个汉字与 40 个英文字母应该等长
 ;; here are 20 hanzi and 40 english chars, see if they are the same width
 ;;
 ;; aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa|
@@ -74,19 +74,19 @@
         (apply action))))
 
 ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
-(setq initial-frame-alist '((font . "Sarasa Mono SC")))
-(setq default-frame-alist '((font . "Sarasa Mono SC")))
+(setq initial-frame-alist '((font . "Cascadia Mono")))
+(setq default-frame-alist '((font . "Cascadia Mono")))
 
 (defun cdadar/set-backup-fonts()
   "Set the emoji and glyph fonts."
   (when (display-graphic-p)
     (progn
-      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Sarasa Mono SC" 16)) ;; 11 13 17 19 23
+      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Cascadia Mono" 16)) ;; 11 13 17 19 23
       ;; chinese font
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (set-fontset-font (frame-parameter nil 'font)
                           charset
-                          (font-spec :family "Sarasa Mono SC")))) ;; 14 16 20 22 28
+                          (font-spec :family "Cascadia Mono")))) ;; 14 16 20 22 28
     ))
 
 ;; respect default terminal fonts
