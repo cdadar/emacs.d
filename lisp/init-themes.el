@@ -11,7 +11,7 @@
   :config
   (progn
     ;; Load the theme of your choice:
-    (load-theme 'modus-vivendi))
+    (load-theme 'modus-operandi))
   :bind ("<f5>" . modus-themes-toggle))
 
 
