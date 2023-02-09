@@ -68,14 +68,6 @@
 
 
 
-(use-package beacon
-  :config
-  (setq-default beacon-lighter "")
-  (setq-default beacon-size 20)
-  :hook
-  (after-init . beacon-mode))
-
-
 ;;; Newline behaviour
 
 (global-set-key (kbd "RET") 'newline-and-indent)
