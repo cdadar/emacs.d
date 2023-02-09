@@ -47,15 +47,10 @@
   (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
 
   (define-key corfu-map (kbd "C-j") 'corfu-next)
-  (define-key corfu-map (kbd "C-k") 'corfu-previous))
+  (define-key corfu-map (kbd "C-k") 'corfu-previous)
 
-(use-package corfu-doc
-  :init
-  ;; (add-hook 'corfu-mode-hook #'corfu-doc-mode)
-  (define-key corfu-map (kbd "s-d") #'corfu-doc-toggle)
-  (define-key corfu-map (kbd "s-p") #'corfu-doc-scroll-down) ;; corfu-next
-  (define-key corfu-map (kbd "s-n") #'corfu-doc-scroll-up)   ;; corfu-previous
-  )
+  (when (featurep 'corfu-popupinfo)
+    (corfu-popupinfo-mode)))
 
 ;; Use dabbrev with Corfu!
 (use-package dabbrev
