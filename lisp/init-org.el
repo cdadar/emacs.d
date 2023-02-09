@@ -177,7 +177,7 @@ typical word processor."
     
 ;;; Capturing
     (defun get-year-and-month ()
-      (list (format-time-string "%Y年") (format-time-string "%m月")))
+      (list (format-time-string "%Y 年") (format-time-string "%m 月")))
 
 
     (defun find-month-tree ()
@@ -652,23 +652,27 @@ typical word processor."
 
     (org-babel-do-load-languages
      'org-babel-load-languages
-     `((R . t)
+     (seq-filter
+      (lambda (pair)
+      (locate-library (concat "ob-" (symbol-name (car pair)))))
+     '((R . t)
        (ditaa . t)
        (dot . t)
        (emacs-lisp . t)
-       (lisp . t)
        (gnuplot . t)
        (haskell . nil)
        (latex . t)
+       (ledger . t)
        (ocaml . nil)
        (octave . t)
        (plantuml . t)
        (python . t)
        (ruby . t)
        (screen . nil)
-       (,(if (locate-library "ob-sh") 'sh 'shell) . t)
+       (sh . t) ;; obsolete
+       (shell . t)
        (sql . t)
-       (sqlite . t)))
+       (sqlite . t))))
 
     (require 'org-crypt)
     ;; org-mode 設定
