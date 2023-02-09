@@ -12,7 +12,8 @@
   :mode ("\\.\\(dat\\|ledger\\)\\'" . ledger-mode)
   :config
   (setq ledger-highlight-xact-under-point nil
-        ledger-use-iso-dates nil)
+        ledger-use-iso-dates nil
+        ledger-mode-should-check-version nil)
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-copy-env "LEDGER_FILE"))
