@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: doc page parasm
+# key: dpp
+# --
+
+|PageIndex |是  |int |  分页索引，默认为 1   |
+|PageSize |是  |int |  每页条数，默认 20   |
