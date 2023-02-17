@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: doc result
+# key: dr
+# --
+
+| 参数名           | 类型    | 说明                        |
+| :-----           | :-----  | -----                       |
+| GroupId          | long    | 衍生品集 Id                 |
