@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: doc params
+# key: dp
+# --
+
+
+|参数名|必选|类型|说明|
+|:----    |:---|:----- |-----   |
+|UserId |是  |long | 用户 id    |
