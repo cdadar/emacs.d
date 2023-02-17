@@ -1,0 +1,36 @@
+# key: dpr
+# name: doc page result
+# --
+**返回示例**
+
+\`\`\`
+  {
+    "Code": 0,
+        "Msg": "",
+    "Data": {
+    },
+        "IsSuccess":true
+  }
+\`\`\`
+
+ **返回参数说明**
+
+|参数名|类型|说明|
+|:-----  |:-----|-----|
+|| PagingResult<[${1:dto}](${2:url} "${1:$(yas/substr yas-text "[^\s]*")}")>|实体，参考附录|
+
+ **备注**
+
+- PagingResult 说明
+
+|参数名|类型|说明|
+|:-----  |:-----|-----                           |
+|Data       |List<T>   |分页数据  |
+|Total      |int       |分页数据  |
+|PageSize   |int       |每页记录条数  |
+|PageIndex  |int       |页索引，从 1 开始  |
+
+
+ **备注**
+
+- 无
