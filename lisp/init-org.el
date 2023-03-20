@@ -905,6 +905,10 @@ typical word processor."
              :target (file+head "bible/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 例证")
              :unnarrowed t)
+            ("bs" "查经" plain "%?"
+             :target (file+head "bible/study/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n#+tags: 查经")
+             :unnarrowed t)
             ("p" "program" plain "%?"
              :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
