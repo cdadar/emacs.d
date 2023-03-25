@@ -19,9 +19,7 @@
     (exec-path-from-shell-copy-env "LEDGER_FILE"))
 
   (with-eval-after-load 'flymake
-    (use-package ledger-flymake
-      :config
-      (ledger-flymake-enable))))
+    (ledger-flymake-enable)))
 
 (use-package hledger-mode)
 
