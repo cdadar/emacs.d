@@ -7,7 +7,7 @@
 #+OPTIONS: toc:nil  H:10 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:nil
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
-#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,9in}, truedimen]{geometry}
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
