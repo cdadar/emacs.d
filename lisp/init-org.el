@@ -648,7 +648,7 @@ typical word processor."
             "xelatex -interaction nonstopmode -output-directory %o %f")) ;; org v8
     ;; }}
 
-    (use-package ox-epub)
+
     
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -947,6 +947,11 @@ typical word processor."
 ;;   :bind (("C-c s s" . org-super-links-link)
 ;; 	   ("C-c s l" . org-super-links-store-link)
 ;; 	   ("C-c s C-l" . org-super-links-insert-link)))
+
+
+(use-package ox-epub
+  :after org
+  :ensure t)
 
 
 (provide 'init-org)

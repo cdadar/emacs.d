@@ -6,10 +6,7 @@
 
 (use-package elisp-slime-nav
   :hook
-  ((emacs-lisp-mode-hook ielm-mode-hook) . turn-on-elisp-slime-nav-mode)
-
-
-  )
+  ((emacs-lisp-mode-hook ielm-mode-hook) . turn-on-elisp-slime-nav-mode))
 ;; (with-eval-after-load 'ggtags-mode
 ;;   (add-hook 'emacs-lisp-mode-hook
 ;;             (lambda ()

@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: bible study question
+# key: bibleₛtudy_question
+# --
+
+#+OPTIONS: toc:nil  H:10 tex:t num:nil
+#+OPTIONS: author:nil date:nil title:t
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
+#+LaTeX_HEADER: \usepackage{enumitem}
+#+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
+#+LaTeX_HEADER: \setCJKmainfont{Noto Serif SC}
+#+LATEX_HEADER: \usepackage{indentfirst}
+#+LATEX_HEADER: \setlength{\parindent}{2em}
+#+LATEX_HEADER: \setlength{\parskip}{0em}
+#+LATEX_HEADER: \usepackage{titlesec} %自定义多级标题格式的宏包
+#+LATEX_HEADER: \titleformat{\section}[block]{\mdseries}{}{1em}{}[]
+#+LATEX_HEADER: \titleformat{\subsection}[block]{\mdseries}{}{1em}{}[]
