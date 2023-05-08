@@ -10,7 +10,7 @@
 #+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+#+LaTeX_HEADER: \setCJKmainfont{楷体}
 #+LATEX_HEADER: \renewcommand\maketitle{}
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
