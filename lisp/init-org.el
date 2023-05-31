@@ -951,7 +951,8 @@ typical word processor."
 
 (use-package ox-epub
   :after org
-  :ensure t)
+  :config
+  (require 'ox-epub))
 
 
 (provide 'init-org)
