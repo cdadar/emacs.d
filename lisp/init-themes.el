@@ -11,14 +11,15 @@
   :config
   (progn
     ;; Load the theme of your choice:
-    (load-theme 'modus-vivendi))
-  :bind ("<f5>" . modus-themes-toggle))
+    (load-theme 'modus-operandi))
+  :bind
+  (("<f5>" . modus-themes-toggle)))
 
 
 
 (use-package dimmer
   :hook
-  (after-init . dimmer-mode)
+  ((after-init . dimmer-mode))
   :config
   (setq-default dimmer-fraction 0.15)
   ;; TODO: file upstream as a PR
@@ -35,7 +36,7 @@
   :bind
   (([S-down-mouse-3] . minions-minor-modes-menu))
   :hook
-  (after-init . minions-mode))
+  ((after-init . minions-mode)))
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
