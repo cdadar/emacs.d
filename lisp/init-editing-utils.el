@@ -67,8 +67,8 @@
   (after-init . mode-line-bell-mode))
 
 
-
 ;;; Newline behaviour (see also electric-indent-mode, enabled above)
+
 (defun sanityinc/newline-at-end-of-line ()
   "Move to end of line, enter a newline, and reindent."
   (interactive)
