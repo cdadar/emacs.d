@@ -536,5 +536,10 @@ ORIG is the advised function, which is called with its ARGS."
   :hook
   (org-mode . '(lambda () (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
 
+
+(use-package wakatime-mode
+  :init
+  (global-wakatime-mode))
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
