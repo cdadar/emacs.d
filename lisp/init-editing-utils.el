@@ -532,8 +532,9 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package pangu-spacing
   :init
-  (setq pangu-spacing-real-insert-separtor t)
-  (global-pangu-spacing-mode 1))
+  (global-pangu-spacing-mode t)
+  :hook
+  (org-mode . '(lambda () (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
