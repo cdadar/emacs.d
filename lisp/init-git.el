@@ -27,7 +27,8 @@
    :map magit-status-mode-map
    ("C-M-<up>" . magit-section-up))
   :config
-  (setq-default magit-diff-refine-hunk t)
+  (setq-default magit-diff-refine-'all)
+
   (defun sanityinc/magit-or-vc-log-file (&optional prompt)
     (interactive "P")
     (if (and (buffer-file-name)
