@@ -2,7 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package nix-mode)
+(use-package nix-mode
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs '((nix-mode) . ("nil")))))
 (use-package nixpkgs-fmt)
 (use-package nix-sandbox)
 (use-package nix-buffer)
