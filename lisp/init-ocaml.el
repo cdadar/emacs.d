@@ -2,10 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(with-eval-after-load 'eglot
-  (put 'tuareg-mode 'eglot-language-id "ocaml")
-  (add-to-list 'eglot-server-programs '((tuareg-mode) . ("ocamllsp")) t))
-
 (use-package tuareg
   :config
   (defvar-local tuareg-previous-tuareg-buffer nil
