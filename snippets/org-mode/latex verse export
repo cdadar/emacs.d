@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: latex verse export
+# key: latex_verse
+# --
+#+ATTR_LATEX: :center t :latexcode \color{red} :lines 5
+#+ATTR_LATEX: :versewidth Feed’st thy light’s flame with self-substantial fuel,
+#+BEGIN_VERSE
+$0
+#+END_VERSE
