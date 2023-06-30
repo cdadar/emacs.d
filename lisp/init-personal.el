@@ -74,8 +74,8 @@
         (apply action))))
 
 ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
-(setq initial-frame-alist '((font . "Cascadia Mono")))
-(setq default-frame-alist '((font . "Cascadia Mono")))
+;; (setq initial-frame-alist '((font . "Cascadia Mono")))
+;; (setq default-frame-alist '((font . "Cascadia Mono")))
 
 (defun cdadar/set-backup-fonts()
   "Set the emoji and glyph fonts."
@@ -92,7 +92,7 @@
 ;; respect default terminal fonts
 ;; if we're in a gui set the fonts appropriately
 ;; for daemon sessions and and nondaemons
-(apply-if-gui 'cdadar/set-backup-fonts)
+;; (apply-if-gui 'cdadar/set-backup-fonts)
 
 (defun cdadar/reset-frame-size (&optional frame)
   "重设窗体大小"
