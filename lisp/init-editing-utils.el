@@ -542,5 +542,7 @@ ORIG is the advised function, which is called with its ARGS."
   :init
   (global-wakatime-mode))
 
+(use-package opencc)
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
