@@ -1,0 +1,4 @@
+# key: color
+# name: fonts color
+# --
+@@latex:{\color{red}@@$0@@latex:}@@
