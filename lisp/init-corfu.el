@@ -37,6 +37,7 @@
   ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
 
   (corfu-history-mode)
+  (corfu-popupinfo-mode)
 
   (defun corfu-move-to-minibuffer ()
     (interactive)
@@ -47,10 +48,8 @@
   (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
 
   (define-key corfu-map (kbd "C-j") 'corfu-next)
-  (define-key corfu-map (kbd "C-k") 'corfu-previous)
+  (define-key corfu-map (kbd "C-k") 'corfu-previous))
 
-  (when (featurep 'corfu-popupinfo)
-    (corfu-popupinfo-mode)))
 
 ;; Use dabbrev with Corfu!
 (use-package dabbrev
