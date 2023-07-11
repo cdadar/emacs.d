@@ -74,34 +74,34 @@
         (apply action))))
 
 ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
-;; (setq initial-frame-alist '((font . "Cascadia Mono")))
-;; (setq default-frame-alist '((font . "Cascadia Mono")))
+(setq initial-frame-alist '((font . "Cascadia Mono")))
+(setq default-frame-alist '((font . "Cascadia Mono")))
 
-;; (defun cdadar/set-backup-fonts()
-;;   "Set the emoji and glyph fonts."
-;;   (when (display-graphic-p)
-;;     (progn
-;;       (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Cascadia Mono" 16)) ;; 11 13 17 19 23
-;;       ;; chinese font
-;;       (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;         (set-fontset-font (frame-parameter nil 'font)
-;;                           charset
-;;                           (font-spec :family "Cascadia Mono")))) ;; 14 16 20 22 28
-;;     ))
+(defun cdadar/set-backup-fonts()
+  "Set the emoji and glyph fonts."
+  (when (display-graphic-p)
+    (progn
+      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Cascadia Mono" 16)) ;; 11 13 17 19 23
+      ;; chinese font
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset
+                          (font-spec :family "Cascadia Mono")))) ;; 14 16 20 22 28
+    ))
 
 ;; respect default terminal fonts
 ;; if we're in a gui set the fonts appropriately
 ;; for daemon sessions and and nondaemons
-;; (apply-if-gui 'cdadar/set-backup-fonts)
+(apply-if-gui 'cdadar/set-backup-fonts)
 
 
-(use-package cnfonts
-  :config
-  (require 'cnfonts)
-  (cnfonts-mode 1)
-  :bind  (:map cnfonts-mode-map
-               ("C--" . cnfonts-decrease-fontsize)
-               ("C-+" . cnfonts-increase-fontsize)))
+;; (use-package cnfonts
+;;   :config
+;;   (require 'cnfonts)
+;;   (cnfonts-mode 1)
+;;   :bind  (:map cnfonts-mode-map
+;;                ("C--" . cnfonts-decrease-fontsize)
+;;                ("C-+" . cnfonts-increase-fontsize)))
 
 (defun cdadar/reset-frame-size (&optional frame)
   "重设窗体大小"
