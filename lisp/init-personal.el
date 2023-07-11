@@ -81,7 +81,7 @@
   "Set the emoji and glyph fonts."
   (when (display-graphic-p)
     (progn
-      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Cascadia Mono" 16)) ;; 11 13 17 19 23
+      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Cascadia Mono" 13)) ;; 11 13 17 19 23
       ;; chinese font
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (set-fontset-font (frame-parameter nil 'font)
