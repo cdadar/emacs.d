@@ -550,5 +550,12 @@ ORIG is the advised function, which is called with its ARGS."
                emacs-basic-display
                (not (display-graphic-p))))
       (daemonp)))
+
+
+;; Font
+(defun font-installed-p (font-name)
+  "Check if font with FONT-NAME is available."
+  (find-font (font-spec :name font-name)))
+
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
