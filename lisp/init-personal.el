@@ -85,8 +85,8 @@
       (when (font-installed-p "JetBrainsMono")
         (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "JetBrainsMono" 13)));; 11 13 17 19 23
       ;; chinese font
-      (when (font-installed-p "LXGW WenKai")
-        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        (when (font-installed-p "LXGW WenKai")
           (set-fontset-font (frame-parameter nil 'font)
                             charset
                             (font-spec :family "LXGW WenKai"))))))) ;; 14 16 20 22 28
