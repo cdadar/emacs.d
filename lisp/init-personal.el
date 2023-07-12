@@ -86,7 +86,7 @@
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (set-fontset-font (frame-parameter nil 'font)
                           charset
-                          (font-spec :family "JetBrainsMono")))) ;; 14 16 20 22 28
+                          (font-spec :family "LXGW WenKai")))) ;; 14 16 20 22 28
     ))
 
 ;; respect default terminal fonts
