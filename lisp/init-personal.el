@@ -74,10 +74,6 @@
         (apply action))))
 
 ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
-(when (font-installed-p "JetBrainsMono")
-  (setq initial-frame-alist '((font . "JetBrainsMono")))
-  (setq default-frame-alist '((font . "JetBrainsMono"))))
-
 (defun cdadar/set-backup-fonts()
   "Set the emoji and glyph fonts."
   (when (display-graphic-p)
