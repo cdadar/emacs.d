@@ -74,20 +74,22 @@
         (apply action))))
 
 ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
-(setq initial-frame-alist '((font . "JetBrainsMono")))
-(setq default-frame-alist '((font . "JetBrainsMono")))
+(when (font-installed-p "JetBrainsMono")
+  (setq initial-frame-alist '((font . "JetBrainsMono")))
+  (setq default-frame-alist '((font . "JetBrainsMono"))))
 
 (defun cdadar/set-backup-fonts()
   "Set the emoji and glyph fonts."
   (when (display-graphic-p)
     (progn
-      (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "JetBrainsMono" 13)) ;; 11 13 17 19 23
+      (when (font-installed-p "JetBrainsMono")
+        (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "JetBrainsMono" 13)));; 11 13 17 19 23
       ;; chinese font
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (set-fontset-font (frame-parameter nil 'font)
-                          charset
-                          (font-spec :family "LXGW WenKai")))) ;; 14 16 20 22 28
-    ))
+      (when (font-installed-p "LXGW WenKai")
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "LXGW WenKai"))))))) ;; 14 16 20 22 28
 
 ;; respect default terminal fonts
 ;; if we're in a gui set the fonts appropriately
