@@ -81,12 +81,22 @@ locate PACKAGE."
 (eval-when-compile
   (require 'use-package))
 
+;; Update packages
+(unless (fboundp 'package-upgrade-all)
+  (use-package auto-package-update
+    :init
+    (setq auto-package-update-delete-old-versions t
+          auto-package-update-hide-results t)
+    (defalias 'package-upgrade-all #'auto-package-update-now)))
+
 ;; Required by `use-package'
 (use-package diminish)
 (use-package bind-key)
 
+
 ;; Update GPG keyring for GNU ELPA
 (use-package gnu-elpa-keyring-update)
+
 
 
 ;; package.el updates the saved version of package-selected-packages correctly only
@@ -114,6 +124,8 @@ advice for `require-package', to which ARGS are passed."
             (lambda ()
               (package--save-selected-packages
                (seq-uniq (append sanityinc/required-packages package-selected-packages))))))
+
+
 
 
 (use-package fullframe
