@@ -8,6 +8,7 @@
   ((prog-mode text-mode) . flymake-mode)
   :bind
   (:map flymake-mode-map
+        ("C-c ! l" . flymake-show-buffer-diagnostics)
         ("C-c ! n" . flymake-goto-next-error)
         ("C-c ! p" . flymake-goto-prev-error)
         ("C-c ! c" . flymake-start))
@@ -29,6 +30,23 @@
     (defun python-mode-setup-flymake ()
       (add-hook 'flymake-diagnostic-functions 'flymake-collection-pycodestyle nil t)
       (flymake-mode +1))))
+
+;; Use flycheck checkers with flymake, to extend its coverage
+(use-package flymake-flycheck
+  :after flycheck
+  :init
+  (setq-default flycheck-disabled-checkers
+                (append (default-value 'flycheck-disabled-checkers)
+                        '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package)))
+  (defun sanityinc/enable-flymake-flycheck ()
+    (setq-local flymake-diagnostic-functions
+                (append flymake-diagnostic-functions
+                        (flymake-flycheck-all-chained-diagnostic-functions))))
+
+  :hook
+  ((flymake-mode . sanityinc/enable-flymake-flycheck)
+   ((prog-mode text-mode) . flymake-mode)))
+
 
 
 (use-package flymake-diagnostic-at-point
@@ -52,8 +70,8 @@
                             (:note 'success)
                             (_ 'default))
                         'default))
-           :left-fringe 4
-           :right-fringe 4
+       :left-fringe 4
+       :right-fringe 4
        :max-width (round (* (frame-width) 0.62))
        :max-height (round (* (frame-height) 0.62))
        :internal-border-width 1
