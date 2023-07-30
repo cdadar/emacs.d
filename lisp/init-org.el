@@ -888,25 +888,28 @@ typical word processor."
              :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
-            ("b" "bible")
-            ("bo" "听道" plain "%?"
-             :target (file+head "bible/other/%<%Y%m%d%H%M%S>-${slug}.org"
+            ("c" "Christian")
+            ("co" "听道" plain "%?"
+             :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 听道")
              :unnarrowed t)
-            ("by" "以斯拉学习" plain "%?"
-             :target (file+head "bible/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
+            ("cy" "以斯拉学习" plain "%?"
+             :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
-            ("bb" "个人" plain "%?"
-             :target (file+head "bible/%<%Y%m%d%H%M%S>-${slug}.org"
+            ("cb" "个人" plain "%?"
+             :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+            ("cB" "圣经" plain "%?"
+             :target (file+head "christian/bible/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
-            ("be" "例证" plain "%?"
-             :target (file+head "bible/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
+            ("ce" "例证" plain "%?"
+             :target (file+head "christian/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 例证")
              :unnarrowed t)
-            ("bs" "查经" plain "%?"
-             :target (file+head "bible/study/%<%Y%m%d%H%M%S>-${slug}.org"
+            ("cs" "查经" plain "%?"
+             :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 查经")
              :unnarrowed t)
             ("p" "program" plain "%?"
