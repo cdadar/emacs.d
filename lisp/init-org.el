@@ -900,6 +900,7 @@ typical word processor."
             ("cb" "个人" plain "%?"
              :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
+             :unnarrowed t)
             ("cB" "圣经" plain "%?"
              :target (file+head "christian/bible/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
