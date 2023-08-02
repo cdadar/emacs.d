@@ -135,6 +135,9 @@
 (require 'init-folding)
 (require 'init-dash)
 
+(when (featurep 'treesit)
+  (require 'init-treesitter))
+
 ;;(require 'init-twitter)
 ;; (require 'init-mu)
 (require 'init-ledger)
