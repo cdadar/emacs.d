@@ -4,7 +4,7 @@
 
 (use-package envrc
   :diminish
-  :config
+  :init
   (defun sanityinc/maybe-enable-envrc-global-mode ()
     "Enable `envrc-global-mode' if `direnv' is installed."
     (when (executable-find "direnv")
