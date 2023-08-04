@@ -1,6 +1,6 @@
 ;;; init-mini.el --- Centaur Emacs minimal configurations.	-*- lexical-binding: t no-byte-compile: t -*-
 
-;; Copyright (C) 2018-2021 Vincent Zhang
+;; Copyright (C) 2018-2023 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -11,7 +11,7 @@
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2, or
+;; published by the Free Software Foundation; either version 3, or
 ;; (at your option) any later version.
 ;;
 ;; This program is distributed in the hope that it will be useful,
@@ -33,8 +33,8 @@
 ;;; Code:
 
 ;; Load path
-(push (locate-user-emacs-file "site-lisp") load-path)
-(push (locate-user-emacs-file "lisp") load-path)
+(push (expand-file-name "site-lisp" user-emacs-directory) load-path)
+(push (expand-file-name "lisp" user-emacs-directory) load-path)
 
 ;; Packages
 ;; Without this comment Emacs25 adds (package-initialize) here
@@ -69,8 +69,6 @@
               tab-width        4
               indent-tabs-mode nil)
 
-(setq fill-column 120)
-
 ;; UI
 (load-theme 'wombat t)
 
@@ -90,12 +88,16 @@
 ;;   (global-linum-mode 1))
 
 ;; Basic modes
-(recentf-mode 1)
-(ignore-errors (savehist-mode 1))
-(save-place-mode 1)
 (show-paren-mode 1)
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
+(recentf-mode 1)
+(when (fboundp 'savehist-mode)
+  (savehist-mode 1))
+(if (fboundp 'save-place-mode)
+    (save-place-mode 1)
+  (require 'saveplace)
+  (setq-default save-place t))
 
 (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (electric-pair-mode 1)
@@ -155,7 +157,6 @@
   (global-set-key [(super z)] #'undo)))
 
 ;; Keybindings
-(global-set-key (kbd "C-.") #'imenu)
 (global-set-key (kbd "<C-return>") #'rectangle-mark-mode)
 
 (defun revert-current-buffer ()
@@ -175,3 +176,4 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init-mini.el ends here
+

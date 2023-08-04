@@ -535,7 +535,7 @@ ORIG is the advised function, which is called with its ARGS."
   :init
   (global-pangu-spacing-mode t)
   :hook
-  (org-mode . '(lambda () (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
+  (org-mode . (lambda () (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
 
 
 (use-package wakatime-mode
@@ -544,12 +544,6 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package opencc)
 
-(defun childframe-workable-p ()
-  "Whether childframe is workable."
-  (or (not (or noninteractive
-               emacs-basic-display
-               (not (display-graphic-p))))
-      (daemonp)))
 
 
 ;; Font

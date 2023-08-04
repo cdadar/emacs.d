@@ -64,12 +64,12 @@ locate PACKAGE."
 ;; Initialize packages
 (unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
   (setq package-enable-at-startup nil)          ; To prevent initializing twice
+  (when (version< emacs-version  "29.1") (package-install 'use-package))
   (package-initialize))
 
 ;; Setup `use-package'
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+  (package-refresh-contents))
 
 ;; Should set before loading `use-package'
 (eval-and-compile
