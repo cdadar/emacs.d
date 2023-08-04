@@ -178,8 +178,7 @@
 (use-package shfmt)
 
 (use-package uptimes
-  :hook
-  (after-init . (lambda () (require 'uptimes)))
+  :defer t
   :config
   (setq-default uptimes-keep-count 200))
 
