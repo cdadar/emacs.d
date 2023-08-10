@@ -1,5 +1,5 @@
 ;; Install third-party treesitter-based modes
-(require-package 'clojure-ts-mode)
+(use-package clojure-ts-mode)
 
 
 ;; You can download per-architecture pre-compiled release from
