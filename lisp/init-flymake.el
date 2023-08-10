@@ -20,16 +20,7 @@
             (lambda ()
               (setq eldoc-documentation-functions
                     (cons 'flymake-eldoc-function
-                          (delq 'flymake-eldoc-function eldoc-documentation-functions))))))
-
-  (use-package flymake-collection
-    :hook
-    (after-init  . flymake-collection-hook-setup)
-    (python-mode . python-mode-setup-flymake)
-    :config
-    (defun python-mode-setup-flymake ()
-      (add-hook 'flymake-diagnostic-functions 'flymake-collection-pycodestyle nil t)
-      (flymake-mode +1))))
+                          (delq 'flymake-eldoc-function eldoc-documentation-functions)))))))
 
 ;; Use flycheck checkers with flymake, to extend its coverage
 (use-package flymake-flycheck
