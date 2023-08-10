@@ -151,21 +151,23 @@
   ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
   ;; For some commands and buffer sources it is useful to configure the
   ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (when (and (executable-find "rg"))
+    (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
+      (interactive (list prefix-arg (when-let ((s (symbol-at-point)))
+                                      (symbol-name s))))
+      (consult-ripgrep dir initial)))
+
   (consult-customize
    consult-theme :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
+   consult--source-recent-file consult--source-project-recent-file sanityinc/consult-ripgrep-at-point
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
 
-  (when (and (executable-find "rg"))
-    (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
-      (interactive (list prefix-arg (when-let ((s (symbol-at-point)))
-                                      (symbol-name s))))
-      (consult-ripgrep dir initial))
-    (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point))
+  (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point)
+
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
