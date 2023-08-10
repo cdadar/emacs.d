@@ -31,8 +31,8 @@
                         '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package)))
   (defun sanityinc/enable-flymake-flycheck ()
     (setq-local flymake-diagnostic-functions
-                (append flymake-diagnostic-functions
-                        (flymake-flycheck-all-chained-diagnostic-functions))))
+                (seq-uniq (append flymake-diagnostic-functions
+                                  (flymake-flycheck-all-chained-diagnostic-functions)))))
 
   :hook
   ((flymake-mode . sanityinc/enable-flymake-flycheck)
