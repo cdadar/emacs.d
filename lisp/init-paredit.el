@@ -35,9 +35,12 @@
     (when (memq this-command paredit-minibuffer-commands)
         (enable-paredit-mode)))
 
+  (add-hook 'sanityinc/lispy-modes-hook 'enable-paredit-mode)
+
   (use-package paredit-extension
     :ensure nil
     :load-path "site-lisp/paredit-extension"))
+
 
 (provide 'init-paredit)
 ;;; init-paredit.el ends here
