@@ -35,6 +35,7 @@
   ;;     ;; (setq-local corfu-auto nil) Enable/disable auto completion
   ;;     (corfu-mode 1)))
   ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+  ;; TODO: https://github.com/jdtsmith/kind-icon
 
   (corfu-history-mode)
   (corfu-popupinfo-mode)
@@ -50,6 +51,11 @@
   (define-key corfu-map (kbd "C-j") 'corfu-next)
   (define-key corfu-map (kbd "C-k") 'corfu-previous))
 
+ ;; Make Corfu also work in terminals, without disturbing usual behaviour in GUI
+(use-package corfu-terminal
+  :after corfu
+  :config
+  (corfu-terminal-mode))
 
 ;; Use dabbrev with Corfu!
 (use-package dabbrev
