@@ -140,8 +140,6 @@
            (treesit-available-p))
   (require 'init-treesitter))
 
-;;(require 'init-twitter)
-;; (require 'init-mu)
 (require 'init-ledger)
 
 ;; user config
@@ -174,9 +172,14 @@
 (require 'init-anki)
 ;; Extra packages which don't require any configuration
 
+(use-package sudo-edit)
 (use-package gnuplot)
-(use-package lua-mode)
+(use-package lua-mode
+  :config
+  (reformatter-define lua-format :program "lua-format" :args '("--indent-width=2" "--no-use-tab") :lighter "LuaFmt ")
+  (setq-default lua-indent-level 2))
 (use-package htmlize)
+
 (when *is-a-mac*
   (use-package osx-location))
 (use-package dotenv-mode)
