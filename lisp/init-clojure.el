@@ -9,10 +9,10 @@
       (add-hook m 'sanityinc/lisp-setup)))
 
 (use-package cljsbuild-mode
-  :after clojure-mode)
+  :after (:any clojure-mode clojure-ts-mode))
 
 (use-package elein
-  :after clojure-mode)
+  :after (:any clojure-mode clojure-ts-mode))
 
 (provide 'init-clojure)
 ;;; init-clojure.el ends here
