@@ -3,7 +3,6 @@
 # key: bible-study
 # --
 
-#+tags: 查经
 #+OPTIONS: toc:nil  H:10 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:nil
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
