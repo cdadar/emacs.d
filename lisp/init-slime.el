@@ -4,14 +4,12 @@
 
 (use-package slime
   :config
-  (push (expand-file-name "contrib" (file-name-directory (locate-library "slime"))) load-path)
   ;;; Lisp buffers
-  (with-eval-after-load 'slime
-    (require 'slime-autoloads)
-    (setq slime-protocol-version 'ignore)
-    (setq slime-net-coding-system 'utf-8-unix)
-    (let ((features '(slime-fancy slime-repl slime-fuzzy)))
-      (slime-setup features)) )
+  (require 'slime-autoloads)
+  (setq slime-protocol-version 'ignore)
+  (setq slime-net-coding-system 'utf-8-unix)
+  (let ((features '(slime-fancy slime-repl slime-fuzzy slime-autodoc)))
+    (slime-setup features))
   (defun sanityinc/slime-repl-setup ()
     "Mode setup function for slime REPL."
     (sanityinc/lisp-setup))
