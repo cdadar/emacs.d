@@ -8,7 +8,7 @@
 #+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \setCJKmainfont{楷体}
+#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{0em}
