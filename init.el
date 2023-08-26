@@ -136,6 +136,8 @@
 (require 'init-dash)
 
 (require 'init-ledger)
+(require 'init-lua)
+
 
 ;; user config
 (require 'init-search)
@@ -169,12 +171,7 @@
 
 (use-package sudo-edit)
 (use-package gnuplot)
-(use-package lua-mode
-  :config
-  (reformatter-define lua-format :program "lua-format" :args '("--indent-width=2" "--no-use-tab") :lighter "LuaFmt ")
-  (setq-default lua-indent-level 2))
 (use-package htmlize)
-
 (when *is-a-mac*
   (use-package osx-location))
 (use-package dotenv-mode)
