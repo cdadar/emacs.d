@@ -18,9 +18,7 @@
 
     (add-hook 'flymake-mode-hook
             (lambda ()
-              (setq eldoc-documentation-functions
-                    (cons 'flymake-eldoc-function
-                          (delq 'flymake-eldoc-function eldoc-documentation-functions)))))))
+              (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t)))))
 
 ;; Use flycheck checkers with flymake, to extend its coverage
 (use-package flymake-flycheck
