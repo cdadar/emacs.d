@@ -68,3 +68,4 @@ org-roam.db
 /projects
 places
 .last-package-update-day
+/forge-*.sqlite
