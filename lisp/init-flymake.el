@@ -28,16 +28,10 @@
   (setq-default flycheck-disabled-checkers
                 (append (default-value 'flycheck-disabled-checkers)
                         '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package sh-shellcheck)))
-  (defun sanityinc/enable-flymake-flycheck ()
-    (setq-local flymake-diagnostic-functions
-                (seq-uniq (append flymake-diagnostic-functions
-                                  (flymake-flycheck-all-chained-diagnostic-functions)))))
 
   :hook
-  ((flymake-mode . sanityinc/enable-flymake-flycheck)
+  ((flymake-mode . flymake-flycheck-auto)
    ((prog-mode text-mode) . flymake-mode)))
-
-
 
 (use-package flymake-diagnostic-at-point
   :commands flymake-diagnostic-at-point-mode
