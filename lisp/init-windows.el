@@ -15,7 +15,7 @@
 ;; Make "C-x o" prompt for a target window when there are more than 2
 (use-package switch-window
   :config
-  (setq-default switch-window-shortcut-style 'alphabet)
+  (setq-default switch-window-shortcut-style 'qwerty)
   (setq-default switch-window-timeout nil)
   :bind
   (("C-x o" . switch-window)))
