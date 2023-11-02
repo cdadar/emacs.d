@@ -112,7 +112,7 @@
   :diminish
   :hook
   (after-init . global-undo-tree-mode)
-  :config
+  :init
   (setq undo-tree-auto-save-history nil))
 
 
