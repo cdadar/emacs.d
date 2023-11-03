@@ -5,17 +5,19 @@
 
 
 (use-package nix-ts-mode
-  :config
+  :init
   (defun sanityinc/set-nix-ts-auto-mode ()
         (when (and (fboundp 'treesit-ready-p)
                    (treesit-ready-p 'nix t)
                    (fboundp 'nix-ts-mode))
           (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-ts-mode))))
-  (add-hook 'after-init-hook 'sanityinc/set-nix-ts-auto-mode)
-  (use-package nix-mode
+  :hook
+  (after-init . sanityinc/set-nix-ts-auto-mode)
   :config
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-server-programs '((nix-mode) . ("nil"))))))
+  (use-package nix-mode
+    :config
+    (with-eval-after-load 'eglot
+      (add-to-list 'eglot-server-programs '((nix-mode) . ("nil"))))))
 
 (use-package nixpkgs-fmt
   :after (:any nix-ts-mode nix-mode))
