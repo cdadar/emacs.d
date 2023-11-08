@@ -18,7 +18,11 @@
       map)
     "Prefix map for commands that create and manipulate eat buffers.")
   :hook (eat-exit . sanityinc/on-eat-exit)
-  :bind (:map global-map ("C-c t" . sanityinc/eat-map)))
+  :bind (:map global-map ("C-c t" . sanityinc/eat-map))
+  :config
+  ((add-to-list 'eat-semi-char-non-bound-keys [?\e ?w])
+   (eat-update-semi-char-mode-map)
+   (eat-reload)))
 
 ;; (when (maybe-require-package 'eat)
 ;;   (defun sanityinc/on-eat-exit (process)
