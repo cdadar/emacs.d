@@ -127,6 +127,8 @@
 (require 'init-terraform)
 (require 'init-nix)
 (use-package nginx-mode)
+(use-package just-mode)
+(use-package justl)
 
 (require 'init-paredit)
 (require 'init-lisp)
