@@ -24,6 +24,8 @@
   :hook
   (python-mode . sanityinc/flymake-ruff-maybe-enable))
 
+(use-package ruff-format)
+
 (use-package toml-mode
   :mode ("poetry\\.lock\\'" . toml-mode))
 
