@@ -5,15 +5,9 @@
 
 
 (use-package nix-ts-mode
-  :init
-  (defun sanityinc/set-nix-ts-auto-mode ()
-        (when (and (fboundp 'treesit-ready-p)
-                   (treesit-ready-p 'nix t)
-                   (fboundp 'nix-ts-mode))
-          (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-ts-mode))))
-  :hook
-  (after-init . sanityinc/set-nix-ts-auto-mode)
   :config
+  (when (and (fboundp 'treesit-ready-p) (treesit-ready-p 'nix t))
+    (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-ts-mode)))
   (use-package nix-mode
     :config
     (with-eval-after-load 'eglot
