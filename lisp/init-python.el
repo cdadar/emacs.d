@@ -19,7 +19,7 @@
 (use-package flymake-ruff
   :init
   (defun sanityinc/flymake-ruff-maybe-enable ()
-    (when (executable-find flymake-ruff-program)
+    (when (executable-find "ruff")
       (flymake-ruff-load)))
   :hook
   (python-mode . sanityinc/flymake-ruff-maybe-enable))
