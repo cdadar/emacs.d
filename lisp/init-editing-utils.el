@@ -538,9 +538,9 @@ ORIG is the advised function, which is called with its ARGS."
   (org-mode . (lambda () (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
 
 
-(use-package wakatime-mode
-  :init
-  (global-wakatime-mode))
+;; (use-package wakatime-mode
+;;   :init
+;;   (global-wakatime-mode))
 
 (use-package opencc)
 

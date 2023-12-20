@@ -24,3 +24,4 @@
 #+LATEX_HEADER: \setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
 #+LATEX_HEADER: \setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
 #+LATEX_HEADER: \setdescription{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+#+LATEX_HEADER: \institute{}
