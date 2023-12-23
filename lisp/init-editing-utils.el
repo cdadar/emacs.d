@@ -212,9 +212,7 @@
   :config
   (move-dup-mode)
   :bind
-  (([M-up] . move-dup-move-lines-up)
-   ([M-down] . move-dup-move-lines-down)
-   ([M-S-up] . move-dup-move-lines-up)
+  (([M-S-up] . move-dup-move-lines-up)
    ([M-S-down] . move-dup-move-lines-down)
    ("C-c d" . move-dup-duplicate-down)
    ("C-c u" . move-dup-duplicate-up)))
