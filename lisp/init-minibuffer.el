@@ -286,6 +286,8 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   :commands consult-yasnippet
   :bind (("M-+" . consult-yasnippet)))
 
+(use-package consult-flycheck)
+
 (with-eval-after-load 'org-roam
   (use-package consult-org-roam
     :config
