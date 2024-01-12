@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: latex_blue
+# key: latex_blue
+# --
+@@latex:{\\color\{blue\}@@`yas-selected-text` @@latex:}@@

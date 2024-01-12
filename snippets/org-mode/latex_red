@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: latex_red
+# key: latex_red
+# --
+@@latex:{\\color\{red\}@@`yas-selected-text` @@latex:}@@
