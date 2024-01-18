@@ -280,13 +280,9 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   :config
   (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
-
-
 (use-package consult-yasnippet
   :commands consult-yasnippet
   :bind (("M-+" . consult-yasnippet)))
-
-(use-package consult-flycheck)
 
 (with-eval-after-load 'org-roam
   (use-package consult-org-roam
