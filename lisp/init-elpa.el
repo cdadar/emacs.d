@@ -61,6 +61,8 @@ locate PACKAGE."
 
 ;;; Fire up package.el
 
+(setq package-native-compile t)
+
 ;; Initialize packages
 (unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
   (setq package-enable-at-startup nil)          ; To prevent initializing twice
