@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package toml-mode
-  :hook
-  (toml-mode . goto-address-prog-mode))
+(use-package toml-mode)
 
 (provide 'init-toml)
 ;;; init-toml.el ends here
