@@ -90,10 +90,6 @@
   ((js2-mode-hook js-mode-hook) . inferior-js-keys-mode))
 
 
-(use-package add-node-modules-path
-  :hook
-  ((typescript-mode js-mode js2-mode coffee-mode rjsx-mode) . add-node-modules-path))
-
 (use-package js2-refactor
   :hook
   ((typescript-mode js-mode js2-mode coffee-mode rjsx-mode) . js2-refactor-mode)
