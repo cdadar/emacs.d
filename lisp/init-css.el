@@ -46,15 +46,7 @@
 
 
 ;;; LESS
-(use-package less-css-mode
-  :config
-  (use-package skewer-less
-    :hook (less-css-mode . skewer-less-mode)))
-
-
-;; Skewer CSS
-(use-package skewer-mode
-  :hook (css-mode . skewer-css-mode))
+(use-package less-css-mode)
 
 
 ;;; Use eldoc for syntax hints
