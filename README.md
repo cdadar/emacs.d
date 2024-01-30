@@ -8,8 +8,34 @@ This is my own config which base on Purcell. THe origin repo is https://github.c
 
 # A reasonable Emacs config
 
-In particular, there's a nice config for *autocompletion* with [corfu](https://github.com/minad/corfu), and `flymake` is
-used to immediately highlight syntax errors in Ruby, Python, Javascript, Haskell and a number of other languages.
+This is my emacs configuration tree, continually used and tweaked
+since 2000, and it may be a good starting point for other Emacs
+users, especially web developers. These days it's
+somewhat geared towards OS X, but it is known to also work on Linux
+and Windows.
+
+Emacs itself comes with support for many programming languages. This
+config adds improved defaults and extended support for the following, listed
+in the approximate order of how much I use them, from most to least:
+
+* Haskell / Purescript / Elm / OCaml
+* Ruby / Ruby on Rails
+* SQL
+* CSS / LESS / SASS / SCSS
+* Javascript / Typescript
+* HTML / HAML / Markdown / Textile / ERB
+* Common Lisp (with Slime)
+* Python
+* Rust
+* Clojure (with Cider and nRepl)
+* PHP
+* Erlang
+
+In particular, there's a nice config for *autocompletion* with
+[corfu](https://github.com/minad/corfu), and
+`flymake` (re-using backends from [flycheck](http://www.flycheck.org))
+is used to immediately highlight syntax errors in Ruby, Python,
+Javascript, Haskell and a number of other languages.
 
 LSP support is provided using `eglot`.
 

@@ -73,13 +73,6 @@
       (define-key js2-mode-map (kbd "M-.") nil))))
 
 
-;;; Coffeescript
-(use-package coffee-mode
-  :mode ("\\.coffee\\.erb\\'" . coffee-mode)
-  :config
-  (setq-default coffee-tab-width js-indent-level))
-
-
 ;; Run and interact with an inferior JS via js-comint.el
 
 (use-package js-comint
