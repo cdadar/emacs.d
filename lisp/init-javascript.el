@@ -97,14 +97,6 @@
   ((js2-mode-hook js-mode-hook) . inferior-js-keys-mode))
 
 
-;; Alternatively, use skewer-mode
-
-(use-package skewer-mode
-  :hook
-  (skewer-mode . (lambda () (inferior-js-keys-mode -1))))
-
-
-
 (use-package add-node-modules-path
   :hook
   ((typescript-mode js-mode js2-mode coffee-mode rjsx-mode) . add-node-modules-path))
