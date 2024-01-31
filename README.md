@@ -43,9 +43,20 @@ package manage is using `use-package`
 
 ## Supported Emacs versions
 
-The config should run on Emacs 26.1 or greater and is designed to degrade smoothly - see the CI build - but note that
-much newer versions are required for an increasing number of key packages, so to get full functionality you should use
-the latest Emacs version available to you.
+Use the latest released Emacs version available to you. The author
+typically uses the latest stable version.
+
+The config should run on Emacs 27.1 or greater and is designed to
+degrade smoothly - see the CI build - but many enhancements may be
+unavailable if your Emacs is too old, and in general you should try
+to use the latest stable Emacs release like I do.
+
+## Other requirements
+
+To make the most of the programming language-specific support in this
+config, further programs will likely be required, particularly those
+that [flycheck](https://github.com/flycheck/flycheck) uses to provide
+on-the-fly syntax checking.
 
 ## Installation
 
