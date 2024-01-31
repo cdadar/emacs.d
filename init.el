@@ -9,10 +9,10 @@
 ;; Produce backtraces when errors occur: can be helpful to diagnose startup issues
 ;;(setq debug-on-error t)
 
-(let ((minver "27.1"))
+(let ((minver "26.1"))
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-(when (version< emacs-version "28.1")
+(when (version< emacs-version "27.1")
   (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
 
 (add-to-list 'load-path (locate-user-emacs-file "lisp"))
@@ -62,7 +62,7 @@
 ;; General performance tuning
 (use-package gcmh
   :diminish
-  :init (setq gcmh-high-cons-threshold (* 512 1024 1024))
+  :init (setq gcmh-high-cons-threshold (* 128 1024 1024))
   :hook (after-init . gcmh-mode))
 
 (setq jit-lock-defer-time 0)
