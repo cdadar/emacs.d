@@ -1,8 +1,8 @@
 # key: export_beamer
 # name: export_beamer
 # --
-#+OPTIONS:   num:t toc:nil
-#+OPTIONS:   H:1
+#+OPTIONS:   H:1 num:t toc:nil author:nil date:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 
 #+PROPERTY: comments yes
 #+PROPERTY: header-args :exports both :eval never-export
