@@ -5,12 +5,6 @@
 ;;   See http://www.reddit.com/r/emacs/comments/21fjpn/fontifying_buffer_list_for_emacs_243/
 
 ;;; Code:
-
-(use-package fullframe
-  :config
-  (fullframe ibuffer ibuffer-quit)
-  )
-
 (use-package ibuffer-vc
   :config
   (defun ibuffer-set-up-preferred-filters ()
