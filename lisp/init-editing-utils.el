@@ -525,16 +525,17 @@ ORIG is the advised function, which is called with its ARGS."
         (delete (car list))
       (remove-it (cdr list)))))
 
-(defun timestamp ()
+(defun cdadar/insert-timestamp ()
   (interactive)
   (insert (format-time-string "%Y%m%d%H%M%S")))
 
-(defun date (arg)
+(defun cdadar/insert-date ()
    (interactive "P")
-   (insert (if arg
-               (format-time-string "%d.%m.%Y")
-             (format-time-string "%Y-%m-%d %a"))))
+   (insert (format-time-string "%Y-%m-%d")))
 
+(defun cdadar/insert-date-week ()
+   (interactive "P")
+   (insert (format-time-string "%Y-%m-%d %a")))
 
 (use-package restart-emacs)
 
