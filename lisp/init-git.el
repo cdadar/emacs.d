@@ -30,7 +30,6 @@
   (setq-default magit-diff-refine-hunk 'all)
 
   (sanityinc/fullframe-mode 'magit-status-mode)
-  (setq-default magit-bury-buffer-function 'magit-restore-window-configuration)
 
 
 
