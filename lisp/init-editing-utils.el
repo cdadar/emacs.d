@@ -529,6 +529,13 @@ ORIG is the advised function, which is called with its ARGS."
   (interactive)
   (insert (format-time-string "%Y%m%d%H%M%S")))
 
+(defun date (arg)
+   (interactive "P")
+   (insert (if arg
+               (format-time-string "%d.%m.%Y")
+             (format-time-string "%Y-%m-%d %a"))))
+
+
 (use-package restart-emacs)
 
 (use-package pangu-spacing
@@ -550,6 +557,10 @@ ORIG is the advised function, which is called with its ARGS."
 (defun font-installed-p (font-name)
   "Check if font with FONT-NAME is available."
   (find-font (font-spec :name font-name)))
+
+
+
+
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
