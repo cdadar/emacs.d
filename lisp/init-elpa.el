@@ -143,13 +143,6 @@ advice for `require-package', to which ARGS are passed."
               (package--save-selected-packages
                (seq-uniq (append sanityinc/required-packages package-selected-packages))))))
 
-
-
-
-(use-package fullframe
-  :config
-  (fullframe list-packages quit-window))
-
 
 (defun sanityinc/set-tabulated-list-column-width (col-name width)
   "Set any column with name COL-NAME to the given WIDTH."

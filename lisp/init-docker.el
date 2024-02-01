@@ -4,12 +4,11 @@
 
 (use-package docker
   :config
-  (fullframe docker-images tablist-quit)
-  (fullframe docker-machines tablist-quit)
-  (fullframe docker-volumes tablist-quit)
-  (fullframe docker-networks tablist-quit)
-  (fullframe docker-containers tablist-quit)
-  )
+  (sanityinc/fullframe-mode 'docker-images-mode)
+  (sanityinc/fullframe-mode 'docker-machines-mode)
+  (sanityinc/fullframe-mode 'docker-volumes-mode)
+  (sanityinc/fullframe-mode 'docker-networks-mode)
+  (sanityinc/fullframe-mode 'docker-containers-mode))
 
 (use-package dockerfile-mode)
 (use-package docker-compose-mode)
