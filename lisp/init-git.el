@@ -27,7 +27,12 @@
    :map magit-status-mode-map
    ("C-M-<up>" . magit-section-up))
   :config
-  (setq-default magit-diff-refine-'all)
+  (setq-default magit-diff-refine-hunk 'all)
+
+  (sanityinc/fullframe-mode 'magit-status-mode)
+  (setq-default magit-bury-buffer-function 'magit-restore-window-configuration)
+
+
 
   (defun sanityinc/magit-or-vc-log-file (&optional prompt)
     (interactive "P")
@@ -43,10 +48,7 @@
 
   (defun magit-submodule-remove+ ()
     (interactive)
-    (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
-  (use-package fullframe
-    :config
-    (fullframe magit-status magit-mode-quit-window)))
+    (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil)))
 
 
 (use-package magit-todos)
