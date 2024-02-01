@@ -71,10 +71,6 @@
                       (magit-find-file (plist-get info :id )
                                        (concat git-dir (plist-get info :filename))))))
                 vc-msg-git-extra))))
-
-(when *is-a-mac*
-  (with-eval-after-load 'magit
-    (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
 
 ;; Convenient binding for vc-git-grep
