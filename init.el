@@ -179,7 +179,9 @@
 (require 'init-latex)
 (require 'init-perl)
 (require 'init-anki)
+(require 'init-date)
 ;; Extra packages which don't require any configuration
+
 
 (use-package sudo-edit)
 (use-package gnuplot)
