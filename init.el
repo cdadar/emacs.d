@@ -63,7 +63,7 @@
 (use-package gcmh
   :diminish
   :init (setq gcmh-high-cons-threshold (* 128 1024 1024))
-  :hook (after-init . gcmh-mode))
+  :hook (after-init . gcmh))
 
 (setq jit-lock-defer-time 0)
 
