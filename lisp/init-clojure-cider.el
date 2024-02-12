@@ -9,7 +9,8 @@
   (setq nrepl-popup-stacktraces nil)
   :hook
   (cider-repl-mode . subword-mode)
-  (cider-repl-mode . paredit-mode))
+  (cider-repl-mode . paredit-mode)
+  (clojure-ts-mode . cider-mode))
 
 (use-package flycheck-clojure
   :after (clojure-mode cider flycheck)
