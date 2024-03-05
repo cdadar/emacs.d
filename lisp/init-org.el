@@ -889,6 +889,10 @@ typical word processor."
                                 "#+title: ${title}\n")
              :unnarrowed t)
             ("c" "Christian")
+            ("ca" "学房" plain "%?"
+             :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t)
             ("co" "听道" plain "%?"
              :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 听道")

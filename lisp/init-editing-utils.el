@@ -498,11 +498,7 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package restart-emacs)
 
-(use-package pangu-spacing
-  :init
-  (global-pangu-spacing-mode t)
-  :hook
-  (org-mode . (lambda () (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
+(use-package pangu-spacing)
 
 
 ;; (use-package wakatime-mode
