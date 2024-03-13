@@ -176,7 +176,6 @@
 ;; (require 'init-citre)
 (require 'init-yasnippet)
 (require 'init-emmet)
-(require 'init-latex)
 (require 'init-dict)
 (require 'init-erc)
 (require 'init-emojify)
