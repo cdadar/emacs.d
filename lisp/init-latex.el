@@ -6,6 +6,7 @@
 
 (use-package cdlatex)
 (use-package auctex
+  :ensure nil
   :hook
   ;; Going to see if we actually need these
   (LaTeX-mode . auto-fill-mode)
@@ -26,7 +27,9 @@
                        (setq TeX-save-query  nil )
                        (setq TeX-show-compilation t)))
   :config
+  ;; (defalias 'context-mode #'ConTeXt-mode)
   (when (locate-library "auctex")
+
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
     (setq TeX-close-quote "")
