@@ -46,6 +46,10 @@
 ;; from emacs (especially on Microsoft Windows)
 (prefer-coding-system 'utf-8)
 
+(if (boundp 'use-short-answers)
+    (setq use-short-answers t)
+  (fset 'yes-or-no-p 'y-or-n-p)
+
 ;; Better defaults
 ;; (setq initial-scratch-message nil)
 (setq inhibit-splash-screen t)
