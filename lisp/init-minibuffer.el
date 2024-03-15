@@ -269,10 +269,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 
 
 (use-package marginalia
-  :hook (after-init . marginalia-mode)
-  :init
-  :config
-  )
+  :hook (after-init . marginalia-mode))
 
 (use-package embark-consult
   :after (embark consult)
