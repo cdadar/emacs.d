@@ -73,7 +73,10 @@
          ("C-c k" . consult-kmacro)
          ("C-c m" . consult-man)
          ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
+         ([remap Info-search]        . consult-info)
+         ([remap imenu]              . consult-imenu)
+         ([remap isearch-forward]    . consult-line)
+         ([remap recentf-open-files] . consult-recent-file)
          ;; C-x bindings in `ctl-x-map'
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
