@@ -19,5 +19,6 @@
 #+LaTeX_HEADER: \usetheme{metropolis}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
+#+LaTeX_HEADER: \usepackage{xcolor}
 
 #+LATEX_HEADER: \institute{}
