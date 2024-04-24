@@ -7,12 +7,13 @@
 
 (use-package citre
   :diminish
+  :defer t
   :init
   (require 'citre-config)
-  :bind (("c-x c j" . citre-jump)
-         ("c-x c j" . citre-jump-back)
-         ("c-x c p" . citre-ace-peek)
-         ("c-x c u" . citre-update-this-tags-file))
+  (global-set-key (kbd "C-x c j") 'citre-jump)
+  (global-set-key (kbd "C-x c J") 'citre-jump-back)
+  (global-set-key (kbd "C-x c p") 'citre-ace-peek)
+  (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
   :config
   (setq
    ;; set this if you want to always use one location to create a tags file.

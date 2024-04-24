@@ -20,8 +20,4 @@
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
 
-#+LaTeX_HEADER: \usepackage{enumitem}
-#+LATEX_HEADER: \setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
-#+LATEX_HEADER: \setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
-#+LATEX_HEADER: \setdescription{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
 #+LATEX_HEADER: \institute{}
