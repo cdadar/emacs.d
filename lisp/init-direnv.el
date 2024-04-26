@@ -4,16 +4,11 @@
 
 (use-package envrc
   :diminish
-  :init
-  (defun sanityinc/maybe-enable-envrc-global-mode ()
-    "Enable `envrc-global-mode' if `direnv' is installed."
-    (when (executable-find "direnv")
-      (envrc-global-mode)))
   :bind
   (:map envrc-mode-map
         ("C-c $" . envrc-command-map))
   :hook
-  (after-init . sanityinc/maybe-enable-envrc-global-mode))
+  (after-init . envrc-global-mode))
 
 (provide 'init-direnv)
 
