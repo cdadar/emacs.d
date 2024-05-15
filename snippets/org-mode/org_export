@@ -3,14 +3,13 @@
 # key: org_export
 # --
 
-#+OPTIONS: toc:nil  H:10 tex:t
-#+OPTIONS: author:nil date:nil title:nil
+#+OPTIONS: toc:nil  H:10 tex:t num:nil
+#+OPTIONS: author:nil date:nil title:t
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
 #+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
-#+LATEX_HEADER: \renewcommand\maketitle{}
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{1em}
