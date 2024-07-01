@@ -889,7 +889,7 @@ typical word processor."
                                 "#+title: ${title}\n")
              :unnarrowed t)
             ("c" "Christian")
-            ("ca" "学房" plain "%?"
+            ("ca" "基督学房" plain "%?"
              :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
@@ -916,6 +916,10 @@ typical word processor."
             ("cs" "查经" plain "%?"
              :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 查经")
+             :unnarrowed t)
+            ("cz" "栽培班" plain "%?"
+             :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
              :unnarrowed t)
             ("p" "program" plain "%?"
              :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"

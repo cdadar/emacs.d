@@ -11,7 +11,7 @@
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LATEX_HEADER: \usepackage{indentfirst}
-#+LATEX_HEADER: \setlength{\parindent}{2em}
+#+LATEX_HEADER: \setlength{\parindent}{0em}
 #+LATEX_HEADER: \setlength{\parskip}{0em}
 
 * 请分享以下其中之一即可：上周讲义或讲解或主日讲台给你的感动、上周失败的见证或感恩的见证、上周操练的感恩与挑战。
