@@ -15,6 +15,7 @@
 
 (use-package nixpkgs-fmt
   :after (:any nix-ts-mode nix-mode))
+(use-package nixfmt)
 (use-package nix-sandbox)
 (use-package nix-buffer)
 (use-package nixos-options)
