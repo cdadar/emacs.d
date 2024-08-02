@@ -11,7 +11,7 @@
   (use-package nix-mode
     :config
     (with-eval-after-load 'eglot
-      (add-to-list 'eglot-server-programs '((nix-mode) . ("nil"))))))
+      (add-to-list 'eglot-server-programs '((nix-mode nix-ts-mode) . ,(eglot-alternatives '("nixd" "nil")))))))
 
 (use-package nixpkgs-fmt
   :after (:any nix-ts-mode nix-mode))
