@@ -27,6 +27,13 @@
    :map tuareg-interactive-mode-map
    ("C-c C-z" . sanityinc/tuareg-repl-switch-back)))
 
+(when (and (fboundp 'treesit-available-p) (treesit-available-p))
+  (use-package ocaml-ts-mode
+  :after (eglot)
+  :config
+  (add-to-list 'eglot-server-programs '(((ocaml-ts-mode :language-id "ocaml")) "ocamllsp"))))
+
+
 (use-package dune
   :config
   (use-package dune-format))
