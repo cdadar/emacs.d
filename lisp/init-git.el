@@ -25,8 +25,11 @@
    ("C-x M-f" . magit-file-dispatch)
    :map magit-status-mode-map
    ("C-M-<up>" . magit-section-up))
+  :hook
+  (git-commit-mode . goto-address-mode)
   :config
   (setq-default magit-diff-refine-hunk 'all)
+
 
   (sanityinc/fullframe-mode 'magit-status-mode)
 
@@ -50,10 +53,6 @@
 
 
 (use-package magit-todos)
-
-(use-package git-commit
-  :hook
-  (git-commit-mode . goto-address-mode))
 
 (when (use-package vc-msg
         :config
