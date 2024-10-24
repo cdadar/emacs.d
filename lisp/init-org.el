@@ -30,7 +30,7 @@
     (when *is-a-mac*
       (use-package grab-mac-link))
 
-    
+
 
     (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
       "A keymap for handy global access to org helpers, particularly clocking.")
@@ -130,7 +130,7 @@
     ;; (advice-add 'org-agenda-files :filter-return #'dynamic-agenda-files-advice)
     ;; (add-to-list 'org-after-todo-state-change-hook 'update-dynamic-agenda-hook t)
 
-    
+
 
     (use-package writeroom-mode)
 
@@ -175,7 +175,7 @@ typical word processor."
 
 
     (setq org-support-shift-select t)
-    
+
 ;;; Capturing
     (defun get-year-and-month ()
       (list (format-time-string "%Y 年") (format-time-string "%m 月")))
@@ -238,7 +238,7 @@ typical word processor."
 
     (require 'org-protocol)
 
-    
+
 
     (setq org-capture-templates
           '(("t" "Todo" entry (file org-agenda-file-inbox)
@@ -301,7 +301,7 @@ typical word processor."
           (when (eq type 'link)
             (kill-region beg end)))))
 
-    
+
 ;;; Refiling
 
     (setq org-refile-use-cache nil)
@@ -340,7 +340,7 @@ typical word processor."
     ;; Allow refile to create parent tasks with confirmation
     (setq org-refile-allow-creating-parent-nodes 'confirm)
 
-    
+
 ;;; To-do settings
 
     (setq org-todo-keywords
@@ -363,7 +363,7 @@ typical word processor."
                   ("PROJECT" :inherit font-lock-string-face))))
 
 
-    
+
 ;;; Agenda views
 
     (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
@@ -528,7 +528,7 @@ typical word processor."
 
     (add-hook 'org-agenda-finalize-hook 'my/org-agenda-insert-efforts)
 
-    
+
 ;;; Org clock
 
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
@@ -551,7 +551,7 @@ typical word processor."
           '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
 
 
-    
+
 ;;; Show the clocked-in task - if any - in the header line
     (defun sanityinc/show-org-clock-in-header-line ()
       (setq-default header-line-format '((" " org-mode-line-string " "))))
@@ -568,7 +568,7 @@ typical word processor."
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
 
 
-    
+
     (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
       (add-hook 'org-clock-in-hook
                 (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
@@ -578,12 +578,12 @@ typical word processor."
                                          "tell application \"org-clock-statusbar\" to clock out"))))
 
 
-    
+
     ;; TODO: warn about inconsistent items, e.g. TODO inside non-PROJECT
     ;; TODO: nested projects!
 
 
-    
+
 ;;; Archiving
 
     (setq org-archive-mark-done nil)
@@ -603,9 +603,7 @@ typical word processor."
          (setq org-map-continue-from (outline-previous-heading)))
        "/CANCELLED" 'file))
 
-    
-
-    
+
 
     ;; ;; Show iCal calendars in the org agenda
     ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
@@ -638,6 +636,7 @@ typical word processor."
     ;; org-latex
     (require 'ox-md)
     (require 'ox-latex)
+
     ;; {{ export org-mode in Chinese into PDF
     ;; @see http://freizl.github.io/posts/tech/2012-04-06-export-orgmode-file-in-Chinese.html
     ;; and you need install texlive-xetex on different platforms
@@ -650,7 +649,7 @@ typical word processor."
     ;; }}
 
 
-    
+
     (org-babel-do-load-languages
      'org-babel-load-languages
      (seq-filter
@@ -723,7 +722,7 @@ typical word processor."
     (define-key org-mode-map (kbd "C-c s c") '+org-screenshot)
 
 
-    
+
 
     ;; used by org-clock-sum-today-by-tags
     (defun filter-by-tags (current-tag)
@@ -958,14 +957,19 @@ typical word processor."
 
 ;; (use-package org-super-links
 ;;   :bind (("C-c s s" . org-super-links-link)
-;; 	   ("C-c s l" . org-super-links-store-link)
-;; 	   ("C-c s C-l" . org-super-links-insert-link)))
+;;         ("C-c s l" . org-super-links-store-link)
+;;         ("C-c s C-l" . org-super-links-insert-link)))
 
 
 (use-package ox-epub
   :after org
   :config
   (require 'ox-epub))
+
+(use-package ox-pandoc
+  :after org
+  :config
+  (require 'ox-pandoc))
 
 
 (provide 'init-org)
