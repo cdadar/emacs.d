@@ -193,6 +193,7 @@
 (require 'init-perl)
 (require 'init-anki)
 (require 'init-date)
+(require 'init-auto-space)
 ;; Extra packages which don't require any configuration
 
 
