@@ -22,7 +22,7 @@
   :config
   (custom-set-variables
    `(eat-semi-char-non-bound-keys
-     (quote ,(cons [?\e ?w] eat-semi-char-non-bound-keys))))
+     (quote ,(cons [?\e ?w] (cl-remove [?\e ?w] eat-semi-char-non-bound-keys :test 'equal)))))
   (eat-update-semi-char-mode-map)
   (eat-reload))
 
