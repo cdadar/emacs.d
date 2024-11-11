@@ -194,6 +194,7 @@
 (require 'init-anki)
 (require 'init-date)
 (require 'init-auto-space)
+(require 'init-pdf)
 ;; Extra packages which don't require any configuration
 
 

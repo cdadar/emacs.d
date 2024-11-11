@@ -74,7 +74,7 @@
 (setq org-roam-directory "~/org-mode/roam")
 (setq elfeed-db-directory "~/Nutstore Files/Nutstore/.elfeed")
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
-
+(setq bibtex-capf-bibliography "~/Nutstore Files/Nutstore/bibliography/references.bib")
 
 (custom-set-variables
  '(markdown-command "pandoc")

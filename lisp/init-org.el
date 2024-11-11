@@ -972,5 +972,23 @@ typical word processor."
   (require 'ox-pandoc))
 
 
+;; (use-package org-zettel-ref-mode
+;;   :ensure t  ; If installed via package manager
+;;   :init
+;;   (setq org-zettel-ref-overview-directory "~/org-mode/roam/")
+;;   :config
+;;   (setq org-zettel-ref-quick-markup-key "C-c m"))
+
+(use-package org-noter
+  :demand t)
+
+
+(use-package org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links
+
+
+
 (provide 'init-org)
 ;;; init-org.el ends here
