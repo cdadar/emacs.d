@@ -25,3 +25,6 @@
 [submodule "site-lisp/color-rg"]
 	path = site-lisp/color-rg
 	url = git@github.com:manateelazycat/color-rg.git
+[submodule "site-lisp/org-zettel-ref-mode"]
+	path = site-lisp/org-zettel-ref-mode
+	url = git@github.com:yibie/org-zettel-ref-mode.git
