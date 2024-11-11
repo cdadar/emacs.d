@@ -982,6 +982,8 @@ typical word processor."
 (use-package org-noter
   :demand t)
 
+(use-package org-ref
+  :ensure t)
 
 (use-package org-roam-bibtex
   :after org-roam
