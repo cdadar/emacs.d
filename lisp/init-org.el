@@ -991,6 +991,11 @@ typical word processor."
   (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links
 
 
+(use-package org-zettel-ref-mode
+  :ensure nil
+  :load-path "site-lisp/color-rg"
+  :config
+  (setq org-zettel-ref-quick-markup-key "C-c m"))
 
 (provide 'init-org)
 ;;; init-org.el ends here

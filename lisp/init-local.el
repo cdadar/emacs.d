@@ -75,6 +75,7 @@
 (setq elfeed-db-directory "~/Nutstore Files/Nutstore/.elfeed")
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 (setq bibtex-capf-bibliography "~/Nutstore Files/Nutstore/bibliography/references.bib")
+(setq org-zettel-ref-overview-directory "~/Nutstore Files/Nutstore/org-overviews/")
 
 (custom-set-variables
  '(markdown-command "pandoc")
