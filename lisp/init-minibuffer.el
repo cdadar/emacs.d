@@ -284,14 +284,17 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   :commands consult-yasnippet
   :bind (("M-+" . consult-yasnippet)))
 
-(with-eval-after-load 'org-roam
-  (use-package consult-org-roam
+(use-package consult-org-roam
+    :after org-roam
     :config
     (consult-org-roam-mode 1)
     :bind
     (("C-c n e" . consult-org-roam-file-find)
      ("C-c n b" . consult-org-roam-backlinks)
-     ("C-c n r" . consult-org-roam-search))))
+     ("C-c n r" . consult-org-roam-search)))
+
+(use-package bibtex-capf
+  :hook ((org-mode markdown-mode tex-mode latex-mode reftex-mode) . bibtex-capf-mode))
 
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here
