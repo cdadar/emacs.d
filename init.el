@@ -195,6 +195,7 @@
 (require 'init-date)
 (require 'init-auto-space)
 (require 'init-pdf)
+(require 'init-epub)
 ;; Extra packages which don't require any configuration
 
 
