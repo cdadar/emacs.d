@@ -985,6 +985,16 @@ typical word processor."
 (use-package org-ref
   :ensure t)
 
+
+(use-package org-journal
+  :defer t
+  :init
+  ;; Change default prefix key; needs to be set before loading org-journal
+  (setq org-journal-prefix-key "C-c j")
+  :config
+  (setq org-journal-dir "~/org-mode/roam/journal/"
+        org-journal-date-format "%A, %d %B %Y"))
+
 (use-package org-roam-bibtex
   :after org-roam
   :config
