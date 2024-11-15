@@ -982,6 +982,8 @@ typical word processor."
 (use-package org-noter
   :demand t)
 
+
+
 (use-package org-noter-plus
   :after org-noter
   :ensure nil
