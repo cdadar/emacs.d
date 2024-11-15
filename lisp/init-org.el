@@ -982,6 +982,11 @@ typical word processor."
 (use-package org-noter
   :demand t)
 
+(use-package org-noter-plus
+  :after org-noter
+  :ensure nil
+  :load-path "site-lisp/org-noter-plus")
+
 (use-package org-ref
   :ensure t)
 
