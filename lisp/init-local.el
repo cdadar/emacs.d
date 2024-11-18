@@ -61,6 +61,10 @@
       bibtex-completion-library-path "~/Nutstore Files/Nutstore/bibliography/bibtex-pdfs"
       bibtex-completion-notes-path "~/Nutstore Files/Nutstore/bibliography/helm-bibtex-notes")
 
+
+(setq citar-bibliography '("~/Nutstore Files/Nutstore/bibliography/references.bib"))
+(setq org-cite-global-bibliography '("~/Nutstore Files/Nutstore/bibliography/references.bib"))
+
 ;; open pdf with system pdf viewer (works on mac)
 (setq bibtex-completion-pdf-open-function
       (lambda (fpath)
