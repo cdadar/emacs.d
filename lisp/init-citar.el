@@ -50,5 +50,10 @@
   (citar-embark-mode)
   (setq citar-at-point-function 'embark-act))
 
+
+(use-package citar-org-roam
+  :after (citar org-roam)
+  :config (citar-org-roam-mode))
+
 (provide 'init-citar)
 ;;; init-citar.el ends here
