@@ -880,6 +880,7 @@ typical word processor."
   :config
   (progn
     (setq org-roam-v2-ack t)
+    (setq org-roam-database-connector 'sqlite-builtin)
     (setq org-id-link-to-org-use-id t)
     (setq org-roam-completion-everywhere t)
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
