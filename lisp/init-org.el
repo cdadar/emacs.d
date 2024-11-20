@@ -1015,5 +1015,16 @@ typical word processor."
   :config
   (setq org-zettel-ref-quick-markup-key "C-c m"))
 
+(use-package org-review
+  :bind (:map org-agenda-mode-map
+              ("C-c C-r" . org-review-insert-last-review))
+  :config
+  (setq org-agenda-custom-commands
+        '(("R" "Review projects" tags-todo "-CANCELLED/"
+           ((org-agenda-overriding-header "Reviews Scheduled")
+            (org-agenda-skip-function 'org-review-agenda-skip)
+            (org-agenda-cmp-user-defined 'org-review-compare)
+            (org-agenda-sorting-strategy '(user-defined-down)))))))
+
 (provide 'init-org)
 ;;; init-org.el ends here
