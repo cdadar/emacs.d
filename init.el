@@ -142,6 +142,11 @@
 (require 'init-nix)
 (use-package nginx-mode)
 (use-package just-mode)
+(use-package just-ts-mode
+  ;; Undo overly-optimistic autoloading, so that things still work in
+  ;; Emacs 29 without treesitter
+  :config
+  (sanityinc/remove-auto-mode 'just-ts-mode))
 (use-package justl)
 
 (require 'init-paredit)
