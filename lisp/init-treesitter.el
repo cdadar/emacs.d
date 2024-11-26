@@ -4,6 +4,9 @@
 
 (use-package clojure-ts-mode)
 (use-package tree-sitter-langs)
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
 
 ;; You can download per-architecture pre-compiled release from
 ;; https://github.com/emacs-tree-sitter/tree-sitter-langs Rename
