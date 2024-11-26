@@ -7,7 +7,7 @@
 (use-package treesit-auto
   :hook (after-init . global-treesit-auto-mode)
   :config
-  (setq treesit-auto-install nil))
+  (setq treesit-auto-install t))
 
 ;; You can download per-architecture pre-compiled release from
 ;; https://github.com/emacs-tree-sitter/tree-sitter-langs Rename
