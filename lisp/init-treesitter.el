@@ -3,10 +3,11 @@
 ;;; Code:
 
 (use-package clojure-ts-mode)
-(use-package tree-sitter-langs)
+
 (use-package treesit-auto
+  :hook (after-init . global-treesit-auto-mode)
   :config
-  (global-treesit-auto-mode))
+  (setq treesit-auto-install nil))
 
 ;; You can download per-architecture pre-compiled release from
 ;; https://github.com/emacs-tree-sitter/tree-sitter-langs Rename
