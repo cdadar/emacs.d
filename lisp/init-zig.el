@@ -6,9 +6,8 @@
   :if (and  (fboundp 'treesit-ready-p) (treesit-ready-p 'zig))
   :mode ("\\.\\(zig\\|zon\\)\\'" . zig-ts-mode)
   :config
-  (progn
-      (with-eval-after-load 'eglot
-        (add-to-list 'eglot-server-programs '(zig-ts-mode . ("zls"))))))
+  (with-eval-after-load 'eglot
+        (add-to-list 'eglot-server-programs '(zig-ts-mode . ("zls")))))
 
 (use-package zig-mode)
 
