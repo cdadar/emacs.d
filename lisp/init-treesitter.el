@@ -3,7 +3,7 @@
 ;;; Code:
 
 (use-package clojure-ts-mode)
-
+(use-package tree-sitter-langs)
 (use-package treesit-auto
   :hook (after-init . global-treesit-auto-mode)
   :config
