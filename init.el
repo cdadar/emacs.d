@@ -177,7 +177,7 @@
 ;; (require 'init-citre)
 (require 'init-yasnippet)
 (require 'init-emmet)
-(require 'init-dict)
+;; (require 'init-dict)
 (require 'init-erc)
 (require 'init-emojify)
 (require 'init-puml)
