@@ -6,7 +6,8 @@
 #+OPTIONS: toc:nil  H:10 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:t
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
-#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in},left=0.6in,right=0.6in,top=0.3in,includehead,includefoot, truedimen]{geometry}
+#+LATEX_HEADER: \documentclass[14pt]{article}
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
