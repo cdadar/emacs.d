@@ -182,7 +182,6 @@
 (require 'init-emojify)
 (require 'init-puml)
 (require 'init-golang)
-(require 'init-personal)
 (require 'init-vimrc)
 (require 'init-elfeed)
 (require 'init-eshell)
@@ -197,6 +196,9 @@
 (require 'init-citar)
 (require 'init-pdf)
 (require 'init-epub)
+
+(require 'init-fonts)
+(require 'init-personal)
 
 ;; Extra packages which don't require any configuration
 

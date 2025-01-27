@@ -79,7 +79,7 @@
   (when (display-graphic-p)
     (progn
       (when (font-installed-p "JetBrainsMono")
-        (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "JetBrainsMono" 13)));; 11 13 17 19 23
+        (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "JetBrainsMono" 17)));; 11 13 17 19 23
       ;; chinese font
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (when (font-installed-p "LXGW WenKai")
@@ -90,7 +90,7 @@
 ;; respect default terminal fonts
 ;; if we're in a gui set the fonts appropriately
 ;; for daemon sessions and and nondaemons
-(apply-if-gui 'cdadar/set-backup-fonts)
+;; (apply-if-gui 'cdadar/set-backup-fonts)
 
 
 ;; (use-package cnfonts
