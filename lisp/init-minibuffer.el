@@ -3,18 +3,19 @@
 ;;; Code:
 
 (use-package vertico
-  :hook (after-init . vertico-mode)
+  :bind (:map vertico-map
+             ("C-'" . vertico-quick-jump)
+             ("RET" . vertico-directory-enter)
+             ("DEL" . vertico-directory-delete-char)
+             ("M-DEL" . vertico-directory-delete-word)
+             ("M-SPC" . +vertico/embark-preview))
+  :hook ((after-init . vertico-mode)
+         (rfn-eshadow-update-overlay . vertico-directory-tidy)
+         (minibuffer-setup . vertico-repeat-save))
   :config
   (setq vertico-resize nil
         vertico-count 17
-        vertico-cycle t)
-  ;; Cleans up path when moving directories with shadowed paths syntax, e.g.
-  ;; cleans ~/foo/bar/// to /, and ~/foo/bar/~/ to ~/.
-  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
-  (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
-  (define-key vertico-map (kbd "C-'") 'vertico-quick-jump)
-  (define-key vertico-map [backspace] #'vertico-directory-delete-char)
-  (define-key vertico-map (kbd "M-SPC") #'+vertico/embark-preview))
+        vertico-cycle t))
 
 (use-package orderless
   :demand t
@@ -63,6 +64,16 @@
         orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
         orderless-style-dispatchers '(+orderless-dispatch))
   )
+
+;; Support Pinyin
+(use-package pinyinlib
+  :after orderless
+  :autoload pinyinlib-build-regexp-string
+  :init
+  (defun completion--regex-pinyin (str)
+    (orderless-regexp (pinyinlib-build-regexp-string str)))
+  (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+
 
 ;; Example configuration for Consult
 (use-package consult
@@ -280,14 +291,15 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   :config
   (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
+(use-package consult-flyspell
+  :bind ("M-g s" . consult-flyspell))
+
 (use-package consult-yasnippet
   :commands consult-yasnippet
-  :bind (("M-+" . consult-yasnippet)))
+  :bind (("M-g y" . consult-yasnippet)))
 
 (use-package consult-org-roam
     :after org-roam
-    :config
-    (consult-org-roam-mode 1)
     :bind
     (("C-c n e" . consult-org-roam-file-find)
      ("C-c n b" . consult-org-roam-backlinks)
