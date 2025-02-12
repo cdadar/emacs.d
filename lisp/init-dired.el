@@ -7,7 +7,7 @@
   :bind (:map ctl-x-map
               (("C-j" . dired-jump))
          :map ctl-x-4-map
-         (("C-j" . dired-jump-other-window))
+              (("C-j" . dired-jump-other-window))
          :map dired-mode-map
               (("e" . dired-open-externally)
                ([mouse-2] . dired-find-file)
