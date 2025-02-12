@@ -37,3 +37,6 @@
 [submodule "site-lisp/emacs-anki-helper"]
 	path = site-lisp/emacs-anki-helper
 	url = git@github.com:Elilif/emacs-anki-helper.git
+[submodule "site-lisp/p-search"]
+	path = site-lisp/p-search
+	url = git@github.com:zkry/p-search.git
