@@ -298,13 +298,6 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   :commands consult-yasnippet
   :bind (("M-g y" . consult-yasnippet)))
 
-(use-package consult-org-roam
-    :after org-roam
-    :bind
-    (("C-c n e" . consult-org-roam-file-find)
-     ("C-c n b" . consult-org-roam-backlinks)
-     ("C-c n r" . consult-org-roam-search)))
-
 (use-package bibtex-capf
   :hook ((org-mode markdown-mode tex-mode latex-mode reftex-mode) . bibtex-capf-mode))
 
