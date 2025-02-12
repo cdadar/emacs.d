@@ -121,6 +121,11 @@
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (setq cape-dabbrev-check-other-buffers nil))
 
+(use-package yasnippet-capf
+  :after cape
+  :config
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+
 (use-package corfu-english-helper
   :ensure nil
   :after corfu
