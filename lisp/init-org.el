@@ -1026,5 +1026,9 @@ typical word processor."
             (org-agenda-cmp-user-defined 'org-review-compare)
             (org-agenda-sorting-strategy '(user-defined-down)))))))
 
+
+(use-package org-fragtog
+  :hook ((org-mode . org-fragtog-mode)))
+
 (provide 'init-org)
 ;;; init-org.el ends here
