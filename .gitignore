@@ -70,3 +70,4 @@ places
 .last-package-update-day
 /forge-*.sqlite
 /projectile.cache
+ellama-sessions/
