@@ -287,9 +287,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 
 (use-package embark-consult
   :after (embark consult)
-  :demand
-  :config
-  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
+  :demand)
 
 (use-package consult-flyspell
   :bind ("M-g s" . consult-flyspell))
