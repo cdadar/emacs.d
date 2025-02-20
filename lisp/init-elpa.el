@@ -96,6 +96,14 @@ locate PACKAGE."
 (use-package diminish)
 (use-package bind-key)
 
+(use-package elpa-mirror
+  :ensure nil
+  :load-path "site-lisp/epla-mirror"
+  :init (require 'elpa-mirror)
+  :config
+  (setq elpamr-default-output-directory "~/Nutstore Files/Nutstore/emacs/epla-mirror")
+  (add-to-list 'package-archives '("epla-mirror" . "~/Nutstore Files/Nutstore/emacs/epla-mirror") t))
+
 
 ;; Update GPG keyring for GNU ELPA
 (use-package gnu-elpa-keyring-update)

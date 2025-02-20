@@ -40,3 +40,6 @@
 [submodule "site-lisp/p-search"]
 	path = site-lisp/p-search
 	url = git@github.com:zkry/p-search.git
+[submodule "site-lisp/elpa-mirror"]
+	path = site-lisp/elpa-mirror
+	url = git@github.com:redguardtoo/elpa-mirror.git
