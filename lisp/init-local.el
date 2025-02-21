@@ -74,12 +74,14 @@
 ;; (setq bibtex-completion-pdf-open-function 'org-open-file)
 
 
-
 (setq org-roam-directory "~/org-mode/roam")
 (setq elfeed-db-directory "~/Nutstore Files/Nutstore/.elfeed")
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 (setq bibtex-capf-bibliography "~/Nutstore Files/Nutstore/bibliography/references.bib")
 (setq org-zettel-ref-overview-directory "~/Nutstore Files/Nutstore/org-overviews/")
+
+(setq elpamr-default-output-directory "~/Nutstore Files/Nutstore/emacs/epla-mirror")
+(add-to-list 'package-archives '("epla-mirror" . "~/Nutstore Files/Nutstore/emacs/epla-mirror"))
 
 (custom-set-variables
  '(markdown-command "pandoc")

@@ -53,9 +53,10 @@
 ;; Calls (package-initialize)
 
 ;; Allow users to provide an optional "init-local" containing personal settings
-(require 'init-local nil t)
+
 
 (require 'init-elpa)      ;; Machinery for installing required packages
+(require 'init-local nil t)
 (require 'init-exec-path) ;; Set up $PATH
 
 
