@@ -170,6 +170,10 @@
   :bind
   (("C-;" . avy-goto-char-timer)))
 
+(use-package ace-pinyin
+  :diminish
+  :hook (after-init . ace-pinyin-global-mode))
+
 (use-package multiple-cursors
   :bind (
          ;; multiple-cursors
