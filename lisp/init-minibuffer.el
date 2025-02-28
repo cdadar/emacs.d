@@ -205,7 +205,11 @@
   ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
   ;;;; 5. No project support
   ;; (setq consult-project-function nil)
-)
+  )
+
+(use-package consult-project-extra
+  :bind (("C-c p f" . consult-project-extra-find)
+         ("C-c p o" . consult-project-extra-find-other-window)))
 
 
 (use-package consult-dir
