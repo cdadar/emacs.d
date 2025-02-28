@@ -89,26 +89,26 @@
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  ;; (add-to-list 'completion-at-point-functions #'cape-history)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  (add-to-list 'completion-at-point-functions #'cape-tex)
-  ;; (add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;; (add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;; (add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  ;; (add-to-list 'completion-at-point-functions #'cape-line)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  ;; (add-hook 'completion-at-point-functions #'cape-history)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions #'cape-tex)
+  ;; (add-hook 'completion-at-point-functions #'cape-sgml)
+  ;; (add-hook 'completion-at-point-functions #'cape-rfc1345)
+  (add-hook 'completion-at-point-functions #'cape-abbrev)
+  ;; (add-hook 'completion-at-point-functions #'cape-dict)
+  ;; (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
+  ;; (add-hook 'completion-at-point-functions #'cape-line)
 
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (setq cape-dabbrev-check-other-buffers nil))
 
 (use-package yasnippet-capf
   :after cape
-  :config
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+  :init
+  (add-hook 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package corfu-english-helper
   :ensure nil
@@ -116,12 +116,6 @@
   :load-path "site-lisp/corfu-english-helper"
   :bind
   (("C-c p E" . corfu-english-helper-search)))
-
-;; (with-eval-after-load 'corfu
-;;   (use-package kind-icon
-;;     :config
-;;     (setq kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-;;     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
