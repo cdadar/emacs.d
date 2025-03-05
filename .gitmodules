@@ -43,3 +43,6 @@
 [submodule "site-lisp/elpa-mirror"]
 	path = site-lisp/elpa-mirror
 	url = git@github.com:redguardtoo/elpa-mirror.git
+[submodule "site-lisp/aidermacs"]
+	path = site-lisp/aidermacs
+	url = git@github.com:MatthewZMD/aidermacs.git
