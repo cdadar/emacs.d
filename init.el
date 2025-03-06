@@ -97,7 +97,8 @@
 (require 'init-uniquify)
 (require 'init-ibuffer)
 (require 'init-flymake)
-(require 'init-eglot)
+(require 'init-lsp)
+;; (require 'init-eglot)
 
 (require 'init-recentf)
 (require 'init-minibuffer)
@@ -203,7 +204,7 @@
 (require 'init-pdf)
 (require 'init-epub)
 (require 'init-ellama)
-(require 'init-lsp)
+
 
 (require 'init-fonts)
 (require 'init-personal)

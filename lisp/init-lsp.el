@@ -1,11 +1,11 @@
-;;; init-lsp.el --- lps config  -*- lexical-binding: t -*-
+;;; init-lsp.el --- LSP support via eglot  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2025 chens
 ;;
 ;; Version: 0.0.1
-;; Keywords: keyword1 keyword2
-;; Author: chens <chens AT linux-bszb>
-;; URL: https://github.com/usrname/init-lsp
+;; Keywords: LSP eglot
+;; Author: chens <chens>
+;; URL: https://github.com/cdadar/emacs.d/lisp/init-lsp.el
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -29,8 +29,6 @@
 ;;
 
 ;;; Code:
-
-(message "hello world")
 
 (use-package eglot
      :hook ((prog-mode . (lambda ()
