@@ -20,5 +20,8 @@
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
 #+LaTeX_HEADER: \usepackage{xcolor}
+#+BEAMER_HEADER: \setbeamertemplate{itemize items}[default]
+#+BEAMER_HEADER: \setbeamertemplate{enumerate items}[default]
+#+BEAMER_HEADER: \setbeamertemplate{items}[default]
 
 #+LATEX_HEADER: \institute{}

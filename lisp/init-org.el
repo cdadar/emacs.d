@@ -648,6 +648,21 @@ typical word processor."
             "xelatex -interaction nonstopmode -output-directory %o %f")) ;; org v8
     ;; }}
 
+    (eval-after-load "ox-latex"
+
+      ;; update the list of LaTeX classes and associated header (encoding, etc.)
+      ;; and structure
+      '(add-to-list 'org-latex-classes
+                    `("beamer"
+                      ,(concat "\\documentclass[presentation]{beamer}\n"
+                               "[DEFAULT-PACKAGES]"
+                               "[PACKAGES]"
+                               "[EXTRA]\n")
+                      ("\\section{%s}" . "\\section*{%s}")
+                      ("\\subsection{%s}" . "\\subsection*{%s}")
+                      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
+
 
 
     (org-babel-do-load-languages

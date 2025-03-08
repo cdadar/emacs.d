@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: frame break
+# key: frame_break
+# --
+
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks=1.2,label=
+:END:
