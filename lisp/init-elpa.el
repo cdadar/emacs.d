@@ -97,8 +97,7 @@ locate PACKAGE."
 (use-package bind-key)
 
 (use-package elpa-mirror
-  :ensure nil
-  :load-path "site-lisp/epla-mirror"
+  :vc(:url "https://github.com/redguardtoo/elpa-mirror" :rev :newest)
   :commands (elpamr-create-mirror-for-installed))
 
 

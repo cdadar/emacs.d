@@ -1002,8 +1002,7 @@ typical word processor."
 
 (use-package org-noter-plus
   :after org-noter
-  :ensure nil
-  :load-path "site-lisp/org-noter-plus")
+  :vc(:url "https://github.com/yuchen-lea/org-noter-plus" :rev :newest))
 
 (use-package org-ref
   :ensure t)
@@ -1026,7 +1025,7 @@ typical word processor."
 
 (use-package org-zettel-ref-mode
   :ensure nil
-  :load-path "site-lisp/color-rg"
+  :vc(:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
   :config
   (setq org-zettel-ref-quick-markup-key "C-c m"))
 

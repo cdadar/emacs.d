@@ -444,29 +444,24 @@ ORIG is the advised function, which is called with its ARGS."
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 (use-package insert-translated-name
-  :ensure nil
-  :load-path "site-lisp/insert-translated-name"
+  :vc(:url "https://github.com/manateelazycat/insert-translated-name" :rev :newest)
   :commands insert-translated-name-insert)
 
 (use-package clip2org
-  :ensure nil
-  :load-path "site-lisp/clip2org")
+  :vc(:url "https://github.com/thamer/clip2org" :rev :newest))
 
 (use-package advance-words-count
-  :ensure nil
-  :load-path "site-lisp/advance-words-count"
+  :vc(:url "https://github.com/LdBeth/advance-words-count" :rev :newest)
   :init
   (require 'advance-wc-mode))
 
 
 (use-package delete-block
-  :ensure nil
-  :load-path "site-lisp/delete-block")
+  :vc(:url "https://github.com/manateelazycat/delete-block" :rev :newest))
 
 
 (use-package color-rg
-  :ensure nil
-  :load-path "site-lisp/color-rg"
+  :vc(:url "https://github.com/manateelazycat/color-rg" :rev :newest)
   :bind
   (("M-s M-r" . color-rg-search-input)
    :map isearch-mode-map ("M-s M-s" . isearch-toggle-color-rg)))

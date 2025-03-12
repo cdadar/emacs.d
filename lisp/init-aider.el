@@ -30,10 +30,9 @@
 
 ;;; Code:
 
-
 (use-package aidermacs
   :ensure nil
-  :load-path "site-lisp/aidermacs"
+  :vc (:url "https://github.com/MatthewZMD/aidermacs" :rev :newest)
   :config
   (setq aidermacs-default-model "sonnet")
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)

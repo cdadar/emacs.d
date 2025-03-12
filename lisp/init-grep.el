@@ -26,7 +26,7 @@
 
 (use-package grep-dired
   :ensure nil
-  :load-path "site-lisp/grep-dired")
+  :vc(:url "https://github.com/manateelazycat/grep-dired"))
 
 
 (provide 'init-grep)

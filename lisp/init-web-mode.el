@@ -50,8 +50,7 @@
           ;; angular imenu
           (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
   (use-package instant-rename-tag
-    :ensure nil
-    :load-path "site-lisp/instant-rename-tag"))
+    :vc(:url"https://github.com/manateelazycat/instant-rename-tag" :rev :newest)))
 
 
 (when (executable-find "prettier")

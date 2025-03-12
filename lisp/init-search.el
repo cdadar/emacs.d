@@ -39,7 +39,6 @@ PROMPT sets the `read-string prompt."
 
 
 (use-package p-search
-  :ensure nil
-  :load-path "site-lisp/p-search")
+  :vc(:url "https://github.com/zkry/p-search" :rev :newest))
 
 (provide 'init-search)

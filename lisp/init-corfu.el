@@ -111,9 +111,8 @@
   (add-hook 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package corfu-english-helper
-  :ensure nil
   :after corfu
-  :load-path "site-lisp/corfu-english-helper"
+  :vc(:url "https://github.com/manateelazycat/corfu-english-helper" :rev :newest)
   :bind
   (("C-c p E" . corfu-english-helper-search)))
 
