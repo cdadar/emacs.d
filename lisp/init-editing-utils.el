@@ -451,7 +451,7 @@ ORIG is the advised function, which is called with its ARGS."
   :vc(:url "https://github.com/thamer/clip2org" :rev :newest))
 
 (use-package advance-words-count
-  :vc(:url "https://github.com/LdBeth/advance-words-count" :rev :newest)
+  :vc(:url "https://github.com/LdBeth/advance-words-count.el" :rev :newest)
   :init
   (require 'advance-wc-mode))
 
