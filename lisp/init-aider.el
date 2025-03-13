@@ -40,7 +40,8 @@
   (setq aidermacs-auto-commits t)
   (setq aidermacs-use-architect-mode t)
   ; Ensure emacs can access *_API_KEY through .bashrc or setenv
-  (setenv "ANTHROPIC_API_KEY" "anthropic-api-key"))
+  ; (setenv "ANTHROPIC_API_KEY" "anthropic-api-key")
+  )
 
 
 (provide 'init-aider)
