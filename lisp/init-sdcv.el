@@ -86,12 +86,13 @@
 ;;; Require
 (when (executable-find "sdcv")
   (use-package sdcv
+    :after posframe
     :vc(:url "https://github.com/manateelazycat/sdcv" :rev :newest)
     :config
     (setq sdcv-say-word-p t)                ;say word after search
 
     (setq sdcv-dictionary-data-dir
-          (concat user-emacs-directory "/sdcv-dict")) ;设置星际译王本地词典的目录
+          (concat user-emacs-directory "sdcv-dict")) ;设置星际译王本地词典的目录
 
     (setq sdcv-dictionary-simple-list    ;星际译王屏幕取词词典, 简单, 快速
           '("懒虫简明英汉词典"
