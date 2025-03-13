@@ -30,18 +30,20 @@
 
 ;;; Code:
 
-(use-package aidermacs
-  :config
-  (setq aidermacs-default-model "sonnet")
-  (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
-  ; Enable minor mode for Aider files
-  (aidermacs-setup-minor-mode)
-  ; See the Configuration section below
-  (setq aidermacs-auto-commits t)
-  (setq aidermacs-use-architect-mode t)
-  ; Ensure emacs can access *_API_KEY through .bashrc or setenv
-  ; (setenv "ANTHROPIC_API_KEY" "anthropic-api-key")
-  )
+(when (executable-find "aider")
+  (use-package aidermacs
+    :config
+    (setq aidermacs-default-model "sonnet")
+    (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
+                                        ; Enable minor mode for Aider files
+    (aidermacs-setup-minor-mode)
+                                        ; See the Configuration section below
+    (setq aidermacs-auto-commits t)
+    (setq aidermacs-use-architect-mode t)
+                                        ; Ensure emacs can access *_API_KEY through .bashrc or setenv
+                                        ; (setenv "ANTHROPIC_API_KEY" "anthropic-api-key")
+    ))
+
 
 
 (provide 'init-aider)
