@@ -1017,7 +1017,10 @@ typical word processor."
   :vc(:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
   :config
   (setq org-zettel-ref-mode-type 'org-roam)
-  (setq org-zettel-ref-quick-markup-key "C-c m"))
+  (setq org-zettel-ref-quick-markup-key "C-c m")
+  (setq org-zettel-ref-python-environment 'venv)  ; 或 'system, 'venv
+  (setq org-zettel-ref-python-env-name "org-zettel-ref")  ; 如果使用 Conda 或 venv
+  (setq org-zettel-ref-python-file (expand-file-name "org-zettel-ref-mode/convert-to-org.py" package-user-dir)))
 
 (use-package org-review
   :bind (:map org-agenda-mode-map

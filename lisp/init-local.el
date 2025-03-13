@@ -78,7 +78,10 @@
 (setq elfeed-db-directory "~/Nutstore Files/Nutstore/.elfeed")
 (setq rmh-elfeed-org-file "~/org-mode/elfeed.org")
 (setq bibtex-capf-bibliography "~/Nutstore Files/Nutstore/bibliography/references.bib")
-(setq org-zettel-ref-overview-directory "~/Nutstore Files/Nutstore/org-overviews/")
+(setq org-zettel-ref-overview-directory "~/Nutstore Files/Nutstore/org-zettel/overviews/")
+(setq org-zettel-ref-temp-folder "~/Nutstore Files/Nutstore/org-zettel/temp_convert/") ; 该文件夹用于存放等待转换的文档
+(setq org-zettel-ref-reference-folder "~/Nutstore Files/Nutstore/org-zettel/ref/") ; 该文件夹用于存放转换后的参考资料
+(setq org-zettel-ref-archive-folder "~/Nutstore Files/Nutstore/org-zettel/archives/") ; 该文件夹用于存放转换后的归档文件
 
 (setq elpamr-default-output-directory "~/Nutstore Files/Nutstore/emacs/epla-mirror")
 (add-to-list 'package-archives '("epla-mirror" . "~/Nutstore Files/Nutstore/emacs/epla-mirror"))
