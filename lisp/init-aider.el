@@ -31,8 +31,6 @@
 ;;; Code:
 
 (use-package aidermacs
-  :ensure nil
-  :vc (:url "https://github.com/MatthewZMD/aidermacs" :rev :newest)
   :config
   (setq aidermacs-default-model "sonnet")
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
@@ -42,7 +40,7 @@
   (setq aidermacs-auto-commits t)
   (setq aidermacs-use-architect-mode t)
   ; Ensure emacs can access *_API_KEY through .bashrc or setenv
-  (setenv "ANTHROPIC_API_KEY" anthropic-api-key))
+  (setenv "ANTHROPIC_API_KEY" "anthropic-api-key"))
 
 
 (provide 'init-aider)
