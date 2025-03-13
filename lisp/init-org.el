@@ -988,17 +988,8 @@ typical word processor."
   (require 'ox-pandoc))
 
 
-;; (use-package org-zettel-ref-mode
-;;   :ensure t  ; If installed via package manager
-;;   :init
-;;   (setq org-zettel-ref-overview-directory "~/org-mode/roam/")
-;;   :config
-;;   (setq org-zettel-ref-quick-markup-key "C-c m"))
-
 (use-package org-noter
   :demand t)
-
-
 
 (use-package org-noter-plus
   :after org-noter
@@ -1006,7 +997,6 @@ typical word processor."
 
 (use-package org-ref
   :ensure t)
-
 
 (use-package org-journal
   :defer t
@@ -1024,9 +1014,9 @@ typical word processor."
 
 
 (use-package org-zettel-ref-mode
-  :ensure nil
   :vc(:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
   :config
+  (setq org-zettel-ref-mode-type 'org-roam)
   (setq org-zettel-ref-quick-markup-key "C-c m"))
 
 (use-package org-review
