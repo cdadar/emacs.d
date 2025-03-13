@@ -204,6 +204,7 @@
 (require 'init-pdf)
 (require 'init-epub)
 (require 'init-ellama)
+(require 'init-sdcv)
 
 
 (require 'init-fonts)
