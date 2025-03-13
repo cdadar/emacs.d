@@ -586,8 +586,6 @@ ORIG is the advised function, which is called with its ARGS."
       buffer-content)))
 
 
-(use-package posframe)
-
 
 
 ;; (defun auto-space-yank-advice (orig-fun &rest args)

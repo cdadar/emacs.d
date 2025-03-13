@@ -86,7 +86,6 @@
 ;;; Require
 (when (executable-find "sdcv")
   (use-package sdcv
-    :after posframe
     :vc(:url "https://github.com/manateelazycat/sdcv" :rev :newest)
     :config
     (setq sdcv-say-word-p t)                ;say word after search
