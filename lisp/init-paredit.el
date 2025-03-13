@@ -42,19 +42,18 @@
     :load-path "site-lisp/paredit-extension"))
 
 
-(when (maybe-require-package 'puni)
-  ;;(add-hook 'prog-mode-hook 'puni-mode)
+(use-package puni
+  :config
   (add-hook 'sanityinc/lispy-modes-hook (lambda () (puni-mode -1)))
-  (with-eval-after-load 'puni
-    (define-key puni-mode-map (kbd "M-(") 'puni-wrap-round)
-    (define-key puni-mode-map (kbd "C-(") 'puni-slurp-backward)
-    (define-key puni-mode-map (kbd "C-)") 'puni-slurp-forward)
-    (define-key puni-mode-map (kbd "C-}") 'puni-barf-forward)
-    (define-key puni-mode-map (kbd "C-{") 'puni-barf-backward)
-    (define-key puni-mode-map (kbd "M-<up>") 'puni-splice-killing-backward)
-    (define-key puni-mode-map (kbd "C-w") nil)))
-
-
+  :bind
+  (:map puni-mode-map
+        (("M-(" . puni-wrap-round )
+         ("C-(" . puni-slurp-backward )
+         ("C-)" . puni-slurp-forward )
+         ("C-}" . puni-barf-forward )
+         ("C-{" . puni-barf-backward )
+         ("M-(" . puni-splice-killing-backward )
+         ("C-w" . nil))))
 
 (provide 'init-paredit)
 ;;; init-paredit.el ends here

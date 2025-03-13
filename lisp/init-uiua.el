@@ -2,13 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(or (maybe-require-package 'uiua-ts-mode)
-    (maybe-require-package 'uiua-mode))
+(or (use-package uiua-ts-mode) (use-package uiua-mode))
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs '((uiua-mode uiua-ts-mode) . ("uiua" "lsp"))))
 
-(maybe-require-package 'nixpkgs-fmt)
+(use-package nixpkgs-fmt)
 
 (provide 'init-uiua)
 ;;; init-uiua.el ends here
