@@ -71,3 +71,4 @@ places
 /forge-*.sqlite
 /projectile.cache
 ellama-sessions/
+.zettel-ref-db.el
