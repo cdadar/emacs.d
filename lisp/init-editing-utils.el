@@ -453,7 +453,8 @@ ORIG is the advised function, which is called with its ARGS."
 (use-package advance-words-count
   :ensure nil
   :load-path "site-lisp/advance-works-count"
-  :commands advance-wc-mode)
+  :init
+  (require 'advance-wc-mode))
 
 
 (use-package delete-block
