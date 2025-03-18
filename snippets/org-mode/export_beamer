@@ -9,19 +9,24 @@
 
 #+startup: beamer
 #+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_options: [aspectratio=169]
 #+LaTeX_CLASS_options: [bigger]
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
 
 
-
-#+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
-#+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \usetheme{metropolis}
-#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
 #+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
 #+LaTeX_HEADER: \usepackage{xcolor}
+#+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
+#+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
+#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+
+#+BEAMER_HEADER: \definecolor{links}{HTML}{0000A0}
 #+BEAMER_HEADER: \setbeamertemplate{itemize items}[default]
 #+BEAMER_HEADER: \setbeamertemplate{enumerate items}[default]
 #+BEAMER_HEADER: \setbeamertemplate{items}[default]
+#+BEAMER_HEADER: \setbeamercolor*{local structure}{fg=darkred}
+#+BEAMER_HEADER: \setbeamercolor{section in toc}{fg=darkred}
+#+BEAMER_HEADER: \setlength{\parskip}{\smallskipamount}
 
 #+LATEX_HEADER: \institute{}
