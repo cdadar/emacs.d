@@ -786,18 +786,6 @@ typical word processor."
           (insert output-string))
         output-string))))
 
-(use-package hexrgb
-  :vc (:url "https://github.com/emacsmirror/hexrgb" :rev :newest))
-
-(use-package org-html-themify
-  :after hexrgb
-  :vc (:url "https://github.com/DogLooksGood/org-html-themify" :rev :newest)
-  :hook (org-mode . org-html-themify-mode)
-  :custom
-  (org-html-themify-themes
-   '((dark . modus-vivendi)
-     (light . modus-operandi))))
-
 (use-package org-pomodoro
   :after org
   :bind
