@@ -623,7 +623,8 @@ ORIG is the advised function, which is called with its ARGS."
 ;;         (insert " ")))))
 
 
-
+(use-package thing-edit
+  :vc (:url "git@github.com:manateelazycat/thing-edit.git" :rev :newest))
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
