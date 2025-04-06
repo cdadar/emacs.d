@@ -91,7 +91,7 @@
  '(delete-selection-mode t)
  '(scroll-bar-mode nil)
  '(org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 10)))
- '(enable-recursive-minibuffers t))
-
+ '(enable-recursive-minibuffers t)
+ '(text-mode-ispell-word-completion nil))
 
 (provide 'init-local)
