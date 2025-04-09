@@ -13,6 +13,7 @@
    ([remap query-replace] . anzu-query-replace)))
 
 
+
 (use-package isearch
   :ensure nil
   :commands (isearch-occur)
@@ -55,6 +56,10 @@ This is useful when followed by an immediate kill."
          ("C-c C-o" . sanityinc/isearch-occur)
          ("C-M-w" . isearch-yank-symbol)
          ([(control return)] . sanityinc/isearch-exit-other-end))))
+
+(use-package ctrlf
+  :init
+  (ctrlf-mode +1))
 
 (provide 'init-isearch)
 ;;; init-isearch.el ends here

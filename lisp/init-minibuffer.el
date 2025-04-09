@@ -77,17 +77,14 @@
 
 ;; Example configuration for Consult
 (use-package consult
-  ;; Replace bindings. Lazily loaded due by `use-package'.
+  ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
          ("C-c k" . consult-kmacro)
          ("C-c m" . consult-man)
          ("C-c i" . consult-info)
-         ([remap Info-search]        . consult-info)
-         ([remap imenu]              . consult-imenu)
-         ([remap isearch-forward]    . consult-line)
-         ([remap recentf-open-files] . consult-recent-file)
+         ([remap Info-search] . consult-info)
          ;; C-x bindings in `ctl-x-map'
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
@@ -141,15 +138,12 @@
   ;; The :init configuration is always executed (Not lazy)
   :init
 
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
-
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
+  ;; Tweak the register preview for `consult-register-load',
+  ;; `consult-register-store' and the built-in commands.  This improves the
+  ;; register formatting, adds thin separator lines, register sorting and hides
+  ;; the window mode line.
   (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
 
   ;; Use Consult to select xref locations with preview
   (setq xref-show-xrefs-function #'consult-xref
@@ -159,6 +153,12 @@
   ;; after lazily loading the package.
   :config
 
+  (when (and (executable-find "rg"))
+    (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
+      (interactive (list current-prefix-arg (when-let ((s (symbol-at-point)))
+                                      (symbol-name s))))
+      (consult-ripgrep dir initial)))
+
   ;; Optionally configure preview. The default value
   ;; is 'any, such that any key triggers the preview.
   ;; (setq consult-preview-key 'any)
@@ -166,15 +166,9 @@
   ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
   ;; For some commands and buffer sources it is useful to configure the
   ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  (when (and (executable-find "rg"))
-    (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
-      (interactive (list current-prefix-arg (when-let ((s (symbol-at-point)))
-                                      (symbol-name s))))
-      (consult-ripgrep dir initial)))
-
   (consult-customize
    consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep
+   consult-ripgrep consult-git-grep consult-grep consult-man
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-file-register
    consult--source-recent-file consult--source-project-recent-file sanityinc/consult-ripgrep-at-point
@@ -183,29 +177,14 @@
 
   (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point)
 
-
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
   (setq consult-narrow-key "<") ;; "C-+"
 
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
-  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
-
-  ;; By default `consult-project-function' uses `project-root' from project.el.
-  ;; Optionally configure a different project root function.
-  ;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
-  ;;;; 2. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-  ;;;; 3. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-  ;;;; 4. projectile.el (projectile-project-root)
-  ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-  ;;;; 5. No project support
-  ;; (setq consult-project-function nil)
-  )
+  ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
+)
 
 (use-package consult-project-extra
   :bind (("C-c p f" . consult-project-extra-find)
