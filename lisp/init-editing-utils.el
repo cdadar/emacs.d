@@ -433,9 +433,9 @@ ORIG is the advised function, which is called with its ARGS."
         wgrep-change-readonly-file t)
   :bind
   (:map grep-mode-map
-   ("C-c C-q" . wgrep-change-to-wgrep-mode)
-   :map occur-mode-map
-   ("C-c C-q" . wgrep-change-to-wgrep-mode))
+        ("C-c C-q" . wgrep-change-to-wgrep-mode)
+        :map occur-mode-map
+        ("C-c C-q" . wgrep-change-to-wgrep-mode))
   :config
   (setq wgrep-auto-save-buffer t))
 
@@ -627,7 +627,8 @@ ORIG is the advised function, which is called with its ARGS."
   :vc (:url "git@github.com:manateelazycat/thing-edit.git" :rev :newest))
 
 
-(use-package apheleia)
+(use-package apheleia
+  :init (apheleia-global-mode))
 
 
 
