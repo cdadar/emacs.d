@@ -1,11 +1,11 @@
-;;; init-ellama.el --- ellama config  -*- lexical-binding: t -*-
+;;; init-ai.el --- about ai config  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2025 chens
 ;;
 ;; Version: 0.0.1
-;; Keywords: ellama ai
-;; Author: chens <gunbanmi@gmail.com>
-;; URL: https://github.com/cdadar/emacd.d/lisp/init-ellama
+;; Keywords: ai emigo aidermacs
+;; Author: chens <chens AT linux-asdf>
+;; URL: https://github.com/cdadar/emacs.d/lisp/init-ai.el
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -29,7 +29,10 @@
 ;;
 
 ;;; Code:
+(message "hello world")
 
+(use-package emigo
+  :vc (:url "https://github.com/MatthewZMD/emigo"  :rev :newest))
 
 (when (executable-find "ollama")
   (use-package ellama
@@ -99,5 +102,18 @@
     (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)))
 
 
-(provide 'init-ellama)
-;;; init-ellama.el ends here
+(when (executable-find "aider")
+  (use-package aidermacs
+    :config
+    (setq aidermacs-default-model "sonnet")
+    (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
+                                        ; Enable minor mode for Aider files
+    (aidermacs-setup-minor-mode)
+                                        ; See the Configuration section below
+    (setq aidermacs-auto-commits t)
+    (setq aidermacs-use-architect-mode t)
+                                        ; Ensure emacs can access *_API_KEY through .bashrc or setenv
+                                        ; (setenv "ANTHROPIC_API_KEY" "anthropic-api-key")
+    ))
+(provide 'init-ai)
+;;; init-ai.el ends here
