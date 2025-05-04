@@ -57,6 +57,14 @@
       org-ref-default-bibliography '("~/Nutstore Files/Nutstore/bibliography/references.bib")
       org-ref-pdf-directory "~/Nutstore Files/Nutstore/bibliography/bibtex-pdfs/")
 
+
+(setq
+ ebib-preload-bib-files '("~/Nutstore Files/Nutstore/bibliography/references.bib")
+ ebib-notes-use-single-file "~/Nutstore Files/Nutstore/bibliography/Notes.org"
+ ebib-file-search-dirs '("~/Nutstore Files/Nutstore/bibliography/bibtex-pdfs/")
+ ebib-reading-list-file "~/Nutstore Files/Nutstore/bibliography/ReadingList.org"
+ ebib-keywords-file "~/Nutstore Files/Nutstore/bibliography/ebib-keywords.txt")
+
 (setq bibtex-completion-bibliography "~/Nutstore Files/Nutstore/bibliography/references.bib"
       bibtex-completion-library-path "~/Nutstore Files/Nutstore/bibliography/bibtex-pdfs"
       bibtex-completion-notes-path "~/Nutstore Files/Nutstore/bibliography/helm-bibtex-notes")

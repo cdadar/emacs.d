@@ -130,7 +130,7 @@
     ;; (advice-add 'org-agenda-files :filter-return #'dynamic-agenda-files-advice)
     ;; (add-to-list 'org-after-todo-state-change-hook 'update-dynamic-agenda-hook t)
 
-
+    
 
     (use-package writeroom-mode)
 
@@ -175,7 +175,7 @@ typical word processor."
 
 
     (setq org-support-shift-select t)
-
+    
 ;;; Capturing
     (defun get-year-and-month ()
       (list (format-time-string "%Y 年") (format-time-string "%m 月")))
@@ -301,7 +301,7 @@ typical word processor."
           (when (eq type 'link)
             (kill-region beg end)))))
 
-
+    
 ;;; Refiling
 
     (setq org-refile-use-cache nil)
@@ -340,7 +340,7 @@ typical word processor."
     ;; Allow refile to create parent tasks with confirmation
     (setq org-refile-allow-creating-parent-nodes 'confirm)
 
-
+    
 ;;; To-do settings
 
     (setq org-todo-keywords
@@ -363,7 +363,7 @@ typical word processor."
                   ("PROJECT" :inherit font-lock-string-face))))
 
 
-
+    
 ;;; Agenda views
 
     (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
@@ -528,7 +528,7 @@ typical word processor."
 
     (add-hook 'org-agenda-finalize-hook 'my/org-agenda-insert-efforts)
 
-
+    
 ;;; Org clock
 
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
@@ -551,7 +551,7 @@ typical word processor."
           '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
 
 
-
+    
 ;;; Show the clocked-in task - if any - in the header line
     (defun sanityinc/show-org-clock-in-header-line ()
       (setq-default header-line-format '((" " org-mode-line-string " "))))
@@ -568,7 +568,7 @@ typical word processor."
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
 
 
-
+    
     (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
       (add-hook 'org-clock-in-hook
                 (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
@@ -578,12 +578,12 @@ typical word processor."
                                          "tell application \"org-clock-statusbar\" to clock out"))))
 
 
-
+    
     ;; TODO: warn about inconsistent items, e.g. TODO inside non-PROJECT
     ;; TODO: nested projects!
 
 
-
+    
 ;;; Archiving
 
     (setq org-archive-mark-done nil)
@@ -603,7 +603,7 @@ typical word processor."
          (setq org-map-continue-from (outline-previous-heading)))
        "/CANCELLED" 'file))
 
-
+    
 
     ;; ;; Show iCal calendars in the org agenda
     ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
@@ -808,7 +808,7 @@ typical word processor."
    (org-pomodoro-long-break-finished . (lambda ()
                                          (notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
    (org-pomodoro-killed . (lambda ()
-              (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))))
+                            (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))))
 
 (use-package org-cliplink
   :after org
@@ -995,8 +995,30 @@ typical word processor."
   :after org-noter
   :vc(:url "https://github.com/yuchen-lea/org-noter-plus" :rev :newest))
 
+(use-package ebib
+  :custom
+  (bibtex-autokey-name-case-convert-function 'capitalize)
+  (bibtex-autokey-titlewords 0)
+  (bibtex-autokey-year-length 4)
+  (ebib-uniquify-keys t)
+  (ebib-bibtex-dialect 'biblatex)
+  (ebib-index-window-size 10)
+  (ebib-keywords-field-keep-sorted t)
+  (ebib-keywords-file-save-on-exit 'always)
+  (ebib-file-associations '(("pdf")) "using Emacs to open pdf")
+  (ebib-use-timestamp t "recording the time that entries are added")
+  (ebib-index-columns '(("Entry Key" 20 t)
+                        ("Author/Editor" 40 nil)
+                        ("Year" 6 t)
+                        ("Title" 50 t)))
+  (ebib-index-default-sort '("timestamp" . descend)))
+
 (use-package org-ref
-  :ensure t)
+  :custom
+  (bibtex-dialect 'biblatex)
+  (org-ref-show-broken-links nil)
+  (org-ref-default-ref-type "eqref")
+  (org-ref-default-citation-link "citet"))
 
 (use-package org-journal
   :defer t
