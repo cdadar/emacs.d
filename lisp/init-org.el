@@ -987,14 +987,6 @@ typical word processor."
   :config
   (require 'ox-pandoc))
 
-
-(use-package org-noter
-  :demand t)
-
-(use-package org-noter-plus
-  :after org-noter
-  :vc(:url "https://github.com/yuchen-lea/org-noter-plus" :rev :newest))
-
 (use-package ebib
   :custom
   (bibtex-autokey-name-case-convert-function 'capitalize)
