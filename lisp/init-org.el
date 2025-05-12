@@ -25,6 +25,7 @@
   :bind
   ((("C-c c" . org-capture)))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
+  :hook (org-mode . (lambda () (setq toggle-truncate-lines t)))
   :config
   (progn
     (when *is-a-mac*
@@ -986,6 +987,9 @@ typical word processor."
   :after org
   :config
   (require 'ox-pandoc))
+
+(use-package org-pdftools
+  :hook (org-mode . org-pdftools-setup-link))
 
 (use-package ebib
   :custom
