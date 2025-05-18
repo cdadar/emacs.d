@@ -934,6 +934,10 @@ typical word processor."
              :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 查经")
              :unnarrowed t)
+            ("cS" "学道" plain "%?"
+             :target (file+head "christian/work/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n#+tags: 学道")
+             :unnarrowed t)
             ("cz" "栽培班" plain "%?"
              :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
