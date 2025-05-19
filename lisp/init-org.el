@@ -935,7 +935,7 @@ typical word processor."
                                 "#+title: ${title}\n#+tags: 查经")
              :unnarrowed t)
             ("cS" "学道" plain "%?"
-             :target (file+head "christian/work/%<%Y%m%d%H%M%S>-${slug}.org"
+             :target (file+head "christian/word/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 学道")
              :unnarrowed t)
             ("cz" "栽培班" plain "%?"
