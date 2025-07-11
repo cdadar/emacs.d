@@ -216,7 +216,6 @@
 (require 'init-date)
 (require 'init-auto-space)
 (require 'init-citar)
-;; (require 'init-pdf)
 (require 'init-epub)
 (require 'init-ai)
 (require 'init-sdcv)

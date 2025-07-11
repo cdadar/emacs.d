@@ -992,9 +992,6 @@ typical word processor."
   :config
   (require 'ox-pandoc))
 
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link))
-
 (use-package ebib
   :custom
   (bibtex-autokey-name-case-convert-function 'capitalize)
