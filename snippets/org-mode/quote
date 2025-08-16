@@ -3,5 +3,5 @@
 # expand-env: ((yas/indent-line 'fixed) (yas/wrap-around-region 'nil))
 # --
 #+begin_quote
-$0
+`yas-selected-text`
 #+end_quote
