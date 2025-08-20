@@ -32,3 +32,5 @@
 #+BEAMER_HEADER: \setbeamercolor*{local structure}{fg=darkred}
 #+BEAMER_HEADER: \setbeamercolor{section in toc}{fg=darkred}
 #+BEAMER_HEADER: \setlength{\parskip}{\smallskipamount}
+
+#+LATEX_HEADER: \institute{}
