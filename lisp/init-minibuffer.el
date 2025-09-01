@@ -4,11 +4,11 @@
 
 (use-package vertico
   :bind (:map vertico-map
-             ("C-'" . vertico-quick-jump)
-             ("RET" . vertico-directory-enter)
-             ("DEL" . vertico-directory-delete-char)
-             ("M-DEL" . vertico-directory-delete-word)
-             ("M-SPC" . +vertico/embark-preview))
+              ("C-'" . vertico-quick-jump)
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word)
+              ("M-SPC" . +vertico/embark-preview))
   :hook ((after-init . vertico-mode)
          (rfn-eshadow-update-overlay . vertico-directory-tidy)
          (minibuffer-setup . vertico-repeat-save))
@@ -156,7 +156,7 @@
   (when (and (executable-find "rg"))
     (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
       (interactive (list current-prefix-arg (when-let ((s (symbol-at-point)))
-                                      (symbol-name s))))
+                                              (symbol-name s))))
       (consult-ripgrep dir initial)))
 
   ;; Optionally configure preview. The default value
@@ -184,7 +184,7 @@
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
-)
+  )
 
 (use-package consult-project-extra
   :bind (("C-c p f" . consult-project-extra-find)

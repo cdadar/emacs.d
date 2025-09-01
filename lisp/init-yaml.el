@@ -6,7 +6,8 @@
   :hook
   (yaml-mode . goto-address-prog-mode)
   :config
-  (add-auto-mode 'yaml-mode "\\.yml\\.erb\\'"))
+  (add-auto-mode 'yaml-mode "\\.yml\\.erb\\'")
+  (setq yaml-indent-offset 2))
 
 (provide 'init-yaml)
 ;;; init-yaml.el ends here
