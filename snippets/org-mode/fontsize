@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: fontsize
+# key: fontsize
+# --
+\fontsize{8}{10}\selectfont
