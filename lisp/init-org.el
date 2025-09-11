@@ -910,14 +910,6 @@ typical word processor."
              :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)
-            ("co" "听道" plain "%?"
-             :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n#+tags: 听道")
-             :unnarrowed t)
-            ("cy" "以斯拉学习" plain "%?"
-             :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
             ("cb" "个人" plain "%?"
              :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
@@ -930,6 +922,10 @@ typical word processor."
              :target (file+head "christian/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 例证")
              :unnarrowed t)
+            ("co" "听道" plain "%?"
+             :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n#+tags: 听道")
+             :unnarrowed t)
             ("cs" "查经" plain "%?"
              :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 查经")
@@ -937,6 +933,14 @@ typical word processor."
             ("cS" "学道" plain "%?"
              :target (file+head "christian/word/%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n#+tags: 学道")
+             :unnarrowed t)
+            ("cw" "忘记背后" plain "%?"
+             :target (file+head "christian/wjbh/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n#+tags: 忘记背后")
+             :unnarrowed t)
+            ("cy" "以斯拉学习" plain "%?"
+             :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
              :unnarrowed t)
             ("cz" "栽培班" plain "%?"
              :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
