@@ -1,0 +1,42 @@
+[submodule "site-lisp/instant-rename-tag"]
+	path = site-lisp/instant-rename-tag
+	url = https://github.com/manateelazycat/instant-rename-tag
+[submodule "site-lisp/org-zettel-ref-mode"]
+	path = site-lisp/org-zettel-ref-mode
+	url = https://github.com/yibie/org-zettel-ref-mode
+[submodule "site-lisp/elpa-mirror"]
+	path = site-lisp/elpa-mirror
+	url = https://github.com/redguardtoo/elpa-mirror
+[submodule "site-lisp/sdcv"]
+	path = site-lisp/sdcv
+	url = https://github.com/manateelazycat/sdcv
+[submodule "site-lisp/grep-dired"]
+	path = site-lisp/grep-dired
+	url = https://github.com/manateelazycat/grep-dired
+[submodule "site-lisp/insert-translated-name"]
+	path = site-lisp/insert-translated-name
+	url = https://github.com/manateelazycat/insert-translated-name
+[submodule "site-lisp/clip2org"]
+	path = site-lisp/clip2org
+	url = https://github.com/thamer/clip2org
+[submodule "site-lisp/delete-block"]
+	path = site-lisp/delete-block
+	url = https://github.com/manateelazycat/delete-block
+[submodule "site-lisp/color-rg"]
+	path = site-lisp/color-rg
+	url = https://github.com/manateelazycat/color-rg
+[submodule "site-lisp/thing-edit"]
+	path = site-lisp/thing-edit
+	url = https://github.com/manateelazycat/thing-edit
+[submodule "site-lisp/p-search"]
+	path = site-lisp/p-search
+	url = https://github.com/zkry/p-search
+[submodule "site-lisp/emigo"]
+	path = site-lisp/emigo
+	url = https://github.com/MatthewZMD/emigo
+[submodule "site-lisp/emacs-anki-helper"]
+	path = site-lisp/emacs-anki-helper
+	url = https://github.com/Elilif/emacs-anki-helper
+[submodule "site-lisp/corfu-english-helper"]
+	path = site-lisp/corfu-english-helper
+	url = https://github.com/manateelazycat/corfu-english-helper

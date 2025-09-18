@@ -51,7 +51,7 @@
   (define-key corfu-map (kbd "C-j") 'corfu-next)
   (define-key corfu-map (kbd "C-k") 'corfu-previous))
 
- ;; Make Corfu also work in terminals, without disturbing usual behaviour in GUI
+;; Make Corfu also work in terminals, without disturbing usual behaviour in GUI
 (use-package corfu-terminal
   :after corfu
   :config
@@ -85,7 +85,7 @@
   :bind (("C-c p" . cape-prefix-map))
   :init
   (setq cape-dabbrev-min-length 3)
- ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
@@ -110,11 +110,18 @@
   :init
   (add-hook 'completion-at-point-functions #'yasnippet-capf))
 
-(use-package corfu-english-helper
-  :after corfu
-  :vc(:url "https://github.com/manateelazycat/corfu-english-helper" :rev :newest)
-  :bind
-  (("C-c p E" . corfu-english-helper-search)))
+(if emacs/>=30p
+    (use-package corfu-english-helper
+      :after corfu
+      :vc(:url "https://github.com/manateelazycat/corfu-english-helper" :rev :newest)
+      :bind
+      (("C-c p E" . corfu-english-helper-search)))
+  (use-package corfu-english-helper
+    :after corfu
+    :load-path "site-lisp/corfu-english-helper"
+    :bind
+    (("C-c p E" . corfu-english-helper-search))))
+
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here

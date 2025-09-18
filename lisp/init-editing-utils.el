@@ -443,12 +443,22 @@ ORIG is the advised function, which is called with its ARGS."
   :config
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
-(use-package insert-translated-name
-  :vc(:url "https://github.com/manateelazycat/insert-translated-name" :rev :newest)
-  :commands insert-translated-name-insert)
+(if emacs/>=30p
+    (use-package insert-translated-name
+      :vc(:url "https://github.com/manateelazycat/insert-translated-name" :rev :newest)
+      :commands insert-translated-name-insert)
+  (use-package insert-translated-name
+    :load-path "site-lisp/insert-translated-name"
+    :commands insert-translated-name-insert)
+  )
 
-(use-package clip2org
-  :vc(:url "https://github.com/thamer/clip2org" :rev :newest))
+
+(if emacs/>=30p
+    (use-package clip2org
+      :vc(:url "https://github.com/thamer/clip2org" :rev :newest))
+  (use-package clip2org
+    :load-path "site-lisp/clip2org"))
+
 
 (use-package advance-words-count
   :ensure nil
@@ -457,15 +467,25 @@ ORIG is the advised function, which is called with its ARGS."
   (require 'advance-wc-mode))
 
 
-(use-package delete-block
-  :vc(:url "https://github.com/manateelazycat/delete-block" :rev :newest))
+(if emacs/>=30p
+    (use-package delete-block
+      :vc(:url "https://github.com/manateelazycat/delete-block" :rev :newest))
+  (use-package delete-block
+    :load-path "site-lisp/delete-block"))
 
 
-(use-package color-rg
-  :vc(:url "https://github.com/manateelazycat/color-rg" :rev :newest)
-  :bind
-  (("M-s M-r" . color-rg-search-input)
-   :map isearch-mode-map ("M-s M-s" . isearch-toggle-color-rg)))
+(if emacs/>=30p
+    (use-package color-rg
+      :vc(:url "https://github.com/manateelazycat/color-rg" :rev :newest)
+      :bind
+      (("M-s M-r" . color-rg-search-input)
+       :map isearch-mode-map ("M-s M-s" . isearch-toggle-color-rg)))
+  (use-package color-rg
+    :load-path "site-lisp/color-rg"
+    :bind
+    (("M-s M-r" . color-rg-search-input)
+     :map isearch-mode-map ("M-s M-s" . isearch-toggle-color-rg))))
+
 
 (defun move-file (new-location)
   "Write this file to NEW-LOCATION, and delete the old one."
@@ -623,8 +643,12 @@ ORIG is the advised function, which is called with its ARGS."
 ;;         (insert " ")))))
 
 
-(use-package thing-edit
-  :vc (:url "https://github.com/manateelazycat/thing-edit.git" :rev :newest))
+(if emacs/>=30p
+    (use-package thing-edit
+      :vc (:url "https://github.com/manateelazycat/thing-edit" :rev :newest))
+  (use-package thing-edit
+    :load-path "site-lisp/thing-edit"))
+
 
 
 (use-package apheleia

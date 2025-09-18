@@ -38,7 +38,11 @@ PROMPT sets the `read-string prompt."
 (global-set-key (kbd "C-c s U") 'prelude-duckduckgo)
 
 
-(use-package p-search
-  :vc(:url "https://github.com/zkry/p-search" :rev :newest))
+(if emacs/>=30p
+    (use-package p-search
+      :vc(:url "https://github.com/zkry/p-search" :rev :newest))
+  (use-package p-search
+    :load-path "site-lisp/p-search"))
+
 
 (provide 'init-search)
