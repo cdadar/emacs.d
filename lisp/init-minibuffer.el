@@ -219,6 +219,7 @@
 
 (use-package embark
   :defer t
+  :commands embark-prefix-help-command
   :init
   (setq which-key-use-C-h-commands nil
         ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
@@ -242,7 +243,9 @@
     (with-current-buffer "*Messages*"
       (goto-char (1- (point-max)))
       (embark-act arg)))
-  :bind ((("C-h E" . embark-on-last-message))
+  :bind (("C-h E" . embark-on-last-message)
+         ("C-s-." . embark-act)
+         ("M-."   . embark-dwim)        ; overrides `xref-find-definitions'
          :map minibuffer-local-map
          (("C-;" . embark-act)
           ("C-c C-;" . embark-export)

@@ -102,7 +102,19 @@
   ;; (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
   ;; (add-hook 'completion-at-point-functions #'cape-line)
 
+  ;; Make these capfs composable.
+  (advice-add 'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
+  (advice-add 'lsp-completion-at-point :around #'cape-wrap-nonexclusive)
+  (advice-add 'comint-completion-at-point :around #'cape-wrap-nonexclusive)
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)
+
+  ;; Sanitize the `pcomplete-completions-at-point' Capf.  The Capf has undesired
+  ;; side effects on Emacs 28.  These advices are not needed on Emacs 29 and newer.
+  (unless emacs/>=29p
+    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
   (setq cape-dabbrev-check-other-buffers nil))
 
 (use-package yasnippet-capf
