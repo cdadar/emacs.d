@@ -1,10 +1,10 @@
 ;;; init-mini.el --- Centaur Emacs minimal configurations.	-*- lexical-binding: t no-byte-compile: t -*-
 
-;; Copyright (C) 2018-2023 Vincent Zhang
+;; Copyright (C) 2018-2025 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
-;; Version: 1.1.0
+;; Version: 1.2.0
 ;; Keywords: .emacs.d centaur
 
 ;; This file is not part of GNU Emacs.
@@ -110,6 +110,9 @@
 (add-hook 'minibuffer-setup-hook #'subword-mode)
 
 ;; Completion
+(when (fboundp 'global-completion-preview-mode)
+  (global-completion-preview-mode 1))
+
 (if (fboundp 'fido-mode)
     (progn
       (fido-mode 1)
@@ -180,4 +183,3 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init-mini.el ends here
-
