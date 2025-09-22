@@ -35,6 +35,7 @@
     (use-package emigo
       :vc (:url "https://github.com/MatthewZMD/emigo"  :rev :newest))
   (use-package emigo
+    :ensure nil
     :load-path "site-lisp/emigo"))
 
 

@@ -121,6 +121,7 @@
                 ))
         )
     (use-package sdcv
+      :ensure nil
       :load-path "site-lisp/sdcv"
       :config
       (setq sdcv-say-word-p t)                ;say word after search

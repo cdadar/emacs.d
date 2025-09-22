@@ -53,6 +53,7 @@
       (use-package instant-rename-tag
         :vc(:url"https://github.com/manateelazycat/instant-rename-tag" :rev :newest))
     (use-package instant-rename-tag
+      :ensure nil
       :load-path "site-lisp/instant-rename-tag")))
 
 

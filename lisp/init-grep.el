@@ -26,9 +26,9 @@
 
 (if emacs/>=30p
     (use-package grep-dired
-      :ensure nil
       :vc(:url "https://github.com/manateelazycat/grep-dired"))
   (use-package grep-dired
+    :ensure nil
     :load-path "site-lisp/grep-dired"
     ))
 

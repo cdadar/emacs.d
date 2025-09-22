@@ -1045,6 +1045,7 @@ typical word processor."
       (setq org-zettel-ref-python-env-name "org-zettel-ref")  ; 如果使用 Conda 或 venv
       (setq org-zettel-ref-python-file (expand-file-name "org-zettel-ref-mode/convert-to-org.py" package-user-dir)))
   (use-package org-zettel-ref-mode
+    :ensure nil
     :load-path "site-lisp/org-zettel-ref-mode"
     :config
     (setq org-zettel-ref-mode-type 'org-roam)

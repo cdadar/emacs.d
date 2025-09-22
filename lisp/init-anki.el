@@ -37,6 +37,7 @@
     (use-package anki-helper
       :vc (:url "https://github.com/Elilif/emacs-anki-helper" :rev :newest))
   (use-package anki-helper
+    :ensure nil
     :load-path "site-lisp/anki-helper"))
 
 

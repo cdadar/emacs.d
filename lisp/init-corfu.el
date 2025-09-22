@@ -129,6 +129,7 @@
       :bind
       (("C-c p E" . corfu-english-helper-search)))
   (use-package corfu-english-helper
+    :ensure nil
     :after corfu
     :load-path "site-lisp/corfu-english-helper"
     :bind
