@@ -34,7 +34,7 @@
   :after elfeed
   :init
   (progn
-    (setq rmh-elfeed-org-auto-ignore-invalid-feeds t)
+    (setq rmh-elfeed-org-auto-ignore-invalid-feeds nil)
     (setq rmh-elfeed-org-files (list rmh-elfeed-org-file)))
   :config
   (elfeed-org))
