@@ -31,6 +31,8 @@
     (when *is-a-mac*
       (use-package grab-mac-link))
 
+    (require 'org-tempo)
+
 
 
     (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
