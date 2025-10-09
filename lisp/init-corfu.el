@@ -122,18 +122,12 @@
   :init
   (add-hook 'completion-at-point-functions #'yasnippet-capf))
 
-(if emacs/>=30p
-    (use-package corfu-english-helper
-      :after corfu
-      :vc(:url "https://github.com/manateelazycat/corfu-english-helper" :rev :newest)
-      :bind
-      (("C-c p E" . corfu-english-helper-search)))
-  (use-package corfu-english-helper
-    :ensure nil
-    :after corfu
-    :load-path "site-lisp/corfu-english-helper"
-    :bind
-    (("C-c p E" . corfu-english-helper-search))))
+(use-package corfu-english-helper
+  :after corfu
+  :vc(:url "https://github.com/manateelazycat/corfu-english-helper" :rev :newest)
+  :bind
+  (("C-c p E" . corfu-english-helper-search)))
+
 
 
 (provide 'init-corfu)

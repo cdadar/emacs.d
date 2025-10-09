@@ -31,12 +31,9 @@
 ;;; Code:
 (message "hello world")
 
-(if emacs/>=30p
-    (use-package emigo
-      :vc (:url "https://github.com/MatthewZMD/emigo"  :rev :newest))
-  (use-package emigo
-    :ensure nil
-    :load-path "site-lisp/emigo"))
+(use-package emigo
+  :vc (:url "https://github.com/MatthewZMD/emigo"  :rev :newest))
+
 
 
 (when (executable-find "ollama")

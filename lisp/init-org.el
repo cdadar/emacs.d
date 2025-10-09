@@ -1037,24 +1037,15 @@ typical word processor."
   :config
   (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links
 
-(if emacs/>=30p
-    (use-package org-zettel-ref-mode
-      :vc(:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
-      :config
-      (setq org-zettel-ref-mode-type 'org-roam)
-      (setq org-zettel-ref-quick-markup-key "C-c m")
-      (setq org-zettel-ref-python-environment 'venv)  ; 或 'system, 'venv
-      (setq org-zettel-ref-python-env-name "org-zettel-ref")  ; 如果使用 Conda 或 venv
-      (setq org-zettel-ref-python-file (expand-file-name "org-zettel-ref-mode/convert-to-org.py" package-user-dir)))
-  (use-package org-zettel-ref-mode
-    :ensure nil
-    :load-path "site-lisp/org-zettel-ref-mode"
-    :config
-    (setq org-zettel-ref-mode-type 'org-roam)
-    (setq org-zettel-ref-quick-markup-key "C-c m")
-    (setq org-zettel-ref-python-environment 'venv)  ; 或 'system, 'venv
-    (setq org-zettel-ref-python-env-name "org-zettel-ref")  ; 如果使用 Conda 或 venv
-    (setq org-zettel-ref-python-file (expand-file-name "org-zettel-ref-mode/convert-to-org.py" package-user-dir))))
+(use-package org-zettel-ref-mode
+  :vc(:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
+  :config
+  (setq org-zettel-ref-mode-type 'org-roam)
+  (setq org-zettel-ref-quick-markup-key "C-c m")
+  (setq org-zettel-ref-python-environment 'venv)  ; 或 'system, 'venv
+  (setq org-zettel-ref-python-env-name "org-zettel-ref")  ; 如果使用 Conda 或 venv
+  (setq org-zettel-ref-python-file (expand-file-name "org-zettel-ref-mode/convert-to-org.py" package-user-dir)))
+
 
 
 (use-package org-review

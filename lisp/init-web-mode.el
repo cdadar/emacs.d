@@ -49,12 +49,8 @@
           ("^[ \t]*<\\(@[a-z.]+\\)[^>]*>? *$" 1 " contentId=\"\\([a-zA-Z0-9_]+\\)\"" "=" ">")
           ;; angular imenu
           (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=")))
-  (if emacs/>=30p
-      (use-package instant-rename-tag
-        :vc(:url"https://github.com/manateelazycat/instant-rename-tag" :rev :newest))
-    (use-package instant-rename-tag
-      :ensure nil
-      :load-path "site-lisp/instant-rename-tag")))
+  (use-package instant-rename-tag
+    :vc(:url"https://github.com/manateelazycat/instant-rename-tag" :rev :newest)))
 
 
 (when (executable-find "prettier")

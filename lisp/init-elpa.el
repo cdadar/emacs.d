@@ -96,14 +96,10 @@ locate PACKAGE."
 (use-package diminish)
 (use-package bind-key)
 
-(if emacs/>=30p
-    (use-package elpa-mirror
-      :vc(:url "https://github.com/redguardtoo/elpa-mirror" :rev :newest)
-      :commands (elpamr-create-mirror-for-installed))
-  (use-package elpa-mirror
-    :ensure nil
-    :load-path "site-lisp/elpa-mirror"
-    :commands (elpamr-create-mirror-for-installed)))
+(use-package elpa-mirror
+  :vc(:url "https://github.com/redguardtoo/elpa-mirror" :rev :newest)
+  :commands (elpamr-create-mirror-for-installed))
+
 
 
 

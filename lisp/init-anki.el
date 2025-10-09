@@ -33,12 +33,9 @@
 (use-package anki-vocabulary)
 (use-package org-anki)
 
-(if emacs/>=30p
-    (use-package anki-helper
-      :vc (:url "https://github.com/Elilif/emacs-anki-helper" :rev :newest))
-  (use-package anki-helper
-    :ensure nil
-    :load-path "site-lisp/anki-helper"))
+(use-package anki-helper
+  :vc (:url "https://github.com/Elilif/emacs-anki-helper" :rev :newest))
+
 
 
 
