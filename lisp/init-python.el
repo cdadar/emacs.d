@@ -55,6 +55,11 @@
       :config
       (setq py-autopep8-options '("--max-line-length=120")))))
 
+(with-eval-after-load 'project
+  (add-to-list 'project-vc-extra-root-markers "pyproject.toml"))
+(with-eval-after-load 'projectile
+  (add-to-list 'projectile-project-root-files "pyproject.toml"))
+
 
 (provide 'init-python)
 ;;; init-python.el ends here
