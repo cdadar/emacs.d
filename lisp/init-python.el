@@ -27,7 +27,7 @@
 (use-package ruff-format)
 
 (use-package toml-mode
-  :mode ("poetry\\.lock\\'" . toml-mode))
+  :mode ("\\(poetry\\|uv\\)\\.lock\\'" . toml-mode))
 
 
 (use-package reformatter
