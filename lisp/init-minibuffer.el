@@ -174,11 +174,27 @@
   ;; after lazily loading the package.
   :config
 
-  (when (and (executable-find "rg"))
-    (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
-      (interactive (list current-prefix-arg (when-let ((s (symbol-at-point)))
-                                              (symbol-name s))))
-      (consult-ripgrep dir initial)))
+  (defmacro sanityinc/no-consult-preview (&rest cmds)
+    `(with-eval-after-load 'consult
+       (consult-customize ,@cmds :preview-key "M-P")))
+
+  (sanityinc/no-consult-preview
+   consult-ripgrep
+   consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-recent-file consult--source-project-recent-file consult--source-bookmark)
+
+  (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
+    (interactive (list current-prefix-arg
+                       (if (use-region-p)
+                           (buffer-substring-no-properties
+                            (region-beginning) (region-end))
+                         (if-let* ((s (symbol-at-point)))
+                             (symbol-name s)))))
+    (consult-ripgrep dir initial))
+  (sanityinc/no-consult-preview sanityinc/consult-ripgrep-at-point)
+  (when (executable-find "rg")
+    (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point))
 
   ;; Optionally configure preview. The default value
   ;; is 'any, such that any key triggers the preview.
@@ -195,8 +211,6 @@
    consult--source-recent-file consult--source-project-recent-file sanityinc/consult-ripgrep-at-point
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
-
-  (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point)
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
