@@ -314,6 +314,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
         (embark-dwim)))))
 
 
+
 (use-package marginalia
   :hook (after-init . marginalia-mode))
 
