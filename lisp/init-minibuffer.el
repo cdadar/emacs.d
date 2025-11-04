@@ -250,6 +250,17 @@
       (push '(occur-mode :position right :width 100) popwin:special-display-config)
       (push '(grep-mode :position right :width 100) popwin:special-display-config)
       (push '(special-mode :position right :width 100) popwin:special-display-config)))
+
+  (with-eval-after-load 'vertico
+    (define-key vertico-map (kbd "C-c C-o") 'embark-export)
+    (define-key vertico-map (kbd "C-c C-c") 'embark-act))
+
+  ;; https://github.com/purcell/whole-line-or-region/issues/30#issuecomment-3388095018
+  (with-eval-after-load 'embark
+    (push 'embark--mark-target
+          (alist-get 'whole-line-or-region-delete-region
+                     embark-around-action-hooks)))
+
   :config
   (defun embark-on-last-message (arg)
     "Act on the last message displayed in the echo area."
