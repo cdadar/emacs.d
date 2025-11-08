@@ -20,6 +20,7 @@
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
 
 
 

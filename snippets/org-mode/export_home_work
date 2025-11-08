@@ -13,6 +13,7 @@
 #+LaTeX_HEADER: \setlist[description]{labelwidth=25em,font=\normalfont\itshape\space }
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
 #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{1em}

@@ -25,10 +25,11 @@
   (setq corfu-max-width 100)
   (setq corfu-auto-delay 0.2)
   (setq corfu-auto-prefix 1)
-  (global-corfu-mode)
+
 
   :hook (prog-mode . cdadar/setup-corfu)
   :config
+  (global-corfu-mode)
   ;; (defun corfu-enable-in-minibuffer ()
   ;;   "Enable Corfu in the minibuffer if `completion-at-point' is bound."
   ;;   (when (where-is-internal #'completion-at-point (list (current-local-map)))

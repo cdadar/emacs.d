@@ -72,3 +72,5 @@ places
 /projectile.cache
 ellama-sessions/
 .zettel-ref-db.el
+
+org-persist/*
