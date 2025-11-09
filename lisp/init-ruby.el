@@ -66,7 +66,9 @@
   (defalias 'ri 'yari))
 
 
-(use-package bundler)
+(when (executable-find "bundler")
+  (use-package bundler))
+
 
 
 (use-package yard-mode
