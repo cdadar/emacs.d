@@ -74,3 +74,5 @@ ellama-sessions/
 .zettel-ref-db.el
 
 org-persist/*
+
+lisp/init-local.el
