@@ -66,11 +66,6 @@
   (defalias 'ri 'yari))
 
 
-(when (executable-find "bundler")
-  (use-package bundler))
-
-
-
 (use-package yard-mode
   :hook
   (ruby-mode . yard-mode))
