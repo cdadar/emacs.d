@@ -9,15 +9,6 @@
   (setq-default locate-command "mdfind"))
 
 
-
-
-(when (executable-find "ag")
-  (use-package ag
-    :config
-    (global-set-key (kbd "M-?") 'ag-project)
-    (setq-default ag-highlight-search t))
-  (use-package wgrep-ag))
-
 (when (executable-find "rg")
   (use-package rg
     :config

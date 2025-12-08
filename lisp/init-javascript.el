@@ -51,12 +51,12 @@
   (when (derived-mode-p 'js-mode)
     (js2-minor-mode 1))
   (js2-imenu-extras-setup)
-    (sanityinc/major-mode-lighter 'js2-mode "JS2")
-      (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
+  (sanityinc/major-mode-lighter 'js2-mode "JS2")
+  (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
 
 
 (require 'derived)
-(when (or (executable-find "rg") (executable-find "ag"))
+(when (or (executable-find "rg"))
   (use-package xref-js2
     :config
     (when (executable-find "rg")
