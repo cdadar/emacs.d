@@ -76,3 +76,5 @@ ellama-sessions/
 org-persist/*
 
 lisp/init-local.el
+
+.DS_Store

@@ -31,7 +31,8 @@
  tooltip-delay 1.5
  fill-column 120
  truncate-lines nil
- truncate-partial-width-windows nil)
+ truncate-partial-width-windows nil
+ warning-minimum-level :error)
 
 (add-hook 'after-init-hook 'delete-selection-mode)
 
@@ -639,6 +640,17 @@ ORIG is the advised function, which is called with its ARGS."
   :init (apheleia-global-mode))
 
 
+(use-package completion-preview
+  :ensure nil
+  :hook ((prog-mode . completion-preview-mode) )
+  :bind
+  ( :map completion-preview-active-mode-map
+    ("M-n" . completion-preview-next-candidate)
+    ("M-p" . completion-preview-prev-candidate))
+  :config
+  (define-key completion-in-region-mode-map (kbd "M-n") 'minibuffer-next-completion)
+  (define-key completion-in-region-mode-map (kbd "M-p") 'minibuffer-previous-completion)
+  )
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
