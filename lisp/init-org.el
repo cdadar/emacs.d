@@ -704,6 +704,7 @@ typical word processor."
     ;; 用於加密的 GPG 金鑰
     ;; 可以設定任何 ID 或是設成 nil 來使用對稱式加密 (symmetric encryption)
     (setq org-crypt-key "6DF1ABB0")
+    (setq epg-pinentry-mode 'loopback)
 
 
     (defun +org-screenshot ()
