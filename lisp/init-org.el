@@ -372,11 +372,10 @@ typical word processor."
     (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
 
 
-    (let ((active-project-match "-INBOX/PROJECT"))
+    (setq org-stuck-projects
+          '("-INBOX/PROJECT" ("NEXT")))
 
-      (setq org-stuck-projects
-            `(,active-project-match ("NEXT")))
-
+    (let ((active-project-match '(car org-stuck-projects)))
       (setq org-tag-alist
             '(("@office" . ?o)
               ("@home" . ?h)
