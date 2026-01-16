@@ -105,17 +105,39 @@
 
 
 (when (executable-find "aider")
-  (use-package aidermacs
+  (use-package aider
     :config
-    (setq aidermacs-default-model "sonnet")
-    (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
-                                        ; Enable minor mode for Aider files
-    (aidermacs-setup-minor-mode)
-                                        ; See the Configuration section below
-    (setq aidermacs-auto-commits t)
-    (setq aidermacs-use-architect-mode t)
-                                        ; Ensure emacs can access *_API_KEY through .bashrc or setenv
-                                        ; (setenv "ANTHROPIC_API_KEY" "anthropic-api-key")
-    ))
+    ;; For latest claude sonnet model
+    (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
+    (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
+    ;; Or chatgpt model
+    ;; (setq aider-args '("--model" "o4-mini"))
+    ;; (setenv "OPENAI_API_KEY" <your-openai-api-key>)
+    ;; Or use your personal config file
+    ;; (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
+    ;; ;;
+    ;; Optional: Set a key binding for the transient menu
+    (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
+    ;; or use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
+    (aider-magit-setup-transients) ;; add aider magit function to magit menu
+    ;; auto revert buffer
+    (global-auto-revert-mode 1)
+    (auto-revert-mode 1))
+
+
+  (use-package ai-code
+    :config
+    ;; use codex as backend, other options are 'gemini, 'github-copilot-cli, 'opencode, 'grok, 'claude-code-ide, 'claude-code, 'cursor
+    (ai-code-set-backend 'codex)
+    ;; Enable global keybinding for the main menu
+    (global-set-key (kbd "C-c a") #'ai-code-menu)
+    ;; Optional: Use eat if you prefer, by default it is vterm
+    ;; (setq ai-code-backends-infra-terminal-backend 'eat) ;; for openai codex, github copilot cli, opencode, grok, cursor-cli; for claude-code-ide.el, you can check their config
+    ;; Optional: Turn on auto-revert buffer, so that the AI code change automatically appears in the buffer
+    (global-auto-revert-mode 1)
+    (setq auto-revert-interval 1) ;; set to 1 second for faster update
+    ;; Optional: Set up Magit integration for AI commands in Magit popups
+    (with-eval-after-load 'magit
+      (ai-code-magit-setup-transients))))
 (provide 'init-ai)
 ;;; init-ai.el ends here
