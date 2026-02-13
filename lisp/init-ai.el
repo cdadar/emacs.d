@@ -81,7 +81,7 @@
     ;;         (make-llm-ollama
     ;;          :chat-model "llama3:8b-instruct-q8_0"
     ;;          :embedding-model "nomic-embed-text"
-    ;;          :default-chat-non-standard-params '(("stop" . ("\n")))))
+    bb    ;;          :default-chat-non-standard-params '(("stop" . ("\n")))))
     (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
     ;; Translation llm provider
     ;; (setopt ellama-translation-provider
@@ -139,5 +139,11 @@
     ;; Optional: Set up Magit integration for AI commands in Magit popups
     (with-eval-after-load 'magit
       (ai-code-magit-setup-transients))))
+
+
+(use-package eca)
+
+
 (provide 'init-ai)
+
 ;;; init-ai.el ends here
