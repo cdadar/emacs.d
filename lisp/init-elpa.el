@@ -89,10 +89,14 @@ locate PACKAGE."
 ;; Update packages
 (unless (fboundp 'package-upgrade-all)
   (use-package auto-package-update
-    :init
-    (setq auto-package-update-delete-old-versions t
-          auto-package-update-hide-results t)
-    (defalias 'package-upgrade-all #'auto-package-update-now)))
+    :ensure t
+    :hook (after-init . auto-package-update-maybe)
+    :if (not (daemonp))
+    :custom
+    (auto-package-update-interval 30)              ; 每30天检查一次
+    (auto-package-update-prompt-before-update t)   ; 升级前提示
+    (auto-package-update-delete-old-versions t)    ; 删除旧版本
+    (auto-package-update-hide-results t)))
 
 ;; Required by `use-package'
 (use-package diminish)
