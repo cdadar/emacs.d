@@ -22,14 +22,13 @@
 ;;; Code:
 
 (use-package org
+  :commands (org-capture org-agenda org-store-link)
   :bind
-  ((("C-c c" . org-capture)))
+  (("C-c c" . org-capture))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :hook (org-mode . (lambda () (setq toggle-truncate-lines t)))
   :config
   (progn
-    (when *is-a-mac*
-      (use-package grab-mac-link))
 
     (require 'org-tempo)
 
@@ -788,6 +787,10 @@ typical word processor."
         (unless noinsert
           (insert output-string))
         output-string))))
+
+
+(use-package grab-mac-link
+  :if *is-a-mac*)
 
 (use-package org-pomodoro
   :after org
