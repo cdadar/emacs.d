@@ -144,7 +144,7 @@
   (setq auto-revert-interval 1) ;; set to 1 second for faster update
   ;; Optional: Set up Magit integration for AI commands in Magit popups
   (with-eval-after-load 'magit
-    (ai-code-magit-setup-transients))))
+    (ai-code-magit-setup-transients)))
 
 (use-package eca)
 
@@ -165,6 +165,6 @@
 
 
 
-(Provide 'init-ai)
+(provide 'init-ai)
 
 ;;; init-ai.el ends here
