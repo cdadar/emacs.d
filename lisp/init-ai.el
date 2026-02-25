@@ -103,26 +103,25 @@
     ;; send last message in chat buffer with C-c C-c
     (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)))
 
-(when (executable-find "aider")
-  (use-package aider
-    :config
-    ;; For latest claude sonnet model
-    (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
-    (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
-    ;; Or chatgpt model
-    ;; (setq aider-args '("--model" "o4-mini"))
-    ;; (setenv "OPENAI_API_KEY" <your-openai-api-key>)
-    ;; Or use your personal config file
-    ;; (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
-    ;; ;;
-    ;; Optional: Set a key binding for the transient menu
-    (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
-    ;; or use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
-    (aider-magit-setup-transients) ;; add aider magit function to magit menu
-    ;; auto revert buffer
-    (global-auto-revert-mode 1)
-    (auto-revert-mode 1)))
-
+(use-package aider
+  :commands (aider)
+  :config
+  ;; For latest claude sonnet model
+  ;; (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
+  ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
+  ;; Or chatgpt model
+  ;; (setq aider-args '("--model" "o4-mini"))
+  ;; (setenv "OPENAI_API_KEY" <your-openai-api-key>)
+  ;; Or use your personal config file
+  (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
+  ;; ;;
+  ;; Optional: Set a key binding for the transient menu
+  (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
+  ;; or use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
+  (aider-magit-setup-transients) ;; add aider magit function to magit menu
+  ;; auto revert buffer
+  (global-auto-revert-mode 1)
+  (auto-revert-mode 1))
 
 (use-package vterm
   :ensure t
@@ -161,8 +160,34 @@
                 (evil-emacs-state)))))
 
 
-(use-package gptel)
+(use-package gptel
+  :ensure t
+  :config
+  ;; 配置 OpenRouter 后端
+  (setq gptel-backend (make-gptel-openrouter
+                       :name "OpenRouter"
+                       :url "https://openrouter.ai/api/v1/chat/completions"
+                       :models '("minimax/minimax-m2.5"
+                                 "anthropic/claude-4.5-sonnet"
+                                 "openai/gpt-5o"
+                                 "google/gemini-pro-2.5")))
+  ;; 设置 API key (需要从环境变量或自定义获取)
+  (setq gptel-api-key (lambda () (auth-source-pick-first-password :host "openrouter.ai")))
+  ;; 或者直接设置 API key (不推荐)
+  ;; (setq gptel-api-key "your-openrouter-api-key")
 
+  ;; 默认模型
+  (setq gptel-model "minimax/minimax-m2.5")
+
+  ;; 使用 stream mode
+  (setq gptel-stream t)
+
+  ;; 设置系统消息
+  (setq gptel-system-message "You are a helpful assistant."))
+
+;; 使用 auth-source 存储 OpenRouter API key 的配置示例:
+;; 在 ~/.authinfo 或 ~/.netrc 中添加:
+;; machine openrouter.ai login api password YOUR_API_KEY
 
 
 (provide 'init-ai)
