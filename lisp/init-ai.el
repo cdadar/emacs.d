@@ -81,7 +81,7 @@
     ;;         (make-llm-ollama
     ;;          :chat-model "llama3:8b-instruct-q8_0"
     ;;          :embedding-model "nomic-embed-text"
-    bb    ;;          :default-chat-non-standard-params '(("stop" . ("\n")))))
+    ;;          :default-chat-non-standard-params '(("stop" . ("\n")))))
     (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
     ;; Translation llm provider
     ;; (setopt ellama-translation-provider
@@ -102,7 +102,6 @@
     :config
     ;; send last message in chat buffer with C-c C-c
     (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)))
-
 
 (when (executable-find "aider")
   (use-package aider
@@ -145,8 +144,7 @@
   (setq auto-revert-interval 1) ;; set to 1 second for faster update
   ;; Optional: Set up Magit integration for AI commands in Magit popups
   (with-eval-after-load 'magit
-    (ai-code-magit-setup-transients)))
-
+    (ai-code-magit-setup-transients))))
 
 (use-package eca)
 
@@ -163,6 +161,10 @@
                 (evil-emacs-state)))))
 
 
-(provide 'init-ai)
+(use-package gptel)
+
+
+
+(Provide 'init-ai)
 
 ;;; init-ai.el ends here
