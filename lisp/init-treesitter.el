@@ -6,7 +6,6 @@
 (use-package tree-sitter-langs)
 (use-package treesit-auto
   :hook (after-init . global-treesit-auto-mode)
-  :init (setq treesit-auto-install 'prompt)
   :config
   (setq treesit-auto-install t))
 
@@ -31,7 +30,13 @@ Return a list of languages seen along the way."
   (let ((grammar-name-to-emacs-lang '(("c-sharp" . "csharp")
                                       ("cpp" . "c++")
                                       ("gomod" . "go-mod")
-                                      ("javascript" . "js")))
+                                      ("javascript" . "js")
+                                      ("typescript" . "ts")
+                                      ("tsx" . "tsx")
+                                      ("python" . "py")
+                                      ("ruby" . "rb")
+                                      ("toml" . "toml")
+                                      ("zig" . "zig")))
         seen-grammars)
     (dolist (dir (cons (expand-file-name "tree-sitter" user-emacs-directory)
                        treesit-extra-load-path))
@@ -74,9 +79,12 @@ Return a list of languages seen along the way."
 ;; When there's js-ts-mode, we also prefer it to js2-mode
 (sanityinc/remap-ts-mode 'js2-mode 'js-ts-mode 'javascript)
 (sanityinc/remap-ts-mode 'clojurescript-mode 'clojurescript-ts-mode 'clojure)
+(sanityinc/remap-ts-mode 'python-mode 'python-ts-mode 'python)
+(sanityinc/remap-ts-mode 'typescript-mode 'typescript-ts-mode 'typescript)
+(sanityinc/remap-ts-mode 'zig-mode 'zig-ts-mode 'zig)
 
 
-;; Default
+;; Default font-lock level for tree-sitter modes
 (setq treesit-font-lock-level 4)
 
 
