@@ -166,14 +166,14 @@
   :config
   ;; 配置 OpenRouter 后端 (使用 OpenAI 兼容接口)
   (setq gptel-backend (gptel-make-openai
-                       "OpenRouter"
-                       :host "openrouter.ai"
-                       :protocol "https"
-                       :endpoint "/api/v1/chat/completions"
-                       :models '("minimax/minimax-m2.5"
-                                 "anthropic/claude-4.5-sonnet"
-                                 "openai/gpt-4o"
-                                 "google/gemini-2.0-flash")))
+                          "OpenRouter"
+                        :host "openrouter.ai"
+                        :protocol "https"
+                        :endpoint "/api/v1/chat/completions"
+                        :models '("minimax/minimax-m2.5"
+                                  "anthropic/claude-4.5-sonnet"
+                                  "openai/gpt-4o"
+                                  "google/gemini-2.0-flash")))
   ;; 设置 API key (需要从环境变量或自定义获取)
   (setq gptel-api-key (lambda () (auth-source-pick-first-password :host "openrouter.ai")))
   ;; 或者直接设置 API key (不推荐)
@@ -187,6 +187,14 @@
 
   ;; 设置系统消息
   (setq gptel-system-message "You are a helpful assistant."))
+
+
+(use-package gptel-agent
+  :config (gptel-agent-update))         ;Read files from agents directories
+
+(use-package gptel-magit
+  :ensure t
+  :hook (magit-mode . gptel-magit-install))
 
 ;; 使用 auth-source 存储 OpenRouter API key 的配置示例:
 ;; 在 ~/.authinfo 或 ~/.netrc 中添加:
