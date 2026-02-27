@@ -162,15 +162,18 @@
 
 (use-package gptel
   :ensure t
+  :demand t
   :config
-  ;; 配置 OpenRouter 后端
-  (setq gptel-backend (make-gptel-openrouter
-                       :name "OpenRouter"
-                       :url "https://openrouter.ai/api/v1/chat/completions"
+  ;; 配置 OpenRouter 后端 (使用 OpenAI 兼容接口)
+  (setq gptel-backend (gptel-make-openai
+                       "OpenRouter"
+                       :host "openrouter.ai"
+                       :protocol "https"
+                       :endpoint "/api/v1/chat/completions"
                        :models '("minimax/minimax-m2.5"
                                  "anthropic/claude-4.5-sonnet"
-                                 "openai/gpt-5o"
-                                 "google/gemini-pro-2.5")))
+                                 "openai/gpt-4o"
+                                 "google/gemini-2.0-flash")))
   ;; 设置 API key (需要从环境变量或自定义获取)
   (setq gptel-api-key (lambda () (auth-source-pick-first-password :host "openrouter.ai")))
   ;; 或者直接设置 API key (不推荐)
