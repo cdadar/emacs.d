@@ -174,8 +174,12 @@
                                   "anthropic/claude-4.5-sonnet"
                                   "openai/gpt-4o"
                                   "google/gemini-2.0-flash")))
-  ;; 设置 API key (需要从环境变量或自定义获取)
-  (setq gptel-api-key (lambda () (auth-source-pick-first-password :host "openrouter.ai")))
+  ;; 设置 API key - 使用 auth-source 并添加错误处理
+  (setq gptel-api-key
+        (lambda ()
+          (let ((key (auth-source-pick-first-password :host "openrouter.ai")))
+            (or key
+                (user-error "OpenRouter API key not found in ~/.authinfo or ~/.netrc. Add: machine openrouter.ai login api password YOUR_API_KEY")))))
   ;; 或者直接设置 API key (不推荐)
   ;; (setq gptel-api-key "your-openrouter-api-key")
 
