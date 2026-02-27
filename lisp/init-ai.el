@@ -174,15 +174,14 @@
                                   "anthropic/claude-4.5-sonnet"
                                   "openai/gpt-4o"
                                   "google/gemini-2.0-flash")))
-  ;; 设置 API key - 使用 auth-source 并添加错误处理
+  ;; 设置 API key - 优先使用环境变量，其次使用 auth-source
   (setq gptel-api-key
         (lambda ()
-          (let ((key (auth-source-pick-first-password :host "openrouter.ai")))
-            (or key
-                (user-error "OpenRouter API key not found in ~/.authinfo or ~/.netrc. Add: machine openrouter.ai login api password YOUR_API_KEY")))))
-  ;; 或者直接设置 API key (不推荐)
-  ;; (setq gptel-api-key "your-openrouter-api-key")
-
+          (or (getenv "OPENROUTER_API_KEY")
+              (let ((key (auth-source-pick-first-password :host "openrouter.ai" :user "api")))
+                (or key
+                    (user-error "OpenRouter API key not found. Set OPENROUTER_API_KEY environment variable or add to ~/.authinfo:
+machine openrouter.ai login api password YOUR_API_KEY"))))))
   ;; 默认模型
   (setq gptel-model "minimax/minimax-m2.5")
 
@@ -201,8 +200,13 @@
   :hook (magit-mode . gptel-magit-install))
 
 ;; 使用 auth-source 存储 OpenRouter API key 的配置示例:
-;; 在 ~/.authinfo 或 ~/.netrc 中添加:
-;; machine openrouter.ai login api password YOUR_API_KEY
+;; 方法1: 在 ~/.authinfo 中添加 (推荐):
+;;   machine openrouter.ai login api password sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+;;
+;; 方法2: 使用环境变量 (在 ~/.bashrc 或 ~/.zshrc 中):
+;;   export OPENROUTER_API_KEY="sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+;;
+;; 注意: 确保 ~/.authinfo 权限正确: chmod 600 ~/.authinfo
 
 
 (provide 'init-ai)
