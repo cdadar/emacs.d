@@ -164,24 +164,25 @@
   :ensure t
   :demand t
   :config
+  ;; Helper function to get API key
+  (defun get-openrouter-api-key ()
+    (or (getenv "OPENROUTER_API_KEY")
+        (auth-source-pick-first-password :host "openrouter.ai" :user "api")
+        (user-error "OpenRouter API key not found. Set OPENROUTER_API_KEY environment variable or add to ~/.authinfo:
+machine openrouter.ai login api password YOUR_API_KEY")))
+
   ;; 配置 OpenRouter 后端 (使用 OpenAI 兼容接口)
   (setq gptel-backend (gptel-make-openai
                           "OpenRouter"
                         :host "openrouter.ai"
                         :protocol "https"
                         :endpoint "/api/v1/chat/completions"
+                        :key #'get-openrouter-api-key
                         :models '("minimax/minimax-m2.5"
                                   "anthropic/claude-4.5-sonnet"
                                   "openai/gpt-4o"
                                   "google/gemini-2.0-flash")))
-  ;; 设置 API key - 优先使用环境变量，其次使用 auth-source
-  (setq gptel-api-key
-        (lambda ()
-          (or (getenv "OPENROUTER_API_KEY")
-              (let ((key (auth-source-pick-first-password :host "openrouter.ai" :user "api")))
-                (or key
-                    (user-error "OpenRouter API key not found. Set OPENROUTER_API_KEY environment variable or add to ~/.authinfo:
-machine openrouter.ai login api password YOUR_API_KEY"))))))
+
   ;; 默认模型
   (setq gptel-model "minimax/minimax-m2.5")
 
