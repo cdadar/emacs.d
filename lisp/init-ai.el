@@ -210,6 +210,9 @@ machine openrouter.ai login api password YOUR_API_KEY")))
 ;; 注意: 确保 ~/.authinfo 权限正确: chmod 600 ~/.authinfo
 
 
+(use-package superchat
+  :vc (:url "https://github.com/yibie/superchat" :rev :newest))
+
 (provide 'init-ai)
 
 ;;; init-ai.el ends here
