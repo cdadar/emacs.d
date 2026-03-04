@@ -213,6 +213,8 @@ machine openrouter.ai login api password YOUR_API_KEY")))
 (use-package superchat
   :vc (:url "https://github.com/yibie/superchat" :rev :newest))
 
+(use-package mcp)
+
 (provide 'init-ai)
 
 ;;; init-ai.el ends here
