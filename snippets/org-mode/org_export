@@ -15,5 +15,7 @@
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{1em}
+#+LATEX_HEADER: \usepackage{titlesec}
 #+LATEX_HEADER: \titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 #+Latex_HEADER: \titleformat{\subparagraph}{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=2em}\item\relax}{\endlist}
