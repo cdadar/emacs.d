@@ -24,6 +24,7 @@
 
 
 
+
 #+BEAMER_HEADER: \definecolor{links}{HTML}{0000A0}
 #+BEAMER_HEADER: \setbeamertemplate{itemize items}[default]
 #+BEAMER_HEADER: \setbeamertemplate{enumerate items}[default]
@@ -33,5 +34,7 @@
 #+BEAMER_HEADER: \setbeamercolor*{local structure}{fg=darkred}
 #+BEAMER_HEADER: \setbeamercolor{section in toc}{fg=darkred}
 #+BEAMER_HEADER: \setlength{\parskip}{\smallskipamount}
+
+#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=0em}\item\relax}{\endlist}
 
 #+LATEX_HEADER: \institute{}
