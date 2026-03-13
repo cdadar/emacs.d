@@ -19,10 +19,34 @@
 #+LaTeX_HEADER: \usepackage{xcolor}
 #+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+#+LATEX_HEADER: \usepackage{polyglossia}
+
+
+
+#+LATEX_HEADER: \setmainfont{Times New Roman}
+
+# #+LATEX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
+# #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+# #+LaTeX_HEADER: \setCJKmainfont{思源宋体}
 #+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
 
 
+
+#+LATEX_HEADER: \setdefaultlanguage{english}
+#+LATEX_HEADER: \setotherlanguages{greek,hebrew}
+
+#+LATEX_HEADER: \newfontfamily\greekfont{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{SBL Hebrew}
+
+# 备用字体
+# #+LATEX_HEADER: \newfontfamily\greekfont{Gentium}
+# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+
+#+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
+#+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
+
+#+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
+#+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
 
 
 #+BEAMER_HEADER: \definecolor{links}{HTML}{0000A0}
