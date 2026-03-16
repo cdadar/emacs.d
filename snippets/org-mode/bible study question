@@ -8,10 +8,37 @@
 #+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+#+LATEX_HEADER: \usepackage{fontspec}
+#+LATEX_HEADER: \usepackage{polyglossia}
+
+#+LATEX_HEADER: \setmainfont{Times New Roman}
+
+# #+LATEX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
+# #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+# #+LaTeX_HEADER: \setCJKmainfont{思源宋体}
+#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
+
+
+#+LATEX_HEADER: \setdefaultlanguage{english}
+#+LATEX_HEADER: \setotherlanguages{greek,hebrew}
+
+#+LATEX_HEADER: \newfontfamily\greekfont{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{SBL Hebrew}
+
+# 备用字体
+# #+LATEX_HEADER: \newfontfamily\greekfont{Gentium}
+# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+
+#+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
+#+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
+
+#+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
+#+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
+
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{0em}
+
 #+LATEX_HEADER: \usepackage{titlesec} %自定义多级标题格式的宏包
 #+LATEX_HEADER: \titleformat{\section}[block]{\mdseries}{}{1em}{}[]
 #+LATEX_HEADER: \titleformat{\subsection}[block]{\mdseries}{}{1em}{}[]
