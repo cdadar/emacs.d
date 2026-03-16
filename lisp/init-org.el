@@ -11,6 +11,7 @@
   (require 'org))
 
 (use-package org
+  :ensure nil
   :commands (org-capture org-agenda org-store-link)
   :bind
   (("C-c c" . org-capture))
@@ -107,6 +108,7 @@ typical word processor."
   :diminish writeroom-mode)
 
 (use-package org
+  :ensure nil
   :config
   (add-hook 'org-agenda-mode-hook 'hl-line-mode)
   (add-hook 'org-agenda-after-show-hook 'org-show-entry)
@@ -456,6 +458,7 @@ typical word processor."
   :hook ((org-mode . org-fragtog-mode)))
 
 (use-package org
+  :ensure nil
   :config
   (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
 
@@ -632,6 +635,7 @@ typical word processor."
      "/CANCELLED" 'file)))
 
 (use-package org
+  :ensure nil
   :config
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
@@ -721,6 +725,7 @@ typical word processor."
       output-string)))
 
 (use-package org
+  :ensure nil
   :config
   (defun get-year-and-month ()
     (list (format-time-string "%Y 年") (format-time-string "%m 月")))
