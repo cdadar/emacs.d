@@ -10,26 +10,20 @@
 
 #+startup: beamer
 #+LaTeX_CLASS: beamer
-#+LATEX_CLASS_OPTIONS: [14pt]
-
-#+LaTeX_CLASS_OPTIONS: [14pt,aspectratio=169]
+#+LaTeX_CLASS_options: [aspectratio=169,14pt]
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
 
 
 #+LaTeX_HEADER: \usetheme{metropolis}
 #+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
 
-# 字体（精简 + 稳定）
 #+LATEX_HEADER: \usepackage{fontspec}
 #+LATEX_HEADER: \usepackage{xeCJK}
 
-
-#+LATEX_HEADER: \setmainfont[Scale=1.0]{Times New Roman}           % 英文主字体
-
-# #+LATEX_HEADER: \setCJKmainfont[Scale=MatchLowercase]{Noto Serif CJK SC}
-# #+LaTeX_HEADER: \setCJKmainfont[Scale=MatchLowercase]{思源宋体 CN}
-# #+LaTeX_HEADER: \setCJKmainfont[Scale=MatchLowercase]{思源宋体}
-#+LaTeX_HEADER: \setCJKmainfont[Scale=MatchLowercase]{LXGW WenKai}
+# #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
+# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
+# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
+#+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
 
 
 # 多语言
@@ -44,7 +38,6 @@
 # #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
 # #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{Ezra SIL}
 
-
 #+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
 #+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
 
@@ -53,12 +46,15 @@
 
 
 #+BEAMER_HEADER: \definecolor{links}{HTML}{0000A0}
-#+BEAMER_HEADER: \hypersetup{colorlinks=true, urlcolor=links, linkcolor=links}
 #+BEAMER_HEADER: \setbeamertemplate{itemize items}[default]
 #+BEAMER_HEADER: \setbeamertemplate{enumerate items}[default]
-#+BEAMER_HEADER: \addtobeamertemplate{block begin}{}{}
+#+BEAMER_HEADER: \setbeamertemplate{items}[default]
+#+BEAMER_HEADER: \addtobeamertemplate{block begin}{}{\vspace*{1\baselineskip}}
 #+BEAMER_HEADER: \addtobeamertemplate{block end}{}{}
+#+BEAMER_HEADER: \setbeamercolor*{local structure}{fg=darkred}
+#+BEAMER_HEADER: \setbeamercolor{section in toc}{fg=darkred}
 #+BEAMER_HEADER: \setlength{\parskip}{\smallskipamount}
-#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=1em}\item\relax}{\endlist}
+
+#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=0em}\item\relax}{\endlist}
 
 #+LATEX_HEADER: \institute{}
