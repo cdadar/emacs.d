@@ -3,39 +3,42 @@
 # key: org_export
 # --
 
-#+OPTIONS: toc:nil  H:3 tex:t num:nil
+#+OPTIONS: toc:nil  H:3 tex:t num:t
 #+OPTIONS: author:nil date:nil title:t
 
 #+LATEX_COMPILER: xelatex
 
-#+LaTeX_HEADER: \hypersetup{colorlinks=true, urlcolor={url-gray}}
-#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in},left=0.6in,right=0.6in,top=0.3in,includehead,includefoot, truedimen]{geometry}
-#+LATEX_HEADER: \documentclass[14pt]{article}
-#+LaTeX_HEADER: \usepackage{enumitem}
-#+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
-#+LaTeX_HEADER: \usepackage{microtype}
-#+LaTeX_HEADER: \usepackage{csquotes}
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [14pt]
+
+
+# 页面
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in},left=0.6in,right=0.6in,top=0.8in,includehead,includefoot]{geometry}
+
+
+# 字体（精简 + 稳定）
 #+LATEX_HEADER: \usepackage{fontspec}
+#+LATEX_HEADER: \usepackage{xeCJK}
+
+#+LATEX_HEADER: \setmainfont[Scale=1.0]{Times New Roman}           % 英文主字体
+
+# #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
+# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
+# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
+#+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
+
+
+# 多语言
 #+LATEX_HEADER: \usepackage{polyglossia}
-
-#+LATEX_HEADER: \setmainfont{Times New Roman}
-
-# #+LATEX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
-# #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
-# #+LaTeX_HEADER: \setCJKmainfont{思源宋体}
-#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
-
-
-
 #+LATEX_HEADER: \setdefaultlanguage{english}
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
-#+LATEX_HEADER: \newfontfamily\greekfont{SBL Greek}
-#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{SBL Hebrew}
+#+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}   % 希腊文
+#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}  % 希伯来文
 
-# 备用字体
-# #+LATEX_HEADER: \newfontfamily\greekfont{Gentium}
-# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+# 备用字体（如需要）
+# #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
+# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{Ezra SIL}
 
 #+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
 #+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
@@ -46,15 +49,23 @@
 
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
-#+LATEX_HEADER: \setlength{\parskip}{1em}
+#+LATEX_HEADER: \setlength{\parskip}{0em}
 
 #+LATEX_HEADER: \usepackage{titlesec}
 #+LATEX_HEADER: \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 #+LATEX_HEADER: \titleformat{\subparagraph}[block]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
 
+# 🔥 关键补丁：修复“标题后不缩进”（必须在 titlesec 后）
 #+LATEX_HEADER: \usepackage{etoolbox}
 #+LATEX_HEADER: \makeatletter
 #+LATEX_HEADER: \patchcmd{\@afterheading}{\@nobreaktrue}{\@nobreakfalse\@afterindenttrue}{}{}
 #+LATEX_HEADER: \makeatother
 
+
+# 其它
+#+LaTeX_HEADER: \usepackage{enumitem}
+#+LaTeX_HEADER: \usepackage{microtype}
+#+LaTeX_HEADER: \usepackage{csquotes}
+
+# 引用环境优化
 #+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=2em}\item\relax}{\endlist}
