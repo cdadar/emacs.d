@@ -5,35 +5,45 @@
 
 #+OPTIONS: toc:nil  H:10 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:t
-#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in}, truedimen]{geometry}
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [14pt]
+
+
+# 页面
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in},left=0.6in,right=0.6in,top=0.8in,includehead,includefoot]{geometry}
+
 #+LaTeX_HEADER: \usepackage{enumitem}
-#+LaTeX_HEADER: \usepackage{xltxtra,fontspec,xunicode,xeCJK}
+
 #+LATEX_HEADER: \usepackage{fontspec}
+#+LaTeX_HEADER: \usepackage{xeCJK}
 #+LATEX_HEADER: \usepackage{polyglossia}
 
-#+LATEX_HEADER: \setmainfont{Times New Roman}
+#+LATEX_HEADER: \setmainfont[Scale=1.0]{Times New Roman}           % 英文主字体
 
-# #+LATEX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
-# #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
-# #+LaTeX_HEADER: \setCJKmainfont{思源宋体}
-#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
+# #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
+# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
+# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
+#+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
 
 
+# 多语言
+#+LATEX_HEADER: \usepackage{polyglossia}
 #+LATEX_HEADER: \setdefaultlanguage{english}
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
-#+LATEX_HEADER: \newfontfamily\greekfont{SBL Greek}
-#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{SBL Hebrew}
+#+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}   % 希腊文
+#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}  % 希伯来文
 
-# 备用字体
-# #+LATEX_HEADER: \newfontfamily\greekfont{Gentium}
-# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+# 备用字体（如需要）
+# #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
+# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{Ezra SIL}
 
 #+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
 #+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
 
 #+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
 #+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
+
 
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
