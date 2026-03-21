@@ -3,7 +3,7 @@
 # key: org_export
 # --
 
-#+OPTIONS: toc:nil  H:10 tex:t num:nil
+#+OPTIONS: toc:nil  H:3 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:t
 
 #+LATEX_COMPILER: xelatex
@@ -46,9 +46,15 @@
 
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
-#+LATEX_HEADER: \setlength{\parskip}{1em}
+#+LATEX_HEADER: \setlength{\parskip}{0pt}
 
 #+LATEX_HEADER: \usepackage{titlesec}
-#+LATEX_HEADER: \titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-#+Latex_HEADER: \titleformat{\subparagraph}{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+#+LATEX_HEADER: \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+#+LATEX_HEADER: \titleformat{\subparagraph}[block]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+
+#+LATEX_HEADER: \usepackage{etoolbox}
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \patchcmd{\@afterheading}{\@nobreaktrue}{\@nobreakfalse\@afterindenttrue}{}{}
+#+LATEX_HEADER: \makeatother
+
 #+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=2em}\item\relax}{\endlist}
