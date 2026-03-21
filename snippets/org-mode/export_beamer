@@ -2,47 +2,64 @@
 # name: export_beamer
 # --
 
-#+OPTIONS:   H:1 num:t toc:nil author:nil date:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+OPTIONS: H:1 num:t toc:nil author:nil date:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 
 #+PROPERTY: comments yes
 #+PROPERTY: header-args :exports both :eval never-export
 
 #+startup: beamer
 #+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_options: [aspectratio=169,14pt]
+#+LaTeX_CLASS_options: [aspectratio=169]
+#+LaTeX_CLASS_options: [bigger]
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
-
 
 #+LaTeX_HEADER: \usetheme{metropolis}
 #+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
 
-#+LATEX_HEADER: \usepackage{fontspec}
-#+LATEX_HEADER: \usepackage{xeCJK}
-
-# #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
-# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
-# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
-#+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
+#+LaTeX_HEADER: \usepackage{fontspec}
+#+LaTeX_HEADER: \usepackage{xeCJK}
+#+LATEX_HEADER: \setbeamertemplate{footline}{}  % 去掉页码
 
 
-# 多语言
-#+LATEX_HEADER: \usepackage{polyglossia}
-#+LATEX_HEADER: \setdefaultlanguage{english}
-#+LATEX_HEADER: \setotherlanguages{greek,hebrew}
+#+LATEX_HEADER: \setmainfont{Times New Roman}
 
-#+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}   % 希腊文
-#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}  % 希伯来文
+# #+LATEX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
+# #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
+# #+LaTeX_HEADER: \setCJKmainfont{思源宋体}
+#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
 
-# 备用字体（如需要）
-# #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
-# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{Ezra SIL}
 
-#+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
-#+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
+# #+LATEX_HEADER: \usepackage{polyglossia}
+# #+LATEX_HEADER: \setdefaultlanguage{english}
+# #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
+#
+# #+LATEX_HEADER: \newfontfamily\greekfont{SBL Greek}
+# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{SBL Hebrew}
+#
+# # 备用字体
+# # #+LATEX_HEADER: \newfontfamily\greekfont{Gentium}
+# # #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+#
+# #+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
+# #+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
+#
+# #+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
+# #+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
 
-#+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
-#+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
+
+#+LATEX_HEADER: \setlength{\parindent}{0pt}         % 取消首行缩进
+#+LATEX_HEADER: \setlength{\parskip}{\smallskipamount} % 段落间距
+#+LATEX_HEADER: \XeTeXlinebreaklocale "zh"
+#+LATEX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
+#+LATEX_HEADER: \CJKsetecglue{}                  % 中文段首间距清除
+
+#+LATEX_HEADER:  \renewenvironment{quote}{%
+#+LATEX_HEADER:    \list{}{\leftmargin=0em}\item[]%
+#+LATEX_HEADER:    \begin{minipage}[t]{\textwidth}\raggedright
+#+LATEX_HEADER:  }{%
+#+LATEX_HEADER:    \end{minipage}\endlist%
+#+LATEX_HEADER:  }
 
 
 #+BEAMER_HEADER: \definecolor{links}{HTML}{0000A0}
@@ -53,8 +70,12 @@
 #+BEAMER_HEADER: \addtobeamertemplate{block end}{}{}
 #+BEAMER_HEADER: \setbeamercolor*{local structure}{fg=darkred}
 #+BEAMER_HEADER: \setbeamercolor{section in toc}{fg=darkred}
+
 #+BEAMER_HEADER: \setlength{\parskip}{\smallskipamount}
+#+BEAMER_HEADER: \setlength{\parindent}{0pt}
 
-#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=0em}\item\relax}{\endlist}
+#+LATEX_HEADER: \newcommand{\leftinstitute}[1]{%
+#+LATEX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
+#+LATEX_HEADER: }
 
-#+LATEX_HEADER: \institute{}
+#+LATEX_HEADER: \leftinstitute{}
