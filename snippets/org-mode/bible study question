@@ -10,7 +10,7 @@
 
 
 # 页面
-#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in},left=0.6in,right=0.6in,top=0.8in,includehead,includefoot]{geometry}
+#+LATEX_HEADER: \usepackage[a4paper,text={6.25in,10in},left=0.6in,right=0.6in,top=0.6in,includehead,includefoot]{geometry}
 
 #+LaTeX_HEADER: \usepackage{enumitem}
 
