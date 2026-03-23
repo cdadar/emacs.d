@@ -2,7 +2,7 @@
 # name: bible study
 # key: bible-study
 # --
-#+OPTIONS: toc:nil  H:3 tex:t num:t
+#+OPTIONS: toc:nil  H:3 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:t
 
 #+LATEX_COMPILER: xelatex
