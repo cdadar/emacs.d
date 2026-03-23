@@ -100,17 +100,10 @@
 #+LaTeX_HEADER: \setotherlanguage{hebrew}
 
 # 希腊文字体设置（SBL Greek）
-#+LaTeX_HEADER: \setgreekfont{SBL Greek}
-#+LaTeX_HEADER: \setgreekfontfeatures{Scale=MatchLowercase}
-#+LaTeX_HEADER: \setgreekfontfeatures{Numbers=OldStyle}
-#+LaTeX_HEADER: \setgreekfontfeatures{Contextuals=WordInitial}
-#+LaTeX_HEADER: \setgreekfontfeatures{Ligatures=TeX}
+#+LaTeX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}
 
 # 希伯来文字体设置（SBL Hebrew）
-#+LaTeX_HEADER: \sethebrewfont{SBL Hebrew}
-#+LaTeX_HEADER: \sethebrewfontfeatures{Scale=MatchLowercase}
-#+LaTeX_HEADER: \sethebrewfontfeatures{Numbers=OldStyle}
-#+LaTeX_HEADER: \sethebrewfontfeatures{Contextuals=WordInitial}
+#+LaTeX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}
 
 # 中文断行设置
 #+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
