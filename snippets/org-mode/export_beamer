@@ -13,7 +13,6 @@
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [aspectratio=169]
 #+LaTeX_CLASS_OPTIONS: [bigger]
-#+BIND: org-beamer-frame-default-options "allowframebreaks"
 
 # ==========================================
 # 主题设置
@@ -71,7 +70,7 @@
 #+LaTeX_HEADER: \setbeamertemplate{enumerate subsubitem}[default]
 #+LaTeX_HEADER: \setbeamertemplate{items}[default]
 
-# 块样式（允许跨页）
+# 块样式
 #+LaTeX_HEADER: \setbeamertemplate{blocks}[default]
 #+LaTeX_HEADER: \addtobeamertemplate{block begin}{\vspace*{0.5\baselineskip}}{}
 #+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\vspace*{0.5\baselineskip}}
@@ -140,8 +139,16 @@
 #+LaTeX_HEADER: \setlength{\parskip}{\smallskipamount}
 #+LaTeX_HEADER: \linespread{1.3}
 
+# 允许段落内换行和分页
+#+LaTeX_HEADER: \binoppenalty=0
+#+LaTeX_HEADER: \relpenalty=0
+#+LaTeX_HEADER: \clubpenalty=0
+#+LaTeX_HEADER: \widowpenalty=0
+#+LaTeX_HEADER: \displaywidowpenalty=0
+#+LaTeX_HEADER: \interlinepenalty=0
+
 # ==========================================
-# 页面分割支持（允许长内容自动分页）
+# 页面分割支持
 # ==========================================
 #+LaTeX_HEADER: \usepackage{multicol}
 #+LaTeX_HEADER: \usepackage{longtable}
@@ -177,26 +184,6 @@
 #+LaTeX_HEADER:   {\begin{oldenumerate}%
 #+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
 #+LaTeX_HEADER:   {\end{oldenumerate}}
-
-# 允许 block 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{block}{\par\allowbreak}
-#+LaTeX_HEADER: \AfterEndEnvironment{block}{\par\allowbreak}
-
-# 允许 columns 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{columns}{\par\allowbreak}
-#+LaTeX_HEADER: \AfterEndEnvironment{columns}{\par\allowbreak}
-
-# 允许 column 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{column}{\par\allowbreak}
-#+LaTeX_HEADER: \AfterEndEnvironment{column}{\par\allowbreak}
-
-# 允许 tabular 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{tabular}{\par\allowbreak}
-#+LaTeX_HEADER: \AfterEndEnvironment{tabular}{\par\allowbreak}
-
-# 允许 minipage 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{minipage}{\par\allowbreak}
-#+LaTeX_HEADER: \AfterEndEnvironment{minipage}{\par\allowbreak}
 
 # ==========================================
 # 引用块样式（合并连续引用）
