@@ -105,6 +105,13 @@
 # 希伯来文字体设置（SBL Hebrew）
 #+LaTeX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}
 
+# 希腊文与希伯来文处理命令
+#+LaTeX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
+#+LaTeX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
+
+#+LaTeX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
+#+LaTeX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
+
 # 中文断行设置
 #+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
 #+LaTeX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
@@ -183,8 +190,6 @@
 #+LaTeX_HEADER: \newcommand{\cn}[1]{\begin{chinese}#1\end{chinese}}
 #+LaTeX_HEADER: \newcommand{\en}[1]{\begin{english}#1\end{english}}
 #+LaTeX_HEADER: \newcommand{\jp}[1]{\begin{japanese}#1\end{japanese}}
-#+LaTeX_HEADER: \newcommand{\gr}[1]{\begin{greek}#1\end{greek}}
-#+LaTeX_HEADER: \newcommand{\he}[1]{\begin{hebrew}#1\end{hebrew}}
 
 # 中英文混排时的间距调整
 #+LaTeX_HEADER: \makeatletter
