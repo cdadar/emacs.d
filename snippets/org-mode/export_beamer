@@ -15,28 +15,28 @@
 #+LaTeX_CLASS_OPTIONS: [bigger]
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
 
-% ===========================================
-% 主题设置
-% ===========================================
+# ==========================================
+# 主题设置
+# ==========================================
 #+LaTeX_HEADER: \usetheme{metropolis}
 #+LaTeX_HEADER: \usecolortheme{default}
 #+LaTeX_HEADER: \usefonttheme{professionalfonts}
 
-% 去掉导航符号
+# 去掉导航符号
 #+LaTeX_HEADER: \setbeamertemplate{navigation symbols}{}
 #+LaTeX_HEADER: \setbeamertemplate{footline}{}
 #+LaTeX_HEADER: \setbeamertemplate{frame numbering}{}
 
-% 标题页设置
+# 标题页设置
 #+LaTeX_HEADER: \setbeamertemplate{title page}[default]
 #+LaTeX_HEADER: \addtobeamertemplate{title page}{\centering}{}
 
-% 封面继续符号
+# 封面继续符号
 #+LaTeX_HEADER: \setbeamertemplate{frametitl continuation}[default]
 
-% ===========================================
-% 颜色主题
-% ===========================================
+# ==========================================
+# 颜色主题
+# ==========================================
 #+LaTeX_HEADER: \definecolor{primary}{HTML}{E53935}
 #+LaTeX_HEADER: \definecolor{secondary}{HTML}{1E88E5}
 #+LaTeX_HEADER: \definecolor{accent}{HTML}{00ACC1}
@@ -55,7 +55,7 @@
 #+LaTeX_HEADER: \setbeamercolor{alerted text}{fg=primary}
 #+LaTeX_HEADER: \setbeamercolor{item}{fg=secondary}
 
-% 列表样式
+# 列表样式
 #+LaTeX_HEADER: \setbeamertemplate{itemize items}[circle]
 #+LaTeX_HEADER: \setbeamertemplate{itemize subitem}[circle]
 #+LaTeX_HEADER: \setbeamertemplate{itemize subsubitem}[circle]
@@ -64,45 +64,56 @@
 #+LaTeX_HEADER: \setbeamertemplate{enumerate subsubitem}[default]
 #+LaTeX_HEADER: \setbeamertemplate{items}[default]
 
-% 块样式
+# 块样式
 #+LaTeX_HEADER: \setbeamertemplate{blocks}[default]
 #+LaTeX_HEADER: \addtobeamertemplate{block begin}{\vspace*{0.5\baselineskip}}{}
 #+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\vspace*{0.5\baselineskip}}
 
-% ===========================================
-% 字体设置
-% ===========================================
+# ==========================================
+# 字体设置
+# ==========================================
 #+LaTeX_HEADER: \usepackage{fontspec}
 #+LaTeX_HEADER: \usepackage{xeCJK}
 #+LaTeX_HEADER: \usepackage{xunicode}
 
-% 英文衬线字体
+# 英文衬线字体
 #+LaTeX_HEADER: \setmainfont{Times New Roman}
 #+LaTeX_HEADER: \setsansfont{Helvetica}
 #+LaTeX_HEADER: \setmonofont{Courier New}
 
-% 中文字体
+# 中文字体
 #+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
 #+LaTeX_HEADER: \setCJKsansfont{LXGW WenKai}
 #+LaTeX_HEADER: \setCJKmonofont{LXGW WenKai}
 
-% 代码字体
+# 代码字体
 #+LaTeX_HEADER: \newfontfamily\monoFont{Courier New}
 
-% ===========================================
-% 多语言支持
-% ===========================================
+# ==========================================
+# 多语言支持
+# ==========================================
 #+LaTeX_HEADER: \usepackage{polyglossia}
 #+LaTeX_HEADER: \setmainlanguage{english}
 #+LaTeX_HEADER: \setotherlanguage{chinese}
 #+LaTeX_HEADER: \setotherlanguage{japanese}
+#+LaTeX_HEADER: \setotherlanguage{greek}
+#+LaTeX_HEADER: \setotherlanguage{hebrew}
 
-% 中文断行设置
+# 希腊文设置
+#+LaTeX_HEADER: \setgreekfont{default}
+#+LaTeX_HEADER: \setgreekfontfeatures{Scale=MatchLowercase}
+#+LaTeX_HEADER: \setgreekfontfeatures{Numbers=OldStyle}
+
+# 希伯来文设置
+#+LaTeX_HEADER: \sethebrewfont{default}
+#+LaTeX_HEADER: \sethebrewfontfeatures{Scale=MatchLowercase}
+
+# 中文断行设置
 #+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
 #+LaTeX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
 #+LaTeX_HEADER: \CJKsetecglue{}
 
-% CJK 标点符号处理（中文直角引号）
+# CJK 标点符号处理（中文直角引号）
 #+LaTeX_HEADER: \makeatletter
 #+LaTeX_HEADER: \ifnum\strcmp{\languagename}{chinese}=0
 #+LaTeX_HEADER:   \xeCJKsetup{CJKspace=true}
@@ -111,16 +122,16 @@
 #+LaTeX_HEADER: \fi
 #+LaTeX_HEADER: \makeatother
 
-% ===========================================
-% 段落格式
-% ===========================================
+# ==========================================
+# 段落格式
+# ==========================================
 #+LaTeX_HEADER: \setlength{\parindent}{0pt}
 #+LaTeX_HEADER: \setlength{\parskip}{\smallskipamount}
 #+LaTeX_HEADER: \linespread{1.3}
 
-% ===========================================
-% 引用块样式
-% ===========================================
+# ==========================================
+# 引用块样式
+# ==========================================
 #+LaTeX_HEADER: \renewenvironment{quote}{%
 #+LaTeX_HEADER:   \list{}{\leftmargin=2em\rightmargin=0em}%
 #+LaTeX_HEADER:   \item[]%
@@ -131,9 +142,9 @@
 #+LaTeX_HEADER:   \endlist%
 #+LaTeX_HEADER: }
 
-% ===========================================
-% 代码块样式
-% ===========================================
+# ==========================================
+# 代码块样式
+# ==========================================
 #+LaTeX_HEADER: \lstset{%
 #+LaTeX_HEADER:   basicstyle=\small\ttfamily,
 #+LaTeX_HEADER:   backgroundcolor=\color{light},
@@ -153,30 +164,32 @@
 #+LaTeX_HEADER:   breakindent=2em,
 #+LaTeX_HEADER: }
 
-% ===========================================
-% 自定义命令
-% ===========================================
+# ==========================================
+# 自定义命令
+# ==========================================
 #+LaTeX_HEADER: \newcommand{\email}[1]{\hrefmailto:#1}
 #+LaTeX_HEADER: \newcommand{\hrefmailto}[1]{\href{#1}{\nolinkurl{#1}}}
 
-% 强调文字
+# 强调文字
 #+LaTeX_HEADER: \let\oldalert\alert
 #+LaTeX_HEADER: \DeclareRobustCommand{\alert}[1]{\textcolor{primary}{#1}}
 
-% 重点标记
+# 重点标记
 #+LaTeX_HEADER: \newcommand{\key}[1]{\textbf{\textcolor{secondary}{#1}}}
 
-% 机构信息（支持多行）
+# 机构信息（支持多行）
 #+LaTeX_HEADER: \newcommand{\leftinstitute}[1]{%
 #+LaTeX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
 #+LaTeX_HEADER: }
 
-% 中文环境下的特殊命令
+# 多语言环境下的特殊命令
 #+LaTeX_HEADER: \newcommand{\cn}[1]{\begin{chinese}#1\end{chinese}}
 #+LaTeX_HEADER: \newcommand{\en}[1]{\begin{english}#1\end{english}}
 #+LaTeX_HEADER: \newcommand{\jp}[1]{\begin{japanese}#1\end{japanese}}
+#+LaTeX_HEADER: \newcommand{\gr}[1]{\begin{greek}#1\end{greek}}
+#+LaTeX_HEADER: \newcommand{\he}[1]{\begin{hebrew}#1\end{hebrew}}
 
-% 中英文混排时的间距调整
+# 中英文混排时的间距调整
 #+LaTeX_HEADER: \makeatletter
 #+LaTeX_HEADER: \def\CJK@mth{ }
 #+LaTeX_HEADER: \def\CJK@mnth{ }
