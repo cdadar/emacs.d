@@ -171,11 +171,6 @@
 #+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
 #+LaTeX_HEADER:   {\end{oldenumerate}}
 
-# 允许代码块跨页
-#+LaTeX_HEADER: \lstnewenvironment{code}[1][]%
-#+LaTeX_HEADER:   {\lstset{#1\breaklines=true\pagebreak[3]}}%
-#+LaTeX_HEADER:   {}
-
 # ==========================================
 # 引用块样式（合并连续引用）
 # ==========================================
@@ -195,7 +190,7 @@
 #+LaTeX_HEADER:   }{%
 #+LaTeX_HEADER:     \end{minipage}%
 #+LaTeX_HEADER:     \endlist%
-#+LaTeX_HEADER:     \par\addvspace{-\topsep}%
+#+LaTeX_HEADER:     \par\add\vspace{-\topsep}%
 #+LaTeX_HEADER:   }
 
 # ==========================================
