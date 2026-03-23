@@ -134,6 +134,49 @@
 #+LaTeX_HEADER: \linespread{1.3}
 
 # ==========================================
+# 页面分割支持（允许长内容自动分页）
+# ==========================================
+#+LaTeX_HEADER: \usepackage{multicol}
+#+LaTeX_HEADER: \usepackage{longtable}
+#+LaTeX_HEADER: \usepackage{booktabs}
+#+LaTeX_HEADER: \usepackage{ltcaption}
+#+LaTeX_HEADER: \usepackage{xltabular}
+
+# 允许表格跨页
+#+LaTeX_HEADER: \let\oldtable\table
+#+LaTeX_HEADER: \let\endoldtable\endtable
+#+LaTeX_HEADER: \renewenvironment{table}%
+#+LaTeX_HEADER:   {\begin{oldtable}[t]%
+#+LaTeX_HEADER:   \begin{xltabular}{\linewidth}}%
+#+LaTeX_HEADER:   {\end{xltabular}%
+#+LaTeX_HEADER:   \end{oldtable}}
+
+# 允许图片跨页
+#+LaTeX_HEADER: \makeatletter
+#+LaTeX_HEADER: \def\fps@figure{htbp}
+#+LaTeX_HEADER: \makeatother
+
+# 允许列表环境跨页
+#+LaTeX_HEADER: \let\olditemize\itemize
+#+LaTeX_HEADER: \let\endolditemize\enditemize
+#+LaTeX_HEADER: \renewenvironment{itemize}%
+#+LaTeX_HEADER:   {\begin{olditemize}%
+#+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
+#+LaTeX_HEADER:   {\end{olditemize}}
+
+#+LaTeX_HEADER: \let\oldenumerate\enumerate
+#+LaTeX_HEADER: \let\endoldenumerate\endenumerate
+#+LaTeX_HEADER: \renewenvironment{enumerate}%
+#+LaTeX_HEADER:   {\begin{oldenumerate}%
+#+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
+#+LaTeX_HEADER:   {\end{oldenumerate}}
+
+# 允许代码块跨页
+#+LaTeX_HEADER: \lstnewenvironment{code}[1][]%
+#+LaTeX_HEADER:   {\lstset{#1\breaklines=true\pagebreak[3]}}%
+#+LaTeX_HEADER:   {}
+
+# ==========================================
 # 引用块样式（合并连续引用）
 # ==========================================
 #+LaTeX_HEADER: \usepackage{etoolbox}
