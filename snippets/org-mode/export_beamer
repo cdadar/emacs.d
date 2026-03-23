@@ -99,14 +99,18 @@
 #+LaTeX_HEADER: \setotherlanguage{greek}
 #+LaTeX_HEADER: \setotherlanguage{hebrew}
 
-# 希腊文设置
-#+LaTeX_HEADER: \setgreekfont{default}
+# 希腊文字体设置（SBL Greek）
+#+LaTeX_HEADER: \setgreekfont{SBL Greek}
 #+LaTeX_HEADER: \setgreekfontfeatures{Scale=MatchLowercase}
 #+LaTeX_HEADER: \setgreekfontfeatures{Numbers=OldStyle}
+#+LaTeX_HEADER: \setgreekfontfeatures{Contextuals=WordInitial}
+#+LaTeX_HEADER: \setgreekfontfeatures{Ligatures=TeX}
 
-# 希伯来文设置
-#+LaTeX_HEADER: \sethebrewfont{default}
+# 希伯来文字体设置（SBL Hebrew）
+#+LaTeX_HEADER: \sethebrewfont{SBL Hebrew}
 #+LaTeX_HEADER: \sethebrewfontfeatures{Scale=MatchLowercase}
+#+LaTeX_HEADER: \sethebrewfontfeatures{Numbers=OldStyle}
+#+LaTeX_HEADER: \sethebrewfontfeatures{Contextuals=WordInitial}
 
 # 中文断行设置
 #+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
