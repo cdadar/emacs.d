@@ -65,7 +65,7 @@
 #+LaTeX_HEADER: \setbeamertemplate{items}[default]
 
 % 块样式
-#+LaTeX_HEADER: \setbeamertemplate.blocks}[default]
+#+LaTeX_HEADER: \setbeamertemplate{blocks}[default]
 #+LaTeX_HEADER: \addtobeamertemplate{block begin}{\vspace*{0.5\baselineskip}}{}
 #+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\vspace*{0.5\baselineskip}}
 
@@ -74,6 +74,7 @@
 % ===========================================
 #+LaTeX_HEADER: \usepackage{fontspec}
 #+LaTeX_HEADER: \usepackage{xeCJK}
+#+LaTeX_HEADER: \usepackage{xunicode}
 
 % 英文衬线字体
 #+LaTeX_HEADER: \setmainfont{Times New Roman}
@@ -89,16 +90,33 @@
 #+LaTeX_HEADER: \newfontfamily\monoFont{Courier New}
 
 % ===========================================
+% 多语言支持
+% ===========================================
+#+LaTeX_HEADER: \usepackage{polyglossia}
+#+LaTeX_HEADER: \setmainlanguage{english}
+#+LaTeX_HEADER: \setotherlanguage{chinese}
+#+LaTeX_HEADER: \setotherlanguage{japanese}
+
+% 中文断行设置
+#+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
+#+LaTeX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
+#+LaTeX_HEADER: \CJKsetecglue{}
+
+% CJK 标点符号处理（中文直角引号）
+#+LaTeX_HEADER: \makeatletter
+#+LaTeX_HEADER: \ifnum\strcmp{\languagename}{chinese}=0
+#+LaTeX_HEADER:   \xeCJKsetup{CJKspace=true}
+#+LaTeX_HEADER:   \xeCJKsetup{EmDashType=4}
+#+LaTeX_HEADER:   \xeCJKsetup{AltPunct={[]}}
+#+LaTeX_HEADER: \fi
+#+LaTeX_HEADER: \makeatother
+
+% ===========================================
 % 段落格式
 % ===========================================
 #+LaTeX_HEADER: \setlength{\parindent}{0pt}
 #+LaTeX_HEADER: \setlength{\parskip}{\smallskipamount}
 #+LaTeX_HEADER: \linespread{1.3}
-
-% XeTeX 中文断行
-#+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
-#+LaTeX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
-#+LaTeX_HEADER: \CJKsetecglue{}
 
 % ===========================================
 % 引用块样式
@@ -152,5 +170,16 @@
 #+LaTeX_HEADER: \newcommand{\leftinstitute}[1]{%
 #+LaTeX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
 #+LaTeX_HEADER: }
+
+% 中文环境下的特殊命令
+#+LaTeX_HEADER: \newcommand{\cn}[1]{\begin{chinese}#1\end{chinese}}
+#+LaTeX_HEADER: \newcommand{\en}[1]{\begin{english}#1\end{english}}
+#+LaTeX_HEADER: \newcommand{\jp}[1]{\begin{japanese}#1\end{japanese}}
+
+% 中英文混排时的间距调整
+#+LaTeX_HEADER: \makeatletter
+#+LaTeX_HEADER: \def\CJK@mth{ }
+#+LaTeX_HEADER: \def\CJK@mnth{ }
+#+LaTeX_HEADER: \makeatother
 
 #+LaTeX_HEADER: \leftinstitute{}
