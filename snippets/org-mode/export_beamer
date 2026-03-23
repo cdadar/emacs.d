@@ -172,41 +172,24 @@
 #+LaTeX_HEADER:   {\end{oldenumerate}}
 
 # 允许 block 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{block}{\begin{latex允许分页}}
-#+LaTeX_HEADER: \AfterEndEnvironment{block}{\end{latex允许分页}}
+#+LaTeX_HEADER: \BeforeBeginEnvironment{block}{\par\allowbreak}
+#+LaTeX_HEADER: \AfterEndEnvironment{block}{\par\allowbreak}
 
 # 允许 columns 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{columns}{\begin{latex允许分页}}
-#+LaTeX_HEADER: \AfterEndEnvironment{columns}{\end{latex允许分页}}
+#+LaTeX_HEADER: \BeforeBeginEnvironment{columns}{\par\allowbreak}
+#+LaTeX_HEADER: \AfterEndEnvironment{columns}{\par\allowbreak}
 
 # 允许 column 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{column}{\begin{latex允许分页}}
-#+LaTeX_HEADER: \AfterEndEnvironment{column}{\end{latex允许分页}}
+#+LaTeX_HEADER: \BeforeBeginEnvironment{column}{\par\allowbreak}
+#+LaTeX_HEADER: \AfterEndEnvironment{column}{\par\allowbreak}
 
 # 允许 tabular 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{tabular}{\begin{latex允许分页}}
-#+LaTeX_HEADER: \AfterEndEnvironment{tabular}{\end{latex允许分页}}
+#+LaTeX_HEADER: \BeforeBeginEnvironment{tabular}{\par\allowbreak}
+#+LaTeX_HEADER: \AfterEndEnvironment{tabular}{\par\allowbreak}
 
 # 允许 minipage 环境跨页
-#+LaTeX_HEADER: \BeforeBeginEnvironment{minipage}{\begin{latex允许分页}}
-#+LaTeX_HEADER: \AfterEndEnvironment{minipage}{\end{latex允许分页}}
-
-# 定义允许分页的盒子
-#+LaTeX_HEADER: \newsavebox\allowpagebreakbox
-#+LaTeX_HEADER: \newenvironment{latex允许分页}%
-#+LaTeX_HEADER:   {}%
-#+LaTeX_HEADER:   {}
-
-# 允许换行符 \\ 允许分页
-#+LaTeX_HEADER: \makeatletter
-#+LaTeX_HEADER: \def\@@@ AllowPageBreak{\allowbreak}
-#+LaTeX_HEADER: \catcode`\\=13
-#+LaTeX_HEADER: \protected\def\\{\@ifstar\@swtich\@swhack%
-#+LaTeX_HEADER:     \fi%
-#+LaTeX_HEADER:     \endgraf%
-#+LaTeX_HEADER:     \vadjust{\penalty-\@M}%
-#+LaTeX_HEADER:     \iffalse}{\fi}%
-#+LaTeX_HEADER: \makeatother
+#+LaTeX_HEADER: \BeforeBeginEnvironment{minipage}{\par\allowbreak}
+#+LaTeX_HEADER: \AfterEndEnvironment{minipage}{\par\allowbreak}
 
 # ==========================================
 # 引用块样式（合并连续引用）
@@ -238,7 +221,6 @@
 #+LaTeX_HEADER:   basicstyle=\small\ttfamily,
 #+LaTeX_HEADER:   backgroundcolor=\color{light},
 #+LaTeX_HEADER:   frame=single,
-#+LaTeX_HEADER:   frameround=fttt,
 #+LaTeX_HEADER:   numbers=left,
 #+LaTeX_HEADER:   numberstyle=\tiny\color{gray},
 #+LaTeX_HEADER:   stepnumber=1,
