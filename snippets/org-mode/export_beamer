@@ -149,6 +149,7 @@
 # ==========================================
 # 代码块样式
 # ==========================================
+#+LaTeX_HEADER: \usepackage{listings}
 #+LaTeX_HEADER: \lstset{%
 #+LaTeX_HEADER:   basicstyle=\small\ttfamily,
 #+LaTeX_HEADER:   backgroundcolor=\color{light},
@@ -165,7 +166,7 @@
 #+LaTeX_HEADER:   commentstyle=\color{accent},
 #+LaTeX_HEADER:   breaklines=true,
 #+LaTeX_HEADER:   breakautoindent=true,
-#+LaTeX_HEADER:   breakindent=2em,
+#+LaTeX_HEADER:   breakindent=2em
 #+LaTeX_HEADER: }
 
 # ==========================================
