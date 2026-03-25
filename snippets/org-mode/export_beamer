@@ -73,12 +73,8 @@
 #+LaTeX_HEADER: \setbeamertemplate{enumerate subsubitem}[default]
 #+LaTeX_HEADER: \setbeamertemplate{items}[default]
 
-# 块样式（防止分页）
+# 块样式
 #+LaTeX_HEADER: \setbeamertemplate{blocks}[default]
-#+LaTeX_HEADER: \defbeamertemplatealias{block begin}{default}{\penalties=-10}
-#+LaTeX_HEADER: \defbeamertemplatealias{block end}{default}{\penalties=-10}
-#+LaTeX_HEADER: \addtobeamertemplate{block begin}{\penalty-10001}{}
-#+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\penalty-10001}
 #+LaTeX_HEADER: \addtobeamertemplate{block begin}{\vspace*{0.5\baselineskip}}{}
 #+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\vspace*{0.5\baselineskip}}
 
@@ -191,17 +187,6 @@
 #+LaTeX_HEADER:   {\begin{oldenumerate}%
 #+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
 #+LaTeX_HEADER:   {\end{oldenumerate}}
-
-# 修复 framebreak 在 block 后面失效的问题
-#+LaTeX_HEADER: \makeatletter
-#+LaTeX_HEADER: \let\orig@endblock\endblock
-#+LaTeX_HEADER: \def\endblock{%
-#+LaTeX_HEADER:   \ifbeamer@framebreaks%
-#+LaTeX_HEADER:     \penalty-10004%
-#+LaTeX_HEADER:   \fi%
-#+LaTeX_HEADER:   \orig@endblock%
-#+LaTeX_HEADER: }
-#+LaTeX_HEADER: \makeatother
 
 # ==========================================
 # 引用块样式（合并连续引用）
