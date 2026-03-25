@@ -25,7 +25,13 @@
   :hook
   (python-mode . sanityinc/flymake-ruff-maybe-enable))
 
-(use-package ruff-format)
+(use-package ruff-format
+  :after reformatter
+  :config
+  (reformatter-define ruff-fix
+    :program ruff-format-command
+    :args (list "check" "--fix-only" "--stdin-filename" (or (buffer-file-name) input-file))
+    :lighter " RuffFix"))
 
 (use-package toml-mode
   :mode ("\\(poetry\\|uv\\)\\.lock\\'" . toml-mode))
