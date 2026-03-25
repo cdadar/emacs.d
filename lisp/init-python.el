@@ -25,20 +25,6 @@
   :hook
   (python-mode . sanityinc/flymake-ruff-maybe-enable))
 
-(with-eval-after-load 'eglot
-  ;; This addition of "ty" has been upstreamed as of Dec 2025, but not
-  ;; yet released in ELPA versions of eglot.
-  (push `((python-mode python-ts-mode)
-          . ,(eglot-alternatives
-              '(("ty" "server")
-                "pylsp"
-                "pyls"
-                ("basedpyright-langserver" "--stdio")
-                ("pyright-langserver" "--stdio")
-                ("pyrefly" "lsp")
-                "jedi-language-server" ("ruff" "server") "ruff-lsp")))
-        eglot-server-programs))
-
 (use-package ruff-format)
 
 (use-package toml-mode
