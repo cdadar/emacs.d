@@ -22,7 +22,7 @@
 #+LaTeX_HEADER: \usecolortheme{default}
 #+LaTeX_HEADER: \usefonttheme{professionalfonts}
 
-# 标题分割线
+# 标题分割线（保留 metropolis 主题的彩色分割线）
 #+LaTeX_HEADER: \setbeamertemplate{title separator}[default]
 #+LaTeX_HEADER: \setbeamertemplate{progress bar in title page}[default]
 
@@ -50,6 +50,7 @@
 #+LaTeX_HEADER: \setbeamercolor{structure}{fg=primary}
 #+LaTeX_HEADER: \setbeamercolor{alerted text}{fg=primary}
 #+LaTeX_HEADER: \setbeamercolor{title separator}{fg=primary}
+#+LaTeX_HEADER: \setbeamercolor{progress in title page}{fg=primary}
 
 # 列表样式
 #+LaTeX_HEADER: \setbeamertemplate{itemize items}[circle]
