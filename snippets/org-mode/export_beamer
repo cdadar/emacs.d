@@ -73,8 +73,12 @@
 #+LaTeX_HEADER: \setbeamertemplate{enumerate subsubitem}[default]
 #+LaTeX_HEADER: \setbeamertemplate{items}[default]
 
-# 块样式
+# 块样式（防止分页）
 #+LaTeX_HEADER: \setbeamertemplate{blocks}[default]
+#+LaTeX_HEADER: \defbeamertemplatealias{block begin}{default}{\penalties=-10}
+#+LaTeX_HEADER: \defbeamertemplatealias{block end}{default}{\penalties=-10}
+#+LaTeX_HEADER: \addtobeamertemplate{block begin}{\penalty-10001}{}
+#+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\penalty-10001}
 #+LaTeX_HEADER: \addtobeamertemplate{block begin}{\vspace*{0.5\baselineskip}}{}
 #+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\vspace*{0.5\baselineskip}}
 
@@ -187,14 +191,6 @@
 #+LaTeX_HEADER:   {\begin{oldenumerate}%
 #+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
 #+LaTeX_HEADER:   {\end{oldenumerate}}
-
-# 防止 block 标题与内容被分页分开
-#+LaTeX_HEADER: \BeforeBeginEnvironment{block}{\par\nopagebreak[4]}
-#+LaTeX_HEADER: \AfterEndEnvironment{block}{\par\nopagebreak[4]}
-#+LaTeX_HEADER: \BeforeBeginEnvironment{alertblock}{\par\nopagebreak[4]}
-#+LaTeX_HEADER: \AfterEndEnvironment{alertblock}{\par\nopagebreak[4]}
-#+LaTeX_HEADER: \BeforeBeginEnvironment{exampleblock}{\par\nopagebreak[4]}
-#+LaTeX_HEADER: \AfterEndEnvironment{exampleblock}{\par\nopagebreak[4]}
 
 # ==========================================
 # 引用块样式（合并连续引用）
