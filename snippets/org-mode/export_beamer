@@ -13,8 +13,6 @@
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [aspectratio=169]
 #+LaTeX_CLASS_OPTIONS: [bigger]
-
-# 允许 frame 内容过长时自动分页
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
 
 # ==========================================
@@ -37,9 +35,6 @@
 #+LaTeX_HEADER: \setbeamertemplate{title page}[default]
 #+LaTeX_HEADER: \addtobeamertemplate{title page}{\centering}{}
 
-# 封面继续符号
-#+LaTeX_HEADER: \setbeamertemplate{frametitl continuation}[default]
-
 # ==========================================
 # 颜色主题
 # ==========================================
@@ -51,41 +46,25 @@
 
 #+LaTeX_HEADER: \setbeamercolor{title}{fg=dark}
 #+LaTeX_HEADER: \setbeamercolor{subtitle}{fg=dark}
-#+LaTeX_HEADER: \setbeamercolor{author}{fg=dark}
-#+LaTeX_HEADER: \setbeamercolor{date}{fg=dark}
-#+LaTeX_HEADER: \setbeamercolor{institute}{fg=dark}
 #+LaTeX_HEADER: \setbeamercolor{normal text}{fg=dark}
 #+LaTeX_HEADER: \setbeamercolor{structure}{fg=primary}
-#+LaTeX_HEADER: \setbeamercolor{section in toc}{fg=primary}
-#+LaTeX_HEADER: \setbeamercolor{subsection in toc}{fg=dark}
 #+LaTeX_HEADER: \setbeamercolor{alerted text}{fg=primary}
-#+LaTeX_HEADER: \setbeamercolor{item}{fg=secondary}
-
-# 标题分割线颜色
 #+LaTeX_HEADER: \setbeamercolor{title separator}{fg=primary}
 
 # 列表样式
 #+LaTeX_HEADER: \setbeamertemplate{itemize items}[circle]
-#+LaTeX_HEADER: \setbeamertemplate{itemize subitem}[circle]
-#+LaTeX_HEADER: \setbeamertemplate{itemize subsubitem}[circle]
 #+LaTeX_HEADER: \setbeamertemplate{enumerate items}[default]
-#+LaTeX_HEADER: \setbeamertemplate{enumerate subitem}[default]
-#+LaTeX_HEADER: \setbeamertemplate{enumerate subsubitem}[default]
-#+LaTeX_HEADER: \setbeamertemplate{items}[default]
 
 # 块样式
 #+LaTeX_HEADER: \setbeamertemplate{blocks}[default]
-#+LaTeX_HEADER: \addtobeamertemplate{block begin}{\vspace*{0.5\baselineskip}}{}
-#+LaTeX_HEADER: \addtobeamertemplate{block end}{}{\vspace*{0.5\baselineskip}}
 
 # ==========================================
 # 字体设置
 # ==========================================
 #+LaTeX_HEADER: \usepackage{fontspec}
 #+LaTeX_HEADER: \usepackage{xeCJK}
-#+LaTeX_HEADER: \usepackage{xunicode}
 
-# 英文衬线字体
+# 英文字体
 #+LaTeX_HEADER: \setmainfont{Times New Roman}
 #+LaTeX_HEADER: \setsansfont{Helvetica}
 #+LaTeX_HEADER: \setmonofont{Courier New}
@@ -93,10 +72,6 @@
 # 中文字体
 #+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
 #+LaTeX_HEADER: \setCJKsansfont{LXGW WenKai}
-#+LaTeX_HEADER: \setCJKmonofont{LXGW WenKai}
-
-# 代码字体
-#+LaTeX_HEADER: \newfontfamily\monoFont{Courier New}
 
 # ==========================================
 # 多语言支持
@@ -108,32 +83,19 @@
 #+LaTeX_HEADER: \setotherlanguage{greek}
 #+LaTeX_HEADER: \setotherlanguage{hebrew}
 
-# 希腊文字体设置（SBL Greek）
+# 希腊文字体
 #+LaTeX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}
 
-# 希伯来文字体设置（SBL Hebrew）
+# 希伯来文字体
 #+LaTeX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}
 
-# 希腊文与希伯来文处理命令
+# 希腊文与希伯来文命令
 #+LaTeX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
 #+LaTeX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
 
-#+LaTeX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
-#+LaTeX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
-
-# 中文断行设置
+# 中文断行
 #+LaTeX_HEADER: \XeTeXlinebreaklocale "zh"
 #+LaTeX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
-#+LaTeX_HEADER: \CJKsetecglue{}
-
-# CJK 标点符号处理（中文直角引号）
-#+LaTeX_HEADER: \makeatletter
-#+LaTeX_HEADER: \ifnum\strcmp{\languagename}{chinese}=0
-#+LaTeX_HEADER:   \xeCJKsetup{CJKspace=true}
-#+LaTeX_HEADER:   \xeCJKsetup{EmDashType=4}
-#+LaTeX_HEADER:   \xeCJKsetup{AltPunct={[]}}
-#+LaTeX_HEADER: \fi
-#+LaTeX_HEADER: \makeatother
 
 # ==========================================
 # 段落格式
@@ -142,54 +104,14 @@
 #+LaTeX_HEADER: \setlength{\parskip}{\smallskipamount}
 #+LaTeX_HEADER: \linespread{1.3}
 
-# 允许段落内换行和分页
+# 允许分页
 #+LaTeX_HEADER: \binoppenalty=0
 #+LaTeX_HEADER: \relpenalty=0
 #+LaTeX_HEADER: \clubpenalty=0
 #+LaTeX_HEADER: \widowpenalty=0
-#+LaTeX_HEADER: \displaywidowpenalty=0
-#+LaTeX_HEADER: \interlinepenalty=0
 
 # ==========================================
-# 页面分割支持
-# ==========================================
-#+LaTeX_HEADER: \usepackage{multicol}
-#+LaTeX_HEADER: \usepackage{longtable}
-#+LaTeX_HEADER: \usepackage{booktabs}
-#+LaTeX_HEADER: \usepackage{ltcaption}
-#+LaTeX_HEADER: \usepackage{xltabular}
-
-# 允许表格跨页
-#+LaTeX_HEADER: \let\oldtable\table
-#+LaTeX_HEADER: \let\endoldtable\endtable
-#+LaTeX_HEADER: \renewenvironment{table}%
-#+LaTeX_HEADER:   {\begin{oldtable}[t]%
-#+LaTeX_HEADER:   \begin{xltabular}{\linewidth}}%
-#+LaTeX_HEADER:   {\end{xltabular}%
-#+LaTeX_HEADER:   \end{oldtable}}
-
-# 允许图片跨页
-#+LaTeX_HEADER: \makeatletter
-#+LaTeX_HEADER: \def\fps@figure{htbp}
-#+LaTeX_HEADER: \makeatother
-
-# 允许列表环境跨页
-#+LaTeX_HEADER: \let\olditemize\itemize
-#+LaTeX_HEADER: \let\endolditemize\enditemize
-#+LaTeX_HEADER: \renewenvironment{itemize}%
-#+LaTeX_HEADER:   {\begin{olditemize}%
-#+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
-#+LaTeX_HEADER:   {\end{olditemize}}
-
-#+LaTeX_HEADER: \let\oldenumerate\enumerate
-#+LaTeX_HEADER: \let\endoldenumerate\endenumerate
-#+LaTeX_HEADER: \renewenvironment{enumerate}%
-#+LaTeX_HEADER:   {\begin{oldenumerate}%
-#+LaTeX_HEADER:   \setlength{\itemsep}{0.5em}}%
-#+LaTeX_HEADER:   {\end{oldenumerate}}
-
-# ==========================================
-# 引用块样式（合并连续引用）
+# 引用块样式
 # ==========================================
 #+LaTeX_HEADER: \usepackage{etoolbox}
 #+LaTeX_HEADER: \newcounter{quotecount}
@@ -220,45 +142,24 @@
 #+LaTeX_HEADER:   frame=single,
 #+LaTeX_HEADER:   numbers=left,
 #+LaTeX_HEADER:   numberstyle=\tiny\color{gray},
-#+LaTeX_HEADER:   stepnumber=1,
-#+LaTeX_HEADER:   numbersep=5pt,
-#+LaTeX_HEADER:   showspaces=false,
-#+LaTeX_HEADER:   showstringspaces=false,
-#+LaTeX_HEADER:   keywordstyle=\color{primary},
-#+LaTeX_HEADER:   stringstyle=\color{secondary},
-#+LaTeX_HEADER:   commentstyle=\color{accent},
-#+LaTeX_HEADER:   breaklines=true,
-#+LaTeX_HEADER:   breakautoindent=true,
-#+LaTeX_HEADER:   breakindent=2em
+#+LaTeX_HEADER:   breaklines=true
 #+LaTeX_HEADER: }
 
 # ==========================================
 # 自定义命令
 # ==========================================
-#+LaTeX_HEADER: \newcommand{\email}[1]{\hrefmailto:#1}
-#+LaTeX_HEADER: \newcommand{\hrefmailto}[1]{\href{#1}{\nolinkurl{#1}}}
-
 # 强调文字
 #+LaTeX_HEADER: \let\oldalert\alert
 #+LaTeX_HEADER: \DeclareRobustCommand{\alert}[1]{\textcolor{primary}{#1}}
 
-# 重点标记
-#+LaTeX_HEADER: \newcommand{\key}[1]{\textbf{\textcolor{secondary}{#1}}}
-
-# 机构信息（支持多行）
-#+LaTeX_HEADER: \newcommand{\leftinstitute}[1]{%
-#+LaTeX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
-#+LaTeX_HEADER: }
-
-# 多语言环境下的特殊命令
+# 多语言命令
 #+LaTeX_HEADER: \newcommand{\cn}[1]{\begin{chinese}#1\end{chinese}}
 #+LaTeX_HEADER: \newcommand{\en}[1]{\begin{english}#1\end{english}}
 #+LaTeX_HEADER: \newcommand{\jp}[1]{\begin{japanese}#1\end{japanese}}
 
-# 中英文混排时的间距调整
-#+LaTeX_HEADER: \makeatletter
-#+LaTeX_HEADER: \def\CJK@mth{ }
-#+LaTeX_HEADER: \def\CJK@mnth{ }
-#+LaTeX_HEADER: \makeatother
+# 机构信息
+#+LaTeX_HEADER: \newcommand{\leftinstitute}[1]{%
+#+LaTeX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
+#+LaTeX_HEADER: }
 
 #+LaTeX_HEADER: \leftinstitute{}
