@@ -868,5 +868,10 @@ typical word processor."
                                 (insert (concat "[[file:" filename "]]")))
                             (org-display-inline-images))))))
 
+(use-package org-pandoc-import
+  :after org
+  :vc (:url "https://github.com/tecosaur/org-pandoc-import"
+            :rev :newest))
+
 (provide 'init-org)
 ;;; init-org.el ends here
