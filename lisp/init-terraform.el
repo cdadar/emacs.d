@@ -12,5 +12,7 @@
                 ("tofu-ls" "serve"))))
         eglot-server-programs))
 
+(reformatter-define tofu-fmt :program "tofu" :args '("fmt" "-"))
+
 (provide 'init-terraform)
 ;;; init-terraform.el ends here
