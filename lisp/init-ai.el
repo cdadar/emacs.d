@@ -133,7 +133,8 @@
   :after (vterm)
   :config
   ;; use codex as backend, other options are 'gemini, 'github-copilot-cli, 'opencode, 'grok, 'claude-code-ide, 'claude-code, 'cursor
-  (ai-code-set-backend 'opencode)
+  ;; (ai-code-set-backend 'opencode)
+  (ai-code-set-backend 'codex)
   ;; Enable global keybinding for the main menu
   (global-set-key (kbd "C-c a") #'ai-code-menu)
   ;; Optional: Use eat if you prefer, by default it is vterm
