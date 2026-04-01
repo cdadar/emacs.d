@@ -2,80 +2,98 @@
 # name: export_beamer
 # --
 
-#+OPTIONS: H:1 num:t toc:nil author:nil date:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+TITLE: ${1:Title}
+#+SUBTITLE: ${2:Subtitle}
+#+AUTHOR: ${3:}
+#+OPTIONS: H:1 num:nil toc:nil author:nil date:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 
 #+PROPERTY: comments yes
 #+PROPERTY: header-args :exports both :eval never-export
 
-#+startup: beamer
-#+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_options: [aspectratio=169]
-#+LaTeX_CLASS_options: [bigger]
+#+LATEX_COMPILER: xelatex
+#+STARTUP: beamer
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169,bigger]
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
 
-#+LaTeX_HEADER: \usetheme{metropolis}
-#+LaTeX_HEADER: \setbeamertemplate{frametitle continuation}{}
+#+LATEX_HEADER: \usetheme{metropolis}
+#+LATEX_HEADER: \setbeamertemplate{navigation symbols}{}
+#+LATEX_HEADER: \setbeamertemplate{footline}{}
+#+LATEX_HEADER: \setbeamertemplate{frametitle continuation}{}
+#+LATEX_HEADER: \setbeamercovered{transparent}
 
-#+LaTeX_HEADER: \usepackage{fontspec}
-#+LaTeX_HEADER: \usepackage{xeCJK}
-#+LATEX_HEADER: \setbeamertemplate{footline}{}  % 去掉页码
+#+LATEX_HEADER: \usepackage{fontspec}
+#+LATEX_HEADER: \usepackage{xeCJK}
+#+LATEX_HEADER: \usepackage{polyglossia}
+#+LATEX_HEADER: \usepackage{microtype}
+#+LATEX_HEADER: \usepackage{ragged2e}
+#+LATEX_HEADER: \usepackage[most]{tcolorbox}
 
+#+LATEX_HEADER: \setdefaultlanguage{english}
+#+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
 #+LATEX_HEADER: \setmainfont{Times New Roman}
+#+LATEX_HEADER: \setsansfont{Times New Roman}
+#+LATEX_HEADER: \setmonofont{Menlo}
+#+LATEX_HEADER: \setCJKmainfont{LXGW WenKai}
+#+LATEX_HEADER: \setCJKsansfont{LXGW WenKai}
+#+LATEX_HEADER: \setCJKmonofont{LXGW WenKai Mono}
 
-# #+LATEX_HEADER: \setCJKmainfont{Noto Serif CJK SC}
-# #+LaTeX_HEADER: \setCJKmainfont{思源宋体 CN}
-# #+LaTeX_HEADER: \setCJKmainfont{思源宋体}
-#+LaTeX_HEADER: \setCJKmainfont{LXGW WenKai}
+#+LATEX_HEADER: \newfontfamily\greekfont[Script=Greek,Scale=MatchLowercase]{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\greekfontsf[Script=Greek,Scale=MatchLowercase]{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=MatchLowercase]{SBL Hebrew}
+#+LATEX_HEADER: \newfontfamily\hebrewfontsf[Script=Hebrew,Scale=MatchLowercase]{SBL Hebrew}
 
+#+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
+#+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
+#+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
+#+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
 
-# #+LATEX_HEADER: \usepackage{polyglossia}
-# #+LATEX_HEADER: \setdefaultlanguage{english}
-# #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
-#
-# #+LATEX_HEADER: \newfontfamily\greekfont{SBL Greek}
-# #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{SBL Hebrew}
-#
-# # 备用字体
-# # #+LATEX_HEADER: \newfontfamily\greekfont{Gentium}
-# # #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
-#
-# #+LATEX_HEADER: \newcommand{\gr}[1]{\textgreek{#1}}
-# #+LATEX_HEADER: \newcommand{\heb}[1]{\texthebrew{#1}}
-#
-# #+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
-# #+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
-
-
-#+LATEX_HEADER: \setlength{\parindent}{0pt}         % 取消首行缩进
-#+LATEX_HEADER: \setlength{\parskip}{\smallskipamount} % 段落间距
 #+LATEX_HEADER: \XeTeXlinebreaklocale "zh"
 #+LATEX_HEADER: \XeTeXlinebreakskip = 0pt plus 1pt
-#+LATEX_HEADER: \CJKsetecglue{}                  % 中文段首间距清除
+#+LATEX_HEADER: \CJKsetecglue{}
+#+LATEX_HEADER: \setlength{\parindent}{0pt}
+#+LATEX_HEADER: \setlength{\parskip}{0.45em}
 
-#+LATEX_HEADER:  \renewenvironment{quote}{%
-#+LATEX_HEADER:    \list{}{\leftmargin=0em}\item[]%
-#+LATEX_HEADER:    \begin{minipage}[t]{\textwidth}\raggedright
-#+LATEX_HEADER:  }{%
-#+LATEX_HEADER:    \end{minipage}\endlist%
-#+LATEX_HEADER:  }
+#+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \list{}{\leftmargin=0em\rightmargin=0em}\item[]%
+#+LATEX_HEADER:   \begin{minipage}[t]{\linewidth}\RaggedRight\itshape
+#+LATEX_HEADER: }{%
+#+LATEX_HEADER:   \end{minipage}\endlist%
+#+LATEX_HEADER: }
 
-
-#+BEAMER_HEADER: \definecolor{links}{HTML}{0000A0}
-#+BEAMER_HEADER: \setbeamertemplate{itemize items}[default]
-#+BEAMER_HEADER: \setbeamertemplate{enumerate items}[default]
-#+BEAMER_HEADER: \setbeamertemplate{items}[default]
-#+BEAMER_HEADER: \addtobeamertemplate{block begin}{}{\vspace*{1\baselineskip}}
-#+BEAMER_HEADER: \addtobeamertemplate{block end}{}{}
-#+BEAMER_HEADER: \setbeamercolor*{local structure}{fg=darkred}
-#+BEAMER_HEADER: \setbeamercolor{section in toc}{fg=darkred}
-
-#+BEAMER_HEADER: \setlength{\parskip}{\smallskipamount}
-#+BEAMER_HEADER: \setlength{\parindent}{0pt}
-
+#+LATEX_HEADER: \newtcolorbox{biblequote}[1][]{%
+#+LATEX_HEADER:   enhanced,
+#+LATEX_HEADER:   breakable,
+#+LATEX_HEADER:   colback=normal text.bg,
+#+LATEX_HEADER:   coltext=normal text.fg,
+#+LATEX_HEADER:   boxrule=0pt,
+#+LATEX_HEADER:   frame hidden,
+#+LATEX_HEADER:   borderline west={1.8pt}{0pt}{structure.fg},
+#+LATEX_HEADER:   left=1em,
+#+LATEX_HEADER:   right=1em,
+#+LATEX_HEADER:   top=0.8em,
+#+LATEX_HEADER:   bottom=0.8em,
+#+LATEX_HEADER:   before skip=0.6em,
+#+LATEX_HEADER:   after skip=0.6em,
+#+LATEX_HEADER:   arc=1mm,
+#+LATEX_HEADER:   sharp corners,
+#+LATEX_HEADER:   #1}
+#+LATEX_HEADER: \newcommand{\bibleref}[1]{\par\hfill{{\usebeamercolor[fg]{structure}\footnotesize\textsc{#1}}}}
 #+LATEX_HEADER: \newcommand{\leftinstitute}[1]{%
 #+LATEX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
 #+LATEX_HEADER: }
-
 #+LATEX_HEADER: \leftinstitute{}
+
+# 使用示例：
+# #+Begin_Export latex
+# \begin{biblequote}
+# Blessed are the pure in heart, for they shall see God.\\
+# \gr{μακάριοι οἱ καθαροὶ τῇ καρδίᾳ}
+# \heb{בָּרוּךְ אַתָּה}
+# \bibleref{Matthew 5:8}
+# \end{biblequote}
+# #+end_export
+
+$0
