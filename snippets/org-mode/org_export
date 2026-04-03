@@ -102,24 +102,39 @@
 
 # expex 常用模式封装
 #+LATEX_HEADER: \newcommand{\exVerseThree}[4]{%%
-  \ex\begingl
-    \gla #1 //%% 原文
-    \glb #2 //%% 逐词/音译
-    \glc \gramm{#3} //%% 语法标签/词性（统一样式）
-    \glft #4 //%% 译文或说明
-  \endgl\xe}
+#+LATEX_HEADER:  \ex\begingl
+#+LATEX_HEADER:    \gla #1 //%% 原文
+#+LATEX_HEADER:    \glb #2 //%% 逐词/音译
+#+LATEX_HEADER:    \glc \gramm{#3} //%% 语法标签/词性（统一样式）
+#+LATEX_HEADER:    \glft #4 //%% 译文或说明
+#+LATEX_HEADER:  \endgl\xe}
 #+LATEX_HEADER: \newcommand{\exVerseTwo}[3]{%%
-  \ex\begingl
-    \gla #1 //%% 原文
-    \glb #2 //%% 逐词/音译
-    \glft #3 //%% 译文或说明
-  \endgl\xe}
+#+LATEX_HEADER:  \ex\begingl
+#+LATEX_HEADER:    \gla #1 //%% 原文
+#+LATEX_HEADER:    \glb #2 //%% 逐词/音译
+#+LATEX_HEADER:    \glft #3 //%% 译文或说明
+#+LATEX_HEADER:  \endgl\xe}
 #+LATEX_HEADER: \newcommand{\exWord}[3]{%%
-  \ex\begingl
-    \gla #1 //%% 单词（原文）
-    \glb #2 //%% 词根/音译
-    \glft #3 //%% 释义或语法说明
-  \endgl\xe}
+#+LATEX_HEADER:  \ex\begingl
+#+LATEX_HEADER:    \gla #1 //%% 单词（原文）
+#+LATEX_HEADER:    \glb #2 //%% 词根/音译
+#+LATEX_HEADER:    \glft #3 //%% 释义或语法说明
+#+LATEX_HEADER:  \endgl\xe}
 
-# 引用环境优化
-#+LATEX_HEADER: \renewenvironment{quote}{\list{} {\leftmargin=2em}\item\relax}{\endlist}
+# 引用环境：经文中每一行都像新段落一样缩进 2em
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \par
+#+LATEX_HEADER:   \begingroup
+#+LATEX_HEADER:     % quote 内段落参数：首行缩进 2em，与正文风格一致
+#+LATEX_HEADER:     \setlength{\parindent}{2em}%
+#+LATEX_HEADER:     \setlength{\leftskip}{0pt}% 左边界与正文一致
+#+LATEX_HEADER:     \setlength{\rightskip}{0pt}% 不额外改变右边界
+#+LATEX_HEADER:     % 重新定义 \\：在 quote 内，将每个 "换行" 视为开启一个"没有段间距的新段落"
+#+LATEX_HEADER:     \let\orig@quote@cr\\
+#+LATEX_HEADER:     \def\\{\parskip=0pt\par}% 每次 \\ 都结束当前行并开始一个新段落（首行缩进 2em）
+#+LATEX_HEADER: }{%
+#+LATEX_HEADER:   \par
+#+LATEX_HEADER:   \endgroup
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \makeatother
