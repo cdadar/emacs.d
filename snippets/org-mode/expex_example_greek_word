@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: expex_example_greek_word
+# key: expex_gw
+# --
+
+#+BEGIN_EXPORT latex
+\exWord
+  {\gr{χάρις}}% 原文
+  {charis}% 词根/音译
+  {恩典；常用于保罗书信中，指神白白赐下的救恩与恩惠。}% 释义或语法说明
+#+END_EXPORT

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: expex_example_hebrew_verse
+# key: expex_hv
+# --
+
+#+BEGIN_EXPORT latex
+\exVerseTwo
+  {\heb{בְּרֵאשִׁית בָּרָא אֱלֹהִים}}% 原文
+  {bᵊrēʼšît bārāʼ ʼĕlōhîm}% 逐词/音译
+  {“起初，神创造……”（创 1:1 上）}% 译文或说明
+#+END_EXPORT

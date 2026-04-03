@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: expex_example_greek_verse
+# key: expex_gv
+# --
+
+#+BEGIN_EXPORT latex
+\exVerseThree
+  {\gr{ἐν ἀρχῇ ἦν ὁ λόγος}}% 原文
+  {en archē ēn ho logos}% 逐词/音译
+  {PREP; N.DAT.SG; V.3S.IMP; ART.NOM.SG; N.NOM.SG}% 语法标签
+  {“太初有道。”（约 1:1）}% 译文或说明
+#+END_EXPORT

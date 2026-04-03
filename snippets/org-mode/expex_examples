@@ -1,0 +1,40 @@
+# -*- mode: snippet -*-
+# name: expex_examples
+# key: expex_examples
+# --
+
+# 示例 1：经文 + 逐词 + 语法标签 + 译文（希腊文）
+#+BEGIN_EXPORT latex
+\exVerseThree
+  {\gr{ἐν ἀρχῇ ἦν ὁ λόγος}}% 原文
+  {en archē ēn ho logos}% 逐词/音译
+  {PREP; N.DAT.SG; V.3S.IMP; ART.NOM.SG; N.NOM.SG}% 语法标签
+  {“太初有道。”（约 1:1）}% 译文或说明
+#+END_EXPORT
+
+
+# 示例 2：经文 + 逐词 + 译文（希伯来文）
+#+BEGIN_EXPORT latex
+\exVerseTwo
+  {\heb{בְּרֵאשִׁית בָּרָא אֱלֹהִים}}% 原文
+  {bᵊrēʼšît bārāʼ ʼĕlōhîm}% 逐词/音译
+  {“起初，神创造……”（创 1:1 上）}% 译文或说明
+#+END_EXPORT
+
+
+# 示例 3：单词级分析（希腊文）
+#+BEGIN_EXPORT latex
+\exWord
+  {\gr{χάρις}}% 原文
+  {charis}% 词根/音译
+  {恩典；常用于保罗书信中，指神白白赐下的救恩与恩惠。}% 释义或语法说明
+#+END_EXPORT
+
+
+# 示例 4：单词级分析（希伯来文）
+#+BEGIN_EXPORT latex
+\exWord
+  {\heb{חֶסֶד}}% 原文
+  {ḥesed}% 音译
+  {“慈爱、信实的爱”；旧约中非常重要的盟约用语。}% 释义或语法说明
+#+END_EXPORT

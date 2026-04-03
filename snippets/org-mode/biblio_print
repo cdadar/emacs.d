@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: biblio_print
+# key: biblio_print
+# --
+#+LATEX: \printbibliography

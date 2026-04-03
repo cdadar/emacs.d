@@ -30,11 +30,12 @@
 
 # 多语言
 #+LATEX_HEADER: \usepackage{polyglossia}
-#+LATEX_HEADER: \setdefaultlanguage{english}
+#+LATEX_HEADER: \setdefaultlanguage[variant=american]{english}
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
-#+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}   % 希腊文
-#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}  % 希伯来文
+#+LATEX_HEADER: \newfontfamily\greekfont[Script=Greek,Scale=1.1]{SBL Greek}   % 希腊文
+#+LATEX_HEADER: \newfontfamily\greekfontsf[Script=Greek,Scale=1.1]{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.2]{SBL Hebrew}  % 希伯来文
 
 # 备用字体（如需要）
 # #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
@@ -45,13 +46,22 @@
 
 #+LATEX_HEADER: \newcommand{\grl}[1]{{\Large\textgreek{#1}}}
 #+LATEX_HEADER: \newcommand{\hebl}[1]{{\Large\texthebrew{#1}}}
+#+LATEX_HEADER: \newcommand{\grs}[1]{{\small\textgreek{#1}}}
+#+LATEX_HEADER: \newcommand{\hebs}[1]{{\small\texthebrew{#1}}}
 
 
+# 段落与标题
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
-#+LATEX_HEADER: \setlength{\parskip}{0em}
+#+LATEX_HEADER: \setlength{\parskip}{0.5em}
+
+#+LATEX_HEADER: \usepackage{setspace}
+#+LATEX_HEADER: \linespread{1.2} % 行距略大，适合逐字稿
 
 #+LATEX_HEADER: \usepackage{titlesec}
+#+LATEX_HEADER: \titleformat*{\section}{\Large\bfseries}
+#+LATEX_HEADER: \titleformat*{\subsection}{\large\bfseries}
+#+LATEX_HEADER: \titleformat*{\subsubsection}{\normalsize\bfseries}
 #+LATEX_HEADER: \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 #+LATEX_HEADER: \titleformat{\subparagraph}[block]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
 
@@ -62,10 +72,54 @@
 #+LATEX_HEADER: \makeatother
 
 
-# 其它
+# 列表与微排版
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{microtype}
 #+LaTeX_HEADER: \usepackage{csquotes}
 
+
+# 经文引用（bibleref 轻量方案）
+#+LATEX_HEADER: \usepackage[style=default]{bibleref}
+#+LATEX_HEADER: \usepackage{bibleref-parse}
+#+LATEX_HEADER: \biblerefstyle{jerusalem}
+#+LATEX_HEADER: \newcommand{\verse}[1]{\bibleref{#1}} % 例：\verse{John 3:16}
+
+
+# 参考文献 / 学术写作（biblatex-sbl）
+# 说明：biblatex 配置改由 Emacs 钩子 my/org-latex-add-bible-bib 自动注入
+# 如需手动指定，可在具体 org 文件中添加：
+# #+LATEX_HEADER: \usepackage[backend=biber,style=sbl]{biblatex}
+# #+LATEX_HEADER: \addbibresource{/Users/chens/Documents/Material/bibliography/bible.bib}
+
+
+# 语言学/经文分析例句环境（expex）
+#+LATEX_HEADER: \usepackage{expex}
+#+LATEX_HEADER: \lingset{everygla=\footnotesize,exskip=1.0ex}
+
+# 语法标签统一风格（统一缩小、灰色、等宽字体）
+#+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \newcommand{\gramm}[1]{{\scriptsize\texttt{\textcolor{gray}{#1}}}}
+
+# expex 常用模式封装
+#+LATEX_HEADER: \newcommand{\exVerseThree}[4]{%%
+  \ex\begingl
+    \gla #1 //%% 原文
+    \glb #2 //%% 逐词/音译
+    \glc \gramm{#3} //%% 语法标签/词性（统一样式）
+    \glft #4 //%% 译文或说明
+  \endgl\xe}
+#+LATEX_HEADER: \newcommand{\exVerseTwo}[3]{%%
+  \ex\begingl
+    \gla #1 //%% 原文
+    \glb #2 //%% 逐词/音译
+    \glft #3 //%% 译文或说明
+  \endgl\xe}
+#+LATEX_HEADER: \newcommand{\exWord}[3]{%%
+  \ex\begingl
+    \gla #1 //%% 单词（原文）
+    \glb #2 //%% 词根/音译
+    \glft #3 //%% 释义或语法说明
+  \endgl\xe}
+
 # 引用环境优化
-#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=2em}\item\relax}{\endlist}
+#+LATEX_HEADER: \renewenvironment{quote}{\list{} {\leftmargin=2em}\item\relax}{\endlist}

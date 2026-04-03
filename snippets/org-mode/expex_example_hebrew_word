@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: expex_example_hebrew_word
+# key: expex_hw
+# --
+
+#+BEGIN_EXPORT latex
+\exWord
+  {\heb{חֶסֶד}}% 原文
+  {ḥesed}% 音译
+  {“慈爱、信实的爱”；旧约中非常重要的盟约用语。}% 释义或语法说明
+#+END_EXPORT
