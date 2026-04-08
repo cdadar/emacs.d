@@ -4,10 +4,16 @@
 
 
 (use-package cnfonts
-  :config
-  (cnfonts-mode 1)
   :hook
-  ((after-init . cnfonts-reset-fontsize)))
+  ((after-init . cnfonts-reset-fontsize))
+  :bind
+  (:map cnfonts-mode-map
+        ("C-<mouse-5>" . nil)
+        ("C-<mouse-4>" . nil)
+        ("C-<wheel-down>" . nil)
+        ("C-<wheel-up>" . nil))
+  :config
+  (cnfonts-mode 1))
 
 (provide 'init-fonts)
 
