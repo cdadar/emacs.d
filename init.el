@@ -45,13 +45,6 @@
 (defconst emacs/>=30p
   (>= emacs-major-version 30)
   "Emacs is 30 or above.")
-;;----------------------------------------------------------------------------
-;; Adjust garbage collection thresholds during startup, and thereafter
-
-
-;; Adjust garbage collection threshold for early startup (see use of gcmh below)
-(setq gc-cons-threshold (* 128 1024 1024))
-
 
 ;; Process performance tuning
 

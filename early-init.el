@@ -37,7 +37,7 @@
 ;; Prevent unwanted runtime compilation for gccemacs (native-comp) users;
 ;; packages are compiled ahead-of-time when they are installed and site files
 ;; are compiled when gccemacs is installed.
-(setq native-comp-deferred-compilation nil ;; obsolete since 29.1
+(setq native-comp-deferred-compilation t
       native-comp-jit-compilation nil)
 
 ;; Package initialize occurs automatically, before `user-init-file' is
