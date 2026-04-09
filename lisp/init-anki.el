@@ -30,7 +30,6 @@
   ;; Initialize
   (anki-editor-reset-cloze-number))
 (use-package anki-mode)
-(use-package anki-vocabulary)
 (use-package org-anki)
 
 (use-package anki-helper

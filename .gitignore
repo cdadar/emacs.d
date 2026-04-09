@@ -82,3 +82,5 @@ lisp/init-local.el
 
 eca/
 .aider*
+
+disabled-packages/*

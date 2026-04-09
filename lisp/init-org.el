@@ -45,7 +45,8 @@
 This enables or modifies a number of settings so that the
 experience of editing prose is a little more like that of a
 typical word processor."
-    nil " Prose" nil
+    :init-value nil
+    :lighter " Prose"
     (if prose-mode
         (progn
           (when (fboundp 'writeroom-mode)
@@ -807,7 +808,7 @@ typical word processor."
            "* TODO [#C] %?\n  %i\n %a \n %U"
            :empty-lines 1)
           ("j" "Journal Entry"
-           entry (file+datetree org-agenda-file-journal)
+           entry (file+olp+datetree org-agenda-file-journal)
            "* %?"
            :empty-lines 1)
           ("v" "Vocabulary" entry

@@ -4,6 +4,7 @@
 
 
 (use-package cnfonts
+  :if (display-graphic-p)
   :hook
   ((after-init . cnfonts-reset-fontsize))
   :bind
