@@ -7,7 +7,10 @@
 (use-package treesit-auto
   :hook (after-init . global-treesit-auto-mode)
   :config
-  (setq treesit-auto-install t))
+  (setq treesit-auto-install t)
+  ;; Keep zig on manual config from init-zig.el to avoid noisy startup
+  ;; warnings when the zig grammar is not installed locally.
+  (setq treesit-auto-langs (delq 'zig treesit-auto-langs)))
 
 ;; You can download per-architecture pre-compiled release from
 ;; https://github.com/emacs-tree-sitter/tree-sitter-langs Rename

@@ -3,7 +3,8 @@
 ;;; Code:
 
 (use-package zig-ts-mode
-  :if (and  (fboundp 'treesit-ready-p) (treesit-ready-p 'zig))
+  :if (and (fboundp 'treesit-ready-p)
+           (treesit-ready-p 'zig t))
   :mode ("\\.\\(zig\\|zon\\)\\'" . zig-ts-mode)
   :config
   (with-eval-after-load 'eglot

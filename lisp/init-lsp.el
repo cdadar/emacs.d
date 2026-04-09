@@ -51,10 +51,8 @@
 
 
   ;; Emacs LSP booster
-  (when (executable-find "emacs-lsp-booster")
-    (unless (package-installed-p 'eglot-booster)
-      (and (fboundp #'package-vc-install)
-           (package-vc-install "https://github.com/jdtsmith/eglot-booster")))
+  (when (and (executable-find "emacs-lsp-booster")
+             (locate-library "eglot-booster"))
     (use-package eglot-booster
       :ensure nil
       :autoload eglot-booster-mode

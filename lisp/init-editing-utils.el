@@ -52,14 +52,19 @@
 
 (use-package simple
   :ensure nil
-  :hook (after-init . transient-mark-mode))
+  :hook ((after-init . transient-mark-mode)
+         (after-init . size-indication-mode))
+  :init
+  (setq column-number-mode t))
 
 
 
 ;; Huge files
 
-(when (fboundp 'so-long-enable)
-  (add-hook 'after-init-hook 'so-long-enable))
+(use-package so-long
+  :ensure nil
+  :if (fboundp 'so-long-enable)
+  :hook (after-init . so-long-enable))
 
 (use-package vlf
   :config
@@ -106,7 +111,7 @@
 
 (use-package display-fill-column-indicator
   :ensure nil
-  :if (boundp 'display-fill-column-indicator)
+  :if (fboundp 'display-fill-column-indicator-mode)
   :custom
   (indicate-buffer-boundaries 'left)
   (display-fill-column-indicator-character ?┊)
@@ -339,9 +344,9 @@ ORIG is the advised function, which is called with its ARGS."
 ;;   (setq default-input-method "rime")
 ;;   )
 
-(when (use-package comment-dwim-2
-        :bind
-        (("M-;" . comment-dwim-2))))
+(use-package comment-dwim-2
+  :bind
+  (("M-;" . comment-dwim-2)))
 
 (use-package comment-tags
   :config
@@ -375,9 +380,6 @@ ORIG is the advised function, which is called with its ARGS."
   :diminish
   :config
   (editorconfig-mode))
-
-;;禁止 Emacs 自动生成备份文件
-(setq make-backup-files nil)
 
 ;; 将所选区域缩小到其先前的带大小的快捷键
 (with-eval-after-load 'expand-region
@@ -444,13 +446,6 @@ ORIG is the advised function, which is called with its ARGS."
         ("C-c M-n" . hl-todo-next)
         ("C-c M-o" . hl-todo-occur)))
 
-
-(use-package simple
-  :ensure nil
-  :hook (after-init . size-indication-mode)
-  :init
-  (progn
-    (setq column-number-mode t)))
 
 (use-package wgrep
   :commands wgrep-change-to-wgrep-mode
@@ -667,6 +662,9 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package completion-preview
   :ensure nil
+  :if (and (fboundp 'completion-preview-mode)
+           (boundp 'completion-preview-active-mode-map)
+           (boundp 'completion-in-region-mode-map))
   :hook ((prog-mode . completion-preview-mode) )
   :bind
   ( :map completion-preview-active-mode-map

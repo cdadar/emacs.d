@@ -154,29 +154,30 @@ typical word processor."
               (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
                                        "tell application \"org-clock-statusbar\" to clock out"))))
 
-  (with-eval-after-load 'ob-ditaa
-    (unless (and (boundp 'org-ditaa-jar-path)
-                 (file-exists-p org-ditaa-jar-path))
-      (let ((jar-name "ditaa0_9.jar")
-            (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
-        (setq org-ditaa-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
-        (unless (file-exists-p org-ditaa-jar-path)
-          (message "Grabbing %s for org." jar-name)
-          (let ((zip-temp (make-temp-name "emacs-ditaa")))
-            (unwind-protect
-                (when (and (executable-find "unzip") (url-copy-file url zip-temp))
-                  (shell-command (concat "unzip -p " (shell-quote-argument zip-temp)
-                                         " " (shell-quote-argument jar-name) " > "
-                                         (shell-quote-argument org-ditaa-jar-path))))
-              (when (file-exists-p zip-temp)
-                (delete-file zip-temp))))))))
+  (let ((org-jar-dir (locate-user-emacs-file "")))
+    (with-eval-after-load 'ob-ditaa
+      (unless (and (boundp 'org-ditaa-jar-path)
+                   (file-exists-p org-ditaa-jar-path))
+        (let ((jar-name "ditaa0_9.jar")
+              (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
+          (setq org-ditaa-jar-path (expand-file-name jar-name org-jar-dir))
+          (unless (file-exists-p org-ditaa-jar-path)
+            (message "Grabbing %s for org." jar-name)
+            (let ((zip-temp (make-temp-name "emacs-ditaa")))
+              (unwind-protect
+                  (when (and (executable-find "unzip") (url-copy-file url zip-temp))
+                    (shell-command (concat "unzip -p " (shell-quote-argument zip-temp)
+                                           " " (shell-quote-argument jar-name) " > "
+                                           (shell-quote-argument org-ditaa-jar-path))))
+                (when (file-exists-p zip-temp)
+                  (delete-file zip-temp))))))))
 
-  (with-eval-after-load 'ob-plantuml
-    (let ((jar-name "plantuml.jar")
-          (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
-      (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
-      (unless (file-exists-p org-plantuml-jar-path)
-        (url-copy-file url org-plantuml-jar-path))))
+    (with-eval-after-load 'ob-plantuml
+      (let ((jar-name "plantuml.jar")
+            (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
+        (setq org-plantuml-jar-path (expand-file-name jar-name org-jar-dir))
+        (unless (file-exists-p org-plantuml-jar-path)
+          (url-copy-file url org-plantuml-jar-path)))))
 
 
   (org-babel-do-load-languages

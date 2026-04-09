@@ -29,7 +29,6 @@
 ;;
 
 ;;; Code:
-(message "hello world")
 
 (use-package emigo
   :vc (:url "https://github.com/MatthewZMD/emigo"  :rev :newest))
@@ -104,7 +103,8 @@
     (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)))
 
 (use-package aider
-  :commands (aider)
+  :commands (aider aider-transient-menu)
+  :bind (("C-c A" . aider-transient-menu))
   :config
   ;; For latest claude sonnet model
   ;; (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
@@ -114,9 +114,6 @@
   ;; (setenv "OPENAI_API_KEY" <your-openai-api-key>)
   ;; Or use your personal config file
   (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
-  ;; ;;
-  ;; Optional: Set a key binding for the transient menu
-  (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
   ;; or use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
   (aider-magit-setup-transients) ;; add aider magit function to magit menu
   ;; auto revert buffer
@@ -159,13 +156,15 @@
 (use-package agent-shell
   :config
   ;; Evil state-specific RET behavior: insert mode = newline, normal mode = send
-  (evil-define-key 'insert agent-shell-mode-map (kbd "RET") #'newline)
-  (evil-define-key 'normal agent-shell-mode-map (kbd "RET") #'comint-send-input)
+  (with-eval-after-load 'evil
+    (evil-define-key 'insert agent-shell-mode-map (kbd "RET") #'newline)
+    (evil-define-key 'normal agent-shell-mode-map (kbd "RET") #'comint-send-input))
 
   ;; Configure *agent-shell-diff* buffers to start in Emacs state
   (add-hook 'diff-mode-hook
             (lambda ()
-              (when (string-match-p "\\*agent-shell-diff\\*" (buffer-name))
+              (when (and (featurep 'evil)
+                         (string-match-p "\\*agent-shell-diff\\*" (buffer-name)))
                 (evil-emacs-state)))))
 
 
