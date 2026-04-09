@@ -3,9 +3,12 @@
 ;;; Code:
 
 ;; save a list of open files in ~/.emacs.d/.emacs.desktop
-(setq desktop-path (list user-emacs-directory)
-      desktop-auto-save-timeout 600)
-(desktop-save-mode 1)
+(use-package desktop
+  :ensure nil
+  :hook (after-init . desktop-save-mode)
+  :init
+  (setq desktop-path (list user-emacs-directory)
+        desktop-auto-save-timeout 600))
 
 (defun sanityinc/desktop-time-restore (orig &rest args)
   (let ((start-time (current-time)))
@@ -33,14 +36,14 @@
 (use-package savehist
   :ensure nil
   :hook (after-init . savehist-mode)
-  :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
-              history-length 1000
-              savehist-additional-variables '(mark-ring
-                                              global-mark-ring
-                                              search-ring
-                                              regexp-search-ring
-                                              extended-command-history)
-              savehist-autosave-interval 300))
+  :init
+  (setq history-length 1000
+        savehist-additional-variables '(mark-ring
+                                        global-mark-ring
+                                        search-ring
+                                        regexp-search-ring
+                                        extended-command-history)
+        savehist-autosave-interval 300))
 
 (use-package saveplace
   :ensure nil
@@ -66,7 +69,6 @@
         (file-name-history        . 100)
         (grep-find-history        . 30)
         (grep-history             . 30)
-        (ivy-history              . 100)
         (magit-revision-history   . 50)
         (minibuffer-history       . 50)
         (org-clock-history        . 50)

@@ -6,17 +6,14 @@
 
 ;;; Code:
 
-;; Ensure we use the built-in Org (available in Emacs 27+)
-(when (fboundp 'org-version)
-  (require 'org))
-
 (use-package org
   :ensure nil
+  :defer t
   :commands (org-capture org-agenda org-store-link)
   :bind
   (("C-c c" . org-capture))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
-  :hook (org-mode . (lambda () (setq toggle-truncate-lines t)))
+  :hook (org-mode . (lambda () (setq truncate-lines t)))
   :config
   (setq org-log-done t
         org-edit-timestamp-down-means-later t
@@ -110,6 +107,7 @@ typical word processor."
 
 (use-package org
   :ensure nil
+  :after org
   :config
   (add-hook 'org-agenda-mode-hook 'hl-line-mode)
   (add-hook 'org-agenda-after-show-hook 'org-show-entry)
@@ -181,44 +179,55 @@ typical word processor."
           (url-copy-file url org-plantuml-jar-path)))))
 
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   (seq-filter
-    (lambda (pair)
-      (locate-library (concat "ob-" (symbol-name (car pair)))))
-    '((R . t)
-      (ditaa . t)
-      (dot . t)
-      (emacs-lisp . t)
-      (gnuplot . t)
-      (haskell . nil)
-      (latex . t)
-      (ledger . t)
-      (ocaml . nil)
-      (octave . t)
-      (plantuml . t)
-      (python . t)
-      (ruby . t)
-      (screen . nil)
-      (sh . t)
-      (shell . t)
-      (sql . t)
-      (sqlite . t))))
+  (defvar sanityinc/org-babel-setup-done nil)
 
-  (require 'org-crypt)
-  (org-crypt-use-before-save-magic)
-  (setq org-crypt-tag-matcher "secret"
-        org-tags-exclude-from-inheritance '("secret")
-        org-crypt-key "6DF1ABB0"
-        epg-pinentry-mode 'loopback)
+  (defun sanityinc/org-babel-setup ()
+    (unless sanityinc/org-babel-setup-done
+      (setq sanityinc/org-babel-setup-done t)
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       (seq-filter
+        (lambda (pair)
+          (locate-library (concat "ob-" (symbol-name (car pair)))))
+        '((R . t)
+          (ditaa . t)
+          (dot . t)
+          (emacs-lisp . t)
+          (gnuplot . t)
+          (haskell . nil)
+          (latex . t)
+          (ledger . t)
+          (ocaml . nil)
+          (octave . t)
+          (plantuml . t)
+          (python . t)
+          (ruby . t)
+          (screen . nil)
+          (sh . t)
+          (shell . t)
+          (sql . t)
+          (sqlite . t))))))
+
+  (with-eval-after-load 'ob-core
+    (sanityinc/org-babel-setup))
+
+  (with-eval-after-load 'org
+    (require 'org-crypt nil t)
+    (when (featurep 'org-crypt)
+      (org-crypt-use-before-save-magic)
+      (setq org-crypt-tag-matcher "secret"
+            org-tags-exclude-from-inheritance '("secret")
+            org-crypt-key "6DF1ABB0"
+            epg-pinentry-mode 'loopback)))
 
   (setq org-latex-pdf-process
         '("xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"))
 
-  (require 'ox-md)
-  (require 'ox-latex)
+  (with-eval-after-load 'ox
+    (require 'ox-md nil t)
+    (require 'ox-latex nil t))
 
   (with-eval-after-load 'ox-latex
     (add-to-list 'org-latex-classes
@@ -474,6 +483,7 @@ typical word processor."
 
 (use-package org
   :ensure nil
+  :after org
   :config
   (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
 
@@ -651,6 +661,7 @@ typical word processor."
 
 (use-package org
   :ensure nil
+  :after org
   :config
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
@@ -741,6 +752,7 @@ typical word processor."
 
 (use-package org
   :ensure nil
+  :after org
   :config
   (defun get-year-and-month ()
     (list (format-time-string "%Y 年") (format-time-string "%m 月")))

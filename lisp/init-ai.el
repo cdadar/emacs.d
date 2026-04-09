@@ -44,8 +44,6 @@
     ;; (setopt ellama-keymap-prefix "C-c e")
     ;; language you want ellama to translate to
     (setopt ellama-language "Chinese")
-    ;; could be llm-openai for example
-    (require 'llm-ollama)
     ;; (setopt ellama-provider
     ;;         (make-llm-ollama
     ;;          ;; this model should be pulled to use it
@@ -100,9 +98,9 @@
     (setopt ellama-chat-display-action-function #'display-buffer-full-frame)
     (setopt ellama-instant-display-action-function #'display-buffer-at-bottom)
     :config
+    (require 'llm-ollama)
     ;; send last message in chat buffer with C-c C-c
     (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)))
-
 (use-package aider
   :commands (aider aider-transient-menu)
   :bind (("C-c A" . aider-transient-menu))
@@ -116,10 +114,8 @@
   ;; Or use your personal config file
   (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
   ;; or use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
-  (aider-magit-setup-transients) ;; add aider magit function to magit menu
-  ;; auto revert buffer
-  (global-auto-revert-mode 1)
-  (auto-revert-mode 1))
+  (with-eval-after-load 'magit
+    (aider-magit-setup-transients)))
 
 (use-package vterm
   :ensure t
@@ -146,10 +142,8 @@
   ;; Optional: Ask AI to run test after code changes, for a tighter build-test loop
   (setq ai-code-auto-test-type 'ask-me)
   ;; Optional: In AI session buffers, SPC in Evil normal state triggers the prompt-enter UI
-  (with-eval-after-load 'evil (ai-code-backends-infra-evil-setup))
-  ;; Optional: Turn on auto-revert buffer, so that the AI code change automatically appears in the buffer
-  (global-auto-revert-mode 1)
-  (setq auto-revert-interval 1) ;; set to 1 second for faster update
+  (with-eval-after-load 'evil
+    (ai-code-backends-infra-evil-setup))
   ;; Optional: Set up Magit integration for AI commands in Magit popups
   (with-eval-after-load 'magit
     (ai-code-magit-setup-transients)))
@@ -212,9 +206,8 @@ machine openrouter.ai login api password YOUR_API_KEY")))
   :defer t
   :after gptel
   :commands (gptel-agent-update)
-  :init
-  (with-eval-after-load 'gptel-agent
-    (gptel-agent-update)))         ;Read files from agents directories
+  :config
+  (gptel-agent-update))         ; Read files from agents directories
 
 (use-package gptel-magit
   :ensure t

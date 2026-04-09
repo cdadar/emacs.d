@@ -17,10 +17,7 @@
         vertico-count 17
         vertico-cycle t))
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init
-  (savehist-mode))
+;; savehist is configured centrally in init-sessions.el.
 
 ;; Emacs minibuffer configurations.
 (use-package emacs
