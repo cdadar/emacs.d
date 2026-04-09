@@ -286,7 +286,6 @@ typical word processor."
 
 (use-package org-download
   :after org
-  :demand t
   :hook
   (dired-mode-hook . org-download-enable)
   (org-mode-hook . org-download-enable)
@@ -306,6 +305,7 @@ typical word processor."
   (define-key org-tree-slide-mode-map [(f10)] 'org-tree-slide-move-next-tree))
 
 (use-package org-roam
+  :defer t
   :bind
   (("C-c n l" . org-roam-buffer-toggle)
    ("C-c n s" . org-roam-db-sync)
@@ -316,7 +316,12 @@ typical word processor."
    ("C-c n i" . org-roam-node-insert)
    ("C-c n c" . org-roam-capture)
    ("C-c n j" . org-roam-dailies-capture-today))
-  :hook (after-init . org-roam-db-autosync-mode)
+  :init
+  (run-with-idle-timer
+   5 nil
+   (lambda ()
+     (when (fboundp 'org-roam-db-autosync-mode)
+       (org-roam-db-autosync-mode 1))))
   :config
   (setq org-roam-v2-ack t
         org-roam-database-connector 'sqlite-builtin
@@ -395,6 +400,8 @@ typical word processor."
            :unnarrowed t))))
 
 (use-package org-roam-ui
+  :after org-roam
+  :commands (org-roam-ui-mode org-roam-ui-open)
   :config
   (setq org-roam-ui-sync-theme t
         org-roam-ui-follow t
@@ -402,6 +409,8 @@ typical word processor."
         org-roam-ui-open-on-start t))
 
 (use-package ebib
+  :defer t
+  :commands (ebib)
   :custom
   (bibtex-autokey-name-case-convert-function 'capitalize)
   (bibtex-autokey-titlewords 0)
@@ -420,6 +429,8 @@ typical word processor."
   (ebib-index-default-sort '("timestamp" . descend)))
 
 (use-package org-ref
+  :after org
+  :defer t
   :custom
   (bibtex-dialect 'biblatex)
   (org-ref-show-broken-links nil)
@@ -438,6 +449,8 @@ typical word processor."
   :after org-roam)
 
 (use-package org-zettel-ref-mode
+  :defer t
+  :after org-roam
   :vc (:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
   :config
   (setq org-zettel-ref-mode-type 'org-roam

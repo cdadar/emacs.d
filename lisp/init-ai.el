@@ -31,6 +31,7 @@
 ;;; Code:
 
 (use-package emigo
+  :defer t
   :vc (:url "https://github.com/MatthewZMD/emigo"  :rev :newest))
 
 
@@ -122,19 +123,22 @@
 
 (use-package vterm
   :ensure t
-  :config
+  :defer t
+  :commands (vterm)
+  :init
   (setq vterm-shell "/bin/zsh"))
 
 
 (use-package ai-code
   ;; :straight (:host github :repo "tninja/ai-code-interface.el") ;; if you want to use straight to install, no need to have MELPA setting above
+  :defer t
+  :commands (ai-code-menu)
+  :bind (("C-c a" . ai-code-menu))
   :config
   ;; use codex as backend, other options are 'claude-code, 'gemini, 'github-copilot-cli, 'opencode, 'grok, 'cursor, 'kiro, 'codebuddy, 'aider, 'eca, 'agent-shell, 'claude-code-ide, 'claude-code-el
   (ai-code-set-backend 'codex)
   ;; Optional: default menu stays unchanged; use a narrower 2-column layout on smaller frames
   ;; (setq ai-code-menu-layout 'two-columns)
-  ;; Enable global keybinding for the main menu
-  (global-set-key (kbd "C-c a") #'ai-code-menu)
   ;; Optional: Use eat if you prefer, by default it is vterm
   ;; (setq ai-code-backends-infra-terminal-backend 'eat) ;; config for native CLI backends. for external backends such as agent-shell, claude-code-ide.el and claude-code.el, please check their own config
   ;; Optional: Enable @ file completion in comments and AI sessions
@@ -151,9 +155,11 @@
     (ai-code-magit-setup-transients)))
 
 
-(use-package eca)
+(use-package eca
+  :defer t)
 
 (use-package agent-shell
+  :defer t
   :config
   ;; Evil state-specific RET behavior: insert mode = newline, normal mode = send
   (with-eval-after-load 'evil
@@ -170,7 +176,8 @@
 
 (use-package gptel
   :ensure t
-  :demand t
+  :defer t
+  :commands (gptel gptel-send)
   :config
   ;; Helper function to get API key
   (defun get-openrouter-api-key ()
@@ -202,7 +209,12 @@ machine openrouter.ai login api password YOUR_API_KEY")))
 
 
 (use-package gptel-agent
-  :config (gptel-agent-update))         ;Read files from agents directories
+  :defer t
+  :after gptel
+  :commands (gptel-agent-update)
+  :init
+  (with-eval-after-load 'gptel-agent
+    (gptel-agent-update)))         ;Read files from agents directories
 
 (use-package gptel-magit
   :ensure t
@@ -219,9 +231,11 @@ machine openrouter.ai login api password YOUR_API_KEY")))
 
 
 (use-package superchat
+  :defer t
   :vc (:url "https://github.com/yibie/superchat" :rev :newest))
 
-(use-package mcp)
+(use-package mcp
+  :defer t)
 
 (provide 'init-ai)
 

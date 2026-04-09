@@ -33,106 +33,107 @@
 
 ;;; Code:
 
-(require 'erc)
-;; Interpret mIRC-style color commands in IRC chats
-(setq erc-interpret-mirc-color t)
+(use-package erc
+  :ensure nil
+  :commands (erc start-irc stop-irc)
+  :init
+  (defun filter-server-buffers ()
+    (delq nil
+          (mapcar
+           (lambda (x) (and (erc-server-buffer-p x) x))
+           (buffer-list))))
 
-;; The following are commented out by default, but users of other
-;; non-Emacs IRC clients might find them useful.
-;; Kill buffers for channels after /part
-(setq erc-kill-buffer-on-part t)
+  (defun start-irc ()
+    "Connect to IRC."
+    (interactive)
+    (when (y-or-n-p "Do you want to start IRC? ")
+      (erc :server "irc.libera.chat" :port 6667 :nick erc-nick)))
 
-;; Kill buffers for private queries after quitting the server
-(setq erc-kill-queries-on-quit t)
+  (defun stop-irc ()
+    "Disconnects from all irc servers"
+    (interactive)
+    (dolist (buffer (filter-server-buffers))
+      (message "Server buffer: %s" (buffer-name buffer))
+      (with-current-buffer buffer
+        (erc-quit-server "Asta la vista"))))
+  :config
+  ;; Interpret mIRC-style color commands in IRC chats
+  (setq erc-interpret-mirc-color t)
 
-;; Kill buffers for server messages after quitting the server
-(setq erc-kill-server-buffer-on-quit t)
+  ;; The following are commented out by default, but users of other
+  ;; non-Emacs IRC clients might find them useful.
+  ;; Kill buffers for channels after /part
+  (setq erc-kill-buffer-on-part t)
 
-(setq erc-autojoin-mode t)
-;; erc-autojoin-channels-alist  custom setting
+  ;; Kill buffers for private queries after quitting the server
+  (setq erc-kill-queries-on-quit t)
 
-;; open query buffers in the current window
-(setq erc-query-display 'buffer)
+  ;; Kill buffers for server messages after quitting the server
+  (setq erc-kill-server-buffer-on-quit t)
 
-;; exclude boring stuff from tracking
-(erc-track-mode t)
-(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                "324" "329" "332" "333" "353" "477"))
-;; truncate long irc buffers
-(erc-truncate-mode +1)
+  (setq erc-autojoin-mode t)
+  ;; erc-autojoin-channels-alist  custom setting
 
+  ;; open query buffers in the current window
+  (setq erc-query-display 'buffer)
 
-(require 'erc-notify)
-(defvar erc-notify-nick-alist nil
-  "Alist of nicks and the last time they tried to trigger a
+  ;; exclude boring stuff from tracking
+  (erc-track-mode t)
+  (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                  "324" "329" "332" "333" "353" "477"))
+  ;; truncate long irc buffers
+  (erc-truncate-mode +1)
+
+  (require 'erc-notify)
+  (defvar erc-notify-nick-alist nil
+    "Alist of nicks and the last time they tried to trigger a
 notification")
 
-(defvar erc-notify-timeout 10
-  "Number of seconds that must elapse between notifications from
+  (defvar erc-notify-timeout 10
+    "Number of seconds that must elapse between notifications from
 the same person.")
 
-(defun erc-notify-allowed-p (nick &optional delay)
-  "Return non-nil if a notification should be made for NICK.
+  (defun erc-notify-allowed-p (nick &optional delay)
+    "Return non-nil if a notification should be made for NICK.
 If DELAY is specified, it will be the minimum time in seconds
 that can occur between two notifications.  The default is
 `erc-notify-timeout'."
-  (unless delay (setq delay erc-notify-timeout))
-  (let ((cur-time (time-to-seconds (current-time)))
-        (cur-assoc (assoc nick erc-notify-nick-alist))
-        (last-time nil))
-    (if cur-assoc
-        (progn
-          (setq last-time (cdr cur-assoc))
-          (setcdr cur-assoc cur-time)
-          (> (abs (- cur-time last-time)) delay))
-      (push (cons nick cur-time) erc-notify-nick-alist)
-      t)))
+    (unless delay (setq delay erc-notify-timeout))
+    (let ((cur-time (time-to-seconds (current-time)))
+          (cur-assoc (assoc nick erc-notify-nick-alist))
+          (last-time nil))
+      (if cur-assoc
+          (progn
+            (setq last-time (cdr cur-assoc))
+            (setcdr cur-assoc cur-time)
+            (> (abs (- cur-time last-time)) delay))
+        (push (cons nick cur-time) erc-notify-nick-alist)
+        t)))
 
-(require 'erc-autoaway)
-;; autoaway setup
-(setq erc-auto-discard-away t)
-(setq erc-autoaway-idle-seconds 600)
-(setq erc-autoaway-use-emacs-idle t)
-;; utf-8 always and forever
-(setq erc-server-coding-system '(utf-8 . utf-8))
+  (require 'erc-autoaway)
+  ;; autoaway setup
+  (setq erc-auto-discard-away t)
+  (setq erc-autoaway-idle-seconds 600)
+  (setq erc-autoaway-use-emacs-idle t)
+  ;; utf-8 always and forever
+  (setq erc-server-coding-system '(utf-8 . utf-8))
 
+  (require 'erc-spelling)
+  ;; enable spell checking
+  ;; set different dictionaries by different servers/channels
+  ;; (setq erc-spelling-dictionaries '(("#emacs" "american")))
+  (when *spell-check-support-enabled*
+    (erc-spelling-mode 1))
 
-(require 'erc-spelling)
-;; enable spell checking
-;; set different dictionaries by different servers/channels
-;;(setq erc-spelling-dictionaries '(("#emacs" "american")))
-(when *spell-check-support-enabled*
-  (erc-spelling-mode 1))
-
-(require 'erc-log)
-;; logging
-(setq erc-log-channels-directory "~/.erc/logs/")
-(if (not (file-exists-p erc-log-channels-directory))
+  (require 'erc-log)
+  ;; logging
+  (setq erc-log-channels-directory "~/.erc/logs/")
+  (unless (file-exists-p erc-log-channels-directory)
     (mkdir erc-log-channels-directory t))
-;; FIXME - this advice is wrong and is causing problems on Emacs exit
-;; (defadvice save-buffers-kill-emacs (before save-logs (arg) activate)
-;;   (save-some-buffers t (lambda () (when (eq major-mode 'erc-mode) t))))
-(setq erc-save-buffer-on-part t)
-
-(defun start-irc ()
-  "Connect to IRC."
-  (interactive)
-  (when (y-or-n-p "Do you want to start IRC? ")
-    (erc :server "irc.libera.chat" :port 6667 :nick erc-nick)))
-
-(defun filter-server-buffers ()
-  (delq nil
-        (mapcar
-         (lambda (x) (and (erc-server-buffer-p x) x))
-         (buffer-list))))
-
-(defun stop-irc ()
-  "Disconnects from all irc servers"
-  (interactive)
-  (dolist (buffer (filter-server-buffers))
-    (message "Server buffer: %s" (buffer-name buffer))
-    (with-current-buffer buffer
-      (erc-quit-server "Asta la vista"))))
+  ;; FIXME - this advice is wrong and is causing problems on Emacs exit
+  ;; (defadvice save-buffers-kill-emacs (before save-logs (arg) activate)
+  ;;   (save-some-buffers t (lambda () (when (eq major-mode 'erc-mode) t))))
+  (setq erc-save-buffer-on-part t))
 
 (provide 'init-erc)
 
