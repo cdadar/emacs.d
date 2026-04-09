@@ -10,34 +10,24 @@
   (unless (and *is-a-mac* window-system)
     (suspend-frame)))
 
-(global-set-key (kbd "C-z") 'sanityinc/maybe-suspend-frame)
-
-
-
-;; Suppress GUI features
-
-(setq use-file-dialog nil)
-(setq use-dialog-box nil)
-(setq inhibit-startup-screen t)
-
-
-
-;; Window size and features
-
-(setq-default
- window-resize-pixelwise t
- frame-resize-pixelwise t)
-
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-(when (fboundp 'set-scroll-bar-mode)
-  (set-scroll-bar-mode nil))
-
-(menu-bar-mode -1)
-
-(let ((no-border '(internal-border-width . 0)))
-  (add-to-list 'default-frame-alist no-border)
-  (add-to-list 'initial-frame-alist no-border))
+(use-package frame
+  :ensure nil
+  :bind (("C-z" . sanityinc/maybe-suspend-frame))
+  :custom
+  (use-file-dialog nil)
+  (use-dialog-box nil)
+  (inhibit-startup-screen t)
+  (window-resize-pixelwise t)
+  (frame-resize-pixelwise t)
+  :config
+  (when (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
+  (when (fboundp 'set-scroll-bar-mode)
+    (set-scroll-bar-mode nil))
+  (menu-bar-mode -1)
+  (let ((no-border '(internal-border-width . 0)))
+    (add-to-list 'default-frame-alist no-border)
+    (add-to-list 'initial-frame-alist no-border)))
 
 (defun sanityinc/adjust-opacity (frame incr)
   "Adjust the background opacity of FRAME by increment INCR."
@@ -51,15 +41,28 @@
     (when (and (<= frame-alpha-lower-limit newalpha) (>= 100 newalpha))
       (modify-frame-parameters frame (list (cons 'alpha newalpha))))))
 
+(defun sanityinc/decrease-opacity ()
+  "Decrease the current frame opacity slightly."
+  (interactive)
+  (sanityinc/adjust-opacity nil -2))
+
+(defun sanityinc/increase-opacity ()
+  "Increase the current frame opacity slightly."
+  (interactive)
+  (sanityinc/adjust-opacity nil 2))
+
+(defun sanityinc/reset-opacity ()
+  "Reset the current frame opacity to 100."
+  (interactive)
+  (modify-frame-parameters nil '((alpha . 100))))
+
 (when (and *is-a-mac* (fboundp 'toggle-frame-fullscreen))
-  ;; Command-Option-f to toggle fullscreen mode
-  ;; Hint: Customize `ns-use-native-fullscreen'
-  (global-set-key (kbd "M-ƒ") 'toggle-frame-fullscreen))
+  (global-set-key (kbd "M-ƒ") #'toggle-frame-fullscreen))
 
 ;; TODO: use seethru package instead?
-(global-set-key (kbd "M-C-8") (lambda () (interactive) (sanityinc/adjust-opacity nil -2)))
-(global-set-key (kbd "M-C-9") (lambda () (interactive) (sanityinc/adjust-opacity nil 2)))
-(global-set-key (kbd "M-C-7") (lambda () (interactive) (modify-frame-parameters nil `((alpha . 100)))))
+(global-set-key (kbd "C-M-8") #'sanityinc/decrease-opacity)
+(global-set-key (kbd "C-M-9") #'sanityinc/increase-opacity)
+(global-set-key (kbd "C-M-7") #'sanityinc/reset-opacity)
 
 
 (when *is-a-mac*
@@ -68,16 +71,20 @@
     (ns-auto-titlebar-mode)))
 
 
-(setq frame-title-format
-      '((:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b"))))
+(use-package frame
+  :ensure nil
+  :custom
+  (frame-title-format
+   '((:eval (if (buffer-file-name)
+                (abbreviate-file-name (buffer-file-name))
+              "%b")))))
 
 ;; Non-zero values for `line-spacing' can mess up ansi-term and co,
 ;; so we zero it explicitly in those cases.
-(add-hook 'term-mode-hook
-          (lambda ()
-            (setq line-spacing 0)))
+(use-package term
+  :ensure nil
+  :hook (term-mode . (lambda ()
+                       (setq line-spacing 0))))
 
 
 ;; Change global font size easily
@@ -90,7 +97,10 @@
 (use-package disable-mouse)
 
 
-(when (fboundp 'pixel-scroll-precision-mode)
+(use-package pixel-scroll
+  :ensure nil
+  :if (fboundp 'pixel-scroll-precision-mode)
+  :config
   (pixel-scroll-precision-mode))
 
 

@@ -18,12 +18,14 @@
 
 
 
-(setq-default ibuffer-show-empty-filter-groups nil)
-
-(sanityinc/fullframe-mode 'ibuffer-mode)
-
-
-(with-eval-after-load 'ibuffer
+(use-package ibuffer
+  :ensure nil
+  :bind (("C-x C-b" . ibuffer))
+  :custom
+  (ibuffer-show-empty-filter-groups nil)
+  (ibuffer-filter-group-name-face 'font-lock-doc-face)
+  :config
+  (sanityinc/fullframe-mode 'ibuffer-mode)
   ;; Use human readable Size column instead of original one
   (define-ibuffer-column size-h
     (:name "Size" :inline t)
@@ -50,10 +52,6 @@
 ;;               (vc-status 12 12 :left)
 ;;               " "
 ;;               vc-relative-file)))
-
-(setq ibuffer-filter-group-name-face 'font-lock-doc-face)
-
-(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (use-package tempbuf
   :ensure nil

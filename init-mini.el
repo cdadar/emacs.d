@@ -48,7 +48,7 @@
 
 (if (boundp 'use-short-answers)
     (setq use-short-answers t)
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (fset 'yes-or-no-p 'y-or-n-p))
 
 ;; Better defaults
 ;; (setq initial-scratch-message nil)

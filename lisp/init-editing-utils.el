@@ -4,9 +4,14 @@
 
 (use-package unfill)
 
-(when (fboundp 'electric-pair-mode)
-  (add-hook 'after-init-hook 'electric-pair-mode))
-(add-hook 'after-init-hook 'electric-indent-mode)
+(use-package elec-pair
+  :ensure nil
+  :if (fboundp 'electric-pair-mode)
+  :hook (after-init . electric-pair-mode))
+
+(use-package electric
+  :ensure nil
+  :hook (after-init . electric-indent-mode))
 
 (use-package list-unicode-display)
 
@@ -34,13 +39,20 @@
  truncate-partial-width-windows nil
  warning-minimum-level :error)
 
-(add-hook 'after-init-hook 'delete-selection-mode)
+(use-package delsel
+  :ensure nil
+  :hook (after-init . delete-selection-mode))
 
-(add-hook 'after-init-hook 'global-auto-revert-mode)
-(setq global-auto-revert-non-file-buffers t
-      auto-revert-verbose nil)
+(use-package autorevert
+  :ensure nil
+  :hook (after-init . global-auto-revert-mode)
+  :custom
+  (global-auto-revert-non-file-buffers t)
+  (auto-revert-verbose nil))
 
-(add-hook 'after-init-hook 'transient-mark-mode)
+(use-package simple
+  :ensure nil
+  :hook (after-init . transient-mark-mode))
 
 
 
@@ -80,18 +92,25 @@
 
 
 
-(when (fboundp 'display-line-numbers-mode)
-  (setq-default display-line-numbers-width 3)
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-  (add-hook 'yaml-mode-hook 'display-line-numbers-mode)
-  (add-hook 'yaml-ts-mode-hook 'display-line-numbers-mode))
+(use-package display-line-numbers
+  :ensure nil
+  :if (fboundp 'display-line-numbers-mode)
+  :custom
+  (display-line-numbers-width 3)
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  (yaml-mode . display-line-numbers-mode)
+  (yaml-ts-mode . display-line-numbers-mode))
 
 
 
-(when (boundp 'display-fill-column-indicator)
-  (setq-default indicate-buffer-boundaries 'left)
-  (setq-default display-fill-column-indicator-character ?┊)
-  (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode))
+(use-package display-fill-column-indicator
+  :ensure nil
+  :if (boundp 'display-fill-column-indicator)
+  :custom
+  (indicate-buffer-boundaries 'left)
+  (display-fill-column-indicator-character ?┊)
+  :hook (prog-mode . display-fill-column-indicator-mode))
 
 
 
@@ -149,10 +168,14 @@
 
 
 ;; Show matching parens
-(add-hook 'after-init-hook 'show-paren-mode)
+(use-package paren
+  :ensure nil
+  :hook (after-init . show-paren-mode))
 
-(when (fboundp 'repeat-mode)
-  (add-hook 'after-init-hook 'repeat-mode))
+(use-package repeat
+  :ensure nil
+  :if (fboundp 'repeat-mode)
+  :hook (after-init . repeat-mode))
 
 ;;; Expand region
 (use-package expand-region
@@ -161,8 +184,10 @@
 
 
 ;;; Handy key bindings
-(with-eval-after-load 'help
-  (define-key help-map "A" 'describe-face))
+(use-package help
+  :ensure nil
+  :bind (:map help-map
+              ("A" . describe-face)))
 
 (global-set-key (kbd "C-.") 'set-mark-command)
 (global-set-key (kbd "C-x C-.") 'pop-global-mark)
