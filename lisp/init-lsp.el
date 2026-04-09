@@ -46,7 +46,7 @@
                 ("C-M-." . consult-eglot-symbols)))
 
   (use-package consult-eglot-embark
-    :after （embark consult-eglot）
+    :after (embark consult-eglot)
     :config
     (consult-eglot-embark-mode))
 
