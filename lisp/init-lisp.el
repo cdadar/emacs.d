@@ -21,7 +21,7 @@
 
 
 (defun sanityinc/headerise-elisp ()
-  "Add minimal header and footer to an elisp buffer in order to placate flycheck."
+  "Add minimal header and footer to an elisp buffer for syntax-checking tools."
   (interactive)
   (let ((fname (if (buffer-file-name)
                    (file-name-nondirectory (buffer-file-name))

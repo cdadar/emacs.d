@@ -20,6 +20,7 @@
             (lambda ()
               (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t)))))
 
+
 ;; Use flycheck checkers with flymake, to extend its coverage
 (use-package flymake-flycheck
   ;; Disable flycheck checkers for which we have flymake equivalents
