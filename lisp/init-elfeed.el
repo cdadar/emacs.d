@@ -42,7 +42,7 @@
 (use-package elfeed-autotag
   :hook (after-init . elfeed-autotag)
   :init
-  (setq elfeed-autotag-files (list spike-leung/elfeed-org-files)))
+  (setq elfeed-autotag-files (list rmh-elfeed-org-file)))
 
 
 
@@ -53,7 +53,7 @@
                     (org-element-property :raw-link element))))
     (if (and buffer-file-name
              (string-equal (expand-file-name (buffer-file-name))
-                           (expand-file-name spike-leung/elfeed-org-files))
+                           (expand-file-name rmh-elfeed-org-file))
              link
              (string-match-p (rx (or "rss" "feed" "atom" "xml")) link))
         (let* ((url-parts (url-generic-parse-url link))
