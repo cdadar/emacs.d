@@ -9,7 +9,7 @@ This is a personal Emacs configuration based on [Purcell's emacs.d](https://gith
 ## Repository Structure
 
 - `init.el` - Main entry point that loads all configuration modules
-- `early-init.el` - Pre-initialization (Emacs 27+), handles GC, native compilation, and UI optimization
+- `early-init.el` - Pre-initialization (Emacs 29.1+), handles GC, native compilation, and UI optimization
 - `lisp/` - Contains 100+ configuration modules (e.g., `init-org.el`, `init-python.el`, `init-ai.el`)
 - `site-lisp/` - Local packages not available in package archives
 - `elpa-{VERSION}/` - Package installation directory (versioned per Emacs version)
@@ -29,7 +29,7 @@ Test with minimal configuration:
 emacs -Q --l ~/.emacs.d/init-mini.el
 ```
 
-The CI workflow in `.github/workflows/test.yml` automatically tests startup on multiple Emacs versions (27.1-30.2).
+The CI workflow in `.github/workflows/test.yml` automatically tests startup on multiple Emacs versions (29.1-30.2).
 
 ## Key Architecture Patterns
 

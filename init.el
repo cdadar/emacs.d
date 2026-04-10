@@ -9,11 +9,9 @@
 ;; Produce backtraces when errors occur: can be helpful to diagnose startup issues
 ;; (setq debug-on-error t)
 
-(let ((minver "26.1"))
+(let ((minver "29.1"))
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-(when (version< emacs-version "27.1")
-  (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
 
 (add-to-list 'load-path (locate-user-emacs-file "lisp"))
 (require 'init-benchmarking) ;; Measure startup time
@@ -31,19 +29,19 @@
                        (*linux* nil)
                        (t nil)))
 (defconst emacs/>=27p
-  (>= emacs-major-version 27)
+  (version<= "27.0" emacs-version)
   "Emacs is 27 or above.")
 
 (defconst emacs/>=28p
-  (>= emacs-major-version 28)
+  (version<= "28.0" emacs-version)
   "Emacs is 28 or above.")
 
 (defconst emacs/>=29p
-  (>= emacs-major-version 29)
+  (version<= "29.0" emacs-version)
   "Emacs is 29 or above.")
 
 (defconst emacs/>=30p
-  (>= emacs-major-version 30)
+  (version<= "30.0" emacs-version)
   "Emacs is 30 or above.")
 
 ;; Process performance tuning

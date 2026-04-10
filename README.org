@@ -15,3 +15,7 @@ git submodule update --init --recursive
 ** 安装外部依赖
 - ripgrep (https://github.com/BurntSushi/ripgrep)  very very very fast!!!
 - libnotify-tools 提供 org-pomodoro 的通知命令 =notify-send=
+
+
+** 包管理器
+=use-package= 来作为包管理器
