@@ -1,0 +1,200 @@
+#+title: init-org.el 优化总结清单
+#+author: Hermes Agent
+#+date: [2026-04-11]
+
+* 已完成
+
+** use-package 结构收敛
+- 将多个分散的 ~(use-package org ...)~ 收敛为单一主块。
+- 清理了散落的 ~(with-eval-after-load 'org ...)~，避免 Org 主配置分裂。
+- 目前 Org 主配置的职责更清晰：
+  - ~:custom~ 放基础变量
+  - ~:hook~ 放简单 hook
+  - ~:bind~ 放按键绑定
+  - ~:config~ 放函数定义与集中初始化调用
+
+** 解决配置互相覆盖问题
+- 合并了 ~org-agenda-custom-commands~ 的定义，避免不同位置重复 ~setq~ 造成覆盖。
+- 合并了 ~org-capture-templates~ 的定义，避免增量修改后又被整体重写。
+- 将 Brain capture 模板并入统一 capture 配置，避免模板丢失。
+
+** 清理未接线/历史遗留代码
+- 删除了未真正启用的 dynamic agenda 相关 dead code。
+- 去掉了旧式 advice/持久化思路带来的维护负担。
+
+** Hook 与 keymap 整理
+- 将反复在 hook 中修改 ~org-mode-map~ 的逻辑移出，避免每次进 buffer 重复做全局 keymap 修改。
+- 将截图命令抽成独立函数，并绑定到 ~C-c s c~。
+- 修正了 prose 相关逻辑里对 Org major mode 的判断。
+
+** 第二梯队懒加载优化
+- ~org-roam~ 改成真正按需加载后再启用 autosync，而不是通过启动后的 idle timer 提前触发。
+- 这些扩展改成了更合理的按需加载方式：
+  - ~grab-mac-link~
+  - ~ox-ioslide~
+  - ~org-mind-map~
+  - ~org-pandoc-import~
+
+** Babel / 导出路径去副作用化
+- 移除了启动/加载路径中对 ditaa 和 plantuml 的运行时自动下载。
+- 去除了以下历史债模式：
+  - ~http://~ 下载
+  - ~url-copy-file~
+  - ~shell-command unzip -p ...~
+- 现在改为只发现和配置已有工具：
+  - ditaa: 本地 jar 或 ~DITAA_JAR~
+  - plantuml: 系统 ~plantuml~ 命令、 本地 jar 或 ~PLANTUML_JAR~
+- 未发现工具时只提示，不再在 init 路径里安装软件。
+
+** 主配置函数化
+- 将主 ~use-package org~ 中的大块 ~:config~ 拆成按职责划分的 setup 函数：
+  - ~cdadar/org-setup-agenda-window-hooks~
+  - ~cdadar/org-setup-clocking~
+  - ~cdadar/org-setup-babel~
+  - ~cdadar/org-setup-crypt~
+  - ~cdadar/org-setup-export~
+  - ~cdadar/org-setup-refile~
+  - ~cdadar/org-setup-agenda~
+  - ~cdadar/org-setup-global-prefix~
+  - ~cdadar/org-setup-capture~
+  - ~cdadar/org-setup-ui~
+- 主块末尾统一调用这些 setup 函数，提升可读性和可维护性。
+
+** 命名空间统一（仅限本轮新整理的内容）
+- 按用户要求，将本轮新整理出来的 Org helper/setup 命名统一到 ~cdadar/~。
+- 保留原本已有的 ~sanityinc/~ 命名，不做全量迁移。
+- 已统一的新命名包括：
+  - ~cdadar/org-mode-setup~
+  - ~cdadar/org-screenshot~
+  - ~cdadar/org-filter-by-tag~
+  - ~cdadar/org-get-year-and-month~
+  - ~cdadar/org-find-month-tree~
+  - ~cdadar/org-capture-template-goto-link~
+  - ~cdadar/org-generate-anki-note-body~
+  - ~cdadar/org-archive-done-tasks~
+  - ~cdadar/org-clock-sum-today-by-tags~
+  - ~cdadar/org-pomodoro-notify~
+  - 以及各类 ~cdadar/org-setup-*~ 函数
+
+** 包级一致性整理
+- 对若干 Org 生态包做了风格统一：
+  - ~org-pomodoro~
+  - ~org-mind-map~
+  - ~org-brain~
+  - ~org-download~
+  - ~org-tree-slide~
+  - ~org-roam~
+  - ~org-roam-ui~
+- 典型改进包括：
+  - 能放 ~:custom~ 的变量放 ~:custom~
+  - 小段初始化逻辑抽成 ~cdadar/...-setup~
+  - 避免在 ~:config~ 中直接堆叠无结构 ~setq~
+
+** 已验证
+- ~check-parens~ 通过。
+- ~batch-byte-compile lisp/init-org.el~ 通过。
+- ~./test-startup.sh~ 通过。
+- 目标懒加载/加载路径验证通过：
+  - ~require 'org~
+  - ~require 'ox~
+  - ~require 'ob-core~
+  - ~require 'ob-plantuml~
+  - ~require 'ob-ditaa~
+
+* 可选后续
+
+** 进一步拆分 Babel 配置
+可以继续将 ~cdadar/org-setup-babel~ 再拆成两个函数：
+- ~cdadar/org-setup-babel-languages~
+- ~cdadar/org-setup-diagram-tools~
+
+这样能更清楚地区分：
+- Babel 语言启用列表
+- 图表/diagram 工具发现与配置
+
+** 对剩余 Org 生态包继续做包级一致性整理
+还可以按同样思路继续整理：
+- ~org-ref~
+- ~org-journal~
+- ~org-zettel-ref-mode~
+- ~org-roam-bibtex~
+
+目标是让这些块都更接近统一风格：
+- 简单配置用 ~:custom~
+- 明确入口用 ~:commands~ / ~:bind~
+- 复杂逻辑用 ~cdadar/...-setup~
+
+** 将部分大型数据结构拆到常量或专用函数
+以下内容仍然偏大：
+- ~org-agenda-custom-commands~
+- ~org-capture-templates~
+- ~org-roam-capture-templates~
+
+可选做法：
+- 抽成 ~defconst~
+- 或抽成返回值函数
+- 或按主题拆分（如 work / notes / anki / protocol）
+
+这样对 diff 和后续维护会更友好。
+
+** 进一步统一新旧命名空间
+目前遵循了“新改的替换，原本的不用替换”的要求。
+未来如果想彻底统一风格，可以考虑逐步把旧的 ~sanityinc/~ 名称迁移到 ~cdadar/~。
+但这应作为单独、可控的改动来做，而不是顺手混改。
+
+** 为关键用户命令补显式绑定或文档说明
+例如这些命令虽然已整理，但未必都有清晰入口：
+- ~cdadar/org-archive-done-tasks~
+- ~cdadar/org-clock-sum-today-by-tags~
+- ~cdadar/org-find-month-tree~
+
+可选地：
+- 增加 keybinding
+- 加入 prefix map
+- 或在注释/文档中列出用途
+
+* 暂不建议动
+
+** 不建议一次性全量改名旧 ~sanityinc/~ 标识
+原因：
+- 已有名字分布较广
+- 可能影响用户习惯、历史配置和 muscle memory
+- 本轮已经明确约束为“只改新整理出来的部分”
+
+如果要做，应单独作为“命名空间迁移”任务处理。
+
+** 不建议把所有逻辑都强行塞进 ~:custom~ / ~:hook~
+有些逻辑天然更适合保留在函数和 ~:config~ 里，例如：
+- advice
+- 复杂 capture 模板生成
+- Babel 图表工具发现
+- Agenda 跳过逻辑
+- 自定义命令定义
+
+过度声明式化会让结构更隐晦，不一定更好维护。
+
+** 不建议恢复运行时自动安装 diagram 依赖
+已经移除的做法不建议再加回来：
+- 启动时联网下载 jar
+- 配置加载时执行 unzip / shell 安装流程
+- 用不安全的远程源自动取文件
+
+更稳妥的方式应是：
+- 明确安装
+- 明确路径
+- 明确环境变量
+
+** 不建议短期继续大规模重排整个文件顺序
+当前已经完成了几轮结构重构并通过验证。
+继续大幅重排会增加：
+- diff 噪音
+- 回归排查成本
+- 未来 blame 难度
+
+如果后续还要重排，建议基于明确目标单独进行，例如：
+- “只整理 capture 区块”
+- “只整理 roam 区块”
+- “只整理 export/babel 区块”
+
+* 文件位置
+- 本总结文件保存在：~docs/init-org-optimization-summary.org~
