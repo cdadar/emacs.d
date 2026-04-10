@@ -16,7 +16,10 @@
   :config
   (cnfonts-mode 1))
 
-
+(defun cdadar/disable-mouse-text-scaling (&optional _arg)
+  "Disable mouse or touchpad gestures that try to scale text."
+  (interactive "P")
+  (user-error "Mouse wheel text scaling is disabled in this configuration"))
 
 (use-package mouse
   :ensure nil
@@ -26,10 +29,10 @@
         mouse-wheel-follow-mouse t)
 
   :bind
-  (("<C-mouse-4>" . nil)
-   ("<C-mouse-5>" . nil)
-   ("<C-wheel-up>" . nil)
-   ("<C-wheel-down>" . nil)))
+  (("<C-mouse-4>" . cdadar/disable-mouse-text-scaling)
+   ("<C-mouse-5>" . cdadar/disable-mouse-text-scaling)
+   ("<C-wheel-up>" . cdadar/disable-mouse-text-scaling)
+   ("<C-wheel-down>" . cdadar/disable-mouse-text-scaling)))
 
 (provide 'init-fonts)
 

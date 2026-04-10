@@ -87,12 +87,6 @@
                        (setq line-spacing 0))))
 
 
-;; Change global font size easily
-
-(use-package default-text-scale
-  :hook
-  (after-init . default-text-scale-mode))
-
 
 (use-package disable-mouse)
 
