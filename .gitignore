@@ -84,3 +84,4 @@ eca/
 .aider*
 
 disabled-packages/*
+slide_config.js

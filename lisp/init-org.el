@@ -106,8 +106,7 @@ typical word processor."
                 (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))))
 
   (when (and (boundp '*is-a-mac*) *is-a-mac*)
-    (define-key org-mode-map (kbd "M-h") nil)
-    (define-key org-mode-map (kbd "C-c g") 'grab-mac-link)))
+    (define-key org-mode-map (kbd "M-h") nil)))
 
 (use-package writeroom-mode
   :diminish writeroom-mode)
@@ -242,7 +241,10 @@ typical word processor."
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 
 (use-package grab-mac-link
-  :if (bound-and-true-p *is-a-mac*))
+  :if (bound-and-true-p *is-a-mac*)
+  :commands (grab-mac-link grab-mac-link-dwim)
+  :bind (:map org-mode-map
+              ("C-c g" . grab-mac-link)))
 
 (use-package org-pomodoro
   :after org
@@ -265,17 +267,21 @@ typical word processor."
 
 ;; create ppt
 (use-package ox-ioslide
-  :after org)
+  :commands (org-ioslide-export-as-html org-ioslide-export-to-html))
 
 (use-package org-appear
   :after org
   :hook (org-mode . org-appear-mode))
 
 (use-package org-mind-map
-  :after org
+  :commands (org-mind-map-write
+             org-mind-map-write-with-prompt
+             org-mind-map-write-current-branch
+             org-mind-map-write-current-tree)
+  :init
+  (setq org-mind-map-engine "dot") ; Default. Directed Graph
   :config
   (require 'ox-org)
-  (setq org-mind-map-engine "dot"); Default. Directed Graph
   ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
   ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
   ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
@@ -326,18 +332,14 @@ typical word processor."
    ("C-c n i" . org-roam-node-insert)
    ("C-c n c" . org-roam-capture)
    ("C-c n j" . org-roam-dailies-capture-today))
-  :init
-  (run-with-idle-timer
-   5 nil
-   (lambda ()
-     (when (fboundp 'org-roam-db-autosync-mode)
-       (org-roam-db-autosync-mode 1))))
   :config
   (setq org-roam-v2-ack t
         org-roam-database-connector 'sqlite-builtin
         org-id-link-to-org-use-id t
         org-roam-completion-everywhere t
         org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (when (fboundp 'org-roam-db-autosync-mode)
+    (org-roam-db-autosync-mode 1))
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?"
            :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
@@ -855,7 +857,9 @@ typical word processor."
           (kill-region beg end))))))
 
 (use-package org-pandoc-import
-  :after org
+  :commands (org-pandoc-import-as-org
+             org-pandoc-import-to-org
+             org-pandoc-import-transient-mode)
   :vc (:url "https://github.com/tecosaur/org-pandoc-import"
             :rev :newest))
 
