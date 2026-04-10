@@ -32,7 +32,9 @@
   (("<C-mouse-4>" . cdadar/disable-mouse-text-scaling)
    ("<C-mouse-5>" . cdadar/disable-mouse-text-scaling)
    ("<C-wheel-up>" . cdadar/disable-mouse-text-scaling)
-   ("<C-wheel-down>" . cdadar/disable-mouse-text-scaling)))
+   ("<C-wheel-down>" . cdadar/disable-mouse-text-scaling)
+   ("<C-M-wheel-up>" . cdadar/disable-mouse-text-scaling)
+   ("<C-M-wheel-down>" . cdadar/disable-mouse-text-scaling)))
 
 (provide 'init-fonts)
 
