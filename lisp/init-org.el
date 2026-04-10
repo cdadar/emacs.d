@@ -10,8 +10,10 @@
   :ensure nil
   :defer t
   :commands (org-capture org-agenda org-store-link)
-  :bind
-  (("C-c c" . org-capture))
+  :bind (("C-c c" . org-capture)
+         :map org-mode-map
+         ("C-M-<up>" . org-up-element)
+         ("C-c s c" . +org-screenshot))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :hook (org-mode . (lambda () (setq truncate-lines t)))
   :config
@@ -51,7 +53,7 @@ typical word processor."
           (setq truncate-lines nil
                 word-wrap t
                 cursor-type 'bar)
-          (when (eq major-mode 'org)
+          (when (derived-mode-p 'org-mode)
             (kill-local-variable 'buffer-face-mode-face))
           (buffer-face-mode 1)
           (set (make-local-variable 'blink-cursor-interval) 0.6)
@@ -74,41 +76,43 @@ typical word processor."
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0))))
 
+  (defun +org-screenshot ()
+    "Take a screenshot into a unique-named file and insert an Org file link."
+    (interactive)
+    (org-display-inline-images)
+    (let ((filename
+           (concat
+            (make-temp-name
+             (concat (file-name-nondirectory (buffer-file-name))
+                     "_imgs/"
+                     (format-time-string "%Y%m%d_%H%M%S_")))
+            ".png")))
+      (unless (file-exists-p (file-name-directory filename))
+        (make-directory (file-name-directory filename) t))
+      (make-frame-invisible nil t)
+      (when (and (boundp '*is-a-mac*) *is-a-mac*)
+        (call-process-shell-command "screencapture" nil nil nil nil " -s " (concat "\"" filename "\""))
+        (call-process-shell-command "convert" nil nil nil nil (concat "\"" filename "\" -resize  \"50%\"") (concat "\"" filename "\"")))
+      (when (and (boundp '*linux*) *linux*)
+        (call-process "import" nil nil nil filename))
+      (make-frame-visible)
+      (when (file-exists-p filename)
+        (insert (concat "[[file:" filename "]]")))
+      (org-display-inline-images)))
+
   (with-eval-after-load 'org-agenda
     (add-hook 'org-agenda-mode-hook
-              (lambda () (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))))
+              (lambda ()
+                (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))))
 
-  (defvar dynamic-agenda-files nil
-    "dynamic generate agenda files list when changing org state")
-
-  (defun update-dynamic-agenda-hook ()
-    (let ((done (or (not org-state)
-                    (member org-state org-done-keywords)))
-          (file (buffer-file-name))
-          (agenda (funcall (ad-get-orig-definition 'org-agenda-files))))
-      (unless (member file agenda)
-        (if done
-            (save-excursion
-              (goto-char (point-min))
-              (unless (search-forward-regexp org-not-done-heading-regexp nil t)
-                (customize-save-variable
-                 'dynamic-agenda-files
-                 (cl-delete-if (lambda (k) (string= k file))
-                               dynamic-agenda-files))))
-          (unless (member file dynamic-agenda-files)
-            (customize-save-variable 'dynamic-agenda-files
-                                     (add-to-list 'dynamic-agenda-files file)))))))
-
-  (defun dynamic-agenda-files-advice (orig-val)
-    (union orig-val dynamic-agenda-files :test #'equal)))
+  (when (and (boundp '*is-a-mac*) *is-a-mac*)
+    (define-key org-mode-map (kbd "M-h") nil)
+    (define-key org-mode-map (kbd "C-c g") 'grab-mac-link)))
 
 (use-package writeroom-mode
   :diminish writeroom-mode)
 
-(use-package org
-  :ensure nil
-  :after org
-  :config
+(with-eval-after-load 'org
   (add-hook 'org-agenda-mode-hook 'hl-line-mode)
   (add-hook 'org-agenda-after-show-hook 'org-show-entry)
 
@@ -284,14 +288,11 @@ typical word processor."
   :after org
   :config
   (setq org-id-track-globally t
-        org-id-locations-file "~/.emacs.d/.org-id-locations"
+        org-id-locations-file (locate-user-emacs-file ".org-id-locations")
         org-brain-visualize-default-choices 'all
         org-brain-title-max-length 12
         org-brain-include-file-entries nil
-        org-brain-file-entries-use-title nil)
-  (push '("b" "Brain" plain (function org-brain-goto-end)
-          "* %i%?" :empty-lines 1)
-        org-capture-templates))
+        org-brain-file-entries-use-title nil))
 
 (use-package org-download
   :after org
@@ -469,22 +470,12 @@ typical word processor."
 
 (use-package org-review
   :bind (:map org-agenda-mode-map
-              ("C-c C-r" . org-review-insert-last-review))
-  :config
-  (setq org-agenda-custom-commands
-        '(("R" "Review projects" tags-todo "-CANCELLED/"
-           ((org-agenda-overriding-header "Reviews Scheduled")
-            (org-agenda-skip-function 'org-review-agenda-skip)
-            (org-agenda-cmp-user-defined 'org-review-compare)
-            (org-agenda-sorting-strategy '(user-defined-down)))))))
+              ("C-c C-r" . org-review-insert-last-review)))
 
 (use-package org-fragtog
   :hook ((org-mode . org-fragtog-mode)))
 
-(use-package org
-  :ensure nil
-  :after org
-  :config
+(with-eval-after-load 'org
   (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
 
   (defun sanityinc/verify-refile-target ()
@@ -549,7 +540,12 @@ typical word processor."
           (search category-up))
         org-agenda-window-setup 'current-window
         org-agenda-custom-commands
-        '(("N" "Notes" tags "NOTE"
+        '(("R" "Review projects" tags-todo "-CANCELLED/"
+           ((org-agenda-overriding-header "Reviews Scheduled")
+            (org-agenda-skip-function 'org-review-agenda-skip)
+            (org-agenda-cmp-user-defined 'org-review-compare)
+            (org-agenda-sorting-strategy '(user-defined-down))))
+          ("N" "Notes" tags "NOTE"
            ((org-agenda-overriding-header "Notes")
             (org-tags-match-list-sublevels t)))
           ("g" "GTD"
@@ -635,13 +631,6 @@ typical word processor."
           ("cB" "book" tags-todo "book")
           ("cv" "video" tags-todo "video")))
 
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
-              (when (and (boundp '*is-a-mac*) *is-a-mac*)
-                (define-key org-mode-map (kbd "M-h") nil)
-                (define-key org-mode-map (kbd "C-c g") 'grab-mac-link))))
-
   (setq org-archive-mark-done nil
         org-archive-location "%s_archive::datetree/")
 
@@ -659,10 +648,7 @@ typical word processor."
        (setq org-map-continue-from (outline-previous-heading)))
      "/CANCELLED" 'file)))
 
-(use-package org
-  :ensure nil
-  :after org
-  :config
+(with-eval-after-load 'org
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
   (define-key sanityinc/org-global-prefix-map (kbd "j") 'org-clock-goto)
@@ -750,10 +736,7 @@ typical word processor."
         (insert output-string))
       output-string)))
 
-(use-package org
-  :ensure nil
-  :after org
-  :config
+(with-eval-after-load 'org
   (defun get-year-and-month ()
     (list (format-time-string "%Y 年") (format-time-string "%m 月")))
 
@@ -820,6 +803,8 @@ typical word processor."
           ("b" "Blog Ideas" entry (file+headline org-agenda-file-note "Blog Ideas")
            "* TODO [#B] %?  :BLOG:\n  %i\n %U"
            :empty-lines 1)
+          ("B" "Brain" plain (function org-brain-goto-end)
+           "* %i%?" :empty-lines 1)
           ("s" "Code Snippet" entry
            (file org-agenda-file-code-snippet)
            "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
@@ -867,33 +852,7 @@ typical word processor."
              (beg (org-element-property :begin context))
              (end (org-element-property :end context)))
         (when (eq type 'link)
-          (kill-region beg end)))))
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (define-key org-mode-map (kbd "C-c s c")
-                          (defun +org-screenshot ()
-                            "Take a screenshot into a unique-named file in the current buffer file directory and insert a link to this file."
-                            (interactive)
-                            (org-display-inline-images)
-                            (setq filename
-                                  (concat
-                                   (make-temp-name
-                                    (concat (file-name-nondirectory (buffer-file-name))
-                                            "_imgs/"
-                                            (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-                            (unless (file-exists-p (file-name-directory filename))
-                              (make-directory (file-name-directory filename)))
-                            (make-frame-invisible nil t)
-                            (when (and (boundp '*is-a-mac*) *is-a-mac*)
-                              (call-process-shell-command "screencapture" nil nil nil nil " -s " (concat "\"" filename "\""))
-                              (call-process-shell-command "convert" nil nil nil nil (concat "\"" filename "\" -resize  \"50%\"" ) (concat "\"" filename "\"" )))
-                            (when (and (boundp '*linux*) *linux*)
-                              (call-process "import" nil nil nil filename))
-                            (make-frame-visible)
-                            (if (file-exists-p filename)
-                                (insert (concat "[[file:" filename "]]")))
-                            (org-display-inline-images))))))
+          (kill-region beg end))))))
 
 (use-package org-pandoc-import
   :after org
