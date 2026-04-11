@@ -108,16 +108,11 @@ Call a second time to restore the original window configuration."
 
 
 (unless (memq window-system '(nt w32))
-
   (use-package windswap
     :hook
     (after-init . (lambda () (apply-partially 'windmove-default-keybindings 'control)))
     (after-init . (lambda () (apply-partially 'windswap-default-keybindings 'shift 'control)))))
 
-
-(when (maybe-require-package 'pulsar)
-  (setq-default pulsar-pulse-region-functions nil)
-  (pulsar-global-mode t))
 
 (use-package pulsar
   :init
