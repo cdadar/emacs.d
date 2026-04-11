@@ -13,12 +13,11 @@
         ("C-c ! p" . flymake-goto-prev-error)
         ("C-c ! c" . flymake-start))
   :config
-  (unless (version< emacs-version "28.1")
-    (setq eldoc-documentation-function 'eldoc-documentation-compose)
+  (setq eldoc-documentation-function 'eldoc-documentation-compose)
 
-    (add-hook 'flymake-mode-hook
+  (add-hook 'flymake-mode-hook
             (lambda ()
-              (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t)))))
+              (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t))))
 
 
 ;; Use flycheck checkers with flymake, to extend its coverage

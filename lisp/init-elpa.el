@@ -23,11 +23,6 @@
 (setq package-install-upgrade-built-in t)
 
 
-;; Work-around for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
-(when (and (version< emacs-version "26.3") (boundp 'libgnutls-version) (>= libgnutls-version 30604))
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-
-
 ;;; On-demand installation of packages
 
 (defun require-package (package &optional min-version no-refresh)
@@ -67,9 +62,8 @@ locate PACKAGE."
 (setq package-native-compile t)
 
 ;; Initialize packages
-(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
-  (setq package-enable-at-startup nil)          ; To prevent initializing twice
-  (when (version< emacs-version  "29.1") (package-install 'use-package))
+(unless (bound-and-true-p package--initialized)
+  (setq package-enable-at-startup nil)
   (package-initialize))
 
 ;; Setup `use-package'

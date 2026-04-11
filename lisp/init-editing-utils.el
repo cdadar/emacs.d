@@ -6,7 +6,6 @@
 
 (use-package elec-pair
   :ensure nil
-  :if (fboundp 'electric-pair-mode)
   :hook (after-init . electric-pair-mode))
 
 (use-package electric
@@ -63,7 +62,6 @@
 
 (use-package so-long
   :ensure nil
-  :if (fboundp 'so-long-enable)
   :hook (after-init . so-long-enable))
 
 (use-package vlf
@@ -99,7 +97,6 @@
 
 (use-package display-line-numbers
   :ensure nil
-  :if (fboundp 'display-line-numbers-mode)
   :custom
   (display-line-numbers-width 3)
   :hook
@@ -111,7 +108,6 @@
 
 (use-package display-fill-column-indicator
   :ensure nil
-  :if (fboundp 'display-fill-column-indicator-mode)
   :custom
   (indicate-buffer-boundaries 'left)
   (display-fill-column-indicator-character ?┊)
@@ -179,7 +175,6 @@
 
 (use-package repeat
   :ensure nil
-  :if (fboundp 'repeat-mode)
   :hook (after-init . repeat-mode))
 
 ;;; Expand region

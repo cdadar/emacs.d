@@ -37,10 +37,9 @@
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
 ;; Packages
-;; Without this comment Emacs25 adds (package-initialize) here
 (setq package-archives
-      '(("gnu"   . "http://elpa.gnu.org/packages/")
-        ("melpa" . "http://melpa.org/packages/")))
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 
 ;; Explicitly set the prefered coding systems to avoid annoying prompt
 ;; from emacs (especially on Microsoft Windows)
@@ -87,10 +86,6 @@
 
 ;; (global-hl-line-mode 1)
 
-;; (if (fboundp 'display-line-numbers-mode)
-;;     (global-display-line-numbers-mode 1)
-;;   (global-linum-mode 1))
-
 ;; Basic modes
 (show-paren-mode 1)
 (delete-selection-mode 1)
@@ -98,10 +93,9 @@
 (recentf-mode 1)
 (when (fboundp 'savehist-mode)
   (savehist-mode 1))
-(if (fboundp 'save-place-mode)
-    (save-place-mode 1)
-  (require 'saveplace)
-  (setq-default save-place t))
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
 
 (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (electric-pair-mode 1)
@@ -113,35 +107,16 @@
 (when (fboundp 'global-completion-preview-mode)
   (global-completion-preview-mode 1))
 
-(if (fboundp 'fido-mode)
-    (progn
-      (fido-mode 1)
-      (when (fboundp 'fido-vertical-mode)
-        (fido-vertical-mode 1))
+(when (fboundp 'fido-vertical-mode)
+  (fido-vertical-mode 1)
 
-      (defun fido-recentf-open ()
-        "Use `completing-read' to find a recent file."
-        (interactive)
-        (if (find-file (completing-read "Find recent file: " recentf-list))
-            (message "Opening file...")
-          (message "Aborting")))
-      (global-set-key (kbd "C-x C-r") 'fido-recentf-open))
-  (progn
-    (ido-mode 1)
-    (ido-everywhere 1)
-
-    (setq ido-use-virtual-buffers t
-          ido-use-filename-at-point 'guess
-          ido-create-new-buffer 'always
-          ido-enable-flex-matching t)
-
-    (defun ido-recentf-open ()
-      "Use `ido-completing-read' to find a recent file."
-      (interactive)
-      (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-          (message "Opening file...")
-        (message "Aborting")))
-    (global-set-key (kbd "C-x C-r") 'ido-recentf-open)))
+  (defun fido-recentf-open ()
+    "Use `completing-read' to find a recent file."
+    (interactive)
+    (if (find-file (completing-read "Find recent file: " recentf-list))
+        (message "Opening file...")
+      (message "Aborting")))
+  (global-set-key (kbd "C-x C-r") 'fido-recentf-open))
 
 ;; Key Modifiers
 (cond

@@ -28,14 +28,6 @@
                         (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
                        (*linux* nil)
                        (t nil)))
-(defconst emacs/>=27p
-  (version<= "27.0" emacs-version)
-  "Emacs is 27 or above.")
-
-(defconst emacs/>=28p
-  (version<= "28.0" emacs-version)
-  "Emacs is 28 or above.")
-
 (defconst emacs/>=29p
   (version<= "29.0" emacs-version)
   "Emacs is 29 or above.")
@@ -231,8 +223,7 @@
   :config
   (setq-default uptimes-keep-count 200))
 
-(when (fboundp 'global-eldoc-mode)
-  (add-hook 'after-init-hook 'global-eldoc-mode))
+(add-hook 'after-init-hook #'global-eldoc-mode)
 
 (require 'init-direnv)
 
