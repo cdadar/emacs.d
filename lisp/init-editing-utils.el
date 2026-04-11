@@ -332,7 +332,8 @@ ORIG is the advised function, which is called with its ARGS."
   (python-mode . (lambda ()
                    (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle))))
 
-(when (executable-find "rg") (use-package deadgrep))
+(use-package deadgrep
+  :if (executable-find "rg"))
 
 ;; (use-package rime
 ;;   :config

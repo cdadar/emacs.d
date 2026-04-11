@@ -49,9 +49,9 @@ Various popular Emacs tools are included and configured here, such as
 ## Supported Emacs versions
 
 Use the latest released Emacs version available to you. The author
-typically uses the latest stable version.
+usually uses the latest stable version.
 
-The config requires Emacs 29.1 or greater. See the CI build for the currently tested version range, but in general you should try to use the latest stable Emacs release like I do.
+The minimum supported Emacs version is 29.1. The CI workflow currently tests Emacs 29.1 through 30.2, plus snapshot builds, but in general you should try to use the latest stable Emacs release.
 
 ## Other requirements
 

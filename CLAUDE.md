@@ -57,7 +57,7 @@ To add personal customizations without modifying core files:
 
 ### Version-Specific Code
 The configuration uses constants to enable/disable features based on Emacs version:
-- `emacs/>=27p`, `emacs/>=28p`, `emacs/>=29p`, `emacs/>=30p`
+- `emacs/>=29p`, `emacs/>=30p`
 - Platform-specific: `*is-a-mac*`, `*linux*`, `*win64*`
 
 ## Language Support

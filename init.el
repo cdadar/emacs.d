@@ -22,15 +22,14 @@
 (defconst *cygwin* (eq system-type 'cygwin) )
 (defconst *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
 (defconst *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
-(defconst *emacs24* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 24))) )
 (defconst *no-memory* (cond
                        (*is-a-mac*
                         (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
                        (*linux* nil)
                        (t nil)))
 (defconst emacs/>=29p
-  (version<= "29.0" emacs-version)
-  "Emacs is 29 or above.")
+  (version<= "29.1" emacs-version)
+  "Emacs is 29.1 or above.")
 
 (defconst emacs/>=30p
   (version<= "30.0" emacs-version)

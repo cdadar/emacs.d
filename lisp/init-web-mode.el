@@ -66,12 +66,12 @@
     (add-hook 'web-mode-hook 'prettier-html-on-save-mode)))
 
 
-(when (use-package ng2-mode
-        :mode  (("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode)
-                ("*\\.component\\.html\\'" . ng2-mode))
-        :config
-        (when (functionp 'prettier-html-on-save-mode)
-          (add-hook 'ng2-mode 'prettier-html-on-save-mode))))
+(use-package ng2-mode
+  :mode (("*\\.{component|service|pipe|directive|guard|module}\\.ts\\'" . ng2-mode)
+         ("*\\.component\\.html\\'" . ng2-mode))
+  :config
+  (when (functionp 'prettier-html-on-save-mode)
+    (add-hook 'ng2-mode 'prettier-html-on-save-mode)))
 
 (provide 'init-web-mode)
 ;;; init-web-mode.el ends here

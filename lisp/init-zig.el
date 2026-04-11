@@ -8,7 +8,7 @@
   :mode ("\\.\\(zig\\|zon\\)\\'" . zig-ts-mode)
   :config
   (with-eval-after-load 'eglot
-        (add-to-list 'eglot-server-programs '(zig-ts-mode . ("zls")))))
+    (add-to-list 'eglot-server-programs '(zig-ts-mode . ("zls")))))
 
 (use-package zig-mode)
 
