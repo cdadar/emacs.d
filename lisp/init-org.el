@@ -48,17 +48,16 @@
   ;; clocking
   (org-clock-persist t)
   (org-clock-in-resume t)
+  ;; Save clock data and notes in the LOGBOOK drawer
   (org-clock-into-drawer t)
+  ;; Save state changes in the LOGBOOK drawer
   (org-log-into-drawer t)
+  ;; Removes clocked tasks with 0:00 duration
   (org-clock-out-remove-zero-time-clocks t)
+  ;; Clock out when moving task to a done state
   (org-clock-out-when-done t)
   (org-clock-clocked-in-display 'mode-line)
   (org-clock-mode-line-total 'today)
-  ;; crypt
-  (org-crypt-tag-matcher "secret")
-  (org-tags-exclude-from-inheritance '("secret"))
-  (org-crypt-key "6DF1ABB0")
-  (epg-pinentry-mode 'loopback)
   ;; refile
   (org-refile-target-verify-function 'sanityinc/verify-refile-target)
   ;; agenda
@@ -184,18 +183,6 @@ typical word processor."
   (defun cdadar/org-setup-clocking ()
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
     (org-clock-persistence-insinuate)
-    (setq org-clock-persist t
-          org-clock-in-resume t
-          ;; Save clock data and notes in the LOGBOOK drawer
-          org-clock-into-drawer t
-          ;; Save state changes in the LOGBOOK drawer
-          org-log-into-drawer t
-          ;; Removes clocked tasks with 0:00 duration
-          org-clock-out-remove-zero-time-clocks t
-          ;; Clock out when moving task to a done state
-          org-clock-out-when-done t
-          org-clock-clocked-in-display 'mode-line
-          org-clock-mode-line-total 'today)
     (with-eval-after-load 'org-clock
       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
@@ -274,7 +261,20 @@ typical word processor."
       (setq org-crypt-tag-matcher "secret"
             org-tags-exclude-from-inheritance '("secret")
             org-crypt-key "6DF1ABB0"
-            epg-pinentry-mode 'loopback)))
+            epg-pinentry-mode 'loopback)
+      ;; 有解密条目的 buffer 跳过自动保存，避免 super-save 立刻重新加密
+      (defvar-local cdadar/org-crypt-decrypting nil
+        "Non-nil when an org-crypt entry has been decrypted in this buffer.")
+
+      (defadvice org-decrypt-entry (after cdadar/org-decrypt-mark activate)
+        (setq-local cdadar/org-crypt-decrypting t))
+
+      (defadvice org-encrypt-entry (after cdadar/org-encrypt-unmark activate)
+        (unless (save-excursion
+                  (goto-char (point-min))
+                  (re-search-forward
+                   (concat "^\\*+[ \t].*:" org-crypt-tag-matcher ":") nil t))
+          (kill-local-variable 'cdadar/org-crypt-decrypting)))))
 
   (defun cdadar/org-setup-export ()
     (with-eval-after-load 'ox
@@ -305,8 +305,7 @@ typical word processor."
       (org-agenda-refile goto rfloc no-update)))
 
   (defun cdadar/org-setup-refile ()
-    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
-    (setq org-refile-target-verify-function 'sanityinc/verify-refile-target))
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
 
   (defun cdadar/org-archive-done-tasks ()
     "archive of DNONE AND CANCELLED in current buffer"
@@ -687,18 +686,17 @@ typical word processor."
 (use-package org-pomodoro
   :after org
   :bind
-  (([(meta p)] . org-pomodoro))
-  :config
-  (defun cdadar/org-pomodoro-notify (title message)
-    (call-process "notify-send" nil 0 nil title message))
-  (defun cdadar/org-pomodoro-setup ()
-    (setq org-pomodoro-keep-killed-pomodoro-time t))
-  (cdadar/org-pomodoro-setup)
+  ([(meta p)] . org-pomodoro)
+  :custom
+  (org-pomodoro-keep-killed-pomodoro-time t)
   :hook
   ((org-pomodoro-finished . (lambda () (cdadar/org-pomodoro-notify "Pomodoro completed!" "Time for a break.")))
    (org-pomodoro-break-finished . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Short Break Finished" "Ready for Another?")))
    (org-pomodoro-long-break-finished . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Long Break Finished" "Ready for Another?")))
-   (org-pomodoro-killed . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))))
+   (org-pomodoro-killed . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Killed" "One does not simply kill a pomodoro!"))))
+  :config
+  (defun cdadar/org-pomodoro-notify (title message)
+    (call-process "notify-send" nil 0 nil title message)))
 
 (use-package org-cliplink
   :after org
@@ -775,97 +773,94 @@ typical word processor."
    ("C-c n i" . org-roam-node-insert)
    ("C-c n c" . org-roam-capture)
    ("C-c n j" . org-roam-dailies-capture-today))
+  :custom
+  (org-roam-v2-ack t)
+  (org-roam-database-connector 'sqlite-builtin)
+  (org-id-link-to-org-use-id t)
+  (org-roam-completion-everywhere t)
+  (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   :config
-  (defun cdadar/org-roam-setup ()
-    (setq org-roam-v2-ack t
-          org-roam-database-connector 'sqlite-builtin
-          org-id-link-to-org-use-id t
-          org-roam-completion-everywhere t
-          org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-    (when (fboundp 'org-roam-db-autosync-mode)
-      (org-roam-db-autosync-mode 1))
-    (setq org-roam-capture-templates
-          '(("d" "default" plain "%?"
-             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("c" "Christian")
-            ("ca" "基督学房" plain "%?"
-             :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("cb" "个人" plain "%?"
-             :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("cB" "圣经" plain "%?"
-             :target (file+head "christian/bible/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("ce" "例证" plain "%?"
-             :target (file+head "christian/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n#+tags: 例证")
-             :unnarrowed t)
-            ("co" "听道" plain "%?"
-             :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n#+tags: 听道")
-             :unnarrowed t)
-            ("cs" "查经" plain "%?"
-             :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n#+tags: 查经")
-             :unnarrowed t)
-            ("cS" "学道" plain "%?"
-             :target (file+head "christian/word/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n#+tags: 学道")
-             :unnarrowed t)
-            ("cw" "忘记背后" plain "%?"
-             :target (file+head "christian/wjbh/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n#+tags: 忘记背后")
-             :unnarrowed t)
-            ("cy" "以斯拉学习" plain "%?"
-             :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("cz" "栽培班" plain "%?"
-             :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("p" "program" plain "%?"
-             :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("n" "Booknotes" plain "%?"
-             :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("i" "investment" plain "%?"
-             :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("o" "other" plain "%?"
-             :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("w" "work" plain "%?"
-             :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t)
-            ("B" "blog" plain "%?"
-             :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
-                                "#+title: ${title}\n")
-             :unnarrowed t))))
-  (cdadar/org-roam-setup))
+  (when (fboundp 'org-roam-db-autosync-mode)
+    (org-roam-db-autosync-mode 1))
+  (setq org-roam-capture-templates
+        '(("d" "default" plain "%?"
+           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("c" "Christian")
+          ("ca" "基督学房" plain "%?"
+           :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("cb" "个人" plain "%?"
+           :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("cB" "圣经" plain "%?"
+           :target (file+head "christian/bible/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("ce" "例证" plain "%?"
+           :target (file+head "christian/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+tags: 例证")
+           :unnarrowed t)
+          ("co" "听道" plain "%?"
+           :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+tags: 听道")
+           :unnarrowed t)
+          ("cs" "查经" plain "%?"
+           :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+tags: 查经")
+           :unnarrowed t)
+          ("cS" "学道" plain "%?"
+           :target (file+head "christian/word/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+tags: 学道")
+           :unnarrowed t)
+          ("cw" "忘记背后" plain "%?"
+           :target (file+head "christian/wjbh/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+tags: 忘记背后")
+           :unnarrowed t)
+          ("cy" "以斯拉学习" plain "%?"
+           :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("cz" "栽培班" plain "%?"
+           :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("p" "program" plain "%?"
+           :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("n" "Booknotes" plain "%?"
+           :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("i" "investment" plain "%?"
+           :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("o" "other" plain "%?"
+           :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("w" "work" plain "%?"
+           :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("B" "blog" plain "%?"
+           :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t))))
 
 (use-package org-roam-ui
   :after org-roam
   :commands (org-roam-ui-mode org-roam-ui-open)
-  :config
-  (defun cdadar/org-roam-ui-setup ()
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
-  (cdadar/org-roam-ui-setup))
+  :custom
+  (org-roam-ui-sync-theme t)
+  (org-roam-ui-follow t)
+  (org-roam-ui-update-on-save t)
+  (org-roam-ui-open-on-start t))
 
 (use-package ebib
   :defer t
@@ -898,11 +893,10 @@ typical word processor."
 
 (use-package org-journal
   :defer t
-  :init
-  (setq org-journal-prefix-key "C-c j")
-  :config
-  (setq org-journal-dir "~/org-mode/roam/journal/"
-        org-journal-date-format "%A, %d %B %Y"))
+  :custom
+  (org-journal-prefix-key "C-c j")
+  (org-journal-dir "~/org-mode/roam/journal/")
+  (org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-roam-bibtex
   :after org-roam)
@@ -911,11 +905,11 @@ typical word processor."
   :defer t
   :after org-roam
   :vc (:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
-  :config
-  (setq org-zettel-ref-mode-type 'org-roam
-        org-zettel-ref-quick-markup-key "C-c m"
-        org-zettel-ref-python-environment 'venv
-        org-zettel-ref-python-env-name "org-zettel-ref"))
+  :custom
+  (org-zettel-ref-mode-type 'org-roam)
+  (org-zettel-ref-quick-markup-key "C-c m")
+  (org-zettel-ref-python-environment 'venv)
+  (org-zettel-ref-python-env-name "org-zettel-ref"))
 
 (use-package org-review
   :bind (:map org-agenda-mode-map

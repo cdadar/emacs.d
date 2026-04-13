@@ -428,7 +428,9 @@ ORIG is the advised function, which is called with its ARGS."
         (when (and buffer-file-name
                    (buffer-modified-p (current-buffer))
                    (file-writable-p buffer-file-name)
-                   (if (file-remote-p buffer-file-name) super-save-remote-files t))
+                   (if (file-remote-p buffer-file-name) super-save-remote-files t)
+                   ;; 跳过有解密条目的 org buffer，避免自动重新加密
+                   (not (bound-and-true-p cdadar/org-crypt-decrypting)))
           (save-buffer)))))
 
   (advice-add 'super-save-command :override 'save-all-buffers))
