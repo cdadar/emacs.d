@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'ispell)
-
 ;; {{ flyspell setup for web-mode
 (defun web-mode-flyspell-verify ()
   (let* ((f (get-text-property (- (point) 1) 'face))
@@ -63,16 +61,7 @@
     :config
     (flyspell-lazy-mode 1)))
 
-;; better performance
-(setq flyspell-issue-message-flag nil)
-
-;; if (aspell installed) { use aspell}
-;; else if (hunspell installed) { use hunspell }
-;; whatever spell checker I use, I always use English dictionary
-;; I prefer use aspell because:
-;; 1. aspell is older
-;; 2. looks Kevin Atkinson still get some road map for aspell:
-;; @see http://lists.gnu.org/archive/html/aspell-announce/2011-09/msg00000.html
+;; {{ ispell configuration
 (defun flyspell-detect-ispell-args (&optional run-together)
   "If RUN-TOGETHER is true, spell check the CamelCase words.
 Please note RUN-TOGETHER will make aspell less capable. So it should only be used in prog-mode-hook."
@@ -107,47 +96,61 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
 ;; hunspell will search for a dictionary called `en_US' in the path specified by
 ;; `$DICPATH'
 
-(cond
- ((executable-find "aspell")
-  (setq ispell-program-name "aspell"))
- ((executable-find "hunspell")
-  (setq ispell-program-name "hunspell")
-  (setq ispell-local-dictionary "en_US")
-  (setq ispell-local-dictionary-alist
-        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8))))
- (t (setq ispell-program-name nil)
-    (message "You need install either aspell or hunspell for ispell")))
+(use-package ispell
+  :ensure nil
+  :init
+  (require 'ispell)
+  (setq-default ispell-extra-args (flyspell-detect-ispell-args t))
+  :config
+  (cond
+   ((executable-find "aspell")
+    (setq ispell-program-name "aspell"))
+   ((executable-find "hunspell")
+    (setq ispell-program-name "hunspell")
+    (setq ispell-local-dictionary "en_US")
+    (setq ispell-local-dictionary-alist
+          '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8))))
+   (t (setq ispell-program-name nil)
+      (message "You need install either aspell or hunspell for ispell")))
 
-;; `ispell-cmd-args' contains *extra* arguments appending to CLI process
-;; when (ispell-send-string). Useless!
-;; `ispell-extra-args' is *always* used when start CLI aspell process
-(setq-default ispell-extra-args (flyspell-detect-ispell-args t))
-;; (setq ispell-cmd-args (flyspell-detect-ispell-args))
-(defadvice ispell-word (around my-ispell-word activate)
-  (let ((old-ispell-extra-args ispell-extra-args))
-    (ispell-kill-ispell t)
-    ;; use emacs original arguments
-    (setq ispell-extra-args (flyspell-detect-ispell-args))
-    ad-do-it
-    ;; restore our own ispell arguments
-    (setq ispell-extra-args old-ispell-extra-args)
-    (ispell-kill-ispell t)
-    ))
+  (defadvice ispell-word (around my-ispell-word activate)
+    (let ((old-ispell-extra-args ispell-extra-args))
+      (ispell-kill-ispell t)
+      ;; use emacs original arguments
+      (setq ispell-extra-args (flyspell-detect-ispell-args))
+      ad-do-it
+      ;; restore our own ispell arguments
+      (setq ispell-extra-args old-ispell-extra-args)
+      (ispell-kill-ispell t)
+      ))
 
-(defadvice flyspell-auto-correct-word (around my-flyspell-auto-correct-word activate)
-  (let* ((old-ispell-extra-args ispell-extra-args))
-    (ispell-kill-ispell t)
-    ;; use emacs original arguments
-    (setq ispell-extra-args (flyspell-detect-ispell-args))
-    ad-do-it
-    ;; restore our own ispell arguments
-    (setq ispell-extra-args old-ispell-extra-args)
-    (ispell-kill-ispell t)))
+  (defadvice flyspell-auto-correct-word (around my-flyspell-auto-correct-word activate)
+    (let* ((old-ispell-extra-args ispell-extra-args))
+      (ispell-kill-ispell t)
+      ;; use emacs original arguments
+      (setq ispell-extra-args (flyspell-detect-ispell-args))
+      ad-do-it
+      ;; restore our own ispell arguments
+      (setq ispell-extra-args old-ispell-extra-args)
+      (ispell-kill-ispell t))))
+;; }}
 
+;; {{ flyspell configuration
 (defun text-mode-hook-setup ()
   ;; Turn off RUN-TOGETHER option when spell check text-mode
   (setq-local ispell-extra-args (flyspell-detect-ispell-args)))
-(add-hook 'text-mode-hook 'text-mode-hook-setup)
+
+(use-package flyspell
+  :ensure nil
+  :bind (("C-c s" . flyspell-auto-correct-word)
+         :map flyspell-mode-map
+         ("C-." . nil)
+         ("C-;" . nil))
+  :hook (text-mode . text-mode-hook-setup)
+  :custom
+  (flyspell-issue-message-flag nil)
+  :config
+  (add-to-list 'flyspell-prog-text-faces 'nxml-text-face))
 
 ;; Add auto spell-checking in comments for all programming language modes
 ;; if and only if there is enough memory
@@ -167,14 +170,6 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
 
 ;; I don't use flyspell in text-mode because I often write Chinese.
 ;; I'd rather manually spell check the English text
-
-;; you can also use "M-x ispell-word" or hotkey "M-$". It pop up a multiple choice
-;; @see http://frequal.com/Perspectives/EmacsTip03-FlyspellAutoCorrectWord.HTML
-(global-set-key (kbd "C-c s") 'flyspell-auto-correct-word)
-
-(with-eval-after-load 'flyspell-mode
-  (define-key flyspell-mode-map (kbd "C-.") nil))
-
 
 ;; {{ avoid spell-checking doublon (double word) in certain major modes
 (defvar flyspell-check-doublon t
@@ -200,12 +195,7 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
                       (mapconcat 'identity aspell-words "\n"))))))
 
 (when (executable-find ispell-program-name)
-  ;; Add spell-checking in comments for all programming language modes
-  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-
-  (with-eval-after-load 'flyspell
-    (define-key flyspell-mode-map (kbd "C-;") nil)
-    (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
 (provide 'init-spelling)
 ;;; init-spelling.el ends here

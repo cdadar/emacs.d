@@ -1,4 +1,4 @@
-;;; init-perl.sql --- perl config  -*- lexical-binding: t -*-
+;;; init-perl.el --- perl config  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -38,4 +38,3 @@
 (provide 'init-perl)
 
 ;;; init-perl.el ends here
-;;; init-perl.sql ends here

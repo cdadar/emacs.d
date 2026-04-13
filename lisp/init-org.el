@@ -45,6 +45,65 @@
   (org-latex-pdf-process '("xelatex -interaction nonstopmode -output-directory %o %f"
                            "xelatex -interaction nonstopmode -output-directory %o %f"
                            "xelatex -interaction nonstopmode -output-directory %o %f"))
+  ;; clocking
+  (org-clock-persist t)
+  (org-clock-in-resume t)
+  (org-clock-into-drawer t)
+  (org-log-into-drawer t)
+  (org-clock-out-remove-zero-time-clocks t)
+  (org-clock-out-when-done t)
+  (org-clock-clocked-in-display 'mode-line)
+  (org-clock-mode-line-total 'today)
+  ;; crypt
+  (org-crypt-tag-matcher "secret")
+  (org-tags-exclude-from-inheritance '("secret"))
+  (org-crypt-key "6DF1ABB0")
+  (epg-pinentry-mode 'loopback)
+  ;; refile
+  (org-refile-target-verify-function 'sanityinc/verify-refile-target)
+  ;; agenda
+  (org-todo-keywords
+   '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+     (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+     (sequence "WAITING(w@/!)" "TESTING(T!)" "PUBLISH(P!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
+  (org-todo-repeat-to-state "NEXT")
+  (org-todo-state-tags-triggers
+   '(("CANCELLED" ("CANCELLED" . t))
+     ("WAITING" ("WAITING" . t))
+     ("HOLD" ("WAITING") ("HOLD" . t))
+     (done ("WAITING") ("HOLD"))
+     ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+     ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+     ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
+  (org-todo-keyword-faces
+   '(("NEXT" :inherit warning)
+     ("PROJECT" :inherit font-lock-string-face)))
+  (org-tag-alist
+   '(("@office" . ?o)
+     ("@home" . ?h)
+     ("@way" . ?w)
+     ("@trailing" . ?t)
+     ("@computer" . ?c)
+     ("@phone" . ?p)
+     ("@kindle" . ?k)
+     ("bug" . ?b)
+     ("demand" . ?d)
+     ("video" . ?v)
+     ("book" . ?B)))
+  (org-agenda-compact-blocks t)
+  (org-agenda-sticky t)
+  (org-agenda-start-on-weekday nil)
+  (org-agenda-span 'day)
+  (org-agenda-include-diary nil)
+  (org-agenda-skip-scheduled-delay-if-deadline t)
+  (org-agenda-sorting-strategy
+   '((agenda habit-down time-up deadline-up scheduled-up effort-up category-keep)
+     (todo priority-down category-up effort-up)
+     (tags priority-down category-up effort-up)
+     (search category-up)))
+  (org-agenda-window-setup 'current-window)
+  (org-archive-mark-done nil)
+  (org-archive-location "%s_archive::datetree/")
   :config
   (defun cdadar/org-mode-setup ()
     (setq truncate-lines t))
