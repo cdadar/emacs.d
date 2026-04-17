@@ -11,6 +11,8 @@
   :defer t
   :commands (org-capture org-agenda org-store-link)
   :bind (("C-c c" . org-capture)
+         ("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
          :map org-mode-map
          ("C-M-<up>" . org-up-element))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
@@ -240,21 +242,12 @@ typical word processor."
                 (lambda ()
                   (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t)))))
 
-  (defun sanityinc/show-org-clock-in-header-line ()
-    (setq-default header-line-format '((" " org-mode-line-string " "))))
-
-  (defun sanityinc/hide-org-clock-from-header-line ()
-    (setq-default header-line-format nil))
-
   (defun cdadar/org-setup-clocking ()
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
     (org-clock-persistence-insinuate)
     (with-eval-after-load 'org-clock
       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
-    ;; (add-hook 'org-clock-in-hook 'sanityinc/show-org-clock-in-header-line)
-    ;; (add-hook 'org-clock-out-hook 'sanityinc/hide-org-clock-from-header-line)
-    ;; (add-hook 'org-clock-cancel-hook 'sanityinc/hide-org-clock-from-header-line)
     (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
       (add-hook 'org-clock-in-hook
                 (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
@@ -621,18 +614,27 @@ typical word processor."
   :custom
   (org-pomodoro-keep-killed-pomodoro-time t)
   :hook
-  ((org-pomodoro-finished . (lambda () (cdadar/org-pomodoro-notify "Pomodoro completed!" "Time for a break.")))
-   (org-pomodoro-break-finished . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Short Break Finished" "Ready for Another?")))
-   (org-pomodoro-long-break-finished . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Long Break Finished" "Ready for Another?")))
-   (org-pomodoro-killed . (lambda () (cdadar/org-pomodoro-notify "Pomodoro Killed" "One does not simply kill a pomodoro!"))))
+  ((org-pomodoro-finished . cdadar/org-pomodoro-finished-notify)
+   (org-pomodoro-break-finished . cdadar/org-pomodoro-break-finished-notify)
+   (org-pomodoro-long-break-finished . cdadar/org-pomodoro-long-break-finished-notify)
+   (org-pomodoro-killed . cdadar/org-pomodoro-killed-notify))
   :config
   (defun cdadar/org-pomodoro-notify (title message)
-    (call-process "notify-send" nil 0 nil title message)))
+    (call-process "notify-send" nil 0 nil title message))
+  (defun cdadar/org-pomodoro-finished-notify ()
+    (cdadar/org-pomodoro-notify "Pomodoro completed!" "Time for a break."))
+  (defun cdadar/org-pomodoro-break-finished-notify ()
+    (cdadar/org-pomodoro-notify "Pomodoro Short Break Finished" "Ready for Another?"))
+  (defun cdadar/org-pomodoro-long-break-finished-notify ()
+    (cdadar/org-pomodoro-notify "Pomodoro Long Break Finished" "Ready for Another?"))
+  (defun cdadar/org-pomodoro-killed-notify ()
+    (cdadar/org-pomodoro-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
 
 (use-package org-cliplink
   :after org
-  :bind
-  (("C-c l" . org-store-link) ("C-c a" . org-agenda)))
+  :commands (org-cliplink org-cliplink-dwim)
+  :bind (:map org-mode-map
+              ("C-c C-l" . org-cliplink)))
 
 ;; create ppt
 (use-package ox-ioslide
@@ -650,16 +652,7 @@ typical word processor."
   :init
   (setq org-mind-map-engine "dot") ; Default. Directed Graph
   :config
-  (defun cdadar/org-mind-map-setup ()
-    (require 'ox-org)
-    ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-    ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-    ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-    ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-    ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-    ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-    )
-  (cdadar/org-mind-map-setup))
+  (require 'ox-org))
 
 (use-package org-brain
   :after org
@@ -680,19 +673,17 @@ typical word processor."
   :custom
   (org-download-heading-lvl nil)
   (org-download-image-dir "./img")
-  (org-download-screenshot-method "pngpaste %s")
+  (org-download-screenshot-method (if *is-a-mac* "pngpaste %s" "import %s"))
   (org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 
 (use-package org-tree-slide
   :after org
   :bind
   (([(f8)] . org-tree-slide-mode)
-   ([(shift f8)] . org-tree-slide-skip-done-toggle))
-  :config
-  (defun cdadar/org-tree-slide-setup ()
-    (define-key org-tree-slide-mode-map [(f9)] 'org-tree-slide-move-previous-tree)
-    (define-key org-tree-slide-mode-map [(f10)] 'org-tree-slide-move-next-tree))
-  (cdadar/org-tree-slide-setup))
+   ([(shift f8)] . org-tree-slide-skip-done-toggle)
+   :map org-tree-slide-mode-map
+   ([(f9)] . org-tree-slide-move-previous-tree)
+   ([(f10)] . org-tree-slide-move-next-tree)))
 
 (use-package org-roam
   :defer t
