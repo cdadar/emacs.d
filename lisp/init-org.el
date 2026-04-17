@@ -147,7 +147,7 @@
                    (org-agenda-skip-function
                     (lambda ()
                       (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
-                          (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
+                          (org-agenda-skip-subtree-if 'nottodo '("TODO")))))
                    (org-tags-match-list-sublevels t)
                    (org-agenda-sorting-strategy
                     '(priority-down category-keep))))
@@ -689,12 +689,14 @@ typical word processor."
 (use-package org-brain
   :after org
   :custom
-  (org-id-track-globally t)
-  (org-id-locations-file (locate-user-emacs-file ".org-id-locations"))
   (org-brain-visualize-default-choices 'all)
   (org-brain-title-max-length 12)
   (org-brain-include-file-entries nil)
   (org-brain-file-entries-use-title nil))
+
+(with-eval-after-load 'org-id
+  (setq org-id-track-globally t)
+  (setq org-id-locations-file (locate-user-emacs-file ".org-id-locations")))
 
 (use-package org-download
   :after org
@@ -730,7 +732,6 @@ typical word processor."
    ("C-c n c" . org-roam-capture)
    ("C-c n j" . org-roam-dailies-capture-today))
   :custom
-  (org-roam-v2-ack t)
   (org-roam-database-connector 'sqlite-builtin)
   (org-id-link-to-org-use-id t)
   (org-roam-completion-everywhere t)
@@ -842,10 +843,12 @@ typical word processor."
   :after org
   :defer t
   :custom
-  (bibtex-dialect 'biblatex)
   (org-ref-show-broken-links nil)
   (org-ref-default-ref-type "eqref")
   (org-ref-default-citation-link "citet"))
+
+(with-eval-after-load 'bibtex
+  (setq bibtex-dialect 'biblatex))
 
 (use-package org-journal
   :defer t
