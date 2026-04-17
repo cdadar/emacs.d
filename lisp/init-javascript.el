@@ -63,7 +63,7 @@
       (setq-default xref-js2-search-program 'rg))
     (defun sanityinc/enable-xref-js2 ()
       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
-    (let ((base-mode (if (fboundp 'js-base-mode) 'js-base-mode 'js-mode)))
+    (let ((base-mode 'js-base-mode))
       (with-eval-after-load 'js
         (add-hook (derived-mode-hook-name base-mode) 'sanityinc/enable-xref-js2)
         (define-key js-mode-map (kbd "M-.") nil)

@@ -45,9 +45,7 @@
 ;; from emacs (especially on Microsoft Windows)
 (prefer-coding-system 'utf-8)
 
-(if (boundp 'use-short-answers)
-    (setq use-short-answers t)
-  (fset 'yes-or-no-p 'y-or-n-p))
+(setq use-short-answers t)
 
 ;; Better defaults
 ;; (setq initial-scratch-message nil)
@@ -91,8 +89,7 @@
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
 (recentf-mode 1)
-(when (fboundp 'savehist-mode)
-  (savehist-mode 1))
+(savehist-mode 1)
 (use-package saveplace
   :ensure nil
   :hook (after-init . save-place-mode))
@@ -107,16 +104,15 @@
 (when (fboundp 'global-completion-preview-mode)
   (global-completion-preview-mode 1))
 
-(when (fboundp 'fido-vertical-mode)
-  (fido-vertical-mode 1)
+(fido-vertical-mode 1)
 
-  (defun fido-recentf-open ()
-    "Use `completing-read' to find a recent file."
-    (interactive)
-    (if (find-file (completing-read "Find recent file: " recentf-list))
-        (message "Opening file...")
-      (message "Aborting")))
-  (global-set-key (kbd "C-x C-r") 'fido-recentf-open))
+(defun fido-recentf-open ()
+  "Use `completing-read' to find a recent file."
+  (interactive)
+  (if (find-file (completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+(global-set-key (kbd "C-x C-r") 'fido-recentf-open)
 
 ;; Key Modifiers
 (cond

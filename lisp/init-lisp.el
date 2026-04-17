@@ -207,8 +207,7 @@ there is no current file, eval the current buffer."
 (dolist (mode '(emacs-lisp-mode ielm-mode lisp-mode inferior-lisp-mode lisp-interaction-mode))
   (add-hook (derived-mode-hook-name mode) 'sanityinc/lisp-setup))
 
-(when (boundp 'eval-expression-minibuffer-setup-hook)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
+(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
 (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))

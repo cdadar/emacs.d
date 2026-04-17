@@ -27,13 +27,6 @@
                         (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
                        (*linux* nil)
                        (t nil)))
-(defconst emacs/>=29p
-  (version<= "29.1" emacs-version)
-  "Emacs is 29.1 or above.")
-
-(defconst emacs/>=30p
-  (version<= "30.0" emacs-version)
-  "Emacs is 30 or above.")
 
 ;; Process performance tuning
 

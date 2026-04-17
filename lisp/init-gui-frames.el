@@ -93,7 +93,6 @@
 
 (use-package pixel-scroll
   :ensure nil
-  :if (fboundp 'pixel-scroll-precision-mode)
   :config
   (pixel-scroll-precision-mode))
 
