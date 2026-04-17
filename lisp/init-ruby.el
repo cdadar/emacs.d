@@ -43,21 +43,20 @@
 
 ;;; Ruby compilation
 
-(with-eval-after-load 'ruby-mode
-  (use-package ruby-compilation
-    :bind
-    (:map ruby-mode-map
-          ([S-f7] . ruby-compilation-this-buffer)
-          ([f7] . ruby-compilation-this-test))
-    :config
-    (defalias 'rake 'ruby-compilation-rake)))
+(use-package ruby-compilation
+  :after ruby-mode
+  :bind
+  (:map ruby-mode-map
+        ([S-f7] . ruby-compilation-this-buffer)
+        ([f7] . ruby-compilation-this-test))
+  :config
+  (defalias 'rake 'ruby-compilation-rake))
 
 
 ;;; Robe
-(with-eval-after-load 'ruby-mode
-  (use-package robe
-    :hook
-    (ruby-mode . robe-mode)))
+(use-package robe
+  :after ruby-mode
+  :hook (ruby-mode . robe-mode))
 
 
 ;;; ri support
@@ -76,8 +75,6 @@
 (use-package mmm-mode
   :mode  ("\\.jst\\.ejs\\'"  . html-erb-mode)
   :config
-  (require 'derived)
-
   (defun sanityinc/set-up-mode-for-erb (mode)
     (add-hook (derived-mode-hook-name mode) (lambda () (require 'mmm-erb)))
     (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))

@@ -377,9 +377,9 @@ ORIG is the advised function, which is called with its ARGS."
   :config
   (editorconfig-mode))
 
-;; 将所选区域缩小到其先前的带大小的快捷键
-(with-eval-after-load 'expand-region
-  (global-set-key (kbd "C-|") 'er/contract-region))
+(use-package expand-region
+  :ensure nil
+  :bind ("C-|" . er/contract-region))
 
 (use-package keyfreq
   :config

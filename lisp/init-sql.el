@@ -2,22 +2,21 @@
 ;;; Commentary:
 ;;; Code:
 
-(with-eval-after-load 'sql
+(use-package sql
+  :ensure nil
+  :config
   ;; sql-mode pretty much requires your psql to be uncustomised from stock settings
-  (add-to-list 'sql-postgres-options "--no-psqlrc"))
-
-(defun sanityinc/pop-to-sqli-buffer ()
-  "Switch to the corresponding sqli buffer."
-  (interactive)
-  (if (and sql-buffer (buffer-live-p sql-buffer))
-      (progn
-        (pop-to-buffer sql-buffer)
-        (goto-char (point-max)))
-    (sql-set-sqli-buffer)
-    (when sql-buffer
-      (sanityinc/pop-to-sqli-buffer))))
-
-(with-eval-after-load 'sql
+  (add-to-list 'sql-postgres-options "--no-psqlrc")
+  (defun sanityinc/pop-to-sqli-buffer ()
+    "Switch to the corresponding sqli buffer."
+    (interactive)
+    (if (and sql-buffer (buffer-live-p sql-buffer))
+        (progn
+          (pop-to-buffer sql-buffer)
+          (goto-char (point-max)))
+      (sql-set-sqli-buffer)
+      (when sql-buffer
+        (sanityinc/pop-to-sqli-buffer))))
   (define-key sql-mode-map (kbd "C-c C-z") 'sanityinc/pop-to-sqli-buffer)
   (when (package-installed-p 'dash-at-point)
     (defun sanityinc/maybe-set-dash-db-docset (&rest _)
@@ -37,10 +36,9 @@
     (sql-product-font-lock nil nil)))
 (add-hook 'sql-interactive-mode-hook 'sanityinc/font-lock-everything-in-sql-interactive-mode)
 
-(with-eval-after-load 'sql
-  (use-package sqlformat
-    :bind
-    (:map sql-mode-map ("C-c C-f" . sqlformat))))
+(use-package sqlformat
+  :after sql
+  :bind (:map sql-mode-map ("C-c C-f" . sqlformat)))
 
 ;; Package ideas:
 ;;   - PEV

@@ -72,7 +72,9 @@
 
 
 ;; Convenient binding for vc-git-grep
-(with-eval-after-load 'vc
+(use-package vc
+  :ensure nil
+  :config
   (define-key vc-prefix-map (kbd "f") 'vc-git-grep))
 
 
@@ -89,9 +91,11 @@
 
 
 
-(with-eval-after-load 'compile
+(use-package compile
+  :ensure nil
+  :config
   (dolist (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)
-                      '(git-svn-needs-update "^\\(.*\\): needs update$" 1 nil nil 2 1)))
+                      '(git-svn-needs-update "^\(.*\): needs update$" 1 nil nil 2 1)))
     (add-to-list 'compilation-error-regexp-alist-alist defn)
     (add-to-list 'compilation-error-regexp-alist (car defn))))
 

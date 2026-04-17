@@ -28,12 +28,13 @@
 
 
 (use-package info-colors
-  :config
-  (with-eval-after-load 'info
-    (add-hook 'Info-selection-hook 'info-colors-fontify-node)))
+  :after info
+  :hook (Info-selection . info-colors-fontify-node))
 
 ;; Handle the prompt pattern for the 1password command-line interface
-(with-eval-after-load 'comint
+(use-package comint
+  :ensure nil
+  :config
   (setq comint-password-prompt-regexp
         (concat
          comint-password-prompt-regexp
@@ -43,9 +44,10 @@
   :config
   (setq-default regex-tool-backend 'perl))
 
-(with-eval-after-load 're-builder
-  ;; Support a slightly more idiomatic quit binding in re-builder
-  (define-key reb-mode-map (kbd "C-c C-k") 'reb-quit))
+(use-package re-builder
+  :ensure nil
+  :bind (:map reb-mode-map
+              ("C-c C-k" . reb-quit)))
 
 (add-auto-mode 'conf-mode "^Procfile\\'")
 
