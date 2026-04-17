@@ -103,6 +103,99 @@
   (org-agenda-window-setup 'current-window)
   (org-archive-mark-done nil)
   (org-archive-location "%s_archive::datetree/")
+  (org-stuck-projects '("-INBOX/PROJECT" ("NEXT")))
+  (org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
+  (org-agenda-custom-commands
+   '(("R" "Review projects" tags-todo "-CANCELLED/"
+      ((org-agenda-overriding-header "Reviews Scheduled")
+       (org-agenda-skip-function 'org-review-agenda-skip)
+       (org-agenda-cmp-user-defined 'org-review-compare)
+       (org-agenda-sorting-strategy '(user-defined-down))))
+     ("N" "Notes" tags "NOTE"
+      ((org-agenda-overriding-header "Notes")
+       (org-tags-match-list-sublevels t)))
+     ("g" "GTD"
+      ((agenda "" nil)
+       (tags "INBOX"
+             ((org-agenda-overriding-header "Inbox")
+              (org-tags-match-list-sublevels nil)))
+       (stuck ""
+              ((org-agenda-overriding-header "Stuck Projects")
+               (org-agenda-tags-todo-honor-ignore-options t)
+               (org-tags-match-list-sublevels t)
+               (org-agenda-todo-ignore-scheduled 'future)))
+       (tags-todo "-INBOX"
+                  ((org-agenda-overriding-header "Next Actions")
+                   (org-agenda-tags-todo-honor-ignore-options t)
+                   (org-agenda-todo-ignore-scheduled 'future)
+                   (org-agenda-skip-function
+                    (lambda ()
+                      (or (org-agenda-skip-subtree-if 'todo '("HOLD" "WAITING"))
+                          (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
+                   (org-tags-match-list-sublevels t)
+                   (org-agenda-sorting-strategy
+                    '(todo-state-down priority-down effort-up category-keep))))
+       (tags-todo "-INBOX/PROJECT"
+                  ((org-agenda-overriding-header "Projects")
+                   (org-tags-match-list-sublevels t)
+                   (org-agenda-sorting-strategy
+                    '(priority-down category-keep))))
+       (tags-todo "-INBOX/-NEXT"
+                  ((org-agenda-overriding-header "Orphaned Tasks")
+                   (org-agenda-tags-todo-honor-ignore-options t)
+                   (org-agenda-todo-ignore-scheduled 'future)
+                   (org-agenda-skip-function
+                    (lambda ()
+                      (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
+                          (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
+                   (org-tags-match-list-sublevels t)
+                   (org-agenda-sorting-strategy
+                    '(priority-down category-keep))))
+       (tags-todo "/WAITING"
+                  ((org-agenda-overriding-header "Waiting")
+                   (org-agenda-tags-todo-honor-ignore-options t)
+                   (org-agenda-todo-ignore-scheduled 'future)
+                   (org-agenda-sorting-strategy
+                    '(priority-down category-keep))))
+       (tags-todo "/DELEGATED"
+                  ((org-agenda-overriding-header "Delegated")
+                   (org-agenda-tags-todo-honor-ignore-options t)
+                   (org-agenda-todo-ignore-scheduled 'future)
+                   (org-agenda-sorting-strategy
+                    '(priority-down category-keep))))
+       (tags-todo "-INBOX"
+                  ((org-agenda-overriding-header "On Hold")
+                   (org-agenda-skip-function
+                    (lambda ()
+                      (or (org-agenda-skip-subtree-if 'todo '("WAITING"))
+                          (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
+                   (org-tags-match-list-sublevels nil)
+                   (org-agenda-sorting-strategy
+                    '(priority-down category-keep))))))
+     ("w" . "任务安排")
+     ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
+     ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
+     ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
+     ("wd" "不重要且不紧急的任务" tags-todo "+PRIORITY=\"D\"")
+     ("b" "Blog" tags-todo "BLOG")
+     ("p" . "项目安排")
+     ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
+     ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"chens\"")
+     ("W" "Weekly Review"
+      ((stuck "")
+       (tags-todo "PROJECT")))
+     ("c" . "特定标签")
+     ("co" "At the office" tags-todo "@office")
+     ("ch" "At the home" tags-todo "@home")
+     ("ct" "At the travelling" tags-todo "@travelling")
+     ("cw" "At the way" tags-todo "@way")
+     ("cc" "At the computer" tags-todo "@computer")
+     ("cp" "At the phone" tags-todo "@phone")
+     ("ck" "At the kindle" tags-todo "@kindle")
+     ("cb" "bug" tags-todo "bug")
+     ("cd" "demand" tags-todo "demand")
+     ("cB" "book" tags-todo "book")
+     ("cv" "video" tags-todo "video")))
   :config
   (defun cdadar/org-mode-setup ()
     (setq truncate-lines t))
@@ -129,8 +222,7 @@ typical word processor."
           (set (make-local-variable 'line-spacing) 0.2)
           (set (make-local-variable 'electric-pair-mode) nil)
           (ignore-errors (flyspell-mode 1))
-          (when (fboundp 'visual-line-mode)
-            (visual-line-mode 1)))
+          (visual-line-mode 1))
       (kill-local-variable 'truncate-lines)
       (kill-local-variable 'word-wrap)
       (kill-local-variable 'cursor-type)
@@ -139,8 +231,7 @@ typical word processor."
       (kill-local-variable 'electric-pair-mode)
       (buffer-face-mode -1)
       (flyspell-mode -1)
-      (when (fboundp 'visual-line-mode)
-        (visual-line-mode -1))
+      (visual-line-mode -1)
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0))))
 
@@ -158,10 +249,10 @@ typical word processor."
       (unless (file-exists-p (file-name-directory filename))
         (make-directory (file-name-directory filename) t))
       (make-frame-invisible nil t)
-      (when (and (boundp '*is-a-mac*) *is-a-mac*)
+      (when *is-a-mac*
         (call-process-shell-command "screencapture" nil nil nil nil " -s " (concat "\"" filename "\""))
         (call-process-shell-command "convert" nil nil nil nil (concat "\"" filename "\" -resize  \"50%\"") (concat "\"" filename "\"")))
-      (when (and (boundp '*linux*) *linux*)
+      (when *linux*
         (call-process "import" nil nil nil filename))
       (make-frame-visible)
       (when (file-exists-p filename)
@@ -323,140 +414,6 @@ typical word processor."
        (setq org-map-continue-from (outline-previous-heading)))
      "/CANCELLED" 'file))
 
-  (defun cdadar/org-setup-agenda ()
-    (setq org-todo-keywords
-          (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
-                  (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
-                  (sequence "WAITING(w@/!)" "TESTING(T!)" "PUBLISH(P!)"  "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
-          org-todo-repeat-to-state "NEXT"
-          org-todo-state-tags-triggers
-          (quote (("CANCELLED" ("CANCELLED" . t))
-                  ("WAITING" ("WAITING" . t))
-                  ("HOLD" ("WAITING") ("HOLD" . t))
-                  (done ("WAITING") ("HOLD"))
-                  ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-                  ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
-          org-todo-keyword-faces
-          (quote (("NEXT" :inherit warning)
-                  ("PROJECT" :inherit font-lock-string-face)))
-          org-tag-alist
-          '(("@office" . ?o)
-            ("@home" . ?h)
-            ("@way" . ?w)
-            ("@trailing" . ?t)
-            ("@computer" . ?c)
-            ("@phone" . ?p)
-            ("@kindle" . ?k)
-            ("bug" . ?b)
-            ("demand" . ?d)
-            ("video" . ?v)
-            ("book" . ?B))
-          org-agenda-compact-blocks t
-          org-agenda-sticky t
-          org-agenda-start-on-weekday nil
-          org-agenda-span 'day
-          org-agenda-include-diary nil
-          org-agenda-skip-scheduled-delay-if-deadline t
-          org-agenda-sorting-strategy
-          '((agenda habit-down time-up deadline-up scheduled-up effort-up category-keep)
-            (todo priority-down category-up effort-up)
-            (tags priority-down category-up effort-up)
-            (search category-up))
-          org-agenda-window-setup 'current-window
-          org-agenda-custom-commands
-          '(("R" "Review projects" tags-todo "-CANCELLED/"
-             ((org-agenda-overriding-header "Reviews Scheduled")
-              (org-agenda-skip-function 'org-review-agenda-skip)
-              (org-agenda-cmp-user-defined 'org-review-compare)
-              (org-agenda-sorting-strategy '(user-defined-down))))
-            ("N" "Notes" tags "NOTE"
-             ((org-agenda-overriding-header "Notes")
-              (org-tags-match-list-sublevels t)))
-            ("g" "GTD"
-             ((agenda "" nil)
-              (tags "INBOX"
-                    ((org-agenda-overriding-header "Inbox")
-                     (org-tags-match-list-sublevels nil)))
-              (stuck ""
-                     ((org-agenda-overriding-header "Stuck Projects")
-                      (org-agenda-tags-todo-honor-ignore-options t)
-                      (org-tags-match-list-sublevels t)
-                      (org-agenda-todo-ignore-scheduled 'future)))
-              (tags-todo "-INBOX"
-                         ((org-agenda-overriding-header "Next Actions")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-skip-function
-                           (lambda ()
-                             (or (org-agenda-skip-subtree-if 'todo '("HOLD" "WAITING"))
-                                 (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
-                          (org-tags-match-list-sublevels t)
-                          (org-agenda-sorting-strategy
-                           '(todo-state-down priority-down effort-up category-keep))))
-              (tags-todo "-INBOX/PROJECT"
-                         ((org-agenda-overriding-header "Projects")
-                          (org-tags-match-list-sublevels t)
-                          (org-agenda-sorting-strategy
-                           '(priority-down category-keep))))
-              (tags-todo "-INBOX/-NEXT"
-                         ((org-agenda-overriding-header "Orphaned Tasks")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-skip-function
-                           (lambda ()
-                             (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
-                                 (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
-                          (org-tags-match-list-sublevels t)
-                          (org-agenda-sorting-strategy
-                           '(priority-down category-keep))))
-              (tags-todo "/WAITING"
-                         ((org-agenda-overriding-header "Waiting")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-sorting-strategy
-                           '(priority-down category-keep))))
-              (tags-todo "/DELEGATED"
-                         ((org-agenda-overriding-header "Delegated")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-sorting-strategy
-                           '(priority-down category-keep))))
-              (tags-todo "-INBOX"
-                         ((org-agenda-overriding-header "On Hold")
-                          (org-agenda-skip-function
-                           (lambda ()
-                             (or (org-agenda-skip-subtree-if 'todo '("WAITING"))
-                                 (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
-                          (org-tags-match-list-sublevels nil)
-                          (org-agenda-sorting-strategy
-                           '(priority-down category-keep))))))
-            ("w" . "任务安排")
-            ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
-            ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
-            ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
-            ("wd" "不重要且不紧急的任务" tags-todo "+PRIORITY=\"D\"")
-            ("b" "Blog" tags-todo "BLOG")
-            ("p" . "项目安排")
-            ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
-            ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"chens\"")
-            ("W" "Weekly Review"
-             ((stuck "")
-              (tags-todo "PROJECT")))
-            ("c" . "特定标签")
-            ("co" "At the office" tags-todo "@office")
-            ("ch" "At the home" tags-todo "@home")
-            ("ct" "At the travelling" tags-todo "@travelling")
-            ("cw" "At the way" tags-todo "@way")
-            ("cc" "At the computer" tags-todo "@computer")
-            ("cp" "At the phone" tags-todo "@phone")
-            ("ck" "At the kindle" tags-todo "@kindle")
-            ("cb" "bug" tags-todo "bug")
-            ("cd" "demand" tags-todo "demand")
-            ("cB" "book" tags-todo "book")
-            ("cv" "video" tags-todo "video"))
-          org-archive-mark-done nil
-          org-archive-location "%s_archive::datetree/"))
 
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
@@ -494,9 +451,7 @@ typical word processor."
     (define-key sanityinc/org-global-prefix-map (kbd "i") 'org-clock-in)
     (define-key sanityinc/org-global-prefix-map (kbd "o") 'org-clock-out)
     (define-key sanityinc/org-global-prefix-map (kbd "r") 'org-clock-report)
-    (define-key global-map (kbd "C-c o") sanityinc/org-global-prefix-map)
-    (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3)
-                  org-stuck-projects '("-INBOX/PROJECT" ("NEXT"))))
+    (define-key global-map (kbd "C-c o") sanityinc/org-global-prefix-map))
 
   (defun cdadar/org-filter-by-tag (current-tag)
     (let ((head-tags (org-get-tags-at)))
@@ -661,7 +616,7 @@ typical word processor."
           (kill-region beg end)))))
 
   (defun cdadar/org-setup-ui ()
-    (when (and (boundp '*is-a-mac*) *is-a-mac*)
+    (when *is-a-mac*
       (define-key org-mode-map (kbd "M-h") nil)))
 
   (cdadar/org-setup-agenda-window-hooks)
@@ -670,7 +625,6 @@ typical word processor."
   (cdadar/org-setup-crypt)
   (cdadar/org-setup-export)
   (cdadar/org-setup-refile)
-  (cdadar/org-setup-agenda)
   (cdadar/org-setup-global-prefix)
   (cdadar/org-setup-capture)
   (cdadar/org-setup-ui))
