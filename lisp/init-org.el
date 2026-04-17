@@ -236,11 +236,12 @@ typical word processor."
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0))))
 
+  (defun cdadar/org-agenda-align-on-config-change ()
+    (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))
+
   (defun cdadar/org-setup-agenda-window-hooks ()
     (with-eval-after-load 'org-agenda
-      (add-hook 'org-agenda-mode-hook
-                (lambda ()
-                  (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t)))))
+      (add-hook 'org-agenda-mode-hook #'cdadar/org-agenda-align-on-config-change)))
 
   (defun cdadar/org-setup-clocking ()
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
@@ -369,7 +370,7 @@ typical word processor."
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
 
   (defun cdadar/org-archive-done-tasks ()
-    "archive of DNONE AND CANCELLED in current buffer"
+    "archive of DONE AND CANCELLED in current buffer"
     (interactive)
     (org-map-entries
      (lambda ()
@@ -443,7 +444,7 @@ typical word processor."
                      (and timerange (equal timerange-numeric-value 16)
                           (org-read-date nil nil nil "End Date/Time:"))
                      (+ tstart 86400)))
-           h m file item prompt donesomething)
+           h m file item donesomething)
       (while (setq file (pop files))
         (setq org-agenda-buffer (if (file-exists-p file)
                                     (org-get-agenda-file-buffer file)
