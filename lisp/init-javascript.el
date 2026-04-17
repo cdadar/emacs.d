@@ -4,8 +4,6 @@
 
 (use-package json-mode)
 
-
-
 ;; (use-package indium) ;; because this depend company
 
 ;; (use-package js-import) ;; because this depend projectile
@@ -42,7 +40,6 @@
   (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
 
 
-(require 'derived)
 (when (executable-find "rg")
   (use-package xref-js2
     :config
@@ -103,7 +100,9 @@
                 (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
                 (define-key js2-mode-map "@" 'js-doc-insert-tag))))
 
-(with-eval-after-load 'compile
+(use-package compile
+  :ensure nil
+  :config
   ;; Compilation mode for ESLint
   ;; Copied from https://github.com/Fuco1/compile-eslint/blob/master/compile-eslint.el
   (defun compile-eslint--find-filename ()
@@ -112,7 +111,6 @@
       (save-excursion
         (when (re-search-backward (rx bol (group "/" (+ any)) eol))
           (list (match-string 1))))))
-
   (let ((form `(eslint
                 ,(rx-to-string
                   '(and (group (group (+ digit)) ":" (group (+ digit)))
@@ -122,7 +120,6 @@
     (if (assq 'eslint compilation-error-regexp-alist-alist)
         (setf (cdr (assq 'eslint compilation-error-regexp-alist-alist)) (cdr form))
       (push form compilation-error-regexp-alist-alist)))
-
   (push 'eslint compilation-error-regexp-alist))
 
 ;; Add eslint --fix
