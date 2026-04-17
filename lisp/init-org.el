@@ -350,69 +350,9 @@ typical word processor."
                      ("\\subsection{%s}" . "\\subsection*{%s}")
                      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 
-  (defun sanityinc/verify-refile-target ()
-    "Exclude todo keywords with a done state from refile targets."
-    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-
-  (defun sanityinc/org-refile-anywhere (&optional goto default-buffer rfloc msg)
-    "A version of `org-refile' which allows refiling to any subtree."
-    (interactive "P")
-    (let ((org-refile-target-verify-function))
-      (org-refile goto default-buffer rfloc msg)))
-
-  (defun sanityinc/org-agenda-refile-anywhere (&optional goto rfloc no-update)
-    "A version of `org-agenda-refile' which allows refiling to any subtree."
-    (interactive "P")
-    (let ((org-refile-target-verify-function))
-      (org-agenda-refile goto rfloc no-update)))
-
-  (defun cdadar/org-setup-refile ()
-    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
-
-  (defun cdadar/org-archive-done-tasks ()
-    "archive of DONE AND CANCELLED in current buffer"
-    (interactive)
-    (org-map-entries
-     (lambda ()
-       (org-archive-subtree)
-       (setq org-map-continue-from (outline-previous-heading)))
-     "/DONE" 'file)
-    (org-map-entries
-     (lambda ()
-       (org-archive-subtree)
-       (setq org-map-continue-from (outline-previous-heading)))
-     "/CANCELLED" 'file))
-
 
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
-
-  (defun cdadar/org-agenda-calculate-efforts (limit)
-    "Sum the efforts of scheduled entries up to LIMIT in the agenda buffer."
-    (let (total)
-      (save-excursion
-        (while (< (point) limit)
-          (when (member (org-get-at-bol 'type) '("scheduled" "past-scheduled"))
-            (push (org-entry-get (org-get-at-bol 'org-hd-marker) "Effort") total))
-          (forward-line)))
-      (org-duration-from-minutes
-       (cl-reduce #'+
-                  (mapcar #'org-duration-to-minutes
-                          (cl-remove-if-not 'identity total))))))
-
-  (defun my/org-agenda-insert-efforts ()
-    "Insert the efforts for each day inside the agenda buffer."
-    (save-excursion
-      (let (pos)
-        (while (setq pos (text-property-any
-                          (point) (point-max) 'org-agenda-date-header t))
-          (goto-char pos)
-          (end-of-line)
-          (insert-and-inherit (concat " ("
-                                      (cdadar/org-agenda-calculate-efforts
-                                       (next-single-property-change (point) 'day))
-                                      ")"))
-          (forward-line)))))
 
   (defun cdadar/org-setup-global-prefix ()
     (define-key sanityinc/org-global-prefix-map (kbd "j") 'org-clock-goto)
@@ -422,49 +362,6 @@ typical word processor."
     (define-key sanityinc/org-global-prefix-map (kbd "r") 'org-clock-report)
     (define-key global-map (kbd "C-c o") sanityinc/org-global-prefix-map))
 
-  (defun cdadar/org-filter-by-tag (current-tag)
-    (let ((head-tags (org-get-tags-at)))
-      (member current-tag head-tags)))
-
-  (defun cdadar/org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-    (interactive "P")
-    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-           (files (org-add-archive-files (org-agenda-files)))
-           (include-tags '("work" "@office" "@home" "@computer" "@phone" "@kindle" "@trailing"
-                           "bug" "demand" "video" "book" "game"))
-           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-           (output-string "")
-           (tstart (or tstart
-                       (and timerange (equal timerange-numeric-value 4)
-                            (- (org-time-today) 86400))
-                       (and timerange (equal timerange-numeric-value 16)
-                            (org-read-date nil nil nil "Start Date/Time:"))
-                       (org-time-today)))
-           (tend (or tend
-                     (and timerange (equal timerange-numeric-value 16)
-                          (org-read-date nil nil nil "End Date/Time:"))
-                     (+ tstart 86400)))
-           h m file item donesomething)
-      (while (setq file (pop files))
-        (setq org-agenda-buffer (if (file-exists-p file)
-                                    (org-get-agenda-file-buffer file)
-                                  (error "No such file %s" file)))
-        (with-current-buffer org-agenda-buffer
-          (dolist (current-tag include-tags)
-            (org-clock-sum tstart tend (lambda () (cdadar/org-filter-by-tag current-tag)))
-            (setcdr (assoc current-tag tags-time-alist)
-                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-      (while (setq item (pop tags-time-alist))
-        (unless (equal (cdr item) 0)
-          (setq donesomething t)
-          (setq h (/ (cdr item) 60)
-                m (- (cdr item) (* 60 h)))
-          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-      (unless donesomething
-        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-      (unless noinsert
-        (insert output-string))
-      output-string))
 
   (defun cdadar/org-get-year-and-month ()
     (list (format-time-string "%Y 年") (format-time-string "%m 月")))
@@ -597,6 +494,113 @@ typical word processor."
   (cdadar/org-setup-global-prefix)
   (cdadar/org-setup-capture)
   (cdadar/org-setup-ui))
+
+  (defun sanityinc/verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets."
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+  (defun sanityinc/org-refile-anywhere (&optional goto default-buffer rfloc msg)
+    "A version of `org-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-refile goto default-buffer rfloc msg)))
+
+  (defun sanityinc/org-agenda-refile-anywhere (&optional goto rfloc no-update)
+    "A version of `org-agenda-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-agenda-refile goto rfloc no-update)))
+
+  (defun cdadar/org-save-all-org-buffers-after-refile (&rest _)
+    (org-save-all-org-buffers))
+
+  (defun cdadar/org-setup-refile ()
+    (advice-add 'org-refile :after #'cdadar/org-save-all-org-buffers-after-refile))
+
+  (defun cdadar/org-archive-done-tasks ()
+    "archive of DONE AND CANCELLED in current buffer"
+    (interactive)
+    (org-map-entries
+     (lambda ()
+       (org-archive-subtree)
+       (setq org-map-continue-from (outline-previous-heading)))
+     "/DONE" 'file)
+    (org-map-entries
+     (lambda ()
+       (org-archive-subtree)
+       (setq org-map-continue-from (outline-previous-heading)))
+     "/CANCELLED" 'file))
+
+  (defun cdadar/org-agenda-calculate-efforts (limit)
+    "Sum the efforts of scheduled entries up to LIMIT in the agenda buffer."
+    (let (total)
+      (save-excursion
+        (while (< (point) limit)
+          (when (member (org-get-at-bol 'type) '("scheduled" "past-scheduled"))
+            (push (org-entry-get (org-get-at-bol 'org-hd-marker) "Effort") total))
+          (forward-line)))
+      (org-duration-from-minutes
+       (cl-reduce #'+
+                  (mapcar #'org-duration-to-minutes
+                          (cl-remove-if-not 'identity total))))))
+
+  (defun my/org-agenda-insert-efforts ()
+    "Insert the efforts for each day inside the agenda buffer."
+    (save-excursion
+      (let (pos)
+        (while (setq pos (text-property-any
+                          (point) (point-max) 'org-agenda-date-header t))
+          (goto-char pos)
+          (end-of-line)
+          (insert-and-inherit (concat " ("
+                                      (cdadar/org-agenda-calculate-efforts
+                                       (next-single-property-change (point) 'day))
+                                      ")"))
+          (forward-line)))))
+
+  (defun cdadar/org-filter-by-tag (current-tag)
+    (let ((head-tags (org-get-tags-at)))
+      (member current-tag head-tags)))
+
+  (defun cdadar/org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+    (interactive "P")
+    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+           (files (org-add-archive-files (org-agenda-files)))
+           (include-tags '("work" "@office" "@home" "@computer" "@phone" "@kindle" "@trailing"
+                           "bug" "demand" "video" "book" "game"))
+           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+           (output-string "")
+           (tstart (or tstart
+                       (and timerange (equal timerange-numeric-value 4)
+                            (- (org-time-today) 86400))
+                       (and timerange (equal timerange-numeric-value 16)
+                            (org-read-date nil nil nil "Start Date/Time:"))
+                       (org-time-today)))
+           (tend (or tend
+                     (and timerange (equal timerange-numeric-value 16)
+                          (org-read-date nil nil nil "End Date/Time:"))
+                     (+ tstart 86400)))
+           h m file item donesomething)
+      (while (setq file (pop files))
+        (setq org-agenda-buffer (if (file-exists-p file)
+                                    (org-get-agenda-file-buffer file)
+                                  (error "No such file %s" file)))
+        (with-current-buffer org-agenda-buffer
+          (dolist (current-tag include-tags)
+            (org-clock-sum tstart tend (lambda () (cdadar/org-filter-by-tag current-tag)))
+            (setcdr (assoc current-tag tags-time-alist)
+                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+      (while (setq item (pop tags-time-alist))
+        (unless (equal (cdr item) 0)
+          (setq donesomething t)
+          (setq h (/ (cdr item) 60)
+                m (- (cdr item) (* 60 h)))
+          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+      (unless donesomething
+        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+      (unless noinsert
+        (insert output-string))
+      output-string))
 
 (use-package writeroom-mode
   :diminish writeroom-mode)
