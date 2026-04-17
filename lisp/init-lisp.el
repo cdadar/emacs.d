@@ -6,7 +6,7 @@
 
 (use-package elisp-slime-nav
   :hook
-  ((emacs-lisp-mode-hook ielm-mode-hook) . turn-on-elisp-slime-nav-mode))
+  ((emacs-lisp-mode ielm-mode) . turn-on-elisp-slime-nav-mode))
 ;; (with-eval-after-load 'ggtags-mode
 ;;   (add-hook 'emacs-lisp-mode-hook
 ;;             (lambda ()
@@ -46,9 +46,13 @@
 
 (global-set-key [remap eval-expression] 'pp-eval-expression)
 
-(with-eval-after-load 'lisp-mode
-  (define-key emacs-lisp-mode-map (kbd "C-x C-e") 'sanityinc/eval-last-sexp-or-region)
-  (define-key emacs-lisp-mode-map (kbd "C-c C-e") 'pp-eval-expression))
+(use-package elisp-mode
+  :ensure nil
+  :bind (:map emacs-lisp-mode-map
+              ("C-x C-e" . sanityinc/eval-last-sexp-or-region)
+              ("C-c C-e" . pp-eval-expression)
+              ("C-c C-l" . sanityinc/load-this-file)
+              ("C-c C-z" . sanityinc/switch-to-ielm)))
 
 (use-package ipretty
   :hook
@@ -78,8 +82,9 @@ there is no current file, eval the current buffer."
       (eval-buffer)
       (message "Evaluated %s" (current-buffer)))))
 
-(with-eval-after-load 'lisp-mode
-  (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'sanityinc/load-this-file))
+
+
+
 
 
 
@@ -116,10 +121,11 @@ there is no current file, eval the current buffer."
       (funcall sanityinc/repl-switch-function sanityinc/repl-original-buffer)
     (error "No original buffer")))
 
-(with-eval-after-load 'elisp-mode
-  (define-key emacs-lisp-mode-map (kbd "C-c C-z") 'sanityinc/switch-to-ielm))
-(with-eval-after-load 'ielm
-  (define-key ielm-map (kbd "C-c C-z") 'sanityinc/repl-switch-back))
+(use-package ielm
+  :ensure nil
+  :bind (:map ielm-map
+              ("C-c C-z" . sanityinc/repl-switch-back)))
+
 
 
 ;; Hippie-expand
@@ -202,8 +208,6 @@ there is no current file, eval the current buffer."
   "Enable features useful in any Lisp mode."
   (run-hooks 'sanityinc/lispy-modes-hook))
 
-(require 'derived)
-
 (dolist (mode '(emacs-lisp-mode ielm-mode lisp-mode inferior-lisp-mode lisp-interaction-mode))
   (add-hook (derived-mode-hook-name mode) 'sanityinc/lisp-setup))
 
@@ -248,10 +252,9 @@ there is no current file, eval the current buffer."
 
 
 
-(use-package macrostep)
-
-(with-eval-after-load 'lisp-mode
-  (define-key emacs-lisp-mode-map (kbd "C-c x") 'macrostep-expand))
+(use-package macrostep
+  :bind (:map emacs-lisp-mode-map
+              ("C-c x" . macrostep-expand)))
 
 
 
@@ -280,8 +283,10 @@ there is no current file, eval the current buffer."
 
 
 ;; ERT
-(with-eval-after-load 'ert
-  (define-key ert-results-mode-map (kbd "g") 'ert-results-rerun-all-tests))
+(use-package ert
+  :ensure nil
+  :bind (:map ert-results-mode-map
+              ("g" . ert-results-rerun-all-tests)))
 
 
 (use-package cl-libify)
