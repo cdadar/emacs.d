@@ -266,15 +266,17 @@ typical word processor."
       (defvar-local cdadar/org-crypt-decrypting nil
         "Non-nil when an org-crypt entry has been decrypted in this buffer.")
 
-      (defadvice org-decrypt-entry (after cdadar/org-decrypt-mark activate)
+      (defun cdadar/org-decrypt-mark (&rest _)
         (setq-local cdadar/org-crypt-decrypting t))
+      (advice-add 'org-decrypt-entry :after #'cdadar/org-decrypt-mark)
 
-      (defadvice org-encrypt-entry (after cdadar/org-encrypt-unmark activate)
+      (defun cdadar/org-encrypt-unmark (&rest _)
         (unless (save-excursion
                   (goto-char (point-min))
                   (re-search-forward
                    (concat "^\\*+[ \t].*:" org-crypt-tag-matcher ":") nil t))
-          (kill-local-variable 'cdadar/org-crypt-decrypting)))))
+          (kill-local-variable 'cdadar/org-crypt-decrypting)))
+      (advice-add 'org-encrypt-entry :after #'cdadar/org-encrypt-unmark)))
 
   (defun cdadar/org-setup-export ()
     (with-eval-after-load 'ox
