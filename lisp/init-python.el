@@ -42,29 +42,24 @@
   (reformatter-define black :program "black" :args '("-")))
 
 
-(with-eval-after-load 'python
-  (use-package virtualenvwrapper
-    :config
-    (venv-initialize-interactive-shells) ;; if you want interactive shell support
-    (venv-initialize-eshell)             ;; if you want eshell support
-    ;; note that setting `venv-location` is not necessary if you
-    ;; use the default location (`~/.virtualenvs`), or if the
-    ;; the environment variable `WORKON_HOME` points to the right place
-    (setq venv-dirlookup-names '(".venv" "pyenv" ".virtual" "venv"))
+(use-package uv
+  :if (executable-find "uv")
+  :vc (:url "https://github.com/johannes-mueller/uv.el" :rev :newest)
+  :commands (uv uv-init uv-add uv-remove uv-sync uv-lock uv-run uv-export uv-tool uv-python))
 
-    (add-hook 'venv-postmkvirtualenv-hook
-              (lambda () (shell-command "pip install pyflakes"))))
+(use-package py-autopep8
+  :if (executable-find "autopep8")
+  :after python
+  :hook (python-mode . py-autopep8-enable-on-save)
+  :custom (py-autopep8-options '("--max-line-length=120")))
 
-  (when (executable-find "autopep8")
-    (use-package py-autopep8
-      :hook
-      (python-mode . py-autopep8-enable-on-save)
-      :config
-      (setq py-autopep8-options '("--max-line-length=120")))))
-
-(with-eval-after-load 'project
+(use-package project
+  :ensure nil
+  :config
   (add-to-list 'project-vc-extra-root-markers "pyproject.toml"))
-(with-eval-after-load 'projectile
+
+(use-package projectile
+  :config
   (add-to-list 'projectile-project-root-files "pyproject.toml"))
 
 

@@ -9,7 +9,8 @@
                               (require 'slime)
                               (normal-mode))))
 
-(with-eval-after-load 'slime
+(use-package slime
+  :config
   (when (executable-find "lisp")
     (add-to-list 'slime-lisp-implementations
                  '(cmucl ("lisp") :coding-system iso-latin-1-unix)))
@@ -50,8 +51,8 @@
 
 (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)
 
-(with-eval-after-load 'lisp-mode
-  (use-package common-lisp-snippets))
+(use-package common-lisp-snippets
+  :after lisp-mode)
 
 (provide 'init-common-lisp)
 ;;; init-common-lisp.el ends here
