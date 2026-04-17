@@ -12,8 +12,7 @@
   :commands (org-capture org-agenda org-store-link)
   :bind (("C-c c" . org-capture)
          :map org-mode-map
-         ("C-M-<up>" . org-up-element)
-         ("C-c s c" . cdadar/org-screenshot))
+         ("C-M-<up>" . org-up-element))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :hook ((org-mode . cdadar/org-mode-setup)
          (org-agenda-mode . hl-line-mode)
@@ -234,30 +233,6 @@ typical word processor."
       (visual-line-mode -1)
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0))))
-
-  (defun cdadar/org-screenshot ()
-    "Take a screenshot into a unique-named file and insert an Org file link."
-    (interactive)
-    (org-display-inline-images)
-    (let ((filename
-           (concat
-            (make-temp-name
-             (concat (file-name-nondirectory (buffer-file-name))
-                     "_imgs/"
-                     (format-time-string "%Y%m%d_%H%M%S_")))
-            ".png")))
-      (unless (file-exists-p (file-name-directory filename))
-        (make-directory (file-name-directory filename) t))
-      (make-frame-invisible nil t)
-      (when *is-a-mac*
-        (call-process-shell-command "screencapture" nil nil nil nil " -s " (concat "\"" filename "\""))
-        (call-process-shell-command "convert" nil nil nil nil (concat "\"" filename "\" -resize  \"50%\"") (concat "\"" filename "\"")))
-      (when *linux*
-        (call-process "import" nil nil nil filename))
-      (make-frame-visible)
-      (when (file-exists-p filename)
-        (insert (concat "[[file:" filename "]]")))
-      (org-display-inline-images)))
 
   (defun cdadar/org-setup-agenda-window-hooks ()
     (with-eval-after-load 'org-agenda
