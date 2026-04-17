@@ -56,10 +56,10 @@
 (put 'rjsx-mode 'flyspell-mode-predicate 'js-flyspell-verify)
 ;; }}
 
-(with-eval-after-load 'flyspell
-  (use-package flyspell-lazy
-    :config
-    (flyspell-lazy-mode 1)))
+(use-package flyspell-lazy
+  :after flyspell
+  :config
+  (flyspell-lazy-mode 1))
 
 ;; {{ ispell configuration
 (defun flyspell-detect-ispell-args (&optional run-together)

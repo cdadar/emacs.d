@@ -99,7 +99,9 @@ This command currently blocks the UI, sorry."
                 (display-buffer (current-buffer))
                 (user-error "EXPLAIN failed")))))))))
 
-(with-eval-after-load 'page-break-lines
+(use-package page-break-lines
+  :ensure nil
+  :config
   (add-to-list 'page-break-lines-modes 'sql-mode))
 
 
@@ -123,7 +125,7 @@ This command currently blocks the UI, sorry."
   "Connect to a predefined SQL connection listed in `sql-connection-alist'"
   (eval `(let ,(cdr (assoc name sql-connection-alist))
            (flet ((sql-get-login (&rest what)))
-             (sql-product-interactive sql-product)))))
+                 (sql-product-interactive sql-product)))))
 
 (defun sql-pool-a ()
   (interactive)
