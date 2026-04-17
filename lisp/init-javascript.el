@@ -4,19 +4,6 @@
 
 (use-package json-mode)
 
-(use-package typescript-mode
-  :config
-  (use-package tide
-    :hook
-    (typescript-mode . setup-tide-mode)
-    ;; formats the buffer before saving
-    (before-save . tide-format-before-save)
-    :mode "*\\.d.ts\\'"
-    :config
-    (defun setup-tide-mode ()
-      (interactive)
-      (tide-setup)
-      (tide-hl-identifier-mode +1))))
 
 
 ;; (use-package indium) ;; because this depend company
@@ -56,11 +43,10 @@
 
 
 (require 'derived)
-(when (or (executable-find "rg"))
+(when (executable-find "rg")
   (use-package xref-js2
     :config
-    (when (executable-find "rg")
-      (setq-default xref-js2-search-program 'rg))
+    (setq-default xref-js2-search-program 'rg)
     (defun sanityinc/enable-xref-js2 ()
       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
     (let ((base-mode 'js-base-mode))
@@ -68,7 +54,7 @@
         (add-hook (derived-mode-hook-name base-mode) 'sanityinc/enable-xref-js2)
         (define-key js-mode-map (kbd "M-.") nil)
         (when (boundp 'js-ts-mode-map)
-          (define-key js-ts-mode-map (kbd "M-." nil)))))
+          (define-key js-ts-mode-map (kbd "M-.") nil))))
     (with-eval-after-load 'js2-mode
       (define-key js2-mode-map (kbd "M-.") nil))))
 
@@ -142,7 +128,7 @@
 ;; Add eslint --fix
 (defun eslint-fix-file ()
   (interactive)
-  (message "eslint --fixing the file" (buffer-file-name))
+  (message "eslint --fixing the file %s" (buffer-file-name))
   (ignore-errors
     (shell-command (concat "eslint --fix " (buffer-file-name)))))
 
