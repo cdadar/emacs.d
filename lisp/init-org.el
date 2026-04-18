@@ -683,7 +683,8 @@ typical word processor."
 
 (with-eval-after-load 'org-id
   (setq org-id-track-globally t)
-  (setq org-id-locations-file (locate-user-emacs-file ".org-id-locations")))
+  (setq org-id-locations-file (locate-user-emacs-file ".org-id-locations"))
+  (setq org-id-link-to-org-use-id t))
 
 (use-package org-download
   :after org
@@ -718,7 +719,6 @@ typical word processor."
    ("C-c n j" . org-roam-dailies-capture-today))
   :custom
   (org-roam-database-connector 'sqlite-builtin)
-  (org-id-link-to-org-use-id t)
   (org-roam-completion-everywhere t)
   (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   :config
