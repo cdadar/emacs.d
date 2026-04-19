@@ -23,9 +23,9 @@
 #+LATEX_HEADER: \setmainfont[Scale=1.0]{Times New Roman}           % 英文主字体
 
 # #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
-# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
-# #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
-#+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
+# #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
+# #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
+#+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
 
 
 # 多语言
@@ -53,7 +53,7 @@
 # 段落与标题
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
-#+LATEX_HEADER: \setlength{\parskip}{0.5em}
+#+LATEX_HEADER: \setlength{\parskip}{0em}
 
 #+LATEX_HEADER: \usepackage{setspace}
 #+LATEX_HEADER: \linespread{1.2} % 行距略大，适合逐字稿
@@ -73,9 +73,10 @@
 
 
 # 列表与微排版
-#+LaTeX_HEADER: \usepackage{enumitem}
-#+LaTeX_HEADER: \usepackage{microtype}
-#+LaTeX_HEADER: \usepackage{csquotes}
+#+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \AtBeginEnvironment{quote}{\setlist{nosep}}
+#+LATEX_HEADER: \usepackage{microtype}
+#+LATEX_HEADER: \usepackage{csquotes}
 
 
 # 经文引用（bibleref 轻量方案）
