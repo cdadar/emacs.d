@@ -172,14 +172,20 @@
   :config
 
   (defmacro sanityinc/no-consult-preview (&rest cmds)
-    `(with-eval-after-load 'consult
-       (consult-customize ,@cmds :preview-key "M-P")))
+    `(consult-customize ,@cmds :preview-key "M-P"))
 
   (sanityinc/no-consult-preview
-   consult-ripgrep
-   consult-git-grep consult-grep
+   consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult-source-recent-file consult-source-project-recent-file consult-source-bookmark)
+   consult-source-recent-file consult-source-project-recent-file)
+
+  (consult-customize
+   consult-theme
+   :preview-key '(:debounce 0.2 any))
+
+  (consult-customize
+   consult-man consult-source-bookmark consult-source-file-register
+   :preview-key '(:debounce 0.4 any))
 
   (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
     (interactive (list current-prefix-arg
@@ -189,25 +195,9 @@
                          (if-let* ((s (symbol-at-point)))
                              (symbol-name s)))))
     (consult-ripgrep dir initial))
-  (sanityinc/no-consult-preview sanityinc/consult-ripgrep-at-point)
+  (consult-customize sanityinc/consult-ripgrep-at-point :preview-key '(:debounce 0.4 any))
   (when (executable-find "rg")
     (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point))
-
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key "M-.")
-  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  (consult-customize
-   consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep consult-man
-   consult-bookmark consult-recent-file consult-xref
-   consult-source-bookmark consult-source-file-register
-   consult-source-recent-file consult-source-project-recent-file sanityinc/consult-ripgrep-at-point
-   ;; :preview-key "M-."
-   :preview-key '(:debounce 0.4 any))
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
@@ -242,23 +232,21 @@
      (window-parameters (mode-line-format . none))
      (window-height . fit-window-to-buffer)))
 
+  :config
   (with-eval-after-load 'popwin
-    (progn
-      (push '(occur-mode :position right :width 100) popwin:special-display-config)
-      (push '(grep-mode :position right :width 100) popwin:special-display-config)
-      (push '(special-mode :position right :width 100) popwin:special-display-config)))
+    (push '(occur-mode :position right :width 100) popwin:special-display-config)
+    (push '(grep-mode :position right :width 100) popwin:special-display-config)
+    (push '(special-mode :position right :width 100) popwin:special-display-config))
 
   (with-eval-after-load 'vertico
     (define-key vertico-map (kbd "C-c C-o") 'embark-export)
     (define-key vertico-map (kbd "C-c C-c") 'embark-act))
 
   ;; https://github.com/purcell/whole-line-or-region/issues/30#issuecomment-3388095018
-  (with-eval-after-load 'embark
-    (push 'embark--mark-target
-          (alist-get 'whole-line-or-region-delete-region
-                     embark-around-action-hooks)))
+  (push 'embark--mark-target
+        (alist-get 'whole-line-or-region-delete-region
+                   embark-around-action-hooks))
 
-  :config
   (defun embark-on-last-message (arg)
     "Act on the last message displayed in the echo area."
     (interactive "P")
