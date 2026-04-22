@@ -186,7 +186,7 @@
 (require 'init-erc)
 (require 'init-emojify)
 (require 'init-puml)
-(require 'init-golang)
+
 (require 'init-vimrc)
 (require 'init-elfeed)
 (require 'init-eshell)
