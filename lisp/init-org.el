@@ -19,7 +19,8 @@
   :hook ((org-mode . cdadar/org-mode-setup)
          (org-agenda-mode . hl-line-mode)
          (org-agenda-after-show . org-show-entry)
-         (org-agenda-finalize . my/org-agenda-insert-efforts))
+         (org-agenda-finalize . my/org-agenda-insert-efforts)
+         (org-after-todo-state-change . cdadar/org-reschedule-monthly-nth-weekday))
   :custom
   (org-log-done t)
   (org-edit-timestamp-down-means-later t)
@@ -244,6 +245,110 @@ typical word processor."
   (defun cdadar/org-setup-agenda-window-hooks ()
     (with-eval-after-load 'org-agenda
       (add-hook 'org-agenda-mode-hook #'cdadar/org-agenda-align-on-config-change)))
+
+  ;; === Custom recurring schedule ===
+  (defconst cdadar/org-monthly-nth-weekday-property "ORG_MONTHLY_NTH"
+    "Property name for the monthly nth weekday rule.")
+
+  (defconst cdadar/org-monthly-weekday-property "ORG_MONTHLY_WEEKDAY"
+    "Property name for the monthly weekday rule.")
+
+  (defun cdadar/org-nth-weekday-of-month (year month weekday nth)
+    "Return encoded time for the NTH WEEKDAY in YEAR MONTH.
+WEEKDAY follows Emacs convention: 0=Sunday .. 6=Saturday.
+NTH supports 1..5, or -1 for the last WEEKDAY of the month."
+    (let ((last-day (calendar-last-day-of-month month year)))
+      (cond
+       ((> nth 0)
+        (let* ((first-dow (calendar-day-of-week (list month 1 year)))
+               (delta (mod (- weekday first-dow) 7))
+               (day (+ 1 delta (* 7 (1- nth)))))
+          (when (> day last-day)
+            (error "Month %04d-%02d has no %dth weekday %d"
+                   year month nth weekday))
+          (encode-time 0 0 0 day month year)))
+       ((= nth -1)
+        (let* ((last-dow (calendar-day-of-week (list month last-day year)))
+               (delta (mod (- last-dow weekday) 7))
+               (day (- last-day delta)))
+          (encode-time 0 0 0 day month year)))
+       (t
+        (error "Unsupported monthly nth value: %S" nth)))))
+
+  (defun cdadar/org-next-monthly-nth-weekday (from-time weekday nth)
+    "Return the next monthly NTH WEEKDAY strictly after FROM-TIME."
+    (let* ((decoded (decode-time from-time))
+           (month (nth 4 decoded))
+           (year (nth 5 decoded))
+           candidate)
+      (while
+          (progn
+            (setq candidate
+                  (condition-case nil
+                      (cdadar/org-nth-weekday-of-month year month weekday nth)
+                    (error nil)))
+            (if (and candidate (time-less-p from-time candidate))
+                nil
+              (setq month (1+ month))
+              (when (> month 12)
+                (setq month 1
+                      year (1+ year)))
+              t)))
+      candidate))
+
+  (defun cdadar/org-monthly-nth-weekday-entry-p ()
+    "Return non-nil when current entry defines a valid monthly nth weekday rule."
+    (let ((nth-str (org-entry-get nil cdadar/org-monthly-nth-weekday-property))
+          (weekday-str (org-entry-get nil cdadar/org-monthly-weekday-property)))
+      (when (and nth-str weekday-str
+                 (string-match-p "^-?[0-9]+$" nth-str)
+                 (string-match-p "^-?[0-9]+$" weekday-str))
+        (let ((nth (string-to-number nth-str))
+              (weekday (string-to-number weekday-str)))
+          (and (member nth '(-1 1 2 3 4 5))
+               (<= 0 weekday 6))))))
+
+  (defvar cdadar/org-reschedule-monthly-nth-weekday--in-progress nil
+    "Non-nil while monthly nth weekday rescheduling is already running.")
+
+  (defun cdadar/org-reschedule-monthly-nth-weekday ()
+    "Reschedule current entry using its monthly nth weekday properties."
+    (when (and (not cdadar/org-reschedule-monthly-nth-weekday--in-progress)
+               (derived-mode-p 'org-mode)
+               (member org-state org-done-keywords)
+               (not (member org-last-state org-done-keywords))
+               (cdadar/org-monthly-nth-weekday-entry-p))
+      (let* ((cdadar/org-reschedule-monthly-nth-weekday--in-progress t)
+             (nth (string-to-number
+                   (org-entry-get nil cdadar/org-monthly-nth-weekday-property)))
+             (weekday (string-to-number
+                       (org-entry-get nil cdadar/org-monthly-weekday-property)))
+             (base-time (or (org-get-scheduled-time (point))
+                            (current-time)))
+             (next-time (cdadar/org-next-monthly-nth-weekday base-time weekday nth))
+             (timestamp (format-time-string (org-time-stamp-format) next-time)))
+        (org-schedule nil timestamp)
+        (when (and org-todo-repeat-to-state
+                   (not (string-empty-p org-todo-repeat-to-state)))
+          (org-todo org-todo-repeat-to-state)))))
+
+  (defun cdadar/org-set-monthly-nth-weekday (nth weekday)
+    "Set current heading to recur on monthly NTH WEEKDAY.
+WEEKDAY uses Emacs convention: 0=Sunday .. 6=Saturday.
+NTH supports 1..5, or -1 for the last weekday in month."
+    (interactive
+     (list
+      (read-number "第几个周几（1..5，最后一个填 -1）: ")
+      (read-number "周几（0=周日 .. 6=周六）: ")))
+    (unless (member nth '(-1 1 2 3 4 5))
+      (user-error "NTH 必须是 1..5 或 -1"))
+    (unless (<= 0 weekday 6)
+      (user-error "WEEKDAY 必须在 0..6 之间"))
+    (org-entry-put nil cdadar/org-monthly-nth-weekday-property
+                   (number-to-string nth))
+    (org-entry-put nil cdadar/org-monthly-weekday-property
+                   (number-to-string weekday))
+    (message "Set monthly nth weekday rule: nth=%s weekday=%s" nth weekday))
 
   ;; === Clocking ===
   (defun cdadar/org-setup-clocking ()
