@@ -11,8 +11,7 @@
 
 (when (executable-find "rg")
   (use-package rg
-    :config
-    (global-set-key (kbd "M-?") 'rg-project)))
+    :commands (rg rg-project)))
 
 
 (use-package grep-dired

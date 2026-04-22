@@ -21,10 +21,12 @@
 
 ;; Emacs minibuffer configurations.
 (use-package emacs
+  :hook (minibuffer-setup . cursor-intangible-mode)
+  :init
+  (context-menu-mode 1)
   :custom
   ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
   ;; to switch display modes.
-  (context-menu-mode t)
   ;; Support opening new minibuffers from inside existing minibuffers.
   (enable-recursive-minibuffers t)
   ;; Hide commands in M-x which do not work in the current mode.  Vertico
@@ -95,6 +97,21 @@
 
 ;; Example configuration for Consult
 (use-package consult
+  :preface
+  (defmacro sanityinc/no-consult-preview (&rest cmds)
+    `(consult-customize ,@cmds :preview-key "M-P"))
+
+  (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
+    (interactive (list current-prefix-arg
+                       (if (use-region-p)
+                           (buffer-substring-no-properties
+                            (region-beginning) (region-end))
+                         (if-let* ((s (symbol-at-point)))
+                             (symbol-name s)))))
+    (unless (executable-find "rg")
+      (user-error "ripgrep (rg) is not available"))
+    (consult-ripgrep dir initial))
+
   ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
@@ -117,6 +134,7 @@
          ("C-M-#" . consult-register)
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("M-?" . sanityinc/consult-ripgrep-at-point)
          ;; M-g bindings in `goto-map'
          ("M-g e" . consult-compile-error)
          ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
@@ -171,9 +189,6 @@
   ;; after lazily loading the package.
   :config
 
-  (defmacro sanityinc/no-consult-preview (&rest cmds)
-    `(consult-customize ,@cmds :preview-key "M-P"))
-
   (sanityinc/no-consult-preview
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
@@ -186,18 +201,7 @@
   (consult-customize
    consult-man consult-source-bookmark consult-source-file-register
    :preview-key '(:debounce 0.4 any))
-
-  (defun sanityinc/consult-ripgrep-at-point (&optional dir initial)
-    (interactive (list current-prefix-arg
-                       (if (use-region-p)
-                           (buffer-substring-no-properties
-                            (region-beginning) (region-end))
-                         (if-let* ((s (symbol-at-point)))
-                             (symbol-name s)))))
-    (consult-ripgrep dir initial))
   (consult-customize sanityinc/consult-ripgrep-at-point :preview-key '(:debounce 0.4 any))
-  (when (executable-find "rg")
-    (global-set-key (kbd "M-?") 'sanityinc/consult-ripgrep-at-point))
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
@@ -221,38 +225,6 @@
 (use-package embark
   :defer t
   :commands embark-prefix-help-command
-  :init
-  (setq which-key-use-C-h-commands nil
-        ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
-        prefix-help-command #'embark-prefix-help-command)
-
-  (setq
-   embark-verbose-indicator-display-action
-   '((display-buffer-at-bottom)
-     (window-parameters (mode-line-format . none))
-     (window-height . fit-window-to-buffer)))
-
-  :config
-  (with-eval-after-load 'popwin
-    (push '(occur-mode :position right :width 100) popwin:special-display-config)
-    (push '(grep-mode :position right :width 100) popwin:special-display-config)
-    (push '(special-mode :position right :width 100) popwin:special-display-config))
-
-  (with-eval-after-load 'vertico
-    (define-key vertico-map (kbd "C-c C-o") 'embark-export)
-    (define-key vertico-map (kbd "C-c C-c") 'embark-act))
-
-  ;; https://github.com/purcell/whole-line-or-region/issues/30#issuecomment-3388095018
-  (push 'embark--mark-target
-        (alist-get 'whole-line-or-region-delete-region
-                   embark-around-action-hooks))
-
-  (defun embark-on-last-message (arg)
-    "Act on the last message displayed in the echo area."
-    (interactive "P")
-    (with-current-buffer "*Messages*"
-      (goto-char (1- (point-max)))
-      (embark-act arg)))
   :bind (("C-h E" . embark-on-last-message)
          ("C-s-." . embark-act)
          ("M-."   . embark-dwim)        ; overrides `xref-find-definitions'
@@ -271,7 +243,39 @@
           ("C-s" . consult-line))
          :map embark-file-map
          (("E" . consult-directory-externally)
-          ("U" . consult-snv-unlock))))
+          ("U" . consult-snv-unlock)))
+  :init
+  (with-eval-after-load 'vertico
+    (define-key vertico-map (kbd "C-c C-o") 'embark-export)
+    (define-key vertico-map (kbd "C-c C-c") 'embark-act))
+
+  (setq which-key-use-C-h-commands nil
+        ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
+        prefix-help-command #'embark-prefix-help-command)
+
+  (setq
+   embark-verbose-indicator-display-action
+   '((display-buffer-at-bottom)
+     (window-parameters (mode-line-format . none))
+     (window-height . fit-window-to-buffer)))
+
+  :config
+  (with-eval-after-load 'popwin
+    (push '(occur-mode :position right :width 100) popwin:special-display-config)
+    (push '(grep-mode :position right :width 100) popwin:special-display-config)
+    (push '(special-mode :position right :width 100) popwin:special-display-config))
+
+  ;; https://github.com/purcell/whole-line-or-region/issues/30#issuecomment-3388095018
+  (push 'embark--mark-target
+        (alist-get 'whole-line-or-region-delete-region
+                   embark-around-action-hooks))
+
+  (defun embark-on-last-message (arg)
+    "Act on the last message displayed in the echo area."
+    (interactive "P")
+    (with-current-buffer "*Messages*"
+      (goto-char (1- (point-max)))
+      (embark-act arg))))
 
 (defun +vertico/embark-export-write ()
   "Export the current vertico results to a writable buffer if possible.
