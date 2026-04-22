@@ -90,9 +90,9 @@
   :after orderless
   :autoload pinyinlib-build-regexp-string
   :init
-  (defun completion--regex-pinyin (str)
+  (defun cdadar/orderless-regex-pinyin (str)
     (orderless-regexp (pinyinlib-build-regexp-string str)))
-  (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+  (add-to-list 'orderless-matching-styles 'cdadar/orderless-regex-pinyin))
 
 
 ;; Example configuration for Consult
@@ -243,7 +243,7 @@
           ("C-s" . consult-line))
          :map embark-file-map
          (("E" . consult-directory-externally)
-          ("U" . consult-snv-unlock)))
+          ("U" . cdadar/consult-snv-unlock-dwim)))
   :init
   (with-eval-after-load 'vertico
     (define-key vertico-map (kbd "C-c C-o") 'embark-export)
@@ -275,7 +275,14 @@
     (interactive "P")
     (with-current-buffer "*Messages*"
       (goto-char (1- (point-max)))
-      (embark-act arg))))
+      (embark-act arg)))
+
+  (defun cdadar/consult-snv-unlock-dwim ()
+    "Call `consult-snv-unlock' when it is available."
+    (interactive)
+    (unless (fboundp 'consult-snv-unlock)
+      (user-error "consult-snv-unlock is not available"))
+    (call-interactively #'consult-snv-unlock)))
 
 (defun +vertico/embark-export-write ()
   "Export the current vertico results to a writable buffer if possible.
