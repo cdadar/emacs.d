@@ -2,7 +2,17 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq-default debugger-bury-or-kill 'kill)
+(use-package emacs
+  :ensure nil
+  :bind (([remap eval-expression] . pp-eval-expression)
+         ("C-h K" . find-function-on-key))
+  :hook (eval-expression-minibuffer-setup . eldoc-mode)
+  :init
+  (setq-default debugger-bury-or-kill 'kill)
+  (setq-default initial-scratch-message
+                (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
+  :config
+  (setq load-prefer-newer t))
 
 (use-package elisp-slime-nav
   :hook
@@ -14,11 +24,9 @@
 ;;                 (define-key ggtags-mode-map (kbd "M-.")  nil)
 ;;                 (define-key ggtags-mode-map (kbd "C-c M-.") 'ggtags-find-tag-dwim)))))
 
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "ELisp")))
-
-(setq-default initial-scratch-message
-              (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
-
+(defun cdadar/set-up-emacs-lisp-mode-name ()
+  "Use a shorter mode name for Emacs Lisp buffers."
+  (funcall (apply-partially #'sanityinc/set-major-mode-name "ELisp")))
 
 (defun sanityinc/headerise-elisp ()
   "Add minimal header and footer to an elisp buffer for syntax-checking tools."
@@ -44,7 +52,9 @@
       (eval-region (min (point) (mark)) (max (point) (mark)))
     (pp-eval-last-sexp prefix)))
 
-(global-set-key [remap eval-expression] 'pp-eval-expression)
+(defun sanityinc/run-lispy-mode-hooks ()
+  "Enable features useful in Lisp-related modes."
+  (run-hooks 'sanityinc/lispy-modes-hook))
 
 (use-package elisp-mode
   :ensure nil
@@ -52,7 +62,11 @@
               ("C-x C-e" . sanityinc/eval-last-sexp-or-region)
               ("C-c C-e" . pp-eval-expression)
               ("C-c C-l" . sanityinc/load-this-file)
-              ("C-c C-z" . sanityinc/switch-to-ielm)))
+              ("C-c C-z" . sanityinc/switch-to-ielm))
+  :hook ((emacs-lisp-mode . sanityinc/maybe-set-bundled-elisp-readonly)
+         (emacs-lisp-mode . cdadar/set-up-emacs-lisp-mode-name)
+         (emacs-lisp-mode . cdadar/set-up-hippie-expand-for-elisp)
+         (emacs-lisp-mode . sanityinc/run-lispy-mode-hooks)))
 
 (use-package ipretty
   :hook
@@ -95,9 +109,6 @@ there is no current file, eval the current buffer."
     (setq buffer-read-only t)
     (view-mode 1)))
 
-(add-hook 'emacs-lisp-mode-hook 'sanityinc/maybe-set-bundled-elisp-readonly)
-
-
 ;; Use C-c C-z to toggle between elisp files and an ielm session
 ;; I might generalise this to ruby etc., or even just adopt the repl-toggle package.
 
@@ -123,6 +134,7 @@ there is no current file, eval the current buffer."
 
 (use-package ielm
   :ensure nil
+  :hook (ielm-mode . sanityinc/run-lispy-mode-hooks)
   :bind (:map ielm-map
               ("C-c C-z" . sanityinc/repl-switch-back)))
 
@@ -130,7 +142,7 @@ there is no current file, eval the current buffer."
 
 ;; Hippie-expand
 
-(defun set-up-hippie-expand-for-elisp ()
+(defun cdadar/set-up-hippie-expand-for-elisp ()
   "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
   (make-local-variable 'hippie-expand-try-functions-list)
   (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol t)
@@ -144,8 +156,8 @@ there is no current file, eval the current buffer."
   :hook
   (after-init . auto-compile-on-save-mode)
   (after-init . auto-compile-on-load-mode)
-  :config
-  (setq auto-compile-delete-stray-dest nil))
+  :custom
+  (auto-compile-delete-stray-dest nil))
 
 
 (defun sanityinc/trust-current-file ()
@@ -160,12 +172,6 @@ there is no current file, eval the current buffer."
     (user-error "Can't find or trust this buffer's file")))
 
 
-;; Load .el if newer than corresponding .elc
-
-(setq load-prefer-newer t)
-
-
-
 (use-package immortal-scratch
   :hook
   (after-init . immortal-scratch-mode))
@@ -204,14 +210,9 @@ there is no current file, eval the current buffer."
   :config
   (add-to-list 'sanityinc/lispy-modes-hook 'aggressive-indent-mode))
 
-(defun sanityinc/lisp-setup ()
-  "Enable features useful in any Lisp mode."
-  (run-hooks 'sanityinc/lispy-modes-hook))
-
 (dolist (mode '(emacs-lisp-mode ielm-mode lisp-mode inferior-lisp-mode lisp-interaction-mode))
-  (add-hook (derived-mode-hook-name mode) 'sanityinc/lisp-setup))
-
-(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+  (unless (memq mode '(emacs-lisp-mode ielm-mode))
+    (add-hook (derived-mode-hook-name mode) #'sanityinc/run-lispy-mode-hooks)))
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
 (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
@@ -255,11 +256,6 @@ there is no current file, eval the current buffer."
 (use-package macrostep
   :bind (:map emacs-lisp-mode-map
               ("C-c x" . macrostep-expand)))
-
-
-
-;; A quick way to jump to the definition of a function given its key binding
-(global-set-key (kbd "C-h K") 'find-function-on-key)
 
 
 
