@@ -12,11 +12,20 @@
   (([remap query-replace-regexp] . anzu-query-replace-regexp)
    ([remap query-replace] . anzu-query-replace)))
 
-
-
 (use-package isearch
   :ensure nil
   :commands (isearch-occur)
+  :custom
+  (isearch-lazy-count t)
+  (lazy-count-prefix-format "(%s/%s) ")
+  (search-whitespace-regexp "[[:space:]]+")
+  (isearch-lax-whitespace t)
+  (isearch-regexp-lax-whitespace nil)
+  (lazy-highlight-cleanup nil)
+  (isearch-wrap-pause 'no)
+  (isearch-repeat-on-direction-change t)
+  (isearch-allow-scroll 'unlimited)
+  (search-default-mode #'char-fold-to-regexp)
   :config
   (defun sanityinc/isearch-occur ()
     "Invoke `consult-line' from isearch."
@@ -43,6 +52,19 @@
                   isearch-yank-flag t))
         (ding)))
     (isearch-search-and-update))
+
+  (defun sanityinc/isearch-dwim ()
+    "Start `isearch-forward' with the active region or symbol at point."
+    (interactive)
+    (let ((input (if (use-region-p)
+                     (buffer-substring-no-properties (region-beginning) (region-end))
+                   (thing-at-point 'symbol t))))
+      (when (use-region-p)
+        (deactivate-mark))
+      (isearch-forward nil 1)
+      (when (and input (not (string-empty-p input)))
+        (isearch-yank-string input))))
+
   (defun sanityinc/isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string.
 This is useful when followed by an immediate kill."
@@ -50,16 +72,16 @@ This is useful when followed by an immediate kill."
     (isearch-exit)
     (goto-char isearch-other-end))
   :bind
-  (:map isearch-mode-map
-        (([remap isearch-delete-char] . isearch-del-char)
-         ("C-o" . sanityinc/isearch-occur)
-         ("C-c C-o" . sanityinc/isearch-occur)
-         ("C-M-w" . isearch-yank-symbol)
-         ([(control return)] . sanityinc/isearch-exit-other-end))))
-
-(use-package ctrlf
-  :init
-  (ctrlf-mode +1))
+  (("C-s" . sanityinc/isearch-dwim)
+   ("C-r" . isearch-backward)
+   :map isearch-mode-map
+   ([remap isearch-delete-char] . isearch-del-char)
+   ("C-o" . sanityinc/isearch-occur)
+   ("C-c C-o" . sanityinc/isearch-occur)
+   ("C-M-w" . isearch-yank-symbol)
+   ("C-<return>" . sanityinc/isearch-exit-other-end)
+   ("C-h" . isearch-del-char)
+   ("<escape>" . isearch-cancel)))
 
 (provide 'init-isearch)
 ;;; init-isearch.el ends here
