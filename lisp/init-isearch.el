@@ -80,7 +80,9 @@ This is useful when followed by an immediate kill."
    ("C-c C-o" . sanityinc/isearch-occur)
    ("C-M-w" . isearch-yank-symbol)
    ("C-<return>" . sanityinc/isearch-exit-other-end)
-   ("C-h" . isearch-del-char)
+   ("C-<backspace>" . isearch-del-char)
+   ("<backspace>" . isearch-del-char)
+   ("DEL" . isearch-del-char)
    ("<escape>" . isearch-cancel)))
 
 (provide 'init-isearch)
