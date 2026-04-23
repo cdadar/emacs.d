@@ -4,38 +4,48 @@
 
 
 
+(defvar rmh-elfeed-org-file (locate-user-emacs-file "elfeed.org")
+  "Default Org file used by elfeed-org.")
+
+(defvar rmh-elfeed-org-auto-ignore-invalid-feeds nil
+  "Whether elfeed-org should ignore invalid feeds automatically.")
+
+(defvar rmh-elfeed-org-files (list rmh-elfeed-org-file)
+  "Org files used by elfeed-org.")
+
+;;functions to support syncing .elfeed between machines
+;;makes sure elfeed reads index from disk before launching
+(defun bjm/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (require 'elfeed)
+  (require 'elfeed-org)
+  (elfeed-org)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
+
+;;write to disk when quiting
+(defun bjm/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
 (use-package elfeed
-  :commands (elfeed-org)
+  :commands (elfeed bjm/elfeed-load-db-and-open)
   :bind
-  (("C-x w" . (lambda () (interactive)  (progn (elfeed-org) (elfeed))))
+  (("C-x w" . bjm/elfeed-load-db-and-open)
    :map elfeed-search-mode-map
    ("q" . bjm/elfeed-save-db-and-bury))
-  :init
-  (setq elfeed-use-curl 't)
-  :config
-  (progn
-    ;;functions to support syncing .elfeed between machines
-    ;;makes sure elfeed reads index from disk before launching
-    (defun bjm/elfeed-load-db-and-open ()
-      "Wrapper to load the elfeed db from disk before opening"
-      (interactive)
-      (elfeed-db-load)
-      (elfeed)
-      (elfeed-search-update--force))
-
-    ;;write to disk when quiting
-    (defun bjm/elfeed-save-db-and-bury ()
-      "Wrapper to save the elfeed db to disk before burying buffer"
-      (interactive)
-      (elfeed-db-save)
-      (quit-window))))
+  :custom
+  (elfeed-use-curl t))
 
 (use-package elfeed-org
   :after elfeed
   :init
-  (progn
-    (setq rmh-elfeed-org-auto-ignore-invalid-feeds nil)
-    (setq rmh-elfeed-org-files (list rmh-elfeed-org-file)))
+  (setq rmh-elfeed-org-auto-ignore-invalid-feeds nil)
+  (setq rmh-elfeed-org-files (list rmh-elfeed-org-file))
   :config
   (elfeed-org))
 
@@ -64,7 +74,10 @@
           (browse-url site-url))
       (apply orig-fun args))))
 
-(advice-add 'org-open-at-point :around #'spike-leung/org-open-rss-feed-as-site-in-elfeed-org-files)
+(unless (advice-member-p #'spike-leung/org-open-rss-feed-as-site-in-elfeed-org-files
+                         'org-open-at-point)
+  (advice-add 'org-open-at-point :around
+              #'spike-leung/org-open-rss-feed-as-site-in-elfeed-org-files))
 
 
 (defconst spike-leung/elfeed-search-filter "@3-months-ago +unread"
@@ -84,7 +97,8 @@ If LEVEL exist, filter heading which level is greater or equal LEVEL."
                  (when (or (null level) (>= (org-element-property :level hl) level))
                    (let* ((raw-title (org-element-property :raw-value hl))
                           (title (org-link-display-format raw-title))
-                          (annotation (org-entry-get hl "description"))
+                          (annotation (org-entry-get (org-element-property :begin hl)
+                                                     "description"))
                           (feed-url (when (string-match org-link-bracket-re raw-title)
                                       (match-string 1 raw-title))))
                      (list :items (list title) :feed-url feed-url :annotation annotation))))
@@ -108,10 +122,10 @@ See `consult--with-preview' about STATE and CANDIDATE."
       ('preview
        (elfeed-search-clear-filter)
        (when (and cand (get-buffer "*elfeed-search*"))
-         (unless (or (string-empty-p cand) (null cand))
+         (unless (string-empty-p cand)
            (elfeed-search-set-filter (concat spike-leung/elfeed-search-filter " =" (string-replace " " "." cand))))))
       ('return
-       (unless (or (string-empty-p cand) (null cand))
+       (when (and cand feed-url (not (string-empty-p cand)))
          (elfeed-search-set-filter (concat spike-leung/elfeed-search-filter " =" (string-replace " " "." cand)))
          (elfeed-update-feed feed-url))))))
 
@@ -126,7 +140,7 @@ See `consult--with-preview' about STATE and CANDIDATE."
                     :annotate (lambda (cand)
                                 (let* ((match-cand (seq-find
                                                     (lambda (v)
-                                                      (string-match-p (car (plist-get v :items)) cand))
+                                                      (string= (car (plist-get v :items)) cand))
                                                     candidates))
                                        (annotation (and match-cand (plist-get match-cand :annotation))))
                                   (when annotation
