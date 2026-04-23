@@ -33,9 +33,10 @@ re-downloaded in order to locate PACKAGE."
     (setq min-version (version-to-list min-version)))
   (or (package-installed-p package min-version)
       (let* ((known (cdr (assoc package package-archive-contents)))
-             (best (car (sort known (lambda (a b)
-                                      (version-list-<= (package-desc-version b)
-                                                       (package-desc-version a)))))))
+             (best (car (sort (copy-sequence known)
+                              (lambda (a b)
+                                (version-list-<= (package-desc-version b)
+                                                 (package-desc-version a)))))))
         (if (and best (version-list-<= min-version (package-desc-version best)))
             (package-install best)
           (if no-refresh
@@ -67,17 +68,12 @@ locate PACKAGE."
   (package-initialize))
 
 ;; Setup `use-package'
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents))
-
-;; Should set before loading `use-package'
+;; Should set before declaring packages.
 (eval-and-compile
   (setq use-package-always-ensure t)
   (setq use-package-always-defer t)
   (setq use-package-expand-minimally t)
-  (setq use-package-enable-imenu-support t))
-
-(eval-when-compile
+  (setq use-package-enable-imenu-support t)
   (require 'use-package))
 
 ;; Update packages
@@ -97,7 +93,7 @@ locate PACKAGE."
 (use-package bind-key)
 
 (use-package elpa-mirror
-  :vc(:url "https://github.com/redguardtoo/elpa-mirror" :rev :newest)
+  :vc (:url "https://github.com/redguardtoo/elpa-mirror" :rev :newest)
   :commands (elpamr-create-mirror-for-installed))
 
 
@@ -126,7 +122,8 @@ advice for `require-package', to which ARGS are passed."
       (when available
         (add-to-list 'sanityinc/required-packages package)))))
 
-(advice-add 'require-package :around 'sanityinc/note-selected-package)
+(unless (advice-member-p #'sanityinc/note-selected-package 'require-package)
+  (advice-add 'require-package :around #'sanityinc/note-selected-package))
 
 
 ;; Work around an issue in Emacs 29 where seq gets implicitly
@@ -139,17 +136,21 @@ advice for `require-package', to which ARGS are passed."
     (let ((load-path (cons (package-desc-dir pkg-desc) load-path)))
       (funcall orig pkg-desc)))
 
-  (advice-add 'package--reload-previously-loaded :around
-              'sanityinc/reload-previously-loaded-with-load-path-updated))
+  (unless (advice-member-p #'sanityinc/reload-previously-loaded-with-load-path-updated
+                           'package--reload-previously-loaded)
+    (advice-add 'package--reload-previously-loaded :around
+                #'sanityinc/reload-previously-loaded-with-load-path-updated)))
 
 
 
+(defun sanityinc/save-selected-packages ()
+  "Persist packages installed via `require-package' to Custom."
+  (package--save-selected-packages
+   (seq-uniq (append sanityinc/required-packages package-selected-packages))))
+
 (when (fboundp 'package--save-selected-packages)
   (require-package 'seq)
-  (add-hook 'after-init-hook
-            (lambda ()
-              (package--save-selected-packages
-               (seq-uniq (append sanityinc/required-packages package-selected-packages))))))
+  (add-hook 'after-init-hook #'sanityinc/save-selected-packages))
 
 
 (defun sanityinc/set-tabulated-list-column-width (col-name width)
@@ -166,7 +167,7 @@ advice for `require-package', to which ARGS are passed."
     (let ((longest-archive-name (apply 'max (mapcar 'length (mapcar 'car package-archives)))))
       (sanityinc/set-tabulated-list-column-width "Archive" longest-archive-name))))
 
-(add-hook 'package-menu-mode-hook 'sanityinc/maybe-widen-package-menu-columns)
+(add-hook 'package-menu-mode-hook #'sanityinc/maybe-widen-package-menu-columns)
 
 
 (provide 'init-elpa)
