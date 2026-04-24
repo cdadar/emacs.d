@@ -1,4 +1,4 @@
-;;; prelude-erc.el --- Emacs Prelude: ERC mode configuration.
+;;; init-erc.el --- Emacs Prelude: ERC mode configuration -*- lexical-binding: t -*-
 ;;
 ;; Copyright © 2011-2017 Bozhidar Batsov
 ;;
@@ -36,7 +36,7 @@
 (use-package erc
   :ensure nil
   :commands (erc start-irc stop-irc)
-  :init
+  :preface
   (defun filter-server-buffers ()
     (delq nil
           (mapcar
@@ -56,35 +56,54 @@
       (message "Server buffer: %s" (buffer-name buffer))
       (with-current-buffer buffer
         (erc-quit-server "Asta la vista"))))
-  :config
-  ;; Interpret mIRC-style color commands in IRC chats
-  (setq erc-interpret-mirc-color t)
-
+  :custom
   ;; The following are commented out by default, but users of other
   ;; non-Emacs IRC clients might find them useful.
   ;; Kill buffers for channels after /part
-  (setq erc-kill-buffer-on-part t)
+  (erc-kill-buffer-on-part t)
 
   ;; Kill buffers for private queries after quitting the server
-  (setq erc-kill-queries-on-quit t)
+  (erc-kill-queries-on-quit t)
 
   ;; Kill buffers for server messages after quitting the server
-  (setq erc-kill-server-buffer-on-quit t)
+  (erc-kill-server-buffer-on-quit t)
 
-  (setq erc-autojoin-mode t)
-  ;; erc-autojoin-channels-alist  custom setting
+  ;; utf-8 always and forever
+  (erc-server-coding-system '(utf-8 . utf-8))
 
   ;; open query buffers in the current window
-  (setq erc-query-display 'buffer)
+  (erc-query-display 'buffer))
 
+(use-package erc-join
+  :ensure nil
+  :after erc
+  :config
+  (erc-autojoin-mode 1))
+
+(use-package erc-track
+  :ensure nil
+  :after erc
+  :custom
   ;; exclude boring stuff from tracking
-  (erc-track-mode t)
-  (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                  "324" "329" "332" "333" "353" "477"))
-  ;; truncate long irc buffers
-  (erc-truncate-mode +1)
+  (erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                             "324" "329" "332" "333" "353" "477"))
+  :config
+  (erc-track-mode 1))
 
-  (require 'erc-notify)
+(use-package erc-goodies
+  :ensure nil
+  :after erc
+  :custom
+  ;; Interpret mIRC-style color commands in IRC chats
+  (erc-interpret-mirc-color t)
+  :config
+  ;; truncate long irc buffers
+  (erc-truncate-mode +1))
+
+(use-package erc-notify
+  :ensure nil
+  :after erc
+  :preface
   (defvar erc-notify-nick-alist nil
     "Alist of nicks and the last time they tried to trigger a
 notification")
@@ -108,33 +127,45 @@ that can occur between two notifications.  The default is
             (setcdr cur-assoc cur-time)
             (> (abs (- cur-time last-time)) delay))
         (push (cons nick cur-time) erc-notify-nick-alist)
-        t)))
+        t))))
 
-  (require 'erc-autoaway)
+(use-package erc-autoaway
+  :ensure nil
+  :after erc
+  :custom
   ;; autoaway setup
-  (setq erc-auto-discard-away t)
-  (setq erc-autoaway-idle-seconds 600)
-  (setq erc-autoaway-use-emacs-idle t)
-  ;; utf-8 always and forever
-  (setq erc-server-coding-system '(utf-8 . utf-8))
+  (erc-auto-discard-away t)
+  (erc-autoaway-idle-seconds 600)
+  :config
+  (if (boundp 'erc-autoaway-idle-method)
+      (setq erc-autoaway-idle-method 'emacs)
+    (setq erc-autoaway-use-emacs-idle t)))
 
-  (require 'erc-spelling)
+(use-package erc-spelling
+  :ensure nil
+  :after erc
+  :config
   ;; enable spell checking
   ;; set different dictionaries by different servers/channels
   ;; (setq erc-spelling-dictionaries '(("#emacs" "american")))
   (when *spell-check-support-enabled*
-    (erc-spelling-mode 1))
+    (erc-spelling-mode 1)))
 
-  (require 'erc-log)
+(use-package erc-log
+  :ensure nil
+  :after erc
+  :custom
   ;; logging
-  (setq erc-log-channels-directory "~/.erc/logs/")
+  (erc-log-channels-directory "~/.erc/logs/")
+  (erc-save-buffer-on-part t)
+  :config
   (unless (file-exists-p erc-log-channels-directory)
     (mkdir erc-log-channels-directory t))
   ;; FIXME - this advice is wrong and is causing problems on Emacs exit
   ;; (defadvice save-buffers-kill-emacs (before save-logs (arg) activate)
-  ;;   (save-some-buffers t (lambda () (when (eq major-mode 'erc-mode) t))))
-  (setq erc-save-buffer-on-part t))
+  ;;   (save-some-buffers t (lambda () (when (eq major-mode 'erc-mode) t)))))
+  )
 
 (provide 'init-erc)
 
-;;; prelude-erc.el ends here
+;;; init-erc.el ends here

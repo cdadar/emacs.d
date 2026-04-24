@@ -7,10 +7,11 @@
   :bind (([remap eval-expression] . pp-eval-expression)
          ("C-h K" . find-function-on-key))
   :hook (eval-expression-minibuffer-setup . eldoc-mode)
+  :custom
+  (initial-scratch-message
+   (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
   :init
   (setq-default debugger-bury-or-kill 'kill)
-  (setq-default initial-scratch-message
-                (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
   :config
   (setq load-prefer-newer t))
 
@@ -91,7 +92,7 @@ there is no current file, eval the current buffer."
     (if file
         (progn
           (save-some-buffers nil (apply-partially 'derived-mode-p 'emacs-lisp-mode))
-          (load-file (buffer-file-name))
+          (load-file file)
           (message "Loaded %s" file))
       (eval-buffer)
       (message "Evaluated %s" (current-buffer)))))
@@ -118,6 +119,7 @@ there is no current file, eval the current buffer."
 (defvar sanityinc/repl-switch-function 'switch-to-buffer-other-window)
 
 (defun sanityinc/switch-to-ielm ()
+  "Switch to the IELM buffer, remembering the originating buffer."
   (interactive)
   (let ((orig-buffer (current-buffer)))
     (if (get-buffer "*ielm*")
@@ -144,7 +146,7 @@ there is no current file, eval the current buffer."
 
 (defun cdadar/set-up-hippie-expand-for-elisp ()
   "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
-  (make-local-variable 'hippie-expand-try-functions-list)
+  (setq-local hippie-expand-try-functions-list hippie-expand-try-functions-list)
   (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol t)
   (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol-partially t))
 
@@ -212,7 +214,7 @@ there is no current file, eval the current buffer."
 
 (dolist (mode '(emacs-lisp-mode ielm-mode lisp-mode inferior-lisp-mode lisp-interaction-mode))
   (unless (memq mode '(emacs-lisp-mode ielm-mode))
-    (add-hook (derived-mode-hook-name mode) #'sanityinc/run-lispy-mode-hooks)))
+    (add-hook (intern (format "%s-hook" mode)) #'sanityinc/run-lispy-mode-hooks)))
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
 (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
@@ -246,6 +248,7 @@ there is no current file, eval the current buffer."
 (advice-add 'revert-buffer :after 'sanityinc/maybe-remove-elc)
 
 (defun sanityinc/reverting (orig &rest args)
+  "Run ORIG with ARGS while marking the current operation as VC reverting."
   (let ((sanityinc/vc-reverting t))
     (apply orig args)))
 (advice-add 'magit-revert-buffers :around 'sanityinc/reverting)
@@ -261,7 +264,7 @@ there is no current file, eval the current buffer."
 
 ;; Extras for theme editing
 (use-package rainbow-mode
-  :config
+  :preface
   (defun sanityinc/enable-rainbow-mode-if-theme ()
     (when (and (buffer-file-name) (string-match-p "\\(color-theme-\\|-theme\\.el\\)" (buffer-file-name)))
       (rainbow-mode)))
