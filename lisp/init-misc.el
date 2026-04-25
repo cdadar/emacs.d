@@ -5,16 +5,19 @@
 
 ;; Misc config - yet to be placed in separate files
 
-(add-auto-mode 'tcl-mode "^Portfile\\'")
+(use-package emacs
+  :ensure nil
+  :hook ((prog-mode . goto-address-prog-mode)
+         (conf-mode . goto-address-prog-mode)
+         (after-save . executable-make-buffer-file-executable-if-script-p)
+         (after-save . sanityinc/set-mode-for-new-scripts))
+  :custom
+  (use-short-answers t)
+  (goto-address-mail-face 'link))
 
-(setq use-short-answers t)
-
-(add-hook 'prog-mode-hook 'goto-address-prog-mode)
-(add-hook 'conf-mode-hook 'goto-address-prog-mode)
-(setq goto-address-mail-face 'link)
-
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-(add-hook 'after-save-hook 'sanityinc/set-mode-for-new-scripts)
+(use-package tcl
+  :ensure nil
+  :mode ("^Portfile\\'" . tcl-mode))
 
 (defun sanityinc/set-mode-for-new-scripts ()
   "Invoke `normal-mode' if this file is a script and in `fundamental-mode'."
@@ -41,15 +44,17 @@
          "\\|^Please enter your password for user .*?:\\s *\\'")))
 
 (use-package regex-tool
-  :config
-  (setq-default regex-tool-backend 'perl))
+  :custom
+  (regex-tool-backend 'perl))
 
 (use-package re-builder
   :ensure nil
   :bind (:map reb-mode-map
               ("C-c C-k" . reb-quit)))
 
-(add-auto-mode 'conf-mode "^Procfile\\'")
+(use-package conf-mode
+  :ensure nil
+  :mode ("^Procfile\\'" . conf-mode))
 
 
 (provide 'init-misc)

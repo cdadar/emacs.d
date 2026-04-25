@@ -5,17 +5,20 @@
 ;;; Basic ruby setup
 (use-package ruby-hash-syntax)
 
-(add-auto-mode 'ruby-mode
-               "\\.rxml\\'"
-               "\\.rjs\\'" "\\.irbrc\\'" "\\.pryrc\\'" "\\.builder\\'"
-               "\\.gemspec\\'" "Kirkfile\\'")
-(add-auto-mode 'conf-mode "Gemfile\\.lock\\'")
-
-(setq-default
- ruby-use-encoding-map nil
- ruby-insert-encoding-magic-comment nil)
-
-(add-hook 'ruby-mode-hook 'subword-mode)
+(use-package ruby-mode
+  :ensure nil
+  :mode (("\\.rxml\\'" . ruby-mode)
+         ("\\.rjs\\'" . ruby-mode)
+         ("\\.irbrc\\'" . ruby-mode)
+         ("\\.pryrc\\'" . ruby-mode)
+         ("\\.builder\\'" . ruby-mode)
+         ("\\.gemspec\\'" . ruby-mode)
+         ("Kirkfile\\'" . ruby-mode)
+         ("Gemfile\\.lock\\'" . conf-mode))
+  :hook (ruby-mode . subword-mode)
+  :custom
+  (ruby-use-encoding-map nil)
+  (ruby-insert-encoding-magic-comment nil))
 
 (use-package page-break-lines
   :ensure nil
@@ -32,15 +35,16 @@
 
 
 ;;; Inferior ruby
+(defun sanityinc/ruby-load-file (&optional choose-file)
+  (interactive "P")
+  (if (or choose-file (not buffer-file-name))
+      (call-interactively 'ruby-load-file)
+    (save-some-buffers)
+    (ruby-load-file buffer-file-name)))
+
 (use-package inf-ruby
-  :config
-  (defun sanityinc/ruby-load-file (&optional choose-file)
-    (interactive "P")
-    (if (or choose-file (not buffer-file-name))
-        (call-interactively 'ruby-load-file)
-      (save-some-buffers)
-      (ruby-load-file buffer-file-name)))
-  (define-key inf-ruby-minor-mode-map [remap ruby-load-file] 'sanityinc/ruby-load-file))
+  :bind (:map inf-ruby-minor-mode-map
+              ([remap ruby-load-file] . sanityinc/ruby-load-file)))
 
 
 ;;; Ruby compilation
