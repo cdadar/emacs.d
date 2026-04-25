@@ -1,14 +1,10 @@
-;;; init-personal.el --- Emacs Prelude: Personal settings
+;;; init-personal.el --- Emacs Prelude: Personal settings -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
 ;; Personal settings to augment those of Prelude
 ;; Install Emacs through homebrew with --cocoa --srgb
 
 ;;; Code:
-;;; make cursor style bar
-(setq-default cursor-type 'box)
-
-
 
 ;; 如果配置好了， 下面 20 个汉字与 40 个英文字母应该等长
 ;; here are 20 hanzi and 40 english chars, see if they are the same width
@@ -67,25 +63,24 @@
   (if (daemonp)
       (add-hook 'after-make-frame-functions
                 (lambda (frame)
-                  (select-frame frame)
-                  (if (display-graphic-p frame)
-                      (apply action))))
-    (if (display-graphic-p)
-        (apply action))))
+                  (when (display-graphic-p frame)
+                    (with-selected-frame frame
+                      (apply action)))))
+    (when (display-graphic-p)
+      (apply action))))
 
 ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
-(defun cdadar/set-backup-fonts()
+(defun cdadar/set-backup-fonts ()
   "Set the emoji and glyph fonts."
   (when (display-graphic-p)
-    (progn
-      (when (font-installed-p "JetBrainsMono")
-        (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "JetBrainsMono" 17)));; 11 13 17 19 23
-      ;; chinese font
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (when (font-installed-p "LXGW WenKai")
-          (set-fontset-font (frame-parameter nil 'font)
-                            charset
-                            (font-spec :family "LXGW WenKai"))))))) ;; 14 16 20 22 28
+    (when (font-installed-p "JetBrainsMono")
+      (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "JetBrainsMono" 17))) ;; 11 13 17 19 23
+    ;; chinese font
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (when (font-installed-p "LXGW WenKai")
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset
+                          (font-spec :family "LXGW WenKai")))))) ;; 14 16 20 22 28
 
 ;; respect default terminal fonts
 ;; if we're in a gui set the fonts appropriately
@@ -101,19 +96,24 @@
 ;;                ("C--" . cnfonts-decrease-fontsize)
 ;;                ("C-+" . cnfonts-increase-fontsize)))
 
-(defun cdadar/reset-frame-size (&optional frame)
+(defun cdadar/reset-frame-size (&optional _frame)
   "重设窗体大小"
   (interactive)
-  (progn (add-to-list 'default-frame-alist '(height . 40))
-         (add-to-list 'default-frame-alist '(width . 120))))
+  (add-to-list 'default-frame-alist '(height . 40))
+  (add-to-list 'default-frame-alist '(width . 120)))
 
-(apply-if-gui 'cdadar/reset-frame-size)
-
+(use-package emacs
+  :ensure nil
+  :init
+  ;; make cursor style bar
+  (setq-default cursor-type 'box)
+  :config
+  (apply-if-gui #'cdadar/reset-frame-size))
 
 ;; use-package with package.el:
 (use-package dashboard
   :ensure t
-  :config
+  :init
   (dashboard-setup-startup-hook))
 
 
