@@ -3,6 +3,7 @@
 ;;; Code:
 
 (use-package gt
+  :ensure t
   :commands (gt-translate gt-setup gt-switch-translator)
   :bind (("C-c s t" . gt-translate)
          ("C-c s T" . gt-setup))
