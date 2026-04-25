@@ -21,7 +21,10 @@ BUFFER and ALIST are as for `display-buffer-full-frame'."
     (when to-restore
       (set-window-configuration to-restore))))
 
-(advice-add 'quit-window :around 'sanityinc/maybe-restore-window-configuration)
+(use-package window
+  :ensure nil
+  :config
+  (advice-add 'quit-window :around #'sanityinc/maybe-restore-window-configuration))
 
 (defmacro sanityinc/fullframe-mode (mode)
   "Configure buffers that open in MODE to display in full-frame."
@@ -29,7 +32,10 @@ BUFFER and ALIST are as for `display-buffer-full-frame'."
                 (cons (cons 'major-mode ,mode)
                       (list 'sanityinc/display-buffer-full-frame))))
 
-(sanityinc/fullframe-mode 'package-menu-mode)
+(use-package package
+  :ensure nil
+  :config
+  (sanityinc/fullframe-mode 'package-menu-mode))
 
 
 ;; Handier way to add modes to auto-mode-alist
@@ -91,8 +97,7 @@ BUFFER and ALIST are as for `display-buffer-full-frame'."
   "Open the current file as a URL using `browse-url'."
   (interactive)
   (let ((file-name (buffer-file-name)))
-    (if (and (fboundp 'tramp-tramp-file-p)
-             (tramp-tramp-file-p file-name))
+    (if (file-remote-p file-name)
         (error "Cannot open tramp file")
       (browse-url (concat "file://" file-name)))))
 
