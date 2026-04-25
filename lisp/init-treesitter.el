@@ -6,8 +6,9 @@
 (use-package tree-sitter-langs)
 (use-package treesit-auto
   :hook (after-init . global-treesit-auto-mode)
+  :custom
+  (treesit-auto-install t)
   :config
-  (setq treesit-auto-install t)
   ;; Keep zig on manual config from init-zig.el to avoid noisy startup
   ;; warnings when the zig grammar is not installed locally.
   (setq treesit-auto-langs (delq 'zig treesit-auto-langs)))
@@ -67,11 +68,6 @@ Return a list of languages seen along the way."
                 (push (intern emacs-lang) seen-grammars)))))))
     seen-grammars))
 
-(sanityinc/auto-configure-treesitter)
-
-
-;;; Support remapping of additional libraries
-
 (defun sanityinc/remap-ts-mode (non-ts-mode ts-mode grammar)
   "Explicitly remap NON-TS-MODE to TS-MODE if GRAMMAR is available."
   (when (and (fboundp 'treesit-ready-p)
@@ -79,16 +75,21 @@ Return a list of languages seen along the way."
              (fboundp ts-mode))
     (add-to-list 'major-mode-remap-alist (cons non-ts-mode ts-mode))))
 
-;; When there's js-ts-mode, we also prefer it to js2-mode
-(sanityinc/remap-ts-mode 'js2-mode 'js-ts-mode 'javascript)
-(sanityinc/remap-ts-mode 'clojurescript-mode 'clojurescript-ts-mode 'clojure)
-(sanityinc/remap-ts-mode 'python-mode 'python-ts-mode 'python)
-(sanityinc/remap-ts-mode 'typescript-mode 'typescript-ts-mode 'typescript)
-(sanityinc/remap-ts-mode 'zig-mode 'zig-ts-mode 'zig)
+
+;;; Support remapping of additional libraries
 
-
-;; Default font-lock level for tree-sitter modes
-(setq treesit-font-lock-level 4)
+(use-package treesit
+  :ensure nil
+  :custom
+  (treesit-font-lock-level 4)
+  :config
+  (sanityinc/auto-configure-treesitter)
+  ;; When there's js-ts-mode, we also prefer it to js2-mode
+  (sanityinc/remap-ts-mode 'js2-mode 'js-ts-mode 'javascript)
+  (sanityinc/remap-ts-mode 'clojurescript-mode 'clojurescript-ts-mode 'clojure)
+  (sanityinc/remap-ts-mode 'python-mode 'python-ts-mode 'python)
+  (sanityinc/remap-ts-mode 'typescript-mode 'typescript-ts-mode 'typescript)
+  (sanityinc/remap-ts-mode 'zig-mode 'zig-ts-mode 'zig))
 
 
 
