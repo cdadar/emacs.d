@@ -201,8 +201,7 @@
 (require 'init-citar)
 (require 'init-epub)
 (require 'init-ai)
-(require 'init-sdcv)
-
+(require 'init-translate)
 
 (require 'init-fonts)
 (require 'init-personal)
