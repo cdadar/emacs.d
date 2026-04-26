@@ -196,7 +196,7 @@
 (require 'init-latex)
 (require 'init-perl)
 (require 'init-anki)
-(use-package init-date
+(use-package insert-time
   :ensure nil
   :commands (insert-date
              insert-time
