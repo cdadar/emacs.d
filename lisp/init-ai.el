@@ -19,7 +19,7 @@
 (use-package ai-code
   :defer t
   :commands (ai-code-menu)
-  :bind (("C-c a" . ai-code-menu))
+  :bind (("C-c A" . ai-code-menu))
   :config
   ;; Primary AI coding entrypoint. Other supported backends include
   ;; 'claude-code, 'gemini, 'github-copilot-cli, 'opencode, 'grok,
@@ -35,7 +35,7 @@
 
 (use-package aider
   :commands (aider aider-transient-menu)
-  :bind (("C-c A" . aider-transient-menu))
+  :bind (("C-c C-a" . aider-transient-menu))
   :config
   (setq aider-args
         `("--config" ,(expand-file-name "~/.aider.conf.yml")))
