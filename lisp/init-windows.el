@@ -16,9 +16,9 @@
 
 ;; Make "C-x o" prompt for a target window when there are more than 2
 (use-package switch-window
-  :config
-  (setq-default switch-window-shortcut-style 'qwerty)
-  (setq-default switch-window-timeout nil)
+  :custom
+  (switch-window-shortcut-style 'qwerty)
+  (switch-window-timeout nil)
   :bind
   (("C-x o" . switch-window)))
 
@@ -35,17 +35,15 @@
       (unless arg
         (select-window target-window)))))
 
-(use-package window
-  :ensure nil
-  :bind (("C-x 2" . (lambda () (interactive)
-                       (funcall (split-window-func-with-other-buffer #'split-window-vertically))))
-         ("C-x 3" . (lambda () (interactive)
-                       (funcall (split-window-func-with-other-buffer #'split-window-horizontally))))
-         ("C-x 1" . sanityinc/toggle-delete-other-windows)
-         ("C-x |" . split-window-horizontally-instead)
-         ("C-x _" . split-window-vertically-instead)
-         ("<f7>" . sanityinc/split-window)
-         ("C-c <down>" . sanityinc/toggle-current-window-dedication)))
+(defun sanityinc/split-window-below-and-focus (&optional arg)
+  "Split the current window below and focus the new window unless ARG is provided."
+  (interactive "P")
+  (funcall (split-window-func-with-other-buffer #'split-window-vertically) arg))
+
+(defun sanityinc/split-window-right-and-focus (&optional arg)
+  "Split the current window right and focus the new window unless ARG is provided."
+  (interactive "P")
+  (funcall (split-window-func-with-other-buffer #'split-window-horizontally) arg))
 
 (defun sanityinc/toggle-delete-other-windows ()
   "Delete other windows in frame if any, or restore previous window config."
@@ -54,6 +52,16 @@
            (equal (selected-window) (next-window)))
       (winner-undo)
     (delete-other-windows)))
+
+(use-package window
+  :ensure nil
+  :bind (("C-x 2" . sanityinc/split-window-below-and-focus)
+         ("C-x 3" . sanityinc/split-window-right-and-focus)
+         ("C-x 1" . sanityinc/toggle-delete-other-windows)
+         ("C-x |" . split-window-horizontally-instead)
+         ("C-x _" . split-window-vertically-instead)
+         ("<f7>" . sanityinc/split-window)
+         ("C-c <down>" . sanityinc/toggle-current-window-dedication)))
 
 
 
@@ -109,14 +117,14 @@ Call a second time to restore the original window configuration."
 
 (unless (memq window-system '(nt w32))
   (use-package windswap
-    :hook
-    (after-init . (lambda () (apply-partially 'windmove-default-keybindings 'control)))
-    (after-init . (lambda () (apply-partially 'windswap-default-keybindings 'shift 'control)))))
+    :config
+    (windmove-default-keybindings 'control)
+    (windswap-default-keybindings 'shift 'control)))
 
 
 (use-package pulsar
-  :init
-  (setq-default pulsar-pulse-region-functions nil)
+  :custom
+  (pulsar-pulse-region-functions nil)
   :config
   (pulsar-global-mode t))
 
