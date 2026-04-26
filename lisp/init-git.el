@@ -14,7 +14,31 @@
 
 (use-package git-link)
 
+(defun sanityinc/magit-or-vc-log-file (&optional follow)
+  "Show Git history for the current file, or fall back to `vc-print-log'.
+With prefix argument FOLLOW, ask Magit to follow renames for the current file."
+  (interactive "P")
+  (if (and (buffer-file-name)
+           (eq 'Git (vc-backend (buffer-file-name))))
+      (magit-log-buffer-file follow)
+    (vc-print-log)))
+
+(defun magit-submodule-remove+ ()
+  "Force-remove a Magit submodule chosen from the current repository."
+  (interactive)
+  (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
+
+(defun sanityinc/vc-msg-magit-find-file ()
+  "Visit the file for the commit currently described by `vc-msg'."
+  (let* ((info vc-msg-previous-commit-info)
+         (git-dir (locate-dominating-file default-directory ".git")))
+    (magit-find-file (plist-get info :id)
+                     (concat git-dir (plist-get info :filename)))))
+
 (use-package magit
+  :custom
+  (magit-diff-refine-hunk 'all)
+  (magit-diff-visit-prefer-worktree t)
   :bind
   (
    ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
@@ -28,54 +52,29 @@
   :hook
   (git-commit-mode . goto-address-mode)
   :config
-  (setq-default magit-diff-refine-hunk 'all)
-  (setq-default magit-diff-visit-prefer-worktree t)
-
-
   (sanityinc/fullframe-mode 'magit-status-mode)
-
-
-
-  (defun sanityinc/magit-or-vc-log-file (&optional prompt)
-    (interactive "P")
-    (if (and (buffer-file-name)
-             (eq 'Git (vc-backend (buffer-file-name))))
-        (if prompt
-            (magit-log-buffer-file-popup)
-          (magit-log-buffer-file t))
-      (vc-print-log)))
-
-  (with-eval-after-load 'vc
-    (define-key vc-prefix-map (kbd "l") 'sanityinc/magit-or-vc-log-file))
-
-  (defun magit-submodule-remove+ ()
-    (interactive)
-    (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil)))
+  )
 
 
 (use-package magit-todos)
 
 (use-package vc-msg
   :config
-  (progn
-    ;; show code of commit
-    (setq vc-msg-git-show-commit-function 'magit-show-commit)
-    ;; open file of certain revision
-    (push '("m"
-            "[m]agit-find-file"
-            (lambda ()
-              (let* ((info vc-msg-previous-commit-info)
-                     (git-dir (locate-dominating-file default-directory ".git")))
-                (magit-find-file (plist-get info :id )
-                                 (concat git-dir (plist-get info :filename))))))
-          vc-msg-git-extra)))
+  ;; show code of commit
+  (setq vc-msg-git-show-commit-function 'magit-show-commit)
+  ;; open file of certain revision
+  (push '("m"
+          "[m]agit-find-file"
+          sanityinc/vc-msg-magit-find-file)
+        vc-msg-git-extra))
 
 
 ;; Convenient binding for vc-git-grep
 (use-package vc
   :ensure nil
-  :config
-  (define-key vc-prefix-map (kbd "f") 'vc-git-grep))
+  :bind (:map vc-prefix-map
+              ("f" . vc-git-grep)
+              ("l" . sanityinc/magit-or-vc-log-file)))
 
 
 ;;; git-svn support
