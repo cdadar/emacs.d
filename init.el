@@ -196,7 +196,16 @@
 (require 'init-latex)
 (require 'init-perl)
 (require 'init-anki)
-(require 'init-date)
+(use-package init-date
+  :ensure nil
+  :commands (insert-date
+             insert-time
+             insert-date-time
+             insert-personal-time-stamp
+             insert-timestamp
+             insert-date-week
+             insert-current-date-time
+             insert-current-time))
 (require 'init-auto-space)
 (require 'init-citar)
 (require 'init-epub)

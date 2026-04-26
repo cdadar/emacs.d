@@ -1,4 +1,4 @@
-;;; init-date.el --- insert time and date stamps at point
+;;; init-date.el --- insert time and date stamps at point -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2001-2015 Ryan McGeary
 ;; Author: Ryan McGeary
@@ -49,36 +49,64 @@
 
 ;;; Code:
 
+(defgroup init-date nil
+  "Insert time and date stamps at point."
+  :group 'editing)
+
 (defcustom insert-date-format "%Y-%m-%d"
   "*Format for `insert-date' (see `format-time-string' for how to
-  format).")
+  format)."
+  :type 'string
+  :group 'init-date)
 
 (defcustom insert-time-format "%T%z"
   "*Format for `insert-time' (see `format-time-string' for how to
-  format).")
+  format)."
+  :type 'string
+  :group 'init-date)
 
 (defcustom insert-date-time-format "%Y-%m-%dT%T%z"
   "*Format for `insert-date-time' (see `format-time-string' for
-  how to format).")
+  how to format)."
+  :type 'string
+  :group 'init-date)
+
+(defcustom current-date-time-format "%a %b %d %H:%M:%S %Z %Y"
+  "Format used by `insert-current-date-time'.
+See `format-time-string' for supported format specifiers."
+  :type 'string
+  :group 'init-date)
+
+(defcustom current-time-format "%a %H:%M:%S"
+  "Format used by `insert-current-time'.
+See `format-time-string' for supported format specifiers."
+  :type 'string
+  :group 'init-date)
+
+(defun init-date--insert-formatted-time (format &optional append-newline)
+  "Insert the current time formatted with FORMAT at point.
+When APPEND-NEWLINE is non-nil, append a trailing newline."
+  (insert (format-time-string format (current-time)))
+  (when append-newline
+    (insert "\n")))
 
 (defun insert-date ()
   "Inserts the current date at point in the format specified by
 `insert-date-format'."
   (interactive "*")
-  (insert (format-time-string insert-date-format)))
+  (init-date--insert-formatted-time insert-date-format))
 
 (defun insert-time ()
   "Inserts the current time at point in the format specified by
 `insert-time-format'."
   (interactive "*")
-  (insert (format-time-string insert-time-format)))
+  (init-date--insert-formatted-time insert-time-format))
 
 (defun insert-date-time ()
-  "Inserts the current date-time combo at point in the formats
-specified by `insert-date-format' and `insert-time-format'.  Uses
-`insert-date' and `insert-time'."
+  "Insert the current date-time at point.
+The format is controlled by `insert-date-time-format'."
   (interactive "*")
-  (insert (format-time-string insert-date-time-format)))
+  (init-date--insert-formatted-time insert-date-time-format))
 
 (defun insert-personal-time-stamp ()
   "Inserts the current time-stamp at point for the current user
@@ -86,39 +114,33 @@ in the formats specified by `insert-date-time-format'.  It
 inserts a timestamp of \"(<`user-login-name'> :
 <`insert-date-time-format'>)\" Uses `insert-date-time'."
   (interactive "*")
-  (insert "(" user-login-name " : ") (insert-date-time) (insert ")"))
+  (insert "(" user-login-name " : ")
+  (insert-date-time)
+  (insert ")"))
 
 
 (defun insert-timestamp ()
-  (interactive)
-  (insert (format-time-string "%Y%m%d%H%M%S")))
+  "Insert a compact numeric timestamp at point."
+  (interactive "*")
+  (init-date--insert-formatted-time "%Y%m%d%H%M%S"))
 
 (defun insert-date-week ()
-  (interactive)
-  (insert (format-time-string "%Y-%m-%d %a")))
-
-(defvar current-date-time-format "%a %b %d %H:%M:%S %Z %Y"
-  "Format of date to insert with `insert-current-date-time' func
-See help of `format-time-string' for possible replacements")
-
-(defvar current-time-format "%a %H:%M:%S"
-  "Format of date to insert with `insert-current-time' func.
-Note the weekly scope of the command's precision.")
+  "Insert the current date plus abbreviated weekday at point."
+  (interactive "*")
+  (init-date--insert-formatted-time "%Y-%m-%d %a"))
 
 (defun insert-current-date-time ()
-  "insert the current date and time into current buffer.
-Uses `current-date-time-format' for the formatting the date/time."
-       (interactive)
+  "Insert the current date and time into the current buffer.
+Uses `current-date-time-format' to format the inserted value."
+  (interactive "*")
 ;       (insert (let () (comment-start)))
-       (insert (format-time-string current-date-time-format (current-time)))
-       (insert "\n")
-       )
+  (init-date--insert-formatted-time current-date-time-format t))
 
 (defun insert-current-time ()
-  "insert the current time (1-week scope) into the current buffer."
-       (interactive)
-       (insert (format-time-string current-time-format (current-time)))
-       (insert "\n")
-       )
+  "Insert the current time into the current buffer.
+Uses `current-time-format' to format the inserted value."
+  (interactive "*")
+  (init-date--insert-formatted-time current-time-format t))
 
 (provide 'init-date)
+;;; init-date.el ends here
