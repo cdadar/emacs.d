@@ -3,6 +3,7 @@
 ;;; Code:
 
 (defun sanityinc/time-subtract-millis (b a)
+  "Return the elapsed time from A to B in milliseconds."
   (* 1000.0 (float-time (time-subtract b a))))
 
 
@@ -11,7 +12,9 @@
 LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 (defun sanityinc/require-times-wrapper (orig feature &rest args)
-  "Note in `sanityinc/require-times' the time taken to require each feature."
+  "Note in `sanityinc/require-times' the time taken to require each feature.
+ORIG is the wrapped `require' function, FEATURE is the requested feature,
+and ARGS are forwarded unchanged."
   (let* ((already-loaded (memq feature features))
          (require-start-time (and (not already-loaded) (current-time))))
     (prog1
@@ -22,7 +25,11 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
                        (list feature require-start-time time)
                        t))))))
 
-(advice-add 'require :around 'sanityinc/require-times-wrapper)
+(use-package emacs
+  :ensure nil
+  :hook (after-init . sanityinc/show-init-time)
+  :config
+  (advice-add 'require :around #'sanityinc/require-times-wrapper))
 
 
 (define-derived-mode sanityinc/require-times-mode tabulated-list-mode "Require-Times"
@@ -68,10 +75,9 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 
 (defun sanityinc/show-init-time ()
+  "Report total init time in milliseconds after startup completes."
   (message "init completed in %.2fms"
            (sanityinc/time-subtract-millis after-init-time before-init-time)))
-
-(add-hook 'after-init-hook 'sanityinc/show-init-time)
 
 
 (provide 'init-benchmarking)
