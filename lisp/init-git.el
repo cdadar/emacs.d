@@ -149,13 +149,18 @@ With prefix argument FOLLOW, ask Magit to follow renames for the current file."
 
 (use-package vc-msg
   :config
-  ;; show code of commit
-  (setq vc-msg-git-show-commit-function 'magit-show-commit)
-  ;; open file of certain revision
-  (push '("m"
-          "[m]agit-find-file"
-          sanityinc/vc-msg-magit-find-file)
-        vc-msg-git-extra))
+  (with-eval-after-load 'vc-msg-git
+    ;; show code of commit
+    (setq vc-msg-git-show-commit-function #'magit-show-commit)
+    ;; open file of certain revision
+    (let ((entry (assoc "m" vc-msg-git-extra)))
+      (if entry
+          (setcdr entry '("[m]agit-find-file"
+                          sanityinc/vc-msg-magit-find-file))
+        (push '("m"
+                "[m]agit-find-file"
+                sanityinc/vc-msg-magit-find-file)
+              vc-msg-git-extra)))))
 
 
 ;;; git-svn support
