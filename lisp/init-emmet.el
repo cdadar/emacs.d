@@ -6,9 +6,9 @@
 
 (use-package emmet-mode
   :hook ((web-mode html-mode sgml-mode css-mode js-mode js2-mode) . emmet-mode)
-  :config
-  (setq emmet-move-cursor-between-quotes t)
-  (setq emmet-expand-jsx-className? nil)
-  (setq emmet-self-closing-tag-style " /"))
+  :custom
+  (emmet-move-cursor-between-quotes t)
+  (emmet-jsx-className-braces? nil)
+  (emmet-self-closing-tag-style " /"))
 
 (provide 'init-emmet)
