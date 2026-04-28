@@ -189,13 +189,20 @@ With prefix argument FOLLOW, ask Magit to follow renames for the current file."
   "Cached list of git svn subcommands")
 
 (defun git-svn--available-commands ()
+  "Return the cached list of available git svn subcommands."
   (or git-svn--available-commands
       (setq git-svn--available-commands
             (sanityinc/string-all-matches
              "^  \\([a-z\\-]+\\) +"
              (shell-command-to-string "git svn help") 1))))
 
-(autoload 'vc-git-root "vc-git")
+(defun cdadar/git-svn-compilation-buffer-name (_major-mode-name)
+  "Return the compilation buffer name used by `git-svn'."
+  "*git-svn*")
+
+(use-package vc-git
+  :ensure nil
+  :commands (vc-git-root))
 
 (defun git-svn (dir command)
   "Run a git svn subcommand in DIR."
@@ -204,7 +211,7 @@ With prefix argument FOLLOW, ask Magit to follow renames for the current file."
                       "git-svn command: "
                       (git-svn--available-commands) nil t nil nil (git-svn--available-commands))))
   (let* ((default-directory (vc-git-root dir))
-         (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
+         (compilation-buffer-name-function #'cdadar/git-svn-compilation-buffer-name))
     (compile (concat "git svn " command))))
 
 (provide 'init-git)
