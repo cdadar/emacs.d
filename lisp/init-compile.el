@@ -49,7 +49,8 @@ Interactively also sends a terminating newline."
 
 (defun sanityinc/alert-after-compilation-finish (buf result)
   "Use `alert' to report compilation RESULT if BUF is hidden."
-  (when (buffer-live-p buf)
+  (when (and (buffer-live-p buf)
+             (not (active-minibuffer-window)))
     (unless (catch 'is-visible
               (walk-windows (lambda (w)
                               (when (eq (window-buffer w) buf)
@@ -71,8 +72,7 @@ Interactively also sends a terminating newline."
   :after ansi-color
   :custom
   (compilation-scroll-output t)
-  :hook ((compilation-filter . sanityinc/colourise-compilation-buffer)
-         (compilation-finish-functions . sanityinc/alert-after-compilation-finish))
+  :hook (compilation-filter . sanityinc/colourise-compilation-buffer)
   :config
   (advice-add 'compilation-start :after #'sanityinc/save-compilation-buffer)
   (advice-add 'recompile :around #'sanityinc/find-prev-compilation))
@@ -87,7 +87,8 @@ Interactively also sends a terminating newline."
 
 (use-package alert
   ;; Customize `alert-default-style' to get messages after compilation
-  :defer t)
+  :config
+  (add-hook 'compilation-finish-functions #'sanityinc/alert-after-compilation-finish))
 
 (provide 'init-compile)
 ;;; init-compile.el ends here
