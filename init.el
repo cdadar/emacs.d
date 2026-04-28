@@ -108,7 +108,6 @@
 (require 'init-editing-utils)
 (require 'init-whitespace)
 
-(require 'init-vc)
 (require 'init-git)
 (require 'init-github)
 
