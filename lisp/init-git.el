@@ -87,6 +87,20 @@ With prefix argument FOLLOW, ask Magit to follow renames for the current file."
     (magit-find-file (plist-get info :id)
                      (concat git-dir (plist-get info :filename)))))
 
+(defun cdadar/setup-vc-msg-git-integration ()
+  "Configure vc-msg Git integration with Magit without duplicating menu entries."
+  ;; show code of commit
+  (setq vc-msg-git-show-commit-function #'magit-show-commit)
+  ;; open file of certain revision
+  (let ((entry (assoc "m" vc-msg-git-extra)))
+    (if entry
+        (setcdr entry '("[m]agit-find-file"
+                        sanityinc/vc-msg-magit-find-file))
+      (push '("m"
+              "[m]agit-find-file"
+              sanityinc/vc-msg-magit-find-file)
+            vc-msg-git-extra))))
+
 (use-package vc
   :ensure nil
   :defer t
@@ -150,17 +164,7 @@ With prefix argument FOLLOW, ask Magit to follow renames for the current file."
 (use-package vc-msg
   :config
   (with-eval-after-load 'vc-msg-git
-    ;; show code of commit
-    (setq vc-msg-git-show-commit-function #'magit-show-commit)
-    ;; open file of certain revision
-    (let ((entry (assoc "m" vc-msg-git-extra)))
-      (if entry
-          (setcdr entry '("[m]agit-find-file"
-                          sanityinc/vc-msg-magit-find-file))
-        (push '("m"
-                "[m]agit-find-file"
-                sanityinc/vc-msg-magit-find-file)
-              vc-msg-git-extra)))))
+    (cdadar/setup-vc-msg-git-integration)))
 
 
 ;;; git-svn support
