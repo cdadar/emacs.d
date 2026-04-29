@@ -8,10 +8,11 @@
 (use-package tagedit
   :mode ("\\.\\(jsp\\|tmpl\\)\\'" . html-mode)
   :hook (sgml-mode . tagedit-mode)
+  :bind (:map tagedit-mode-map
+              ("M-?" . nil)
+              ("M-s" . nil))
   :config
-  (tagedit-add-paredit-like-keybindings)
-  (define-key tagedit-mode-map (kbd "M-?") nil)
-  (define-key tagedit-mode-map (kbd "M-s") nil))
+  (tagedit-add-paredit-like-keybindings))
 
 (provide 'init-html)
 ;;; init-html.el ends here
