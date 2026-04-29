@@ -6,23 +6,21 @@
 
 ;;; Code:
 (use-package ibuffer-vc
-  :config
+  :preface
   (defun ibuffer-set-up-preferred-filters ()
+    "Group ibuffer entries by VC root and keep filename/process sorting."
     (ibuffer-vc-set-filter-groups-by-vc-root)
     (unless (eq ibuffer-sorting-mode 'filename/process)
       (ibuffer-do-sort-by-filename/process)))
   :hook
   (ibuffer . ibuffer-set-up-preferred-filters))
 
-
-
-
-
 (use-package ibuffer
   :ensure nil
   :bind (("C-x C-b" . ibuffer))
+  :init
+  (setq ibuffer-show-empty-filter-groups nil)
   :custom
-  (ibuffer-show-empty-filter-groups nil)
   (ibuffer-filter-group-name-face 'font-lock-doc-face)
   :config
   (sanityinc/fullframe-mode 'ibuffer-mode)
@@ -30,7 +28,6 @@
   (define-ibuffer-column size-h
     (:name "Size" :inline t)
     (file-size-human-readable (buffer-size))))
-
 
 ;; Modify the default ibuffer-formats (toggle with `)
 ;; (setq ibuffer-formats
@@ -58,7 +55,6 @@
   :load-path "site-lisp/tempbuf"
   :hook
   ((custom-mode w3-mode Man-mode view-mode) . turn-on-tempbuf-mode))
-
 
 (provide 'init-ibuffer)
 ;;; init-ibuffer.el ends here
