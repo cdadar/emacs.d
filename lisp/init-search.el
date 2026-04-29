@@ -7,17 +7,18 @@
 
 ;; 从 prelude 中弄出来搜索的功能
 (defun prelude-search (query-url prompt)
-  "Open the search url constructed with the QUERY-URL.
-PROMPT sets the `read-string prompt."
+  "Open QUERY-URL with a query read using PROMPT or the active region."
   (browse-url
    (concat query-url
            (url-hexify-string
-            (if mark-active
-                (buffer-substring (region-beginning) (region-end))
+            (if (use-region-p)
+                (buffer-substring-no-properties (region-beginning) (region-end))
               (read-string prompt))))))
 
 (defmacro prelude-install-search-engine (search-engine-name search-engine-url search-engine-prompt)
-  "Given some information regarding a search engine, install the interactive command to search through them"
+  "Install an interactive command for SEARCH-ENGINE-NAME.
+SEARCH-ENGINE-URL is the query URL prefix.  SEARCH-ENGINE-PROMPT is
+used when reading a query from the minibuffer."
   `(defun ,(intern (format "prelude-%s" search-engine-name)) ()
      ,(format "Search %s with a query or region if any." search-engine-name)
      (interactive)
@@ -31,15 +32,19 @@ PROMPT sets the `read-string prompt."
 
 
 
-(global-set-key (kbd "C-c s g") 'prelude-google)
-(global-set-key (kbd "C-c s G") 'prelude-github)
-(global-set-key (kbd "C-c s E") 'prelude-codeif)
-;; (global-set-key (kbd "C-c y") 'prelude-youtube)
-(global-set-key (kbd "C-c s U") 'prelude-duckduckgo)
+(use-package emacs
+  :ensure nil
+  :bind (("C-c s g" . prelude-google)
+         ("C-c s G" . prelude-github)
+         ("C-c s E" . prelude-codeif)
+         ;; ("C-c y" . prelude-youtube)
+         ("C-c s U" . prelude-duckduckgo)))
 
 (use-package p-search
-  :vc(:url "https://github.com/zkry/p-search" :rev :newest))
+  :vc (:url "https://github.com/zkry/p-search" :rev :newest)
+  :commands (p-search))
 
 
 
 (provide 'init-search)
+;;; init-search.el ends here
