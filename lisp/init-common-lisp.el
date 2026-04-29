@@ -2,31 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-;; See http://bc.tech.coop/blog/070927.html
-(add-auto-mode 'lisp-mode "\\.cl\\'")
-(add-hook 'lisp-mode-hook (lambda ()
-                            (unless (featurep 'slime)
-                              (require 'slime)
-                              (normal-mode))))
-
-(use-package slime
-  :config
-  (when (executable-find "lisp")
-    (add-to-list 'slime-lisp-implementations
-                 '(cmucl ("lisp") :coding-system iso-latin-1-unix)))
-  (when (executable-find "ccl")
-    (add-to-list 'slime-lisp-implementations
-                 '(ccl ("ccl") :coding-system utf-8-unix)))
-  (when (executable-find "sbcl")
-    (add-to-list 'slime-lisp-implementations
-                 '(sbcl ("sbcl") :coding-system utf-8-unix)))
-  (when (executable-find "ros")
-    (add-to-list 'slime-lisp-implementations
-                 '(roswell ("ros" "-Q" "run") :coding-system utf-8-unix))))
+(defun cdadar/ensure-slime-for-lisp-mode ()
+  "Load SLIME and re-run mode setup for Common Lisp buffers when available."
+  (unless (featurep 'slime)
+    (when (require 'slime nil t)
+      (normal-mode))))
 
 ;; From http://bc.tech.coop/blog/070515.html
 (defun lispdoc ()
-  "Searches lispdoc.com for SYMBOL, which is by default the symbol currently under the curser"
+  "Search lispdoc.com for the symbol at point, or prompt for one."
   (interactive)
   (let* ((word-at-point (word-at-point))
          (symbol-at-point (symbol-at-point))
@@ -49,9 +33,37 @@
                                 "full+text+search"
                               "basic+search")))))))
 
-(define-key lisp-mode-map (kbd "C-c l") 'lispdoc)
+(defun cdadar/add-slime-implementation-if-executable (name command coding-system)
+  "Add SLIME implementation NAME using COMMAND when its executable exists.
+CODING-SYSTEM is passed through to `slime-lisp-implementations'."
+  (when (executable-find (car command))
+    (add-to-list 'slime-lisp-implementations
+                 `(,name ,command :coding-system ,coding-system))))
+
+;; See http://bc.tech.coop/blog/070927.html
+(use-package lisp-mode
+  :ensure nil
+  :mode ("\\.cl\\'" . lisp-mode)
+  :hook (lisp-mode . cdadar/ensure-slime-for-lisp-mode)
+  :bind (:map lisp-mode-map
+              ("C-c l" . lispdoc)))
+
+(use-package slime
+  :ensure nil
+  :defer t
+  :if (locate-library "slime")
+  :config
+  (cdadar/add-slime-implementation-if-executable
+   'cmucl '("lisp") 'iso-latin-1-unix)
+  (cdadar/add-slime-implementation-if-executable
+   'ccl '("ccl") 'utf-8-unix)
+  (cdadar/add-slime-implementation-if-executable
+   'sbcl '("sbcl") 'utf-8-unix)
+  (cdadar/add-slime-implementation-if-executable
+   'roswell '("ros" "-Q" "run") 'utf-8-unix))
 
 (use-package common-lisp-snippets
+  :defer t
   :after lisp-mode)
 
 (provide 'init-common-lisp)
