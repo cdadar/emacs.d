@@ -106,8 +106,27 @@ When editing this configuration:
 
 1. **Adding a new package**: Use `use-package` form in the relevant `init-*.el` file
 2. **New language support**: Create `lisp/init-{language}.el` and require it in `init.el`
-3. **Keybindings**: Use `:bind` in use-package or `define-key` in config sections
-4. **Performance tuning**: Adjust gcmh settings in `init.el` or `early-init.el`
+3. **Keybindings**: Prefer `:bind` for package-owned keymaps; keep `define-key` in `:config` when preserving cross-package/load-order semantics is safer
+4. **Package settings**: Move only package-owned `defcustom` variables to `:custom`; keep `defvar` or runtime setup in `:config`
+5. **Performance tuning**: Adjust gcmh settings in `init.el` or `early-init.el`
+
+## Refactoring and Verification Conventions
+
+Use conservative, behavior-preserving `use-package` refactors:
+- Transform existing settings in place; do not remove user configuration without explicit approval.
+- Keep comments unless they are factually wrong or misleading.
+- Use the `cdadar/` prefix for newly introduced helper functions; do not rename existing `sanityinc/` helpers unless explicitly requested.
+- For small modules, keep helper functions at top level when they are shared, and move package-owned hooks, keymaps, and `defcustom` settings into the relevant `use-package` block.
+- Before moving a variable into `:custom`, verify it is a `defcustom` of that package in the installed source.
+- After moving `:mode`, `:hook`, or `:bind` declarations, run a targeted batch check for the resulting auto-mode entry, hook, or keymap binding instead of relying on startup alone.
+
+For each focused cleanup batch, run at least:
+```bash
+emacs --batch --eval '(progn (with-temp-buffer (insert-file-contents "lisp/init-FOO.el") (emacs-lisp-mode) (check-parens)) (princ "check-parens: OK\n"))'
+emacs --batch --eval '(progn (load-file "lisp/init-FOO.el") (princ "load-file: OK\n"))'
+emacs --batch -f batch-byte-compile lisp/init-FOO.el
+./test-startup.sh
+```
 
 ## Important Notes
 
