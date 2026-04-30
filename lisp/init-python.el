@@ -7,23 +7,22 @@
 ;; screencast about this: https://www.youtube.com/watch?v=TbIHRHy7_JM
 
 
-(setq auto-mode-alist
-      (append '(("SConstruct\\'" . python-mode)
-                ("SConscript\\'" . python-mode))
-              auto-mode-alist))
-
-(setq python-shell-interpreter "python3")
+(use-package python
+  :ensure nil
+  :mode (("SConstruct\\'" . python-mode)
+         ("SConscript\\'" . python-mode))
+  :custom
+  (python-shell-interpreter "python3"))
 
 (use-package pip-requirements)
 
-
 (use-package flymake-ruff
-  :init
+  :preface
   (defun sanityinc/flymake-ruff-maybe-enable ()
     (when (executable-find "ruff")
       (flymake-ruff-load)))
   :hook
-  (python-mode . sanityinc/flymake-ruff-maybe-enable))
+  (python-base-mode . sanityinc/flymake-ruff-maybe-enable))
 
 (use-package ruff-format
   :after reformatter
@@ -50,7 +49,7 @@
 (use-package py-autopep8
   :if (executable-find "autopep8")
   :after python
-  :hook (python-mode . py-autopep8-enable-on-save)
+  :hook (python-base-mode . py-autopep8-enable-on-save)
   :custom (py-autopep8-options '("--max-line-length=120")))
 
 (use-package project
