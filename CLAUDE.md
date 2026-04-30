@@ -26,7 +26,7 @@ Test the full configuration startup:
 
 Test with minimal configuration:
 ```bash
-emacs -Q --l ~/.emacs.d/init-mini.el
+emacs -Q -l ~/.emacs.d/init-mini.el
 ```
 
 The CI workflow in `.github/workflows/test.yml` automatically tests startup on multiple Emacs versions (29.1-30.2).

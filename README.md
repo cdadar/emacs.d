@@ -4,7 +4,7 @@ src="https://img.shields.io/badge/Support%20Me-%F0%9F%92%97-ff69b4.svg"></a>
 
 # cdadar's emacs config
 
-This is my own config which base on Purcell. THe origin repo is https://github.com/purcell/emacs.d
+This is my own config based on Purcell's configuration. The upstream repo is https://github.com/purcell/emacs.d
 
 # A reasonable Emacs config
 
@@ -41,7 +41,7 @@ Javascript, Haskell and a number of other languages.
 
 LSP support is provided using `eglot`.
 
-package manage is using `use-package`
+Package management uses `use-package`
 
 Various popular Emacs tools are included and configured here, such as
 `magit`, `docker.el`, `projectile`, `org-mode` etc., but the focus is moderate
@@ -65,13 +65,13 @@ To install, clone this repo to `~/.emacs.d`, i.e. ensure that the `init.el` cont
 `~/.emacs.d/init.el`:
 
 ```
-git clone https://github.com/purcell/emacs.d.git ~/.emacs.d
+git clone https://github.com/cdadar/emacs.d.git ~/.emacs.d
 ```
 
 **Note**: Start Emacs with the minimal configuration for fast startup and troubleshooting.
 
 ``` shell
-emacs -Q --l ~/.emacs.d/init-mini.el
+emacs -Q -l ~/.emacs.d/init-mini.el
 ```
 
 
