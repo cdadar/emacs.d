@@ -75,6 +75,15 @@ emacs -Q -l ~/.emacs.d/init-mini.el
 ```
 
 
+## Agent guidance
+
+This repository includes project-level guidance for AI coding agents:
+
+- `CLAUDE.md` for Claude Code
+- `AGENTS.md` for Codex, OpenCode, and similar agents
+
+Keep these two files aligned when repository conventions, supported Emacs versions, or verification workflows change.
+
 ## Updates
 
 Update the config with `git pull`. You'll probably also want/need to update the third-party packages regularly too,
