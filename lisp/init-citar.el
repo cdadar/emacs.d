@@ -29,6 +29,11 @@
 
 ;;; Code:
 
+(use-package org
+  :ensure nil
+  :bind (:map org-mode-map
+              ("C-c b" . org-cite-insert)))
+
 (use-package citar
   :custom
   (org-cite-insert-processor 'citar)
@@ -37,15 +42,11 @@
   (citar-bibliography org-cite-global-bibliography)
   ;; optional: org-cite-insert is also bound to C-c C-x C-@
   :hook
-  (LaTeX-mode . citar-capf-setup)
-  (org-mode . citar-capf-setup)
-  :bind
-  (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
+  ((LaTeX-mode org-mode) . citar-capf-setup))
 
 
 (use-package citar-embark
-  :after citar embark
-  :no-require
+  :after (citar embark)
   :config
   (citar-embark-mode)
   (setq citar-at-point-function 'embark-act))
