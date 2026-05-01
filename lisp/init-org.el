@@ -201,7 +201,7 @@
   :config
   ;; === Mode setup ===
   (defun cdadar/org-mode-setup ()
-    (setq truncate-lines t))
+    (prose-mode 1))
 
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
