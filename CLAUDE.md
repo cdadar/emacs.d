@@ -99,7 +99,9 @@ The `init-org.el` contains extensive org-mode setup:
 - GTD (Getting Things Done) workflow support
 - Org capture bound to `C-c c`
 - Org clock commands under `C-c o` prefix
-- Auto-downloads PlantUML and ditaa jars for diagram support
+- Org buffers soft-wrap long headings and body text with visual wrap markers, without auto-enabling `prose-mode`
+- LaTeX quote export rewrites `\\` + blank lines inside quote blocks to preserve left alignment in generated PDFs
+- Diagram support configures existing PlantUML / ditaa tools from local jars or `PLANTUML_JAR` / `DITAA_JAR`; it does not auto-download them at startup
 - Configured for various export formats
 
 ## Common Modifications
