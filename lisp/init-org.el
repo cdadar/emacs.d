@@ -223,15 +223,16 @@ typical word processor."
           (when (derived-mode-p 'org-mode)
             (kill-local-variable 'buffer-face-mode-face))
           (buffer-face-mode 1)
-          (set (make-local-variable 'blink-cursor-interval) 0.6)
-          (set (make-local-variable 'show-trailing-whitespace) nil)
-          (set (make-local-variable 'line-spacing) 0.2)
-          (set (make-local-variable 'electric-pair-mode) nil)
+          (setq-local blink-cursor-interval 0.6)
+          (setq-local show-trailing-whitespace nil)
+          (setq-local line-spacing 0.2)
+          (setq-local electric-pair-mode nil)
           (ignore-errors (flyspell-mode 1))
           (visual-line-mode 1))
       (kill-local-variable 'truncate-lines)
       (kill-local-variable 'word-wrap)
       (kill-local-variable 'cursor-type)
+      (kill-local-variable 'blink-cursor-interval)
       (kill-local-variable 'show-trailing-whitespace)
       (kill-local-variable 'line-spacing)
       (kill-local-variable 'electric-pair-mode)
@@ -354,9 +355,18 @@ NTH supports 1..5, or -1 for the last weekday in month."
     (message "Set monthly nth weekday rule: nth=%s weekday=%s" nth weekday))
 
   ;; === Clocking ===
+  (defun cdadar/show-org-clock-in-header-line ()
+    (setq-default header-line-format '((" " org-mode-line-string " "))))
+
+  (defun cdadar/hide-org-clock-from-header-line ()
+    (setq-default header-line-format nil))
+
   (defun cdadar/org-setup-clocking ()
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
     (org-clock-persistence-insinuate)
+    (add-hook 'org-clock-in-hook #'cdadar/show-org-clock-in-header-line)
+    (add-hook 'org-clock-out-hook #'cdadar/hide-org-clock-from-header-line)
+    (add-hook 'org-clock-cancel-hook #'cdadar/hide-org-clock-from-header-line)
     (with-eval-after-load 'org-clock
       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
