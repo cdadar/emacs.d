@@ -452,10 +452,34 @@ NTH supports 1..5, or -1 for the last weekday in month."
       (advice-add 'org-encrypt-entry :after #'cdadar/org-encrypt-unmark)))
 
   ;; === Export ===
+  (defun cdadar/org-latex-fix-quote-paragraph-spacing (text backend _info)
+    "Avoid paragraph indentation after blank lines in LaTeX quote blocks.
+When an Org quote block contains lines ending in \\ followed by a blank line,
+Org exports that blank line as a new paragraph inside the quote environment.
+That paragraph then renders with an extra indent.  Rewrite those cases to a
+LaTeX line break with vertical skip so the next line stays aligned."
+    (if (org-export-derived-backend-p backend 'latex)
+        (with-temp-buffer
+          (insert text)
+          (goto-char (point-min))
+          (while (re-search-forward "\\\\begin{quote}" nil t)
+            (let ((quote-start (match-end 0)))
+              (when (re-search-forward "\\\\end{quote}" nil t)
+                (save-restriction
+                  (narrow-to-region quote-start (match-beginning 0))
+                  (goto-char (point-min))
+                  (while (search-forward "\\\\\n\n" nil t)
+                    (replace-match "\\\\[0.6\\baselineskip]\n" t t))
+                  (widen)))))
+          (buffer-string))
+      text))
+
   (defun cdadar/org-setup-export ()
     (with-eval-after-load 'ox
       (require 'ox-md nil t)
-      (require 'ox-latex nil t))
+      (require 'ox-latex nil t)
+      (add-to-list 'org-export-filter-final-output-functions
+                   #'cdadar/org-latex-fix-quote-paragraph-spacing))
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes
                    '("beamer"
