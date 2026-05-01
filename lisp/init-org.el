@@ -361,15 +361,28 @@ NTH supports 1..5, or -1 for the last weekday in month."
   (defun cdadar/hide-org-clock-from-header-line ()
     (setq-default header-line-format nil))
 
+  (defun cdadar/org-clock-statusbar-available-p ()
+    (and *is-a-mac*
+         (executable-find "osascript")
+         (file-directory-p "/Applications/org-clock-statusbar.app")))
+
+  (defun cdadar/org-clock-statusbar-escape-text (text)
+    (replace-regexp-in-string
+     "\"" "\\\\\""
+     (or text "")
+     t t))
+
   (defun cdadar/org-clock-statusbar-clock-in ()
-    (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                  (concat "tell application \"org-clock-statusbar\" to clock in \""
-                          org-clock-current-task
-                          "\"")))
+    (when (cdadar/org-clock-statusbar-available-p)
+      (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                    (concat "tell application \"org-clock-statusbar\" to clock in \""
+                            (cdadar/org-clock-statusbar-escape-text org-clock-current-task)
+                            "\""))))
 
   (defun cdadar/org-clock-statusbar-clock-out ()
-    (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                  "tell application \"org-clock-statusbar\" to clock out"))
+    (when (cdadar/org-clock-statusbar-available-p)
+      (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                    "tell application \"org-clock-statusbar\" to clock out")))
 
   (defun cdadar/org-setup-clocking ()
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
@@ -380,7 +393,7 @@ NTH supports 1..5, or -1 for the last weekday in month."
     (with-eval-after-load 'org-clock
       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
-    (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
+    (when (cdadar/org-clock-statusbar-available-p)
       (add-hook 'org-clock-in-hook #'cdadar/org-clock-statusbar-clock-in)
       (add-hook 'org-clock-out-hook #'cdadar/org-clock-statusbar-clock-out)))
 
