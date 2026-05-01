@@ -361,6 +361,16 @@ NTH supports 1..5, or -1 for the last weekday in month."
   (defun cdadar/hide-org-clock-from-header-line ()
     (setq-default header-line-format nil))
 
+  (defun cdadar/org-clock-statusbar-clock-in ()
+    (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                  (concat "tell application \"org-clock-statusbar\" to clock in \""
+                          org-clock-current-task
+                          "\"")))
+
+  (defun cdadar/org-clock-statusbar-clock-out ()
+    (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                  "tell application \"org-clock-statusbar\" to clock out"))
+
   (defun cdadar/org-setup-clocking ()
     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
     (org-clock-persistence-insinuate)
@@ -371,12 +381,8 @@ NTH supports 1..5, or -1 for the last weekday in month."
       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
     (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
-      (add-hook 'org-clock-in-hook
-                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                                         (concat "tell application \"org-clock-statusbar\" to clock in \"" org-clock-current-task "\""))))
-      (add-hook 'org-clock-out-hook
-                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                                         "tell application \"org-clock-statusbar\" to clock out")))))
+      (add-hook 'org-clock-in-hook #'cdadar/org-clock-statusbar-clock-in)
+      (add-hook 'org-clock-out-hook #'cdadar/org-clock-statusbar-clock-out)))
 
   ;; === Babel ===
   (defun cdadar/org-find-first-existing-file (&rest paths)
@@ -823,10 +829,13 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (org-brain-include-file-entries nil)
   (org-brain-file-entries-use-title nil))
 
-(with-eval-after-load 'org-id
-  (setq org-id-track-globally t)
-  (setq org-id-locations-file (locate-user-emacs-file ".org-id-locations"))
-  (setq org-id-link-to-org-use-id t))
+(use-package org-id
+  :ensure nil
+  :after org
+  :config
+  (setq org-id-track-globally t
+        org-id-locations-file (locate-user-emacs-file ".org-id-locations")
+        org-id-link-to-org-use-id t))
 
 (use-package org-download
   :after org
