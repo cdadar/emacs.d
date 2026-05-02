@@ -61,7 +61,7 @@
 #+LATEX_HEADER: \usepackage{titlesec}
 #+LATEX_HEADER: \titleformat*{\section}{\Large\bfseries}
 #+LATEX_HEADER: \titleformat*{\subsection}{\large\bfseries}
-#+LATEX_HEADER: \titleformat*{\subsubsection}{\normalsize\bfseries}
+#+LATEX_HEADER: \titleformat{\subsubsection}[block]{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
 #+LATEX_HEADER: \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 #+LATEX_HEADER: \titleformat{\subparagraph}[block]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
 

@@ -204,7 +204,8 @@
     (setq truncate-lines nil
           word-wrap t)
     (setq-local visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
-    (visual-line-mode 1))
+    (visual-line-mode 1)
+    (local-set-key [remap move-end-of-line] #'move-end-of-line))
 
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
