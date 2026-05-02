@@ -3,7 +3,7 @@
 # key: org_export
 # --
 
-#+OPTIONS: toc:nil  H:3 tex:t num:t
+#+OPTIONS: toc:nil  H:5 tex:t num:t
 #+OPTIONS: author:nil date:nil title:t
 
 #+LATEX_COMPILER: xelatex

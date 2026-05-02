@@ -31,6 +31,7 @@
 ** Org 显示与导出修复
 - 在 ~org-mode~ 中启用窗口内软换行，长 heading 与长行内容会在窗口内自动换行显示。
 - 为视觉换行增加了 fringe 标记：~visual-line-fringe-indicators~ 设为 ~(left-curly-arrow right-curly-arrow)~，方便区分软换行与真实换行。
+- 将 ~org-export-headline-levels~ 提升到 ~5~，让五级 Org heading 在 LaTeX 导出时继续保持为真实标题（直到 ~subparagraph~），而不是降级成 ~enumerate~ / ~\item~。
 - 为 quote 导出增加了 ~cdadar/org-latex-fix-quote-paragraph-spacing~，仅在 LaTeX 导出时处理 ~quote~ 环境里的 ~\\ + 空行~，改写为显式竖向间距，避免 PDF 中空行后的内容向右偏移。
 
 ** Clock 显示体验
@@ -99,16 +100,21 @@
   - 小段初始化逻辑抽成 ~cdadar/...-setup~
   - 避免在 ~:config~ 中直接堆叠无结构 ~setq~
 
-** 已验证
-- ~check-parens~ 通过。
-- ~batch-byte-compile lisp/init-org.el~ 通过。
-- ~./test-startup.sh~ 通过。
-- 目标懒加载/加载路径验证通过：
+** 历史验证（2026-04-11）
+- 当时的 ~check-parens~ 通过。
+- 当时的 ~batch-byte-compile lisp/init-org.el~ 通过。
+- 当时的 ~./test-startup.sh~ 通过。
+- 当时的目标懒加载/加载路径验证通过：
   - ~require 'org~
   - ~require 'ox~
   - ~require 'ob-core~
   - ~require 'ob-plantuml~
   - ~require 'ob-ditaa~
+
+** 当前状态（2026-05-02）
+- 当前 ~init-org.el~ 的 batch ~check-parens~ 已通过。
+- 当前 ~init-org.el~ 的 ~load-file~、~batch-byte-compile~ 与 ~./test-startup.sh~ 也已重新验证通过。
+- 本轮已单独验证：将 ~org-export-headline-levels~ 设为 ~5~ 后，五级 Org heading 的 LaTeX 导出不再降级为 ~enumerate~ / ~\\item~。
 
 * 可选后续
 

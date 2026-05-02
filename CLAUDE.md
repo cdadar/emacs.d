@@ -100,6 +100,7 @@ The `init-org.el` contains extensive org-mode setup:
 - Org capture bound to `C-c c`
 - Org clock commands under `C-c o` prefix
 - Org buffers soft-wrap long headings and body text with visual wrap markers, without auto-enabling `prose-mode`
+- LaTeX export keeps five Org headline levels as real headings (`section` through `subparagraph`) instead of degrading deep headings into enumerate/list items
 - LaTeX quote export rewrites `\\` + blank lines inside quote blocks to preserve left alignment in generated PDFs
 - Diagram support configures existing PlantUML / ditaa tools from local jars or `PLANTUML_JAR` / `DITAA_JAR`; it does not auto-download them at startup
 - Configured for various export formats

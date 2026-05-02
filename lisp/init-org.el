@@ -27,6 +27,7 @@
   (org-hide-emphasis-markers t)
   (org-catch-invisible-edits 'show)
   (org-export-coding-system 'utf-8)
+  (org-export-headline-levels 5)
   (org-fast-tag-selection-single-key 'expert)
   (org-html-validation-link nil)
   (org-export-kill-product-buffer-when-displayed t)
@@ -44,9 +45,7 @@
   (org-outline-path-complete-in-steps nil)
   (org-refile-allow-creating-parent-nodes 'confirm)
   (org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-  (org-latex-pdf-process '("xelatex -interaction nonstopmode -output-directory %o %f"
-                           "xelatex -interaction nonstopmode -output-directory %o %f"
-                           "xelatex -interaction nonstopmode -output-directory %o %f"))
+  (org-export-in-background nil)
   ;; clocking
   (org-clock-persist t)
   (org-clock-in-resume t)
@@ -481,44 +480,6 @@ NTH supports 1..5, or -1 for the last weekday in month."
           (kill-local-variable 'cdadar/org-crypt-decrypting)))
       (advice-add 'org-encrypt-entry :after #'cdadar/org-encrypt-unmark)))
 
-  ;; === Export ===
-  (defun cdadar/org-latex-fix-quote-paragraph-spacing (text backend _info)
-    "Avoid paragraph indentation after blank lines in LaTeX quote blocks.
-When an Org quote block contains lines ending in \\ followed by a blank line,
-Org exports that blank line as a new paragraph inside the quote environment.
-That paragraph then renders with an extra indent.  Rewrite those cases to a
-LaTeX line break with vertical skip so the next line stays aligned."
-    (if (org-export-derived-backend-p backend 'latex)
-        (with-temp-buffer
-          (insert text)
-          (goto-char (point-min))
-          (while (re-search-forward "\\\\begin{quote}" nil t)
-            (let ((quote-start (match-end 0)))
-              (when (re-search-forward "\\\\end{quote}" nil t)
-                (save-restriction
-                  (narrow-to-region quote-start (match-beginning 0))
-                  (goto-char (point-min))
-                  (while (search-forward "\\\\\n\n" nil t)
-                    (replace-match "\\\\[0.6\\baselineskip]\n" t t))
-                  (widen)))))
-          (buffer-string))
-      text))
-
-  (defun cdadar/org-setup-export ()
-    (with-eval-after-load 'ox
-      (require 'ox-md nil t)
-      (require 'ox-latex nil t)
-      (add-to-list 'org-export-filter-final-output-functions
-                   #'cdadar/org-latex-fix-quote-paragraph-spacing))
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes
-                   '("beamer"
-                     "\\documentclass[presentation]{beamer}\n"
-                     ("\\section{%s}" . "\\section*{%s}")
-                     ("\\subsection{%s}" . "\\subsection*{%s}")
-                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
-
-
   ;; === Global prefix keymap ===
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
@@ -661,11 +622,109 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (cdadar/org-setup-clocking)
   (cdadar/org-setup-babel)
   (cdadar/org-setup-crypt)
-  (cdadar/org-setup-export)
   (cdadar/org-setup-refile)
   (cdadar/org-setup-global-prefix)
   (cdadar/org-setup-capture)
   (cdadar/org-setup-ui))
+
+;;; --- Export post-processing helpers ---
+
+(defconst cdadar/org-latex-global-symbol-fallback-snippet
+  (mapconcat
+   #'identity
+   '("\\usepackage{newunicodechar}"
+     "\\IfFontExistsTF{Arial Unicode MS}"
+     "  {\\newfontfamily\\symbolfallback{Arial Unicode MS}}"
+     "  {\\IfFontExistsTF{Apple Symbols}"
+     "     {\\newfontfamily\\symbolfallback{Apple Symbols}}"
+     "     {\\newfontfamily\\symbolfallback{DejaVu Sans}}}"
+     "\\newunicodechar{※}{{\\symbolfallback ※}}"
+     "\\newunicodechar{①}{{\\symbolfallback ①}}"
+     "\\newunicodechar{②}{{\\symbolfallback ②}}"
+     "\\newunicodechar{③}{{\\symbolfallback ③}}"
+     "\\newunicodechar{④}{{\\symbolfallback ④}}"
+     "\\newunicodechar{▸}{{\\symbolfallback ▸}}")
+   "\n")
+  "LaTeX header snippet providing fallback glyphs missing in Times New Roman.")
+
+(defun cdadar/org-latex-global-needs-symbol-fallback-p (text)
+  "Return non-nil when exported LaTeX TEXT needs fallback symbol font setup."
+  (and (string-match-p "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{Times New Roman}" text)
+       (string-match-p "[※①②③④▸]" text)
+       (not (string-match-p "\\\\newfontfamily\\\\symbolfallback" text))))
+
+(defun cdadar/org-latex-global-inject-symbol-fallback (text backend info)
+  "Inject fallback glyph support into exported LaTeX TEXT.
+BACKEND and INFO follow the Org export filter protocol."
+  (ignore info)
+  (if (and (org-export-derived-backend-p backend 'latex)
+           (cdadar/org-latex-global-needs-symbol-fallback-p text))
+      (replace-regexp-in-string
+       "\\\\begin{document}"
+       (concat cdadar/org-latex-global-symbol-fallback-snippet "\n\\begin{document}")
+       text t t)
+    text))
+
+(defun cdadar/org-latex-fix-quote-paragraph-spacing (text backend info)
+  "Replace quote-internal blank paragraphs after LaTeX line breaks.
+This keeps grouped quote lines visually separated in PDF without triggering
+paragraph indentation inside quote environments.  INFO is ignored."
+  (ignore info)
+  (if (org-export-derived-backend-p backend 'latex)
+      (with-temp-buffer
+        (insert text)
+        (goto-char (point-min))
+        (while (re-search-forward "\\\\begin{quote}" nil t)
+          (let ((quote-start (match-beginning 0)))
+            (when (re-search-forward "\\\\end{quote}" nil t)
+              (let ((quote-end-marker (copy-marker (match-end 0))))
+                (save-restriction
+                  (narrow-to-region quote-start quote-end-marker)
+                  (goto-char (point-min))
+                  (while (search-forward "\\\\\n\n" nil t)
+                    (replace-match "\\\\[0.6\\baselineskip]\n" t t))
+                  (widen))
+                (goto-char quote-end-marker)
+                (set-marker quote-end-marker nil)))))
+        (buffer-string))
+    text))
+
+(defconst cdadar/org-latex-beamer-class
+  '("beamer"
+    "\\documentclass[presentation]{beamer}\n"
+    ("\\section{%s}" . "\\section*{%s}")
+    ("\\subsection{%s}" . "\\subsection*{%s}")
+    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+  "Beamer class definition appended to `org-latex-classes'.")
+
+(defun cdadar/org-latex-export-to-pdf-async ()
+  "Asynchronously export the current Org buffer to PDF."
+  (interactive)
+  (org-latex-export-to-pdf t))
+
+(use-package ox
+  :ensure nil
+  :after org
+  :config
+  (require 'ox-md nil t)
+  (require 'ox-latex nil t)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-global-inject-symbol-fallback)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-fix-quote-paragraph-spacing))
+
+(use-package ox-latex
+  :ensure nil
+  :after ox
+  :custom
+  (org-latex-pdf-process
+   (if (executable-find "latexmk")
+       '("latexmk -xelatex -interaction=nonstopmode -outdir=%o %f")
+     '("xelatex -interaction nonstopmode -output-directory %o %f"
+       "xelatex -interaction nonstopmode -output-directory %o %f"
+       "xelatex -interaction nonstopmode -output-directory %o %f")))
+  :config
+  (add-to-list 'org-latex-classes cdadar/org-latex-beamer-class))
 
 ;;; --- Standalone utilities and interactive commands ---
 
@@ -779,16 +838,19 @@ LaTeX line break with vertical skip so the next line stays aligned."
 ;;; --- Related packages ---
 
 (use-package writeroom-mode
+  :if (locate-library "writeroom-mode")
   :diminish writeroom-mode)
 
 
 (use-package grab-mac-link
-  :if (bound-and-true-p *is-a-mac*)
+  :if (and (bound-and-true-p *is-a-mac*)
+           (locate-library "grab-mac-link"))
   :commands (grab-mac-link grab-mac-link-dwim)
   :bind (:map org-mode-map
               ("C-c g" . grab-mac-link)))
 
 (use-package org-pomodoro
+  :if (locate-library "org-pomodoro")
   :after org
   :bind
   ([(meta p)] . org-pomodoro)
@@ -811,31 +873,40 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (defun cdadar/org-pomodoro-killed-notify ()
     (cdadar/org-pomodoro-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
 
+;; Editing and UI extensions
 (use-package org-cliplink
+  :if (locate-library "org-cliplink")
   :after org
   :commands (org-cliplink org-cliplink-dwim)
   :bind (:map org-mode-map
               ("C-c C-l" . org-cliplink)))
 
-;; create ppt
-(use-package ox-ioslide
-  :commands (org-ioslide-export-as-html org-ioslide-export-to-html))
-
 (use-package org-appear
+  :if (locate-library "org-appear")
   :after org
   :hook (org-mode . org-appear-mode))
 
+;; Export extensions
+;; create ppt
+(use-package ox-ioslide
+  :if (locate-library "ox-ioslide")
+  :after ox
+  :commands (org-ioslide-export-as-html org-ioslide-export-to-html))
+
 (use-package org-mind-map
+  :if (locate-library "org-mind-map")
+  :after ox
   :commands (org-mind-map-write
              org-mind-map-write-with-prompt
              org-mind-map-write-current-branch
              org-mind-map-write-current-tree)
   :init
-  (setq org-mind-map-engine "dot") ; Default. Directed Graph
-  :config
-  (require 'ox-org))
+  (require 'ox-org nil t)
+  (setq org-mind-map-engine "dot")) ; Default. Directed Graph
 
+;; Knowledge and media extensions
 (use-package org-brain
+  :if (locate-library "org-brain")
   :after org
   :custom
   (org-brain-visualize-default-choices 'all)
@@ -846,12 +917,13 @@ LaTeX line break with vertical skip so the next line stays aligned."
 (use-package org-id
   :ensure nil
   :after org
-  :config
-  (setq org-id-track-globally t
-        org-id-locations-file (locate-user-emacs-file ".org-id-locations")
-        org-id-link-to-org-use-id t))
+  :custom
+  (org-id-track-globally t)
+  (org-id-locations-file (locate-user-emacs-file ".org-id-locations"))
+  (org-id-link-to-org-use-id t))
 
 (use-package org-download
+  :if (locate-library "org-download")
   :after org
   :hook ((dired-mode . org-download-enable)
          (org-mode . org-download-enable))
@@ -862,6 +934,7 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 
 (use-package org-tree-slide
+  :if (locate-library "org-tree-slide")
   :after org
   :bind
   (([(f8)] . org-tree-slide-mode)
@@ -870,7 +943,9 @@ LaTeX line break with vertical skip so the next line stays aligned."
    ([(f9)] . org-tree-slide-move-previous-tree)
    ([(f10)] . org-tree-slide-move-next-tree)))
 
+;; Roam and reference extensions
 (use-package org-roam
+  :if (locate-library "org-roam")
   :defer t
   :bind
   (("C-c n l" . org-roam-buffer-toggle)
@@ -961,6 +1036,7 @@ LaTeX line break with vertical skip so the next line stays aligned."
            :unnarrowed t))))
 
 (use-package org-roam-ui
+  :if (locate-library "org-roam-ui")
   :after org-roam
   :commands (org-roam-ui-mode org-roam-ui-open)
   :custom
@@ -969,7 +1045,9 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (org-roam-ui-update-on-save t)
   (org-roam-ui-open-on-start t))
 
+;; Bibliography and journal extensions
 (use-package ebib
+  :if (locate-library "ebib")
   :defer t
   :commands (ebib)
   :custom
@@ -990,6 +1068,7 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (ebib-index-default-sort '("timestamp" . descend)))
 
 (use-package org-ref
+  :if (locate-library "org-ref")
   :after org
   :defer t
   :custom
@@ -997,10 +1076,13 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (org-ref-default-ref-type "eqref")
   (org-ref-default-citation-link "citet"))
 
-(with-eval-after-load 'bibtex
-  (setq bibtex-dialect 'biblatex))
+(use-package bibtex
+  :ensure nil
+  :custom
+  (bibtex-dialect 'biblatex))
 
 (use-package org-journal
+  :if (locate-library "org-journal")
   :defer t
   :custom
   (org-journal-prefix-key "C-c j")
@@ -1008,9 +1090,11 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-roam-bibtex
+  :if (locate-library "org-roam-bibtex")
   :after org-roam)
 
 (use-package org-zettel-ref-mode
+  :if (locate-library "org-zettel-ref-mode")
   :defer t
   :after org-roam
   :vc (:url "https://github.com/yibie/org-zettel-ref-mode" :rev :newest)
@@ -1020,15 +1104,19 @@ LaTeX line break with vertical skip so the next line stays aligned."
   (org-zettel-ref-python-environment 'venv)
   (org-zettel-ref-python-env-name "org-zettel-ref"))
 
+;; Review, math, and import extensions
 (use-package org-review
+  :if (locate-library "org-review")
   :bind (:map org-agenda-mode-map
               ("C-c C-r" . org-review-insert-last-review)))
 
 (use-package org-fragtog
+  :if (locate-library "org-fragtog")
   :hook ((org-mode . org-fragtog-mode)))
 
 
 (use-package org-pandoc-import
+  :if (locate-library "org-pandoc-import")
   :commands (org-pandoc-import-as-org
              org-pandoc-import-to-org
              org-pandoc-import-transient-mode)
