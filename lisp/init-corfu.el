@@ -23,7 +23,8 @@
               ("M-m" . corfu-move-to-minibuffer)
               ("C-j" . corfu-next)
               ("C-k" . corfu-previous))
-  :hook (prog-mode . cdadar/setup-corfu)
+  :hook ((prog-mode . cdadar/setup-corfu)
+         (text-mode . cdadar/setup-corfu-text-mode))
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -34,7 +35,7 @@
   (corfu-max-width 100)
   :init
   (setq corfu-auto-delay 0.2)
-  (setq corfu-auto-prefix 1)
+  (setq corfu-auto-prefix 2)
   :preface
   (defun cdadar/orderless-dispatch-flex-first (_pattern index _total)
     "orderless-flex for corfu."
@@ -45,6 +46,10 @@
     (setq-local orderless-matching-styles '(orderless-flex)
                 orderless-style-dispatchers nil)
     (add-hook 'orderless-style-dispatchers #'cdadar/orderless-dispatch-flex-first nil 'local))
+
+  (defun cdadar/setup-corfu-text-mode ()
+    "Use a slightly more conservative Corfu auto prefix in text buffers."
+    (setq-local corfu-auto-prefix 3))
 
   (defun corfu-move-to-minibuffer ()
     (interactive)
