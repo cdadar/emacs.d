@@ -124,3 +124,6 @@
 
 
 #+LATEX_HEADER: \newcommand{\versegap}{\vspace{0.8\baselineskip}}
+
+# 特殊的符号
+#+LATEX_HEADER: \usepackage{pifont}
