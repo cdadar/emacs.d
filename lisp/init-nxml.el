@@ -2,16 +2,17 @@
 ;;; Commentary:
 ;;; Code:
 
-(add-auto-mode
- 'nxml-mode
- (concat "\\."
-         (regexp-opt
-          '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
-            "gpx" "tcx" "plist"))
-         "\\'"))
-(setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
-(fset 'xml-mode 'nxml-mode)
-(setq nxml-slash-auto-complete-flag t)
+(use-package nxml-mode
+  :ensure nil
+  :mode (("\\.\\(xml\\|xsd\\|sch\\|rng\\|xslt\\|svg\\|rss\\|gpx\\|tcx\\|plist\\)\\'" . nxml-mode))
+  :magic ("<\\?xml " . nxml-mode)
+  :init
+  (fset 'xml-mode 'nxml-mode)
+  (setq nxml-slash-auto-complete-flag t)
+  ;; Keep plain XML files in `nxml-mode' even after `init-web-mode' registers
+  ;; web-mode's broader "\\.xml?\\'" pattern later during startup.
+  (with-eval-after-load 'init-web-mode
+    (add-auto-mode 'nxml-mode "\\.xml\\'")))
 
 
 ;; See: http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
