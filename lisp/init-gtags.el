@@ -1,8 +1,10 @@
-;;; init-ggtags.el --- ggtags  -*- lexical-binding: t -*-
+;;; init-gtags.el --- ggtags -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
 (use-package ggtags
+  :ensure nil
+  :if (locate-library "ggtags")
   :hook
   ((text-mode prog-mode) . ggtags-mode)
   (after-save . gtags-update-hook)
