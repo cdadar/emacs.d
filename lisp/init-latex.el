@@ -7,22 +7,27 @@
 (use-package cdlatex)
 (use-package auctex
   :ensure nil
+  :preface
+  (defun cdadar/latex-add-common-environments ()
+    (LaTeX-add-environments
+     '("theorem" LaTeX-env-label)
+     '("proposition" LaTeX-env-label)
+     '("lemma" LaTeX-env-label)
+     '("definition" LaTeX-env-label)
+     '("example" LaTeX-env-label)
+     '("remark" LaTeX-env-label)))
+
+  (defun cdadar/latex-add-xelatex-command ()
+    (add-to-list 'TeX-command-list
+                 '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t)))
   :hook
   ;; Going to see if we actually need these
   (LaTeX-mode . auto-fill-mode)
   (LaTeX-mode . abbrev-mode)
   (LaTeX-mode . LaTeX-math-mode)
   (LaTeX-mode . turn-on-reftex)
-  (LaTeX-mode . (lambda ()
-                       (LaTeX-add-environments
-                        '("theorem" LaTeX-env-label)
-                        '("proposition" LaTeX-env-label)
-                        '("lemma" LaTeX-env-label)
-                        '("definition" LaTeX-env-label)
-                        '("example" LaTeX-env-label)
-                        '("remark" LaTeX-env-label))))
-  (LaTeX-mode . (lambda ()
-                       (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))))
+  (LaTeX-mode . cdadar/latex-add-common-environments)
+  (LaTeX-mode . cdadar/latex-add-xelatex-command)
   :custom
   (TeX-auto-save t)
   (TeX-parse-self t)
