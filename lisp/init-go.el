@@ -34,7 +34,8 @@
   :hook ((go-mode . go-guru-hl-identifier-mode)
          (go-ts-mode . go-guru-hl-identifier-mode)))
 
-(use-package go-rename)
+(use-package go-rename
+  :commands (go-rename))
 
 (use-package go-ts-mode
   :ensure nil
