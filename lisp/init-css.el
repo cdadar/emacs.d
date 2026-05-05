@@ -5,7 +5,7 @@
 ;;; Colourise CSS colour literals
 (use-package rainbow-mode
   :hook
-  ((css-mode html-mode sass-mode) . rainbow-mode))
+  ((css-mode html-mode sass-mode scss-mode less-css-mode) . rainbow-mode))
 
 
 ;;; Embedding in html
@@ -40,19 +40,23 @@
 ;;; SASS and SCSS
 (use-package sass-mode)
 (use-package scss-mode
-  :config
-  (setq-default scss-compile-at-save nil)
-  )
+  :init
+  ;; `scss-mode' still uses legacy Flymake variables while current Flymake
+  ;; no longer defines them before old-style backends are loaded.
+  (defvar flymake-allowed-file-name-masks nil)
+  (defvar flymake-err-line-patterns nil)
+  :custom
+  (scss-compile-at-save nil))
 
 
 ;;; LESS
-(use-package less-css-mode)
+(use-package less-css-mode
+  :ensure nil)
 
 
 ;;; Use eldoc for syntax hints
 (use-package css-eldoc
-  :config
-  (autoload 'turn-on-css-eldoc "css-eldoc")
+  :commands turn-on-css-eldoc
   :hook
   (css-mode . turn-on-css-eldoc))
 
