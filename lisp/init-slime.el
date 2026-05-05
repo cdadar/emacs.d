@@ -3,6 +3,8 @@
 ;;; Code:
 
 (use-package slime
+  :ensure nil
+  :if (locate-library "slime")
   :config
   ;;; Lisp buffers
   (require 'slime-autoloads)
