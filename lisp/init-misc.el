@@ -7,12 +7,18 @@
 
 (use-package emacs
   :ensure nil
-  :hook ((prog-mode . goto-address-prog-mode)
-         (conf-mode . goto-address-prog-mode)
-         (after-save . executable-make-buffer-file-executable-if-script-p)
+  :hook ((after-save . executable-make-buffer-file-executable-if-script-p)
          (after-save . sanityinc/set-mode-for-new-scripts))
   :custom
-  (use-short-answers t)
+  (use-short-answers t))
+
+(use-package goto-addr
+  :ensure nil
+  :init
+  (require 'goto-addr)
+  :hook ((prog-mode . goto-address-prog-mode)
+         (conf-mode . goto-address-prog-mode))
+  :custom
   (goto-address-mail-face 'link))
 
 (use-package tcl
