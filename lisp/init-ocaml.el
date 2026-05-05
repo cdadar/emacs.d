@@ -3,7 +3,7 @@
 ;;; Code:
 
 (use-package tuareg
-  :config
+  :preface
   (defvar-local tuareg-previous-tuareg-buffer nil
     "Buffer from which we jumped to the REPL.")
 
@@ -21,11 +21,10 @@
     (when tuareg-previous-tuareg-buffer
       (pop-to-buffer tuareg-previous-tuareg-buffer)))
   :bind
-  (
-   :map tuareg-mode-map
-   ("C-c C-z" . sanityinc/tuareg-repl-switch)
-   :map tuareg-interactive-mode-map
-   ("C-c C-z" . sanityinc/tuareg-repl-switch-back)))
+  (:map tuareg-mode-map
+        ("C-c C-z" . sanityinc/tuareg-repl-switch)
+        :map tuareg-interactive-mode-map
+        ("C-c C-z" . sanityinc/tuareg-repl-switch-back)))
 
 (use-package ocaml-ts-mode
   :if (treesit-available-p)
