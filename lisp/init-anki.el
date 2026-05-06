@@ -2,45 +2,65 @@
 ;;; Commentary:
 ;;; Code:
 
+;; anki-connect: low-level AnkiConnect API client, depended on by
+;; anki-editor, org-anki, and anki-helper.
 (use-package anki-connect)
+
+;; anki-editor: synchronize Org headings with Anki notes.
 (use-package anki-editor
-  :preface
-  (defvar my-anki-editor-cloze-number 1
+  :custom
+  (anki-editor-org-tags-as-anki-tags t)
+  :config
+  (setq anki-editor-create-decks t)
+
+  (defvar cdadar/anki-editor-cloze-number 1
     "Current Anki cloze number for helper commands.")
 
-  (defun anki-editor-cloze-region-auto-incr (&optional arg)
-    "Cloze region without hint and increase card number."
-    (interactive)
-    (anki-editor-cloze-region my-anki-editor-cloze-number "")
-    (setq my-anki-editor-cloze-number (1+ my-anki-editor-cloze-number))
-    (forward-sexp))
-
-  (defun anki-editor-cloze-region-dont-incr (&optional arg)
-    "Cloze region without hint using the previous card number."
-    (interactive)
-    (anki-editor-cloze-region (1- my-anki-editor-cloze-number) "")
-    (forward-sexp))
-
-  (defun anki-editor-reset-cloze-number (&optional arg)
+  (defun cdadar/anki-editor-reset-cloze-number (&optional arg)
     "Reset cloze number to ARG or 1."
     (interactive)
-    (setq my-anki-editor-cloze-number (or arg 1)))
+    (setq cdadar/anki-editor-cloze-number (or arg 1)))
 
-  (defun anki-editor-push-tree ()
-    "Push all notes under a tree."
+  (defun cdadar/anki-editor-cloze-region-auto-incr ()
+    "Cloze region without hint and increase card number."
+    (interactive)
+    (anki-editor-cloze-region cdadar/anki-editor-cloze-number "")
+    (setq cdadar/anki-editor-cloze-number (1+ cdadar/anki-editor-cloze-number))
+    (forward-sexp))
+
+  (defun cdadar/anki-editor-cloze-region-dont-incr ()
+    "Cloze region without hint using the previous card number."
+    (interactive)
+    (anki-editor-cloze-region (1- cdadar/anki-editor-cloze-number) "")
+    (forward-sexp))
+
+  (defun cdadar/anki-editor-push-tree ()
+    "Push all notes under current tree."
     (interactive)
     (anki-editor-push-notes '(4))
-    (anki-editor-reset-cloze-number))
-  :config
-  (setq anki-editor-create-decks t ;; Allow anki-editor to create a new deck if it doesn't exist
-        anki-editor-org-tags-as-anki-tags t)
-  ;; Initialize
-  (anki-editor-reset-cloze-number))
-(use-package anki-mode)
-(use-package org-anki)
+    (cdadar/anki-editor-reset-cloze-number))
 
+  ;; Initialize cloze counter.
+  (cdadar/anki-editor-reset-cloze-number))
+
+;; anki-mode: major mode for editing Anki cards.
+(use-package anki-mode
+  :commands (anki-mode
+             anki-mode-new-card
+             anki-mode-cloze-region))
+
+;; org-anki: alternative org-to-Anki synchronizer.
+(use-package org-anki
+  :commands (org-anki-sync-entry
+             org-anki-sync-all
+             org-anki-import-deck))
+
+;; anki-helper: additional Anki workflow utilities.
 (use-package anki-helper
-  :vc (:url "https://github.com/Elilif/emacs-anki-helper" :rev :newest))
+  :vc (:url "https://github.com/Elilif/emacs-anki-helper" :rev :newest)
+  :commands (anki-helper-entry-sync
+             anki-helper-entry-sync-all
+             anki-helper-sync))
 
 (provide 'init-anki)
 ;;; init-anki.el ends here
