@@ -204,7 +204,9 @@
           word-wrap t)
     (setq-local visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
     (visual-line-mode 1)
-    (local-set-key [remap move-end-of-line] #'move-end-of-line))
+    (local-set-key [remap move-end-of-line] #'move-end-of-line)
+    (local-set-key [remap move-beginning-of-line] #'move-beginning-of-line)
+    (local-set-key [remap kill-line] #'kill-line))
 
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
