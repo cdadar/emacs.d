@@ -2,26 +2,23 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq-default show-trailing-whitespace nil)
-
-
-;;; Whitespace
-
-(defun sanityinc/show-trailing-whitespace ()
-  "Enable display of trailing whitespace in this buffer."
-  (setq-local show-trailing-whitespace t))
-
-(dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
-  (add-hook hook 'sanityinc/show-trailing-whitespace))
-
+(use-package simple
+  :ensure nil
+  :init
+  (setq-default show-trailing-whitespace nil)
+  :preface
+  (defun sanityinc/show-trailing-whitespace ()
+    "Enable display of trailing whitespace in this buffer."
+    (setq-local show-trailing-whitespace t))
+  :hook
+  ((prog-mode text-mode conf-mode) . sanityinc/show-trailing-whitespace)
+  :bind
+  ([remap just-one-space] . cycle-spacing))
 
 (use-package whitespace-cleanup-mode
   :diminish
   :hook
   (after-init . global-whitespace-cleanup-mode))
-
-
-(global-set-key [remap just-one-space] 'cycle-spacing)
 
 (provide 'init-whitespace)
 ;;; init-whitespace.el ends here

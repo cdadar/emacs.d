@@ -2,24 +2,27 @@
 ;;; Commentary:
 ;;; Code:
 
-(when *is-a-mac*
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'none)
-  ;; Make mouse wheel / trackpad scrolling less jerky
-  (setq mouse-wheel-scroll-amount '(1
-                                    ((shift) . 5)
-                                    ((control))))
+(use-package emacs
+  :ensure nil
+  :if *is-a-mac*
+  :custom
+  (mac-command-modifier 'meta)
+  (mac-option-modifier 'none)
+  (mouse-wheel-scroll-amount '(1
+                                ((shift) . 5)
+                                ((control))))
+  :init
   (dolist (multiple '("" "double-" "triple-"))
     (dolist (direction '("right" "left"))
       (global-set-key (read-kbd-macro (concat "<" multiple "wheel-" direction ">")) 'ignore)))
-  (global-set-key (kbd "M-`") 'ns-next-frame)
-  (global-set-key (kbd "M-h") 'ns-do-hide-emacs)
-  (global-set-key (kbd "M-˙") 'ns-do-hide-others)
+  :bind
+  (("M-`" . ns-next-frame)
+   ("M-h" . ns-do-hide-emacs)
+   ("M-˙" . ns-do-hide-others)
+   ("M-ˍ" . ns-do-hide-others))
+  :config
   (with-eval-after-load 'nxml-mode
-    (define-key nxml-mode-map (kbd "M-h") nil))
-  (global-set-key (kbd "M-ˍ") 'ns-do-hide-others) ;; what describe-key reports for cmd-option-h
-  )
-
+    (define-key nxml-mode-map (kbd "M-h") nil)))
 
 (provide 'init-osx-keys)
 ;;; init-osx-keys.el ends here

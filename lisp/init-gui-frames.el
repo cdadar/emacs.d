@@ -56,28 +56,26 @@
   (interactive)
   (modify-frame-parameters nil '((alpha . 100))))
 
-(when (and *is-a-mac* (fboundp 'toggle-frame-fullscreen))
-  (global-set-key (kbd "M-ƒ") #'toggle-frame-fullscreen))
-
-;; TODO: use seethru package instead?
-(global-set-key (kbd "C-M-8") #'sanityinc/decrease-opacity)
-(global-set-key (kbd "C-M-9") #'sanityinc/increase-opacity)
-(global-set-key (kbd "C-M-7") #'sanityinc/reset-opacity)
-
+(use-package frame
+  :ensure nil
+  :bind (("C-M-8" . sanityinc/decrease-opacity)
+         ("C-M-9" . sanityinc/increase-opacity)
+         ("C-M-7" . sanityinc/reset-opacity))
+  :custom
+  (frame-title-format
+   '((:eval (if (buffer-file-name)
+                (abbreviate-file-name (buffer-file-name))
+              "%b")))))
 
 (when *is-a-mac*
   (use-package ns-auto-titlebar
     :config
     (ns-auto-titlebar-mode)))
 
-
-(use-package frame
+(use-package ns-win
   :ensure nil
-  :custom
-  (frame-title-format
-   '((:eval (if (buffer-file-name)
-                (abbreviate-file-name (buffer-file-name))
-              "%b")))))
+  :if *is-a-mac*
+  :bind (("M-ƒ" . toggle-frame-fullscreen)))
 
 ;; Non-zero values for `line-spacing' can mess up ansi-term and co,
 ;; so we zero it explicitly in those cases.

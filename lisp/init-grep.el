@@ -2,23 +2,24 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq-default grep-highlight-matches t
-              grep-scroll-output t)
+(use-package grep
+  :ensure nil
+  :custom
+  (grep-highlight-matches t)
+  (grep-scroll-output t))
 
 (when *is-a-mac*
-  (setq-default locate-command "mdfind"))
+  (use-package locate
+    :ensure nil
+    :custom
+    (locate-command "mdfind")))
 
-
-(when (executable-find "rg")
-  (use-package rg
-    :commands (rg rg-project)))
-
+(use-package rg
+  :if (executable-find "rg")
+  :commands (rg rg-project))
 
 (use-package grep-dired
-  :vc(:url "https://github.com/manateelazycat/grep-dired"))
-
-
-
+  :vc (:url "https://github.com/manateelazycat/grep-dired"))
 
 (provide 'init-grep)
 ;;; init-grep.el ends here

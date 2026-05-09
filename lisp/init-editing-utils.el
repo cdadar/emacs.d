@@ -17,26 +17,44 @@
 
 ;;; Some basic preferences
 
-(setq-default
- blink-cursor-interval 0.4
- bookmark-default-file (locate-user-emacs-file ".bookmarks.el")
- buffers-menu-max-size 30
- case-fold-search t
- ediff-split-window-function 'split-window-horizontally
- ediff-window-setup-function 'ediff-setup-windows-plain
- indent-tabs-mode nil
- create-lockfiles nil
- auto-save-default nil
- make-backup-files nil
- mouse-yank-at-point t
- save-interprogram-paste-before-kill t
- scroll-preserve-screen-position 'always
- set-mark-command-repeat-pop t
- tooltip-delay 1.5
- fill-column 120
- truncate-lines nil
- truncate-partial-width-windows nil
- warning-minimum-level :error)
+(use-package emacs
+  :ensure nil
+  :init
+  (setq-default
+   blink-cursor-interval 0.4
+   bookmark-default-file (locate-user-emacs-file ".bookmarks.el")
+   buffers-menu-max-size 30
+   case-fold-search t
+   ediff-split-window-function 'split-window-horizontally
+   ediff-window-setup-function 'ediff-setup-windows-plain
+   indent-tabs-mode nil
+   create-lockfiles nil
+   auto-save-default nil
+   make-backup-files nil
+   mouse-yank-at-point t
+   save-interprogram-paste-before-kill t
+   scroll-preserve-screen-position 'always
+   set-mark-command-repeat-pop t
+   tooltip-delay 1.5
+   fill-column 120
+   truncate-lines nil
+   truncate-partial-width-windows nil
+   warning-minimum-level :error)
+  (put 'narrow-to-region 'disabled nil)
+  (put 'narrow-to-page 'disabled nil)
+  (put 'narrow-to-defun 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+  :bind
+  (("S-<return>" . sanityinc/newline-at-end-of-line)
+   ("M-Z" . zap-up-to-char)
+   ("C-." . set-mark-command)
+   ("C-x C-." . pop-global-mark)
+   ("M-j" . join-line)
+   ("C-M-<backspace>" . kill-back-to-indentation)
+   ([remap backward-up-list] . sanityinc/backward-up-sexp)
+   ([M-left] . nil)
+   ([M-right] . nil)))
 
 (use-package delsel
   :ensure nil
@@ -91,10 +109,8 @@
   (move-end-of-line 1)
   (newline-and-indent))
 
-(global-set-key (kbd "S-<return>") 'sanityinc/newline-at-end-of-line)
 
 
-
 (use-package display-line-numbers
   :ensure nil
   :custom
@@ -143,7 +159,6 @@
 
 
 ;;; Zap *up* to char is a handy pair for zap-to-char
-(global-set-key (kbd "M-Z") 'zap-up-to-char)
 
 
 
@@ -160,12 +175,7 @@
    ("M-p" . browse-kill-ring-previous)))
 
 ;; Don't disable narrowing commands
-(put 'narrow-to-region 'disabled nil)
-(put 'narrow-to-page 'disabled nil)
-(put 'narrow-to-defun 'disabled nil)
 ;; Don't disable case-change functions
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
 
 
 ;; Show matching parens
@@ -190,9 +200,6 @@
   :bind (:map help-map
               ("A" . describe-face)))
 
-(global-set-key (kbd "C-.") 'set-mark-command)
-(global-set-key (kbd "C-x C-.") 'pop-global-mark)
-
 (use-package avy
   :bind
   (("C-;" . avy-goto-char-timer)))
@@ -215,8 +222,6 @@
          ("C-c M a" . mc/edit-beginnings-of-lines)))
 
 ;; Train myself to use M-f and M-b instead
-(global-unset-key [M-left])
-(global-unset-key [M-right])
 
 (defun kill-back-to-indentation ()
   "Kill from point back to the first non-whitespace character on the line."
@@ -225,11 +230,9 @@
     (back-to-indentation)
     (kill-region (point) prev-pos)))
 
-(global-set-key (kbd "C-M-<backspace>") 'kill-back-to-indentation)
 
 
 
-;;; Page break lines
 (use-package page-break-lines
   :diminish
   :hook
@@ -263,11 +266,9 @@
            (sanityinc/backward-up-sexp (1- arg)))
           ((backward-up-list arg)))))
 
-(global-set-key [remap backward-up-list] 'sanityinc/backward-up-sexp) ; C-M-u, C-M-up
 
 
 
-;;; Cut/copy the current line if no region is active
 (use-package whole-line-or-region
   :diminish
   :hook
@@ -276,7 +277,6 @@
 
 
 ;; M-^ is inconvenient, so also bind M-j
-(global-set-key (kbd "M-j") 'join-line)
 
 
 ;; Random line sorting
