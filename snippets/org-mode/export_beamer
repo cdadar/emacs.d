@@ -33,12 +33,25 @@
 #+LATEX_HEADER: \setdefaultlanguage{english}
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
-#+LATEX_HEADER: \setmainfont{Times New Roman}
-#+LATEX_HEADER: \setsansfont{Times New Roman}
+#+LATEX_HEADER: \setmainfont{texgyretermes}[
+#+LATEX_HEADER:   Extension=.otf,
+#+LATEX_HEADER:   UprightFont=*-regular,
+#+LATEX_HEADER:   BoldFont=*-bold,
+#+LATEX_HEADER:   ItalicFont=*-italic,
+#+LATEX_HEADER:   BoldItalicFont=*-bolditalic,
+#+LATEX_HEADER:   Scale=1.0]
+#+LATEX_HEADER: \setsansfont{texgyretermes}[
+#+LATEX_HEADER:   Extension=.otf,
+#+LATEX_HEADER:   UprightFont=*-regular,
+#+LATEX_HEADER:   BoldFont=*-bold,
+#+LATEX_HEADER:   ItalicFont=*-italic,
+#+LATEX_HEADER:   BoldItalicFont=*-bolditalic,
+#+LATEX_HEADER:   Scale=1.0]
 #+LATEX_HEADER: \setmonofont{Menlo}
 #+LATEX_HEADER: \setCJKmainfont{LXGW WenKai}
 #+LATEX_HEADER: \setCJKsansfont{LXGW WenKai}
 #+LATEX_HEADER: \setCJKmonofont{LXGW WenKai Mono}
+#+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
 
 #+LATEX_HEADER: \newfontfamily\greekfont[Script=Greek,Scale=MatchLowercase]{SBL Greek}
 #+LATEX_HEADER: \newfontfamily\greekfontsf[Script=Greek,Scale=MatchLowercase]{SBL Greek}
@@ -58,7 +71,7 @@
 
 #+LATEX_HEADER: \renewenvironment{quote}{%
 #+LATEX_HEADER:   \list{}{\leftmargin=0em\rightmargin=0em}\item[]%
-#+LATEX_HEADER:   \begin{minipage}[t]{\linewidth}\RaggedRight\itshape
+#+LATEX_HEADER:   \begin{minipage}[t]{\linewidth}\RaggedRight\itshape\quotecjkfont
 #+LATEX_HEADER: }{%
 #+LATEX_HEADER:   \end{minipage}\endlist%
 #+LATEX_HEADER: }

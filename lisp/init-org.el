@@ -631,6 +631,70 @@ NTH supports 1..5, or -1 for the last weekday in month."
 
 ;;; --- Export post-processing helpers ---
 
+(defconst cdadar/org-latex-english-main-font "TeX Gyre Termes"
+  "English main font used for Org LaTeX/PDF exports.")
+
+(defconst cdadar/org-latex-cjk-main-font "LXGW WenKai"
+  "Default Chinese body font used for Org LaTeX/PDF exports.")
+
+(defconst cdadar/org-latex-cjk-mono-font "LXGW WenKai Mono"
+  "Default Chinese monospaced font used for Org LaTeX/PDF exports.")
+
+(defconst cdadar/org-latex-cjk-quote-font "Kaiti SC"
+  "Default Chinese quote font used for Org LaTeX/PDF exports.")
+
+(defun cdadar/org-latex-tex-gyre-termes-mainfont-snippet ()
+  "Return a portable fontspec snippet for TeX Gyre Termes.
+Use file-name based lookup so TeX can find the OTF files through kpathsea even
+when the TeX Live installation path changes."
+  "\\setmainfont{texgyretermes}[
+  Extension=.otf,
+  UprightFont=*-regular,
+  BoldFont=*-bold,
+  ItalicFont=*-italic,
+  BoldItalicFont=*-bolditalic,
+  Scale=1.0]")
+
+(defun cdadar/org-latex-use-english-main-font (text backend info)
+  "Use `cdadar/org-latex-english-main-font' for Org LaTeX TEXT.
+This keeps older notes that specify Times New Roman in their local headers
+visually consistent with the current Org PDF export preference.  BACKEND and
+INFO follow the Org export filter protocol."
+  (ignore info)
+  (if (org-export-derived-backend-p backend 'latex)
+      (replace-regexp-in-string
+       "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{Times New Roman}\\(?:[[:blank:]]*%.*\\)?"
+       (cdadar/org-latex-tex-gyre-termes-mainfont-snippet)
+       text t t)
+    text))
+
+(defun cdadar/org-latex-quote-cjk-font-snippet ()
+  "Return LaTeX setup for the preferred CJK quote font."
+  (format "\\usepackage{etoolbox}
+\\newCJKfontfamily\\quotecjkfont[Scale=1.0]{%s}
+\\AtBeginEnvironment{quote}{\\quotecjkfont}"
+          cdadar/org-latex-cjk-quote-font))
+
+(defun cdadar/org-latex-needs-quote-cjk-font-p (text)
+  "Return non-nil when exported LaTeX TEXT should get quote CJK font setup."
+  (and (string-match-p "\\\\begin{quote}" text)
+       (or (string-match-p "\\\\usepackage{xeCJK}" text)
+           (string-match-p "\\\\setCJKmainfont" text))
+       (not (string-match-p "\\\\newCJKfontfamily\\\\quotecjkfont" text))
+       (not (string-match-p "\\\\AtBeginEnvironment{quote}{\\\\quotecjkfont}" text))))
+
+(defun cdadar/org-latex-inject-quote-cjk-font (text backend info)
+  "Inject preferred CJK quote font setup into exported LaTeX TEXT.
+BACKEND and INFO follow the Org export filter protocol."
+  (ignore info)
+  (if (and (org-export-derived-backend-p backend 'latex)
+           (cdadar/org-latex-needs-quote-cjk-font-p text))
+      (replace-regexp-in-string
+       "\\\\begin{document}"
+       (concat (cdadar/org-latex-quote-cjk-font-snippet) "\n\\begin{document}")
+       text t t)
+    text))
+
 (defconst cdadar/org-latex-global-symbol-fallback-snippet
   (mapconcat
    #'identity
@@ -645,14 +709,18 @@ NTH supports 1..5, or -1 for the last weekday in month."
      "\\newunicodechar{②}{{\\symbolfallback ②}}"
      "\\newunicodechar{③}{{\\symbolfallback ③}}"
      "\\newunicodechar{④}{{\\symbolfallback ④}}"
-     "\\newunicodechar{▸}{{\\symbolfallback ▸}}")
+     "\\newunicodechar{▸}{{\\symbolfallback ▸}}"
+     "\\newunicodechar{‐}{{\\symbolfallback ‐}}"
+     "\\newunicodechar{─}{{\\symbolfallback ─}}")
    "\n")
-  "LaTeX header snippet providing fallback glyphs missing in Times New Roman.")
+  "LaTeX header snippet providing fallback glyphs missing in common serif fonts.")
 
 (defun cdadar/org-latex-global-needs-symbol-fallback-p (text)
   "Return non-nil when exported LaTeX TEXT needs fallback symbol font setup."
-  (and (string-match-p "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{Times New Roman}" text)
-       (string-match-p "[※①②③④▸]" text)
+  (and (or (string-match-p "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{Times New Roman}" text)
+           (string-match-p "\\\\setmainfont\\(?:\\[\(?:.\|\n\)*\\]\\)?{texgyretermes}" text)
+           (string-match-p "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{TeX Gyre Termes}" text))
+       (string-match-p "[※①②③④▸‐─]" text)
        (not (string-match-p "\\\\newfontfamily\\\\symbolfallback" text))))
 
 (defun cdadar/org-latex-global-inject-symbol-fallback (text backend info)
@@ -665,6 +733,28 @@ BACKEND and INFO follow the Org export filter protocol."
        "\\\\begin{document}"
        (concat cdadar/org-latex-global-symbol-fallback-snippet "\n\\begin{document}")
        text t t)
+    text))
+
+(defun cdadar/org-latex-fix-bibleref-compat (text backend info)
+  "Normalize older bibleref snippets in exported LaTeX TEXT.
+Some notes still use `\\usepackage[style=default]{bibleref}', but recent
+bibleref releases reject that option.  Also rewrite the custom `\\verse{...}'
+shortcut to `\\bibleref{...}' instead of redefining LaTeX's built-in verse
+environment command.  BACKEND and INFO follow the Org export filter protocol."
+  (ignore info)
+  (if (org-export-derived-backend-p backend 'latex)
+      (with-temp-buffer
+        (insert text)
+        (goto-char (point-min))
+        (while (search-forward "\\usepackage[style=default]{bibleref}" nil t)
+          (replace-match "\\usepackage{bibleref}" t t))
+        (goto-char (point-min))
+        (while (search-forward "\\newcommand{\\verse}[1]{\\bibleref{#1}}" nil t)
+          (delete-region (line-beginning-position) (min (point-max) (1+ (line-end-position)))))
+        (goto-char (point-min))
+        (while (search-forward "\\verse{" nil t)
+          (replace-match "\\bibleref{" t t))
+        (buffer-string))
     text))
 
 (defun cdadar/org-latex-fix-quote-paragraph-spacing (text backend info)
@@ -711,7 +801,13 @@ paragraph indentation inside quote environments.  INFO is ignored."
   (require 'ox-md nil t)
   (require 'ox-latex nil t)
   (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-use-english-main-font)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-inject-quote-cjk-font)
+  (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-global-inject-symbol-fallback)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-fix-bibleref-compat)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-fix-quote-paragraph-spacing))
 

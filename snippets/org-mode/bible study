@@ -19,12 +19,19 @@
 #+LATEX_HEADER: \usepackage{fontspec}
 #+LATEX_HEADER: \usepackage{xeCJK}
 
-#+LATEX_HEADER: \setmainfont[Scale=1.0]{Times New Roman}           % 英文主字体
+#+LATEX_HEADER: \setmainfont{texgyretermes}[
+#+LATEX_HEADER:   Extension=.otf,
+#+LATEX_HEADER:   UprightFont=*-regular,
+#+LATEX_HEADER:   BoldFont=*-bold,
+#+LATEX_HEADER:   ItalicFont=*-italic,
+#+LATEX_HEADER:   BoldItalicFont=*-bolditalic,
+#+LATEX_HEADER:   Scale=1.0]           % 英文主字体
 
 # #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
 # #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
 # #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
 #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
+#+LaTeX_HEADER: \setCJKmonofont[Scale=1.0]{LXGW WenKai Mono}
 
 
 # 多语言
@@ -67,6 +74,8 @@
 #+LaTeX_HEADER: \usepackage{csquotes}
 
 # 引用环境优化
+#+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
+#+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
 #+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=0em}\item\relax}{\endlist}
 
 

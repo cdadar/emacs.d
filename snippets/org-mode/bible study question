@@ -18,12 +18,19 @@
 #+LaTeX_HEADER: \usepackage{xeCJK}
 #+LATEX_HEADER: \usepackage{polyglossia}
 
-#+LATEX_HEADER: \setmainfont[Scale=1.0]{Times New Roman}           % 英文主字体
+#+LATEX_HEADER: \setmainfont{texgyretermes}[
+#+LATEX_HEADER:   Extension=.otf,
+#+LATEX_HEADER:   UprightFont=*-regular,
+#+LATEX_HEADER:   BoldFont=*-bold,
+#+LATEX_HEADER:   ItalicFont=*-italic,
+#+LATEX_HEADER:   BoldItalicFont=*-bolditalic,
+#+LATEX_HEADER:   Scale=1.0]           % 英文主字体
 
 # #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{Noto Serif CJK SC}
 # #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
 # #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
 #+LaTeX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
+#+LaTeX_HEADER: \setCJKmonofont[Scale=1.0]{LXGW WenKai Mono}
 
 
 # 多语言
@@ -33,6 +40,10 @@
 
 #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}   % 希腊文
 #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}  % 希伯来文
+
+#+LATEX_HEADER: \usepackage{etoolbox}
+#+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
+#+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
 
 # 备用字体（如需要）
 # #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
