@@ -9,13 +9,13 @@
   :ensure t
   :if (or (memq window-system '(mac ns x pgtk))
           (daemonp))
-  :init
+  :custom
   ;; 明确使用 zsh
-  (setq exec-path-from-shell-shell-name "/bin/zsh")
+  (exec-path-from-shell-shell-name "/bin/zsh")
 
   ;; 使用 login shell，读取 ~/.zprofile / ~/.zshenv
   ;; 不建议默认用 -i，避免 .zshrc 输出内容污染结果
-  (setq exec-path-from-shell-arguments '("-l"))
+  (exec-path-from-shell-arguments '("-l"))
 
   :config
   ;; 需要同步到 Emacs 的环境变量

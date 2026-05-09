@@ -4,10 +4,23 @@
 
 (require 'init-frame-hooks)
 
-(global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
-(global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))
+(defun sanityinc/scroll-down-one-line ()
+  "Scroll down one line."
+  (interactive)
+  (scroll-down 1))
 
-(autoload 'mwheel-install "mwheel")
+(defun sanityinc/scroll-up-one-line ()
+  "Scroll up one line."
+  (interactive)
+  (scroll-up 1))
+
+(use-package mwheel
+  :ensure nil
+  :commands (mwheel-install))
+
+(use-package xt-mouse
+  :ensure nil
+  :commands (xterm-mouse-mode))
 
 (defun sanityinc/console-frame-setup ()
   (xterm-mouse-mode 1) ; Mouse in a terminal (Use shift to paste with middle button)
@@ -15,7 +28,12 @@
 
 
 
-(add-hook 'after-make-console-frame-hooks 'sanityinc/console-frame-setup)
+(use-package emacs
+  :ensure nil
+  :bind (([mouse-4] . sanityinc/scroll-down-one-line)
+         ([mouse-5] . sanityinc/scroll-up-one-line))
+  :init
+  (add-hook 'after-make-console-frame-hooks #'sanityinc/console-frame-setup))
 
 (provide 'init-xterm)
 ;;; init-xterm.el ends here

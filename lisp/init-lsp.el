@@ -42,13 +42,21 @@
     (eglot-ensure)))
 
 (use-package eglot
+  :ensure nil
+  :commands (eglot eglot-ensure)
   :hook ((prog-mode . cdadar/eglot-ensure-maybe)
          ((markdown-mode yaml-mode yaml-ts-mode) . eglot-ensure))
   :custom
   (eglot-autoshutdown t)
   (eglot-send-changes-idle-time 0.5)
   :init
-  (setq eglot-events-buffer-size 0))
+  ;; Emacs 29 uses `eglot-events-buffer-size'.  Emacs 30 replaced it with
+  ;; `eglot-events-buffer-config', but still reads this legacy variable while
+  ;; computing the new default, so keep it in `:init' before Eglot loads.
+  (setq eglot-events-buffer-size 0)
+  :config
+  (when (boundp 'eglot-events-buffer-config)
+    (setq eglot-events-buffer-config '(:size 0 :format full))))
 
 (use-package consult-eglot
   :after eglot
@@ -61,14 +69,14 @@
   (consult-eglot-embark-mode))
 
 ;; Emacs LSP booster
-(when (and (executable-find "emacs-lsp-booster")
+(use-package eglot-booster
+  :ensure nil
+  :after eglot
+  :if (and (executable-find "emacs-lsp-booster")
            (locate-library "eglot-booster"))
-  (use-package eglot-booster
-    :ensure nil
-    :after eglot
-    :commands (eglot-booster-mode)
-    :init
-    (eglot-booster-mode 1)))
+  :commands (eglot-booster-mode)
+  :init
+  (eglot-booster-mode 1))
 
 (use-package org-src
   :ensure nil

@@ -9,21 +9,25 @@
         modus-themes-bold-constructs nil
         modus-themes-region '(bg-only no-extend))
   :config
-  (progn
-    ;; Load the theme of your choice:
-    (load-theme 'modus-operandi))
+  ;; Load the theme of your choice:
+  (load-theme 'modus-operandi)
   :bind
   (("<f5>" . modus-themes-toggle)))
 
 
 
+(defun sanityinc/dimmer-refresh-after-background-mode-change (&rest _)
+  "Refresh dimmer after frame background mode changes."
+  (dimmer-process-all))
+
 (use-package dimmer
   :hook
   ((after-init . dimmer-mode))
+  :custom
+  (dimmer-fraction 0.15)
   :config
-  (setq-default dimmer-fraction 0.15)
   ;; TODO: file upstream as a PR
-  (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))
+  (advice-add 'frame-set-background-mode :after #'sanityinc/dimmer-refresh-after-background-mode-change)
 
   ;; Don't dim in terminal windows. Even with 256 colours it can
   ;; lead to poor contrast.  Better would be to vary dimmer-fraction

@@ -16,14 +16,19 @@ Selectively runs either `after-make-console-frame-hooks' or
                    'after-make-window-system-frame-hooks
                  'after-make-console-frame-hooks))))
 
-(add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
-
 (defconst sanityinc/initial-frame (selected-frame)
   "The frame (if any) active during Emacs initialization.")
 
-(add-hook 'after-init-hook
-          (lambda () (when sanityinc/initial-frame
-                  (run-after-make-frame-hooks sanityinc/initial-frame))))
+(defun sanityinc/run-after-make-initial-frame-hooks ()
+  "Run frame creation hooks for `sanityinc/initial-frame'."
+  (when sanityinc/initial-frame
+    (run-after-make-frame-hooks sanityinc/initial-frame)))
+
+(use-package emacs
+  :ensure nil
+  :init
+  (add-hook 'after-make-frame-functions #'run-after-make-frame-hooks)
+  (add-hook 'after-init-hook #'sanityinc/run-after-make-initial-frame-hooks))
 
 
 (provide 'init-frame-hooks)

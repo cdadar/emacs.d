@@ -167,7 +167,9 @@ advice for `require-package', to which ARGS are passed."
     (let ((longest-archive-name (apply 'max (mapcar 'length (mapcar 'car package-archives)))))
       (sanityinc/set-tabulated-list-column-width "Archive" longest-archive-name))))
 
-(add-hook 'package-menu-mode-hook #'sanityinc/maybe-widen-package-menu-columns)
+(use-package package
+  :ensure nil
+  :hook (package-menu-mode . sanityinc/maybe-widen-package-menu-columns))
 
 
 (provide 'init-elpa)

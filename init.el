@@ -230,7 +230,9 @@
   :config
   (setq-default uptimes-keep-count 200))
 
-(add-hook 'after-init-hook #'global-eldoc-mode)
+(use-package eldoc
+  :ensure nil
+  :hook (after-init . global-eldoc-mode))
 
 (require 'init-direnv)
 
