@@ -3,10 +3,11 @@
 ;;; Code:
 
 (use-package mmm-mode
+  :custom
+  (mmm-submode-decoration-level 2)
   :config
   (require 'mmm-auto)
-  (setq mmm-global-mode 'buffers-with-submode-classes)
-  (setq mmm-submode-decoration-level 2))
+  (setq mmm-global-mode 'buffers-with-submode-classes))
 
 
 (provide 'init-mmm)
