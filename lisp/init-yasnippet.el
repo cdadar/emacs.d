@@ -9,10 +9,11 @@
 ;; but it's necessary cost
 
 (use-package yasnippet
+  :custom
+  (yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-indent-line 'fixed)
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode t)
-  (setf yas-indent-line 'fixed)
   (use-package auto-yasnippet
     :bind
     (("C-c & C-w" . aya-create)

@@ -64,14 +64,14 @@ VER, FILENAME, and ARGS are forwarded unchanged."
 (use-package savehist
   :ensure nil
   :hook (after-init . savehist-mode)
-  :init
-  (setq history-length 1000
-        savehist-additional-variables '(mark-ring
-                                        global-mark-ring
-                                        search-ring
-                                        regexp-search-ring
-                                        extended-command-history)
-        savehist-autosave-interval 300))
+  :custom
+  (history-length 1000)
+  (savehist-additional-variables '(mark-ring
+                                   global-mark-ring
+                                   search-ring
+                                   regexp-search-ring
+                                   extended-command-history))
+  (savehist-autosave-interval 300))
 
 (use-package saveplace
   :ensure nil
@@ -81,8 +81,7 @@ VER, FILENAME, and ARGS are forwarded unchanged."
   :custom
   (session-save-file (locate-user-emacs-file ".session"))
   (session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
-  :config
-  (setq session-save-file-coding-system 'utf-8)
+  (session-save-file-coding-system 'utf-8)
   :hook
   (after-init . session-initialize))
 

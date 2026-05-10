@@ -6,9 +6,10 @@
   :ensure nil
   :mode (("\\.\\(xml\\|xsd\\|sch\\|rng\\|xslt\\|svg\\|rss\\|gpx\\|tcx\\|plist\\)\\'" . nxml-mode))
   :magic ("<\\?xml " . nxml-mode)
+  :custom
+  (nxml-slash-auto-complete-flag t)
   :init
   (fset 'xml-mode 'nxml-mode)
-  (setq nxml-slash-auto-complete-flag t)
   ;; Keep plain XML files in `nxml-mode' even after `init-web-mode' registers
   ;; web-mode's broader "\\.xml?\\'" pattern later during startup.
   (with-eval-after-load 'init-web-mode

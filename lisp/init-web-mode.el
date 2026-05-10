@@ -38,16 +38,16 @@
   (web-mode-code-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-enable-auto-expanding t)
+  (web-mode-imenu-regexp-list
+   '(("<\\(h[1-9]\\)\\([^>]*\\)>\\([^<]*\\)" 1 3 ">" nil)
+     ("^[ \t]*<\\([@a-z]+\\)[^>]*>? *$" 1 " id=\"\\([a-zA-Z0-9_]+\\)\"" "#" ">")
+     ("^[ \t]*<\\(@[a-z.]+\\)[^>]*>? *$" 1 " contentId=\"\\([a-zA-Z0-9_]+\\)\"" "=" ">")
+     ;; angular imenu
+     (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "=" "nil")))
   :config
   ;; make org-mode export fail, I use evil and evil-matchit
   ;; to select text, so expand-region.el is not used
-  (remove-hook 'web-mode-hook #'er/add-web-mode-expansions)
-  (setq web-mode-imenu-regexp-list
-        '(("<\\(h[1-9]\\)\\([^>]*\\)>\\([^<]*\\)" 1 3 ">" nil)
-          ("^[ \t]*<\\([@a-z]+\\)[^>]*>? *$" 1 " id=\"\\([a-zA-Z0-9_]+\\)\"" "#" ">")
-          ("^[ \t]*<\\(@[a-z.]+\\)[^>]*>? *$" 1 " contentId=\"\\([a-zA-Z0-9_]+\\)\"" "=" ">")
-          ;; angular imenu
-          (" \\(ng-[a-z]*\\)=\"\\([^\"]+\\)" 1 2 "="))))
+  (remove-hook 'web-mode-hook #'er/add-web-mode-expansions))
 
 (use-package instant-rename-tag
   :after web-mode

@@ -3,9 +3,9 @@
 ;;; Code:
 
 (use-package lua-mode
+  :custom
+  (lua-indent-level 2)
   :config
-  (setq-default lua-indent-level 2)
-
   (reformatter-define lua-format
     :program "lua-format"
     :args '("--indent-width=2" "--no-use-tab")

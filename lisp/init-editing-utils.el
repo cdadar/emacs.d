@@ -71,8 +71,8 @@
   :ensure nil
   :hook ((after-init . transient-mark-mode)
          (after-init . size-indication-mode))
-  :init
-  (setq column-number-mode t))
+  :custom
+  (column-number-mode t))
 
 
 
@@ -151,8 +151,8 @@
   :diminish
   :hook
   (after-init . global-undo-tree-mode)
-  :init
-  (setq undo-tree-auto-save-history nil))
+  :custom
+  (undo-tree-auto-save-history nil))
 
 
 
@@ -163,8 +163,9 @@
 
 
 (use-package browse-kill-ring
+  :custom
+  (browse-kill-ring-separator "\f")
   :config
-  (setq browse-kill-ring-separator "\f")
   (with-eval-after-load 'page-break-lines
     (add-to-list 'page-break-lines-modes 'browse-kill-ring-mode))
   :bind
@@ -172,7 +173,7 @@
    :map browse-kill-ring-mode-map
    ("C-g" . browse-kill-ring-quit)
    ("M-n" . browse-kill-ring-forward)
-   ("M-p" . browse-kill-ring-previous)))
+   ("M-p" . browse-kill-ring-backward)))
 
 ;; Don't disable narrowing commands
 ;; Don't disable case-change functions
@@ -346,25 +347,24 @@ ORIG is the advised function, which is called with its ARGS."
   (("M-;" . comment-dwim-2)))
 
 (use-package comment-tags
-  :config
-  (setq comment-tags-keymap-prefix (kbd "C-c #"))
-  (setq comment-tags-keyword-faces
-        `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
-          ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
-          ("BUG" . ,(list :weight 'bold :foreground "#DB3340"))
-          ("HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
-          ("KLUDGE" . ,(list :weight 'bold :foreground "#E8B71A"))
-          ("XXX" . ,(list :weight 'bold :foreground "#F7EAC8"))
-          ("INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
-          ("DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
-  (setq comment-tags-comment-start-only t
-        comment-tags-require-colon t
-        comment-tags-case-sensitive t
-        comment-tags-show-faces t
-        comment-tags-lighter nil)
+  :custom
+  (comment-tags-keymap-prefix (kbd "C-c #"))
+  (comment-tags-keyword-faces
+   `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
+     ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
+     ("BUG" . ,(list :weight 'bold :foreground "#DB3340"))
+     ("HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
+     ("KLUDGE" . ,(list :weight 'bold :foreground "#E8B71A"))
+     ("XXX" . ,(list :weight 'bold :foreground "#F7EAC8"))
+     ("INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
+     ("DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
+  (comment-tags-comment-start-only t)
+  (comment-tags-require-colon t)
+  (comment-tags-case-sensitive t)
+  (comment-tags-show-faces t)
+  (comment-tags-lighter nil)
   :hook
-  (prog-mode . comment-tags-mode)
-  )
+  (prog-mode . comment-tags-mode))
 
 (use-package iedit)
 
@@ -393,30 +393,29 @@ ORIG is the advised function, which is called with its ARGS."
   :diminish
   :hook
   (after-init . super-save-mode)
+  :custom
+  (super-save-auto-save-when-idle t)
+  (super-save-idle-duration 5)
+  (super-save-remote-files nil)
+  (super-save-exclude '(".gpg"))
+  (super-save-hook-triggers '(focus-out-hook find-file-hook))
+  (super-save-triggers '(other-window
+                         ace-window
+                         balance-windows
+                         next-buffer
+                         previous-buffer
+                         org-babel-execute-src-block
+                         split-window-below
+                         split-window-horizontally
+                         start-process-shell-command
+                         switch-to-buffer
+                         windmove-up
+                         windmove-down
+                         windmove-left
+                         windmove-right
+                         magit-status))
   :config
   (setq-default auto-save-default nil)
-  (setq super-save-auto-save-when-idle t)
-  (setq super-save-idle-duration 5)
-  (setq super-save-remote-files nil)
-  (setq super-save-exclude '(".gpg"))
-  (setq super-save-hook-triggers
-        '(focus-out-hook find-file-hook))
-  (setq super-save-triggers
-        '(other-window
-          ace-window
-          balance-windows
-          next-buffer
-          previous-buffer
-          org-babel-execute-src-block
-          split-window-below
-          split-window-horizontally
-          start-process-shell-command
-          switch-to-buffer
-          windmove-down
-          windmove-left
-          windmove-right
-          windmove-up
-          magit-status))
 
   (defun save-all-buffers ()
     (save-excursion
@@ -444,9 +443,9 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package wgrep
   :commands wgrep-change-to-wgrep-mode
-  :init
-  (setq wgrep-auto-save-buffer t
-        wgrep-change-readonly-file t)
+  :custom
+  (wgrep-auto-save-buffer t)
+  (wgrep-change-readonly-file t)
   :bind
   (:map grep-mode-map
         ("C-c C-q" . wgrep-change-to-wgrep-mode)

@@ -4,9 +4,11 @@
 
 (use-package rust-mode
   :hook (rust-mode . cdadar/rust-compile)
+  :custom
+  (rust-format-on-save t)
+  :bind (:map rust-mode-map
+              ("RET" . av/auto-indent-method-maybe))
   :config
-  (setq rust-format-on-save t)
-  (define-key rust-mode-map (kbd "RET") 'av/auto-indent-method-maybe)
   (defun cdadar/rust-compile ()
     (setq-local compile-command "cargo check --color never --tests")))
 

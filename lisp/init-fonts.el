@@ -23,11 +23,10 @@
 
 (use-package mouse
   :ensure nil
-  :init
-  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))
-        mouse-wheel-progressive-speed nil
-        mouse-wheel-follow-mouse t)
-
+  :custom
+  (mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (mouse-wheel-progressive-speed nil)
+  (mouse-wheel-follow-mouse t)
   :bind
   (("<C-mouse-4>" . cdadar/disable-mouse-text-scaling)
    ("<C-mouse-5>" . cdadar/disable-mouse-text-scaling)
