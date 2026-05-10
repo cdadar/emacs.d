@@ -95,6 +95,17 @@
   (add-to-list 'orderless-matching-styles 'cdadar/orderless-regex-pinyin))
 
 
+(use-package register
+  :ensure nil
+  :custom
+  (register-preview-delay 0.5))
+
+(use-package xref
+  :ensure nil
+  :custom
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref))
+
 ;; Example configuration for Consult
 (use-package consult
   :preface
@@ -179,11 +190,6 @@
   ;; register formatting, adds thin separator lines, register sorting and hides
   ;; the window mode line.
   (advice-add #'register-preview :override #'consult-register-window)
-  (setq register-preview-delay 0.5)
-
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
 
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
@@ -250,9 +256,7 @@
     (define-key vertico-map (kbd "C-c C-o") 'embark-export)
     (define-key vertico-map (kbd "C-c C-c") 'embark-act))
 
-  (setq which-key-use-C-h-commands nil
-        ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
-        prefix-help-command #'embark-prefix-help-command)
+  (setq prefix-help-command #'embark-prefix-help-command)
 
   :custom
   (embark-verbose-indicator-display-action

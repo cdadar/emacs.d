@@ -303,9 +303,11 @@
 (use-package which-key
   :hook
   (after-init . which-key-mode)
+  :custom
+  (which-key-idle-delay 1.5)
+  (which-key-use-C-h-commands nil)
   :config
-  (which-key-setup-side-window-bottom)
-  (setq-default which-key-idle-delay 1.5))
+  (which-key-setup-side-window-bottom))
 
 
 (defun sanityinc/disable-features-during-macro-call (orig &rest args)
