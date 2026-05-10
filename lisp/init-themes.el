@@ -3,11 +3,11 @@
 ;;; Code:
 (use-package emacs
   :ensure nil
-  :init
+  :custom
   ;; Add all your customizations prior to loading the themes
-  (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
-        modus-themes-region '(bg-only no-extend))
+  (modus-themes-italic-constructs t)
+  (modus-themes-bold-constructs nil)
+  (modus-themes-region '(bg-only no-extend))
   :config
   ;; Load the theme of your choice:
   (load-theme 'modus-operandi)

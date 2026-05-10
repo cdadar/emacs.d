@@ -4,8 +4,8 @@
 
 (use-package simple
   :ensure nil
-  :init
-  (setq-default show-trailing-whitespace nil)
+  :custom
+  (show-trailing-whitespace nil)
   :preface
   (defun sanityinc/show-trailing-whitespace ()
     "Enable display of trailing whitespace in this buffer."
