@@ -37,12 +37,14 @@
 
 ;; Process performance tuning
 
-(setq read-process-output-max (* 4 1024 1024))
-(setq process-adaptive-read-buffering nil)
+(use-package emacs
+  :ensure nil
+  :custom
+  (read-process-output-max (* 4 1024 1024))
+  (process-adaptive-read-buffering nil))
 
 
 ;; Bootstrap config
-
 
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (require 'init-utils)
@@ -56,21 +58,17 @@
 (require 'init-local nil t)
 (require 'init-exec-path) ;; Set up $PATH
 
-
+
 ;; General performance tuning
 (use-package gcmh
   :diminish
   :init (setq gcmh-high-cons-threshold (* 128 1024 1024))
   :hook (after-init . gcmh-mode))
 
-(setq jit-lock-defer-time 0)
-
-;; (when (require-package 'gcmh)
-;;   (setq gcmh-high-cons-threshold (* 512 1024 1024))
-;;   (add-hook 'after-init-hook 'gcmh-mode)
-;;   (with-eval-after-load 'diminish
-;;     (diminish 'gcmh-mode)))
-;; (setq jit-lock-defer-time 0)
+(use-package emacs
+  :ensure nil
+  :custom
+  (jit-lock-defer-time 0))
 
 
 ;; allow users to provide an optional "init-preload-local.el"
@@ -220,15 +218,15 @@
 (use-package sudo-edit)
 (use-package gnuplot)
 (use-package htmlize)
-(when *is-a-mac*
-  (use-package osx-location))
+(use-package osx-location
+  :if *is-a-mac*)
 (use-package dotenv-mode)
 (use-package shfmt)
 
 (use-package uptimes
   :defer t
-  :config
-  (setq-default uptimes-keep-count 200))
+  :custom
+  (uptimes-keep-count 200))
 
 (use-package eldoc
   :ensure nil
