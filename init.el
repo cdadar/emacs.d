@@ -37,16 +37,16 @@
 
 ;; Process performance tuning
 
-(use-package emacs
-  :ensure nil
-  :custom
-  (read-process-output-max (* 4 1024 1024))
-  (process-adaptive-read-buffering nil))
-
-
 ;; Bootstrap config
 
-(setq custom-file (locate-user-emacs-file "custom.el"))
+(use-package emacs
+  :ensure nil
+  :init
+  (setq custom-file (locate-user-emacs-file "custom.el"))
+  :custom
+  (read-process-output-max (* 4 1024 1024))
+  (process-adaptive-read-buffering nil)
+  (jit-lock-defer-time 0))
 (require 'init-utils)
 (require 'init-site-lisp) ;; Must come before elpa, as it may provide package.el
 ;; Calls (package-initialize)
@@ -62,15 +62,11 @@
 ;; General performance tuning
 (use-package gcmh
   :diminish
-  :init (setq gcmh-high-cons-threshold (* 128 1024 1024))
+  :custom
+  (gcmh-high-cons-threshold (* 128 1024 1024))
   :hook (after-init . gcmh-mode))
 
-(use-package emacs
-  :ensure nil
-  :custom
-  (jit-lock-defer-time 0))
 
-
 ;; allow users to provide an optional "init-preload-local.el"
 (require 'init-preload-local nil t)
 
@@ -151,8 +147,9 @@
 (require 'init-clojure)
 (require 'init-clojure-cider)
 
-(when *spell-check-support-enabled*
-  (require 'init-spelling))
+(use-package init-spelling
+  :if *spell-check-support-enabled*
+  :ensure nil)
 
 (require 'init-misc)
 
