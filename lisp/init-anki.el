@@ -10,8 +10,8 @@
 (use-package anki-editor
   :custom
   (anki-editor-org-tags-as-anki-tags t)
+  (anki-editor-create-decks t)
   :config
-  (setq anki-editor-create-decks t)
 
   (defvar cdadar/anki-editor-cloze-number 1
     "Current Anki cloze number for helper commands.")

@@ -3,9 +3,9 @@
 ;;; Code:
 
 (use-package elm-mode
-  :config
-  (when (executable-find "elm-format")
-    (setq-default elm-format-on-save t)))
+  :if (executable-find "elm-format")
+  :custom
+  (elm-format-on-save t))
 
 (use-package elm-test-runner)
 

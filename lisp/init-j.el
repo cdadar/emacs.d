@@ -3,8 +3,8 @@
 ;;; Code:
 
 (use-package j-mode
-  :config
-  (setq-default j-console-cmd "jconsole")
+  :custom
+  (j-console-cmd "jconsole")
   :hook
   (inferior-j-mode-hook . (lambda () (electric-pair-mode -1))))
 

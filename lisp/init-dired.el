@@ -16,9 +16,9 @@
   (dired-dwim-target t)
   (dired-listing-switches "-alGh")
   (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'top)
   (dired-kill-when-opening-new-dired-buffer t)
   :config
-  (setq dired-recursive-deletes 'top)
   (defun dired-open-externally (&optional arg)
     "Open marked or current file in operating system's default application."
     (interactive "P")

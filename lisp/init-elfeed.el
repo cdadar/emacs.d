@@ -43,16 +43,16 @@
 
   (defvar rmh-elfeed-org-files (list rmh-elfeed-org-file)
     "Org files used by elfeed-org.")
-  :init
-  (setq rmh-elfeed-org-auto-ignore-invalid-feeds nil)
-  (setq rmh-elfeed-org-files (list rmh-elfeed-org-file))
+  :custom
+  (rmh-elfeed-org-auto-ignore-invalid-feeds nil)
+  (rmh-elfeed-org-files (list rmh-elfeed-org-file))
   :config
   (elfeed-org))
 
 (use-package elfeed-autotag
   :hook (after-init . elfeed-autotag)
-  :init
-  (setq elfeed-autotag-files (list rmh-elfeed-org-file)))
+  :custom
+  (elfeed-autotag-files (list rmh-elfeed-org-file)))
 
 
 

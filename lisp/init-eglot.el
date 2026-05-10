@@ -5,10 +5,10 @@
 ;;; Code:
 
 (use-package eglot
-  :init
-  (setq-default eglot-extend-to-xref t)
-  (setq eglot-code-action-indicator "✓")
-  (setq eglot-code-action-indications '(eldoc-hint mode-line))
+  :custom
+  (eglot-extend-to-xref t)
+  (eglot-code-action-indicator "✓")
+  (eglot-code-action-indications '(eldoc-hint mode-line))
   :config
   (use-package consult-eglot))
 

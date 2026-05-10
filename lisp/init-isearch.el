@@ -6,8 +6,8 @@
 (use-package anzu
   :hook
   (after-init . global-anzu-mode)
-  :config
-  (setq anzu-mode-lighter "")
+  :custom
+  (anzu-mode-lighter "")
   :bind
   (([remap query-replace-regexp] . anzu-query-replace-regexp)
    ([remap query-replace] . anzu-query-replace)))

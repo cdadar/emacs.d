@@ -3,9 +3,9 @@
 ;;; Code:
 
 (use-package habitica
-  :config
-  (setq habitica-turn-on-highlighting t)
-  (setq habitica-show-streak t))
+  :custom
+  (habitica-turn-on-highlighting t)
+  (habitica-show-streak t))
 
 (provide 'init-habitica)
 ;;; init-habitica.el ends here

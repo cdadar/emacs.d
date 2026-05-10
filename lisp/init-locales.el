@@ -19,9 +19,10 @@
         (message "Warning: non-UTF8 encoding in environment variable %s may cause interop problems with this Emacs configuration." varname))))
   (set-charset-priority 'unicode)
   (prefer-coding-system 'utf-8)
-  (setq locale-coding-system 'utf-8)
   (unless (eq system-type 'windows-nt)
-    (set-selection-coding-system 'utf-8)))
+    (set-selection-coding-system 'utf-8))
+  :custom
+  (locale-coding-system 'utf-8))
 
 (provide 'init-locales)
 ;;; init-locales.el ends here

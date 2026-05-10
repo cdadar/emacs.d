@@ -49,7 +49,8 @@
   :after (citar embark)
   :config
   (citar-embark-mode)
-  (setq citar-at-point-function 'embark-act))
+  :custom
+  (citar-at-point-function 'embark-act))
 
 
 (use-package citar-org-roam

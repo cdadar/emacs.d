@@ -3,9 +3,10 @@
 ;;; Code:
 
 (use-package csv-mode
+  :custom
+  (csv-separators '("," ";" "|" " "))
   :config
-  (add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
-  (setq csv-separators '("," ";" "|" " ")))
+  (add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'"))
 
 (provide 'init-csv)
 ;;; init-csv.el ends here

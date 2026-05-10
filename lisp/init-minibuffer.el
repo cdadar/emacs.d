@@ -12,10 +12,10 @@
   :hook ((after-init . vertico-mode)
          (rfn-eshadow-update-overlay . vertico-directory-tidy)
          (minibuffer-setup . vertico-repeat-save))
-  :config
-  (setq vertico-resize nil
-        vertico-count 17
-        vertico-cycle t))
+  :custom
+  (vertico-resize nil)
+  (vertico-count 17)
+  (vertico-cycle t))
 
 ;; savehist is configured centrally in init-sessions.el.
 
@@ -205,7 +205,8 @@
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<") ;; "C-+"
+  :custom
+  (consult-narrow-key "<") ;; "C-+"
 
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
@@ -253,8 +254,8 @@
         ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
         prefix-help-command #'embark-prefix-help-command)
 
-  (setq
-   embark-verbose-indicator-display-action
+  :custom
+  (embark-verbose-indicator-display-action
    '((display-buffer-at-bottom)
      (window-parameters (mode-line-format . none))
      (window-height . fit-window-to-buffer)))
