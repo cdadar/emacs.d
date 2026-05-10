@@ -62,6 +62,18 @@
   (flyspell-lazy-mode 1))
 
 ;; {{ ispell configuration
+(defconst cdadar/hunspell-local-dictionary-alist
+  '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8))
+  "Fallback Hunspell dictionary configuration for `ispell'.")
+
+(defun cdadar/ispell-program-name ()
+  "Return the preferred spell checker executable name, or nil.
+Prefer Aspell when available, otherwise Hunspell."
+  (cond
+   ((executable-find "aspell") "aspell")
+   ((executable-find "hunspell") "hunspell")
+   (t nil)))
+
 (defun flyspell-detect-ispell-args (&optional run-together)
   "If RUN-TOGETHER is true, spell check the CamelCase words.
 Please note RUN-TOGETHER will make aspell less capable. So it should only be used in prog-mode-hook."
@@ -96,35 +108,35 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
 ;; hunspell will search for a dictionary called `en_US' in the path specified by
 ;; `$DICPATH'
 
+(defun cdadar/with-standard-ispell-args (orig-fun &rest args)
+  "Run ORIG-FUN with standard ispell arguments, then restore custom args."
+  (let ((old-ispell-extra-args ispell-extra-args))
+    (ispell-kill-ispell t)
+    (unwind-protect
+        (progn
+          ;; use emacs original arguments
+          (setq ispell-extra-args (flyspell-detect-ispell-args))
+          (apply orig-fun args))
+      ;; restore our own ispell arguments
+      (setq ispell-extra-args old-ispell-extra-args)
+      (ispell-kill-ispell t))))
+
 (use-package ispell
   :ensure nil
   :demand t
+  :custom
+  (ispell-program-name (cdadar/ispell-program-name))
+  (ispell-local-dictionary
+   (when (equal (cdadar/ispell-program-name) "hunspell")
+     "en_US"))
+  (ispell-local-dictionary-alist
+   (when (equal (cdadar/ispell-program-name) "hunspell")
+     cdadar/hunspell-local-dictionary-alist))
   :config
-  (cond
-   ((executable-find "aspell")
-    (setq ispell-program-name "aspell"))
-   ((executable-find "hunspell")
-    (setq ispell-program-name "hunspell")
-    (setq ispell-local-dictionary "en_US")
-    (setq ispell-local-dictionary-alist
-          '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8))))
-   (t (setq ispell-program-name nil)
-      (message "You need install either aspell or hunspell for ispell")))
+  (unless ispell-program-name
+    (message "You need install either aspell or hunspell for ispell"))
 
   (setq-default ispell-extra-args (flyspell-detect-ispell-args t))
-
-  (defun cdadar/with-standard-ispell-args (orig-fun &rest args)
-    "Run ORIG-FUN with standard ispell arguments, then restore custom args."
-    (let ((old-ispell-extra-args ispell-extra-args))
-      (ispell-kill-ispell t)
-      (unwind-protect
-          (progn
-            ;; use emacs original arguments
-            (setq ispell-extra-args (flyspell-detect-ispell-args))
-            (apply orig-fun args))
-        ;; restore our own ispell arguments
-        (setq ispell-extra-args old-ispell-extra-args)
-        (ispell-kill-ispell t))))
 
   (unless (advice-member-p #'cdadar/with-standard-ispell-args 'ispell-word)
     (advice-add 'ispell-word :around #'cdadar/with-standard-ispell-args))
@@ -141,6 +153,18 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
   "Enable `flyspell-prog-mode' when spell checking is available."
   (when (can-enable-flyspell-mode)
     (flyspell-prog-mode)))
+
+;; {{ avoid spell-checking doublon (double word) in certain major modes
+(defvar flyspell-check-doublon t
+  "Check doublon (double word) when calling `flyspell-highlight-incorrect-region'.")
+
+(make-variable-buffer-local 'flyspell-check-doublon)
+
+(defun flyspell-highlight-incorrect-region-hack (orig-fun &rest args)
+  "Skip doublon highlighting when `flyspell-check-doublon' is nil."
+  (when (or flyspell-check-doublon (not (eq 'doublon (nth 2 args))))
+    (apply orig-fun args)))
+;; }}
 
 (use-package flyspell
   :ensure nil
@@ -176,18 +200,6 @@ Please note RUN-TOGETHER will make aspell less capable. So it should only be use
 
 ;; I don't use flyspell in text-mode because I often write Chinese.
 ;; I'd rather manually spell check the English text
-
-;; {{ avoid spell-checking doublon (double word) in certain major modes
-(defvar flyspell-check-doublon t
-  "Check doublon (double word) when calling `flyspell-highlight-incorrect-region'.")
-
-(make-variable-buffer-local 'flyspell-check-doublon)
-
-(defun flyspell-highlight-incorrect-region-hack (orig-fun &rest args)
-  "Skip doublon highlighting when `flyspell-check-doublon' is nil."
-  (when (or flyspell-check-doublon (not (eq 'doublon (nth 2 args))))
-    (apply orig-fun args)))
-;; }}
 
 (defun my-clean-aspell-dict ()
   "Clean ~/.aspell.pws (dictionary used by aspell)."
