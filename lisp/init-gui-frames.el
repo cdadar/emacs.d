@@ -67,10 +67,10 @@
                 (abbreviate-file-name (buffer-file-name))
               "%b")))))
 
-(when *is-a-mac*
-  (use-package ns-auto-titlebar
-    :config
-    (ns-auto-titlebar-mode)))
+(use-package ns-auto-titlebar
+  :if *is-a-mac*
+  :config
+  (ns-auto-titlebar-mode))
 
 (use-package ns-win
   :ensure nil

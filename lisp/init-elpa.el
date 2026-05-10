@@ -6,23 +6,17 @@
 (require 'cl-lib)
 
 
-;;; Install into separate package dirs for each Emacs version, to prevent bytecode incompatibility
-(setq package-user-dir
-      (locate-user-emacs-file (format "elpa-%s.%s" emacs-major-version emacs-minor-version)))
+(use-package emacs
+  :ensure nil
+  :init
+  (setq package-user-dir
+        (locate-user-emacs-file (format "elpa-%s.%s" emacs-major-version emacs-minor-version)))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-unsigned-archives "melpa")
+  :custom
+  (package-install-upgrade-built-in t)
+  (package-native-compile t))
 
-
-
-;;; Standard package repositories
-
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-unsigned-archives "melpa")
-;; Official MELPA Mirror, in case necessary.
-;;(add-to-list 'package-archives (cons "melpa-mirror" (concat proto "://www.mirrorservice.org/sites/melpa.org/packages/")) t)
-
-;; Allow built-in packages to be upgraded
-(setq package-install-upgrade-built-in t)
-
-
 ;;; On-demand installation of packages
 
 (defun require-package (package &optional min-version no-refresh)
@@ -60,8 +54,6 @@ locate PACKAGE."
 
 ;;; Fire up package.el
 
-(setq package-native-compile t)
-
 ;; Initialize packages
 (unless (bound-and-true-p package--initialized)
   (setq package-enable-at-startup nil)
@@ -77,16 +69,14 @@ locate PACKAGE."
   (require 'use-package))
 
 ;; Update packages
-(unless (fboundp 'package-upgrade-all)
-  (use-package auto-package-update
-    :ensure t
-    :hook (after-init . auto-package-update-maybe)
-    :if (not (daemonp))
-    :custom
-    (auto-package-update-interval 30)              ; 每30天检查一次
-    (auto-package-update-prompt-before-update t)   ; 升级前提示
-    (auto-package-update-delete-old-versions t)    ; 删除旧版本
-    (auto-package-update-hide-results t)))
+(use-package auto-package-update
+  :if (not (fboundp 'package-upgrade-all))
+  :hook (after-init . auto-package-update-maybe)
+  :custom
+  (auto-package-update-interval 30)
+  (auto-package-update-prompt-before-update t)
+  (auto-package-update-delete-old-versions t)
+  (auto-package-update-hide-results t))
 
 ;; Required by `use-package'
 (use-package diminish)

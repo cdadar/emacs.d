@@ -8,11 +8,11 @@
   (grep-highlight-matches t)
   (grep-scroll-output t))
 
-(when *is-a-mac*
-  (use-package locate
-    :ensure nil
-    :custom
-    (locate-command "mdfind")))
+(use-package locate
+  :ensure nil
+  :if *is-a-mac*
+  :custom
+  (locate-command "mdfind"))
 
 (use-package rg
   :if (executable-find "rg")
