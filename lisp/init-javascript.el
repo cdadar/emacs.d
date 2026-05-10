@@ -92,11 +92,11 @@
   ((js2-mode rjsx-mode) . prettier-javascript-on-save-mode))
 
 (use-package js-doc
-  :config
-  (setq js-doc-mail-address "your email address"
-        js-doc-author (format "your name <%s>" js-doc-mail-address)
-        js-doc-url "url of your website"
-        js-doc-license "license name")
+  :custom
+  (js-doc-mail-address "your email address")
+  (js-doc-author (format "your name <%s>" js-doc-mail-address))
+  (js-doc-url "url of your website")
+  (js-doc-license "license name")
   :hook
   (js2-mode . (lambda ()
                 (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)

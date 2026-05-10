@@ -67,6 +67,17 @@
   (gptel-model "minimax/minimax-m2.5")
   (gptel-stream t)
   (gptel-system-message "You are a helpful assistant.")
+  (gptel-backend
+   (gptel-make-openai
+       "OpenRouter"
+     :host "openrouter.ai"
+     :protocol "https"
+     :endpoint "/api/v1/chat/completions"
+     :key #'cdadar/get-openrouter-api-key
+     :models '("minimax/minimax-m2.5"
+               "anthropic/claude-4.5-sonnet"
+               "openai/gpt-4o"
+               "google/gemini-2.0-flash")))
   :config
   (defun cdadar/get-openrouter-api-key ()
     (or (getenv "OPENROUTER_API_KEY")
@@ -74,19 +85,7 @@
         (user-error
          (concat
           "OpenRouter API key not found. Set OPENROUTER_API_KEY "
-          "or add machine openrouter.ai login api password <key> to ~/.authinfo"))))
-
-  (setq gptel-backend
-        (gptel-make-openai
-            "OpenRouter"
-          :host "openrouter.ai"
-          :protocol "https"
-          :endpoint "/api/v1/chat/completions"
-          :key #'cdadar/get-openrouter-api-key
-          :models '("minimax/minimax-m2.5"
-                    "anthropic/claude-4.5-sonnet"
-                    "openai/gpt-4o"
-                    "google/gemini-2.0-flash"))))
+          "or add machine openrouter.ai login api password <key> to ~/.authinfo")))))
 
 (use-package gptel-magit
   :hook (magit-mode . gptel-magit-install))

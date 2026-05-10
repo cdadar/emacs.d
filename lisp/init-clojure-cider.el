@@ -5,8 +5,8 @@
 (require 'init-clojure)
 
 (use-package cider
-  :init
-  (setq nrepl-popup-stacktraces nil)
+  :custom
+  (nrepl-popup-stacktraces nil)
   :hook
   (cider-repl-mode . subword-mode)
   (cider-repl-mode . paredit-mode)
