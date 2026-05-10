@@ -998,9 +998,10 @@ paragraph indentation inside quote environments.  INFO is ignored."
              org-mind-map-write-with-prompt
              org-mind-map-write-current-branch
              org-mind-map-write-current-tree)
+  :custom
+  (org-mind-map-engine "dot")
   :init
-  (require 'ox-org nil t)
-  (setq org-mind-map-engine "dot")) ; Default. Directed Graph
+  (require 'ox-org nil t))
 
 ;; Knowledge and media extensions
 (use-package org-brain
@@ -1059,79 +1060,79 @@ paragraph indentation inside quote environments.  INFO is ignored."
   (org-roam-database-connector 'sqlite-builtin)
   (org-roam-completion-everywhere t)
   (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-capture-templates
+   '(("d" "default" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("c" "Christian")
+     ("ca" "基督学房" plain "%?"
+      :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("cb" "个人" plain "%?"
+      :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("cB" "圣经" plain "%?"
+      :target (file+head "christian/bible/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("ce" "例证" plain "%?"
+      :target (file+head "christian/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+tags: 例证")
+      :unnarrowed t)
+     ("co" "听道" plain "%?"
+      :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+tags: 听道")
+      :unnarrowed t)
+     ("cs" "查经" plain "%?"
+      :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+tags: 查经")
+      :unnarrowed t)
+     ("cS" "学道" plain "%?"
+      :target (file+head "christian/word/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+tags: 学道")
+      :unnarrowed t)
+     ("cw" "忘记背后" plain "%?"
+      :target (file+head "christian/wjbh/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+tags: 忘记背后")
+      :unnarrowed t)
+     ("cy" "以斯拉学习" plain "%?"
+      :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("cz" "栽培班" plain "%?"
+      :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("p" "program" plain "%?"
+      :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("n" "Booknotes" plain "%?"
+      :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("i" "investment" plain "%?"
+      :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("o" "other" plain "%?"
+      :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("w" "work" plain "%?"
+      :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)
+     ("B" "blog" plain "%?"
+      :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)))
   :config
   (when (fboundp 'org-roam-db-autosync-mode)
-    (org-roam-db-autosync-mode 1))
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?"
-           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("c" "Christian")
-          ("ca" "基督学房" plain "%?"
-           :target (file+head "christian/academyofchrist/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("cb" "个人" plain "%?"
-           :target (file+head "christian/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("cB" "圣经" plain "%?"
-           :target (file+head "christian/bible/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("ce" "例证" plain "%?"
-           :target (file+head "christian/exmaple/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n#+tags: 例证")
-           :unnarrowed t)
-          ("co" "听道" plain "%?"
-           :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n#+tags: 听道")
-           :unnarrowed t)
-          ("cs" "查经" plain "%?"
-           :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n#+tags: 查经")
-           :unnarrowed t)
-          ("cS" "学道" plain "%?"
-           :target (file+head "christian/word/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n#+tags: 学道")
-           :unnarrowed t)
-          ("cw" "忘记背后" plain "%?"
-           :target (file+head "christian/wjbh/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n#+tags: 忘记背后")
-           :unnarrowed t)
-          ("cy" "以斯拉学习" plain "%?"
-           :target (file+head "christian/yisila/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("cz" "栽培班" plain "%?"
-           :target (file+head "christian/cultivation/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("p" "program" plain "%?"
-           :target (file+head "program/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("n" "Booknotes" plain "%?"
-           :target (file+head "booknotes/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("i" "investment" plain "%?"
-           :target (file+head "investment/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("o" "other" plain "%?"
-           :target (file+head "other/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("w" "work" plain "%?"
-           :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t)
-          ("B" "blog" plain "%?"
-           :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t))))
+    (org-roam-db-autosync-mode 1)))
 
 (use-package org-roam-ui
   :if (locate-library "org-roam-ui")
