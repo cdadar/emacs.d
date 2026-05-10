@@ -161,10 +161,13 @@ With prefix argument FOLLOW, ask Magit to follow renames for the current file."
 
 (use-package magit-todos)
 
-(use-package vc-msg
+(use-package vc-msg)
+
+(use-package vc-msg-git
+  :ensure nil
+  :after vc-msg
   :config
-  (with-eval-after-load 'vc-msg-git
-    (cdadar/setup-vc-msg-git-integration)))
+  (cdadar/setup-vc-msg-git-integration))
 
 
 ;;; git-svn support
