@@ -12,8 +12,8 @@
 (use-package js-mode
   :ensure nil
   :mode ("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode)
-  :config
-  (setq-default js-indent-level 2))
+  :custom
+  (js-indent-level 2))
 
 (use-package rjsx-mode
   :mode (("\\.jsx\\'" . rjsx-mode)
@@ -28,9 +28,9 @@
   :hook
   (js2-mode . (lambda () (setq mode-name "JS2")))
   :interpreter ("node" . js2-mode)
+  :custom
+  (js2-bounce-indent-p nil)
   :config
-  ;; Change some defaults: customize them to override
-  (setq-default js2-bounce-indent-p nil)
   (setq-local js2-mode-show-parse-errors t)
   (setq-local js2-mode-show-strict-warnings t)
   (when (derived-mode-p 'js-mode)
@@ -40,27 +40,30 @@
   (sanityinc/major-mode-lighter 'js2-jsx-mode "JSX2"))
 
 
-(when (executable-find "rg")
-  (use-package xref-js2
-    :config
-    (setq-default xref-js2-search-program 'rg)
-    (defun sanityinc/enable-xref-js2 ()
-      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
-    (let ((base-mode 'js-base-mode))
-      (with-eval-after-load 'js
-        (add-hook (derived-mode-hook-name base-mode) 'sanityinc/enable-xref-js2)
-        (define-key js-mode-map (kbd "M-.") nil)
-        (when (boundp 'js-ts-mode-map)
-          (define-key js-ts-mode-map (kbd "M-.") nil))))
+(use-package xref-js2
+  :if (executable-find "rg")
+  :custom
+  (xref-js2-search-program 'rg)
+  :preface
+  (defun sanityinc/enable-xref-js2 ()
+    (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
+  :config
+  (let ((base-mode 'js-base-mode))
+    (with-eval-after-load 'js
+      (add-hook (derived-mode-hook-name base-mode) 'sanityinc/enable-xref-js2)
+      (define-key js-mode-map (kbd "M-.") nil)
+      (when (boundp 'js-ts-mode-map)
+        (define-key js-ts-mode-map (kbd "M-.") nil))))
     (with-eval-after-load 'js2-mode
-      (define-key js2-mode-map (kbd "M-.") nil))))
+      (define-key js2-mode-map (kbd "M-.") nil)))
 
 
 ;; Run and interact with an inferior JS via js-comint.el
 
 (use-package js-comint
+  :custom
+  (js-comint-program-command "node")
   :config
-  (setq js-comint-program-command "node")
   (defvar inferior-js-minor-mode-map (make-sparse-keymap))
   (define-minor-mode inferior-js-keys-mode
     "Bindings for communicating with an inferior js interpreter."
@@ -79,15 +82,14 @@
   :config
   (js2r-add-keybindings-with-prefix "C-c C-m"))
 
-(when (executable-find "prettier")
-  (use-package reformatter
-    :config
-    (reformatter-define prettier-javascript
-      :program "prettier"
-      :args '("--parser=babel" "--arrow-parens=avoid"))
-
-    (add-hook 'js2-mode-hook 'prettier-javascript-on-save-mode)
-    (add-hook 'rjsx-mode-hook 'prettier-javascript-on-save-mode)))
+(use-package reformatter
+  :if (executable-find "prettier")
+  :config
+  (reformatter-define prettier-javascript
+    :program "prettier"
+    :args '("--parser=babel" "--arrow-parens=avoid"))
+  :hook
+  ((js2-mode rjsx-mode) . prettier-javascript-on-save-mode))
 
 (use-package js-doc
   :config

@@ -115,11 +115,11 @@ Call a second time to restore the original window configuration."
              (buffer-name))))
 
 
-(unless (memq window-system '(nt w32))
-  (use-package windswap
-    :config
-    (windmove-default-keybindings 'control)
-    (windswap-default-keybindings 'shift 'control)))
+(use-package windswap
+  :if (not (memq window-system '(nt w32)))
+  :config
+  (windmove-default-keybindings 'control)
+  (windswap-default-keybindings 'shift 'control))
 
 
 (use-package pulsar

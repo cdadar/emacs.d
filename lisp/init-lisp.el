@@ -10,10 +10,8 @@
   :custom
   (initial-scratch-message
    (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
-  :init
-  (setq-default debugger-bury-or-kill 'kill)
-  :config
-  (setq load-prefer-newer t))
+  (debugger-bury-or-kill 'kill)
+  (load-prefer-newer t))
 
 (use-package elisp-slime-nav
   :hook
@@ -212,12 +210,14 @@ there is no current file, eval the current buffer."
   :config
   (add-to-list 'sanityinc/lispy-modes-hook 'aggressive-indent-mode))
 
-(dolist (mode '(emacs-lisp-mode ielm-mode lisp-mode inferior-lisp-mode lisp-interaction-mode))
-  (unless (memq mode '(emacs-lisp-mode ielm-mode))
-    (add-hook (intern (format "%s-hook" mode)) #'sanityinc/run-lispy-mode-hooks)))
-
-(add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
-(add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
+(use-package emacs
+  :ensure nil
+  :init
+  (dolist (mode '(emacs-lisp-mode ielm-mode lisp-mode inferior-lisp-mode lisp-interaction-mode))
+    (unless (memq mode '(emacs-lisp-mode ielm-mode))
+      (add-hook (intern (format "%s-hook" mode)) #'sanityinc/run-lispy-mode-hooks)))
+  (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
+  (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode)))
 
 
 
