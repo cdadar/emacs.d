@@ -66,10 +66,10 @@ The configuration uses constants to enable/disable features based on Emacs versi
 
 LSP integration via `eglot` (configured in `init-lsp.el`):
 - Auto-enabled for most programming modes except emacs-lisp, lisp, makefile
-- Configured with optimized settings: 1MB read-process-output-max, autoshutdown enabled
+- Configured with optimized settings: 4MB read-process-output-max, autoshutdown enabled
 
 Major language configurations available:
-- Go: `init-golang.el`
+- Go: `init-go.el`
 - Python: `init-python.el`
 - JavaScript/TypeScript: `init-javascript.el`
 - Ruby: `init-ruby.el`
@@ -124,6 +124,7 @@ Use conservative, behavior-preserving `use-package` refactors:
 - For small modules, keep helper functions at top level when they are shared, and move package-owned hooks, keymaps, and `defcustom` settings into the relevant `use-package` block.
 - Before moving a variable into `:custom`, verify it is a `defcustom` of that package in the installed source.
 - After moving `:mode`, `:hook`, or `:bind` declarations, run a targeted batch check for the resulting auto-mode entry, hook, or keymap binding instead of relying on startup alone.
+- For **local configuration modules** (not external packages, e.g. `init-treesitter.el`, `init-spelling.el`), keep `when` + `require` style. Do not wrap them in `use-package`; `:ensure nil` still triggers `package-installed-p` checks and can fail at startup.
 
 For each focused cleanup batch, run at least:
 ```bash
