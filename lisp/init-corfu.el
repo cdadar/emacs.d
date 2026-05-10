@@ -28,14 +28,13 @@
   :custom
   (corfu-cycle t)
   (corfu-auto t)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
   (corfu-quit-at-boundary t)
   (corfu-quit-no-match t)
   (corfu-preview-current nil)
   (corfu-min-width 80)
   (corfu-max-width 100)
-  :init
-  (setq corfu-auto-delay 0.2)
-  (setq corfu-auto-prefix 2)
   :preface
   (defun cdadar/orderless-dispatch-flex-first (_pattern index _total)
     "orderless-flex for corfu."
@@ -92,8 +91,10 @@
   ;; Bind dedicated completion commands
   ;; Alternative prefix keys: C-c p, M-p, M-+, ...
   :bind (("C-c p" . cape-prefix-map))
+  :custom
+  (cape-dabbrev-min-length 3)
+  (cape-dabbrev-check-other-buffers nil)
   :init
-  (setq cape-dabbrev-min-length 3)
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
@@ -123,8 +124,7 @@
   (unless (advice-member-p #'cape-wrap-nonexclusive 'eglot-completion-at-point)
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-nonexclusive))
   (unless (advice-member-p #'cape-wrap-nonexclusive 'pcomplete-completions-at-point)
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive))
-  (setq cape-dabbrev-check-other-buffers nil))
+    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)))
 
 (use-package yasnippet-capf
   :commands (yasnippet-capf)

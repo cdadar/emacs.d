@@ -25,10 +25,9 @@
       (cond ((> colors 8) "xterm-256color")
             ((> colors 1) "xterm-color")
             (t "xterm"))))
-  :init
-  (setq-default eat-term-scrollback-size (* 2 1024 1024))
-  (setq eat-term-name 'sanityinc/eat-term-get-suitable-term-name)
-
+  :custom
+  (eat-term-scrollback-size (* 2 1024 1024))
+  (eat-term-name 'sanityinc/eat-term-get-suitable-term-name)
   :hook (eat-exit . sanityinc/on-eat-exit)
   :bind (:map global-map ("C-c t" . sanityinc/eat-map))
   :config
