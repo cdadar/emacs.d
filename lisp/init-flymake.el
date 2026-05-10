@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package eldoc
+  :ensure nil
+  :custom
+  (eldoc-documentation-function #'eldoc-documentation-compose))
+
 (use-package flymake
   :diminish
   :hook
@@ -13,22 +18,20 @@
         ("C-c ! p" . flymake-goto-prev-error)
         ("C-c ! c" . flymake-start))
   :config
-  (setq eldoc-documentation-function 'eldoc-documentation-compose)
-
   (add-hook 'flymake-mode-hook
             (lambda ()
               (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t))))
 
+(use-package flycheck
+  ;; Disable flycheck checkers for which we have flymake equivalents.
+  :config
+  (setq-default flycheck-disabled-checkers
+                (append (default-value 'flycheck-disabled-checkers)
+                        '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package sh-shellcheck))))
 
 ;; Use flycheck checkers with flymake, to extend its coverage
 (use-package flymake-flycheck
-  ;; Disable flycheck checkers for which we have flymake equivalents
-  :after flycheck
-  :init
-  (setq-default flycheck-disabled-checkers
-                (append (default-value 'flycheck-disabled-checkers)
-                        '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package sh-shellcheck)))
-
+  :after (flymake flycheck)
   :hook
   ((flymake-mode . flymake-flycheck-auto)
    ((prog-mode text-mode) . flymake-mode)))
