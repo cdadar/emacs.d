@@ -36,6 +36,7 @@
   (org-enforce-todo-checkbox-dependencies nil)
   (org-image-actual-width '(400))
   (org-tags-column 80)
+  (org-tags-exclude-from-inheritance '("secret"))
   (org-deadline-warning-days 30)
   (org-lowest-priority 68)
   (org-support-shift-select t)
@@ -462,10 +463,6 @@ NTH supports 1..5, or -1 for the last weekday in month."
     (require 'org-crypt nil t)
     (when (featurep 'org-crypt)
       (org-crypt-use-before-save-magic)
-      (setq org-crypt-tag-matcher "secret"
-            org-tags-exclude-from-inheritance '("secret")
-            org-crypt-key "6DF1ABB0"
-            epg-pinentry-mode 'loopback)
       ;; 有解密条目的 buffer 跳过自动保存，避免 super-save 立刻重新加密
       (defvar-local cdadar/org-crypt-decrypting nil
         "Non-nil when an org-crypt entry has been decrypted in this buffer.")
@@ -628,6 +625,17 @@ NTH supports 1..5, or -1 for the last weekday in month."
   (cdadar/org-setup-global-prefix)
   (cdadar/org-setup-capture)
   (cdadar/org-setup-ui))
+
+(use-package org-crypt
+  :ensure nil
+  :custom
+  (org-crypt-tag-matcher "secret")
+  (org-crypt-key "6DF1ABB0"))
+
+(use-package epg-config
+  :ensure nil
+  :custom
+  (epg-pinentry-mode 'loopback))
 
 ;;; --- Export post-processing helpers ---
 
