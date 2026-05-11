@@ -67,18 +67,22 @@
   (gptel-model "minimax/minimax-m2.5")
   (gptel-stream t)
   (gptel-system-message "You are a helpful assistant.")
-  (gptel-backend
-   (gptel-make-openai
-       "OpenRouter"
-     :host "openrouter.ai"
-     :protocol "https"
-     :endpoint "/api/v1/chat/completions"
-     :key #'cdadar/get-openrouter-api-key
-     :models '("minimax/minimax-m2.5"
-               "anthropic/claude-4.5-sonnet"
-               "openai/gpt-4o"
-               "google/gemini-2.0-flash")))
   :config
+  ;; `gptel-backend' is a defcustom, but its value is a runtime object
+  ;; constructed by `gptel-make-openai'.  Keep it in :config so the
+  ;; constructor runs after gptel (and its autoloads) are loaded, and so
+  ;; the helper `cdadar/get-openrouter-api-key' is already defined.
+  (setq gptel-backend
+        (gptel-make-openai
+            "OpenRouter"
+          :host "openrouter.ai"
+          :protocol "https"
+          :endpoint "/api/v1/chat/completions"
+          :key #'cdadar/get-openrouter-api-key
+          :models '("minimax/minimax-m2.5"
+                    "anthropic/claude-4.5-sonnet"
+                    "openai/gpt-4o"
+                    "google/gemini-2.0-flash")))
   (defun cdadar/get-openrouter-api-key ()
     (or (getenv "OPENROUTER_API_KEY")
         (auth-source-pick-first-password :host "openrouter.ai" :user "api")
