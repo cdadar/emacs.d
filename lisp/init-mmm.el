@@ -5,9 +5,9 @@
 (use-package mmm-mode
   :custom
   (mmm-submode-decoration-level 2)
+  (mmm-global-mode 'buffers-with-submode-classes)
   :config
-  (require 'mmm-auto)
-  (setq mmm-global-mode 'buffers-with-submode-classes))
+  (require 'mmm-auto))
 
 
 (provide 'init-mmm)

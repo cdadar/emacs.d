@@ -32,17 +32,17 @@
 
 (require 'cl-lib)
 
-(defun cdadar/eglot-managed-mode-p ()
-  "Return non-nil when the current buffer should auto-enable Eglot."
-  (not (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'snippet-mode)))
-
-(defun cdadar/eglot-ensure-maybe ()
-  "Enable Eglot in the current buffer when appropriate."
-  (when (cdadar/eglot-managed-mode-p)
-    (eglot-ensure)))
-
 (use-package eglot
   :ensure nil
+  :preface
+  (defun cdadar/eglot-managed-mode-p ()
+    "Return non-nil when the current buffer should auto-enable Eglot."
+    (not (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'snippet-mode)))
+
+  (defun cdadar/eglot-ensure-maybe ()
+    "Enable Eglot in the current buffer when appropriate."
+    (when (cdadar/eglot-managed-mode-p)
+      (eglot-ensure)))
   :commands (eglot eglot-ensure)
   :hook ((prog-mode . cdadar/eglot-ensure-maybe)
          ((markdown-mode yaml-mode yaml-ts-mode) . eglot-ensure))
