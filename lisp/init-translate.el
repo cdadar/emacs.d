@@ -30,8 +30,9 @@
 
   (defun cdadar/gt-setup-default-translator ()
     "Initialize `gt' presets and choose the word translator by default."
-    (setq gt-preset-translators (cdadar/gt-preset-translators))
-    (setq gt-default-translator (alist-get 'word gt-preset-translators)))
+    (let ((preset-translators (cdadar/gt-preset-translators)))
+      (setq gt-preset-translators preset-translators
+            gt-default-translator (alist-get 'word preset-translators))))
   :custom
   (gt-langs '(en zh))
   (gt-taker-text 'word)
