@@ -5,17 +5,41 @@
 (require 'package)
 (require 'cl-lib)
 
+
 
 (use-package emacs
   :ensure nil
   :init
-  (setq package-user-dir
-        (locate-user-emacs-file (format "elpa-%s.%s" emacs-major-version emacs-minor-version)))
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-unsigned-archives "melpa")
   :custom
   (package-install-upgrade-built-in t)
   (package-native-compile t))
+
+;;; Fire up package.el
+
+(use-package package
+  :ensure nil
+  :custom
+  (package-user-dir
+   (locate-user-emacs-file (format "elpa-%s.%s" emacs-major-version emacs-minor-version)))
+  (package-enable-at-startup nil)
+  :hook (package-menu-mode . sanityinc/maybe-widen-package-menu-columns)
+  :config
+  (unless (bound-and-true-p package--initialized)
+    (package-initialize)))
+
+;; Setup `use-package'
+;; Should set before declaring packages.
+(eval-and-compile
+  (require 'use-package)
+  (use-package use-package-core
+    :ensure nil
+    :custom
+    (use-package-always-ensure t)
+    (use-package-always-defer t)
+    (use-package-expand-minimally t)
+    (use-package-enable-imenu-support t)))
 
 ;;; On-demand installation of packages
 
@@ -51,23 +75,8 @@ locate PACKAGE."
      (message "Couldn't install optional package `%s': %S" package err)
      nil)))
 
+
 
-;;; Fire up package.el
-
-;; Initialize packages
-(unless (bound-and-true-p package--initialized)
-  (setq package-enable-at-startup nil)
-  (package-initialize))
-
-;; Setup `use-package'
-;; Should set before declaring packages.
-(eval-and-compile
-  (setq use-package-always-ensure t)
-  (setq use-package-always-defer t)
-  (setq use-package-expand-minimally t)
-  (setq use-package-enable-imenu-support t)
-  (require 'use-package))
-
 ;; Update packages
 (use-package auto-package-update
   :if (not (fboundp 'package-upgrade-all))
@@ -89,9 +98,9 @@ locate PACKAGE."
 
 
 
-
 ;; Update GPG keyring for GNU ELPA
 (use-package gnu-elpa-keyring-update)
+
 
 
 
@@ -115,6 +124,7 @@ advice for `require-package', to which ARGS are passed."
 (unless (advice-member-p #'sanityinc/note-selected-package 'require-package)
   (advice-add 'require-package :around #'sanityinc/note-selected-package))
 
+
 
 ;; Work around an issue in Emacs 29 where seq gets implicitly
 ;; reinstalled via the rg -> transient dependency chain, but fails to
@@ -131,6 +141,7 @@ advice for `require-package', to which ARGS are passed."
     (advice-add 'package--reload-previously-loaded :around
                 #'sanityinc/reload-previously-loaded-with-load-path-updated)))
 
+
 
 
 (defun sanityinc/save-selected-packages ()
@@ -141,6 +152,7 @@ advice for `require-package', to which ARGS are passed."
 (when (fboundp 'package--save-selected-packages)
   (require-package 'seq)
   (add-hook 'after-init-hook #'sanityinc/save-selected-packages))
+
 
 
 (defun sanityinc/set-tabulated-list-column-width (col-name width)
@@ -156,10 +168,6 @@ advice for `require-package', to which ARGS are passed."
     (sanityinc/set-tabulated-list-column-width "Version" 13)
     (let ((longest-archive-name (apply 'max (mapcar 'length (mapcar 'car package-archives)))))
       (sanityinc/set-tabulated-list-column-width "Archive" longest-archive-name))))
-
-(use-package package
-  :ensure nil
-  :hook (package-menu-mode . sanityinc/maybe-widen-package-menu-columns))
 
 
 (provide 'init-elpa)
