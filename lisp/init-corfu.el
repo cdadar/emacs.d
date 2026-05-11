@@ -91,10 +91,9 @@
   ;; Bind dedicated completion commands
   ;; Alternative prefix keys: C-c p, M-p, M-+, ...
   :bind (("C-c p" . cape-prefix-map))
-  :custom
-  (cape-dabbrev-min-length 3)
-  (cape-dabbrev-check-other-buffers nil)
   :init
+  (setq cape-dabbrev-min-length 3)
+  (setq cape-dabbrev-check-other-buffers nil)
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local

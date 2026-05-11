@@ -3,9 +3,8 @@
 ;;; Code:
 
 (use-package php-mode
-  :custom
-  (php-template-compatibility nil)
   :config
+  (setq php-template-compatibility nil)
   (setq indent-tabs-mode nil)
   (setq c-basic-offset 2)
   (subword-mode 1)

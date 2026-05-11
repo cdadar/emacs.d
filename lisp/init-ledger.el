@@ -10,11 +10,10 @@
         ("RET" . newline)
         ("C-o" . open-line))
   :mode ("\\.\\(dat\\|ledger\\)\\'" . ledger-mode)
-  :custom
-  (ledger-highlight-xact-under-point nil)
-  (ledger-use-iso-dates nil)
-  (ledger-mode-should-check-version nil)
   :config
+  (setq ledger-highlight-xact-under-point nil)
+  (setq ledger-use-iso-dates nil)
+  (setq ledger-mode-should-check-version nil)
 
   ;; (set ledger-reports
   ;;      '(("当月收支分类统计明细" "%(binary) [[ledger-mode-flags]] -f %(ledger-file) reg ^Expenses ^Incomes -M -X CNY --begin '2023-07-01'")

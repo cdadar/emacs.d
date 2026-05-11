@@ -151,8 +151,8 @@
   :diminish
   :hook
   (after-init . global-undo-tree-mode)
-  :custom
-  (undo-tree-auto-save-history nil))
+  :init
+  (setq undo-tree-auto-save-history nil))
 
 
 
@@ -173,7 +173,7 @@
    :map browse-kill-ring-mode-map
    ("C-g" . browse-kill-ring-quit)
    ("M-n" . browse-kill-ring-forward)
-   ("M-p" . browse-kill-ring-backward)))
+   ("M-p" . browse-kill-ring-previous)))
 
 ;; Don't disable narrowing commands
 ;; Don't disable case-change functions
@@ -445,14 +445,13 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package wgrep
   :commands wgrep-change-to-wgrep-mode
-  :custom
-  (wgrep-auto-save-buffer t)
-  (wgrep-change-readonly-file t)
+  :init
+  (setq wgrep-auto-save-buffer t
+        wgrep-change-readonly-file t)
   :bind
   (:map grep-mode-map
         ("C-c C-q" . wgrep-change-to-wgrep-mode)
-        :map occur-mode-map
-        ("C-c C-q" . wgrep-change-to-wgrep-mode)))
+        ("C-x C-q" . wgrep-change-to-wgrep-mode)))
 
 (use-package elisp-demos
   :config

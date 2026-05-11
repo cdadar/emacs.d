@@ -81,7 +81,8 @@ VER, FILENAME, and ARGS are forwarded unchanged."
   :custom
   (session-save-file (locate-user-emacs-file ".session"))
   (session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
-  (session-save-file-coding-system 'utf-8)
+  :config
+  (setq session-save-file-coding-system 'utf-8)
   :hook
   (after-init . session-initialize))
 

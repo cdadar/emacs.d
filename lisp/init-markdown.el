@@ -3,9 +3,8 @@
 ;;; Code:
 
 (use-package markdown-mode
-  :custom
-  (markdown-command "pandoc")
   :config
+  (setq markdown-command "pandoc")
   (add-auto-mode 'markdown-mode "\\.md\\..markdown\\.html\\'")
   (with-eval-after-load 'whitespace-cleanup-mode
     (add-to-list 'whitespace-cleanup-mode-ignore-modes 'markdown-mode)))

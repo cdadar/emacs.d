@@ -18,8 +18,9 @@
 (use-package ibuffer
   :ensure nil
   :bind (("C-x C-b" . ibuffer))
+  :init
+  (setq ibuffer-show-empty-filter-groups nil)
   :custom
-  (ibuffer-show-empty-filter-groups nil)
   (ibuffer-filter-group-name-face 'font-lock-doc-face)
   :config
   (sanityinc/fullframe-mode 'ibuffer-mode)
