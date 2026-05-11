@@ -5,10 +5,11 @@
 
 
 (use-package sly
+  :custom
+  (sly-net-coding-system 'utf-8-unix)
   :config
   ;;; Lisp buffers
   (setq sly-protocol-version 'ignore)
-  (setq sly-net-coding-system 'utf-8-unix)
   (let ((features '(sly-fancy)))
     ;; (when (require 'sly-company nil t)
     ;;   (push 'sly-company features))

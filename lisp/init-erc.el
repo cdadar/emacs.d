@@ -136,9 +136,10 @@ that can occur between two notifications.  The default is
   ;; autoaway setup
   (erc-auto-discard-away t)
   (erc-autoaway-idle-seconds 600)
+  (erc-autoaway-idle-method 'emacs)
   :config
-  (if (boundp 'erc-autoaway-idle-method)
-      (setq erc-autoaway-idle-method 'emacs)
+  ;; Fallback for older ERC versions without `erc-autoaway-idle-method'
+  (unless (boundp 'erc-autoaway-idle-method)
     (setq erc-autoaway-use-emacs-idle t)))
 
 (use-package erc-spelling

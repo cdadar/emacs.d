@@ -104,9 +104,9 @@
 
 (use-package emacs
   :ensure nil
-  :init
+  :custom
   ;; make cursor style bar
-  (setq-default cursor-type 'box)
+  (cursor-type 'box)
   :config
   (apply-if-gui #'cdadar/reset-frame-size))
 
