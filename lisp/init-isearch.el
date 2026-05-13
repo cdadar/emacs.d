@@ -71,6 +71,14 @@ This is useful when followed by an immediate kill."
     (interactive)
     (isearch-exit)
     (goto-char isearch-other-end))
+
+  (defun sanityinc/isearch-clear ()
+    "Clear current isearch input."
+    (interactive)
+    (setq isearch-string ""
+          isearch-message ""
+          isearch-yank-flag t)
+    (isearch-search-and-update))
   :bind
   (("C-s" . sanityinc/isearch-dwim)
    ("C-r" . isearch-backward)
@@ -80,6 +88,7 @@ This is useful when followed by an immediate kill."
    ("C-c C-o" . sanityinc/isearch-occur)
    ("C-M-w" . isearch-yank-symbol)
    ("C-<return>" . sanityinc/isearch-exit-other-end)
+   ("C-l" . sanityinc/isearch-clear)
    ("C-<backspace>" . isearch-del-char)
    ("<backspace>" . isearch-del-char)
    ("DEL" . isearch-del-char)
