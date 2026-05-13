@@ -110,12 +110,6 @@
   :config
   (apply-if-gui #'cdadar/reset-frame-size))
 
-;; use-package with package.el:
-(use-package dashboard
-  :ensure t
-  :init
-  (dashboard-setup-startup-hook))
-
 
 (provide 'init-personal)
 ;;; init-personal.el ends here
