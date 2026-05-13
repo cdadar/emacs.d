@@ -381,9 +381,9 @@ ORIG is the advised function, which is called with its ARGS."
   (editorconfig-mode))
 
 (use-package keyfreq
-  :config
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
+  :hook
+  (after-init . keyfreq-mode)
+  (after-init . keyfreq-autosave-mode))
 
 (use-package define-word
   :bind

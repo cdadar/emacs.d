@@ -77,8 +77,7 @@
 (use-package erc-join
   :ensure nil
   :after erc
-  :config
-  (erc-autojoin-mode 1))
+  :hook (after-init . erc-autojoin-mode))
 
 (use-package erc-track
   :ensure nil

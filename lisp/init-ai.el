@@ -22,13 +22,13 @@
   :bind (("C-c A" . ai-code-menu))
   :custom
   (ai-code-auto-test-type 'ask-me)
+  :hook (after-init . ai-code-prompt-filepath-completion-mode)
   :config
   ;; Primary AI coding entrypoint. Other supported backends include
   ;; 'claude-code, 'gemini, 'github-copilot-cli, 'opencode, 'grok,
   ;; 'cursor, 'kiro, 'codebuddy, 'aider, 'eca, 'agent-shell,
   ;; 'claude-code-ide and 'claude-code-el.
   (ai-code-set-backend 'codex)
-  (ai-code-prompt-filepath-completion-mode 1)
   (with-eval-after-load 'evil
     (ai-code-backends-infra-evil-setup))
   (with-eval-after-load 'magit

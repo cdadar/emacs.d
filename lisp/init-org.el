@@ -1138,9 +1138,10 @@ paragraph indentation inside quote environments.  INFO is ignored."
       :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
                          "#+title: ${title}\n")
       :unnarrowed t)))
+  :hook (after-init . org-roam-db-autosync-mode)
   :config
-  (when (fboundp 'org-roam-db-autosync-mode)
-    (org-roam-db-autosync-mode 1)))
+  ;; org-roam-db-autosync-mode is enabled via :hook above
+  )
 
 (use-package org-roam-ui
   :if (locate-library "org-roam-ui")
