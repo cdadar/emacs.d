@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; I use nix + direnv instead of virtualenv/pyenv/pyvenv, and it is an
-;; approach which extends to other languages too. I recorded a
-;; screencast about this: https://www.youtube.com/watch?v=TbIHRHy7_JM
+;; Python projects are managed with uv.
 
 
 (use-package python
