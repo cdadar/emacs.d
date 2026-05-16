@@ -1,8 +1,15 @@
 ;;; init-themes.el --- Defaults for themes -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
-(use-package emacs
+;; Theme configuration — modus-themes is built into Emacs and loaded via
+;; `load-theme', but does not provide a `modus-themes' feature that can be
+;; required.  We use `:no-require t' to prevent `use-package' from calling
+;; `require', while `:demand t' still ensures the :custom/:config/:bind are
+;; evaluated eagerly at startup.
+(use-package modus-themes
   :ensure nil
+  :no-require t
+  :demand t
   :custom
   ;; Add all your customizations prior to loading the themes
   (modus-themes-italic-constructs t)
