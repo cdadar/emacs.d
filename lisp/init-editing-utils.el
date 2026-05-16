@@ -538,15 +538,14 @@ ORIG is the advised function, which is called with its ARGS."
   :if (and (fboundp 'completion-preview-mode)
            (boundp 'completion-preview-active-mode-map)
            (boundp 'completion-in-region-mode-map))
-  :hook ((prog-mode . completion-preview-mode) )
+  :hook ((prog-mode . completion-preview-mode))
   :bind
   ( :map completion-preview-active-mode-map
     ("M-n" . completion-preview-next-candidate)
-    ("M-p" . completion-preview-prev-candidate))
-  :config
-  (define-key completion-in-region-mode-map (kbd "M-n") 'minibuffer-next-completion)
-  (define-key completion-in-region-mode-map (kbd "M-p") 'minibuffer-previous-completion)
-  )
+    ("M-p" . completion-preview-prev-candidate)
+    :map completion-in-region-mode-map
+    ("M-n" . minibuffer-next-completion)
+    ("M-p" . minibuffer-previous-completion)))
 
 (provide 'init-editing-utils)
 ;;; init-editing-utils.el ends here
