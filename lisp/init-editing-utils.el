@@ -514,7 +514,32 @@ ORIG is the advised function, which is called with its ARGS."
 
 (use-package pangu-spacing)
 
-(use-package opencc)
+(use-package opencc
+  :config
+  ;; `opencc-string' 使用异步进程 + (1- (point-max)) 盲目切掉末尾字符，
+  ;; 假设 opencc 输出总是以 \n 结尾。但 accept-process-output 的语义是
+  ;; "收到任意输出即返回"，当输出分块到达时末尾换行可能尚未到达，
+  ;; 导致 (1- (point-max)) 切掉的是真正的最后一个字。
+  ;; 用 :override advice 替换为同步 call-process-region，根除 race condition。
+  (defun cdadar/opencc-string-sync (config string)
+    "Convert STRING using OpenCC CONFIG via synchronous call-process-region."
+    (if (string-empty-p string)
+        ""
+      (with-temp-buffer
+        ;; Ensure multibyte buffer with UTF-8 for process I/O
+        (set-buffer-multibyte t)
+        (insert string)
+        (let ((coding-system-for-write 'utf-8-unix)
+              (coding-system-for-read 'utf-8-unix))
+          (call-process-region (point-min) (point-max)
+                               opencc-command t t nil
+                               "--config" config))
+        ;; Strip trailing newline(s) added by opencc
+        (let ((result (buffer-string)))
+          (while (string-suffix-p "\n" result)
+            (setq result (substring result 0 -1)))
+          result))))
+  (advice-add 'opencc-string :override #'cdadar/opencc-string-sync))
 
 
 
