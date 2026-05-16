@@ -12,13 +12,20 @@
 
 (use-package frame
   :ensure nil
-  :bind (("C-z" . sanityinc/maybe-suspend-frame))
+  :bind (("C-z" . sanityinc/maybe-suspend-frame)
+         ("C-M-8" . sanityinc/decrease-opacity)
+         ("C-M-9" . sanityinc/increase-opacity)
+         ("C-M-7" . sanityinc/reset-opacity))
   :custom
   (use-file-dialog nil)
   (use-dialog-box nil)
   (inhibit-startup-screen t)
   (window-resize-pixelwise t)
   (frame-resize-pixelwise t)
+  (frame-title-format
+   '((:eval (if (buffer-file-name)
+                (abbreviate-file-name (buffer-file-name))
+              "%b"))))
   :config
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
@@ -55,17 +62,6 @@
   "Reset the current frame opacity to 100."
   (interactive)
   (modify-frame-parameters nil '((alpha . 100))))
-
-(use-package frame
-  :ensure nil
-  :bind (("C-M-8" . sanityinc/decrease-opacity)
-         ("C-M-9" . sanityinc/increase-opacity)
-         ("C-M-7" . sanityinc/reset-opacity))
-  :custom
-  (frame-title-format
-   '((:eval (if (buffer-file-name)
-                (abbreviate-file-name (buffer-file-name))
-              "%b")))))
 
 (use-package ns-auto-titlebar
   :if *is-a-mac*
