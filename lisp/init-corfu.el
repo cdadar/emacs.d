@@ -35,6 +35,7 @@
   (corfu-preview-current nil)
   (corfu-min-width 80)
   (corfu-max-width 100)
+  (global-corfu-minibuffer nil)
   :preface
   (defun cdadar/orderless-dispatch-flex-first (_pattern index _total)
     "orderless-flex for corfu."
