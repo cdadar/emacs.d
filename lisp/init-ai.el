@@ -13,6 +13,38 @@
 (use-package mcp
   :defer t)
 
+(use-package agent-shell
+  :defer t
+  :commands (agent-shell)
+  :init
+  (defun cdadar/agent-shell-hermes-make-agent-config ()
+    (agent-shell-make-agent-config
+     :identifier 'hermes
+     :mode-line-name "Hermes"
+     :buffer-name "Hermes"
+     :shell-prompt "Hermes> "
+     :shell-prompt-regexp "Hermes> "
+     :client-maker
+     (lambda (buffer)
+       (agent-shell--make-acp-client
+        :command "hermes"
+        :command-params '("acp")
+        :context-buffer buffer))
+     :install-instructions
+     "Install Hermes Agent and ensure `hermes acp --check` succeeds."))
+
+  (defun cdadar/agent-shell-register-hermes ()
+    (setq agent-shell-agent-configs
+          (cons (cdadar/agent-shell-hermes-make-agent-config)
+                (let (configs)
+                  (dolist (config agent-shell-agent-configs (nreverse configs))
+                    (unless (eq (alist-get :identifier config) 'hermes)
+                      (push config configs)))))))
+
+  :config
+  (cdadar/agent-shell-register-hermes)
+  (setq agent-shell-preferred-agent-config 'hermes))
+
 
 ;;;; Coding agents
 
@@ -24,11 +56,12 @@
   (ai-code-auto-test-type 'ask-me)
   :hook (after-init . ai-code-prompt-filepath-completion-mode)
   :config
-  ;; Primary AI coding entrypoint. Other supported backends include
-  ;; 'claude-code, 'gemini, 'github-copilot-cli, 'opencode, 'grok,
-  ;; 'cursor, 'kiro, 'codebuddy, 'aider, 'eca, 'agent-shell,
+  ;; Primary AI coding entrypoint, now routed through 'agent-shell
+  ;; which uses Hermes ACP. Other supported backends include
+  ;; 'codex, 'claude-code, 'gemini, 'github-copilot-cli, 'opencode,
+  ;; 'grok, 'cursor, 'kiro, 'codebuddy, 'aider, 'eca, 'agent-shell,
   ;; 'claude-code-ide and 'claude-code-el.
-  (ai-code-set-backend 'codex)
+  (ai-code-set-backend 'agent-shell)
   (with-eval-after-load 'evil
     (ai-code-backends-infra-evil-setup))
   (with-eval-after-load 'magit
