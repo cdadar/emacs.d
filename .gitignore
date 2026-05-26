@@ -85,3 +85,4 @@ eca/
 
 disabled-packages/*
 slide_config.js
+agent/history
