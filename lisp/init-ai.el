@@ -8,7 +8,7 @@
   :defer t
   :commands (vterm)
   :custom
-  (vterm-shell "/bin/zsh"))
+  (vterm-shell (executable-find "zsh")))
 
 (use-package mcp
   :defer t)
@@ -36,10 +36,8 @@
   (defun cdadar/agent-shell-register-hermes ()
     (setq agent-shell-agent-configs
           (cons (cdadar/agent-shell-hermes-make-agent-config)
-                (let (configs)
-                  (dolist (config agent-shell-agent-configs (nreverse configs))
-                    (unless (eq (alist-get :identifier config) 'hermes)
-                      (push config configs)))))))
+                (cl-remove-if (lambda (c) (eq (alist-get :identifier c) 'hermes))
+                              agent-shell-agent-configs))))
 
   :config
   (cdadar/agent-shell-register-hermes)
@@ -54,7 +52,8 @@
   :bind (("C-c A" . ai-code-menu))
   :custom
   (ai-code-auto-test-type 'ask-me)
-  :hook (after-init . ai-code-prompt-filepath-completion-mode)
+  :init
+  (add-hook 'after-init #'ai-code-prompt-filepath-completion-mode)
   :config
   ;; Primary AI coding entrypoint, now routed through 'agent-shell
   ;; which uses Hermes ACP. Other supported backends include
