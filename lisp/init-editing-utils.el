@@ -54,7 +54,8 @@
    ("C-M-<backspace>" . kill-back-to-indentation)
    ([remap backward-up-list] . sanityinc/backward-up-sexp)
    ([M-left] . nil)
-   ([M-right] . nil)))
+   ([M-right] . nil)
+   ("C-c y" . cdadar/copy-buffer-file-name)))
 
 (use-package delsel
   :ensure nil
@@ -509,6 +510,15 @@ ORIG is the advised function, which is called with its ARGS."
                (file-exists-p new-location)
                (not (string-equal old-location new-location)))
       (delete-file old-location))))
+
+(defun cdadar/copy-buffer-file-name ()
+  "Copy the current buffer's file path to the kill ring and message it."
+  (interactive)
+  (if-let ((f (buffer-file-name)))
+      (progn
+        (kill-new f)
+        (message "Copied: %s" f))
+    (message "No file associated with this buffer")))
 
 (use-package restart-emacs)
 
