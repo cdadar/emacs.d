@@ -74,15 +74,11 @@ ellama-sessions/
 .zettel-ref-db.el
 
 org-persist/*
-
 lisp/init-local.el
-
 .DS_Store
-
-
 eca/
 .aider*
-
 disabled-packages/*
 slide_config.js
-agent/history
+.hermes/*
+agent/*
