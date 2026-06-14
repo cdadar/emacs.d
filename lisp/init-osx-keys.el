@@ -7,10 +7,10 @@
   :if *is-a-mac*
   :custom
   (mac-command-modifier 'meta)
-  (mac-option-modifier 'none)
+  (mac-option-modifier 'super)
   (mouse-wheel-scroll-amount '(1
-                                ((shift) . 5)
-                                ((control))))
+                               ((shift) . 5)
+                               ((control))))
   :init
   (dolist (multiple '("" "double-" "triple-"))
     (dolist (direction '("right" "left"))
