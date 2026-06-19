@@ -27,6 +27,6 @@ jobs:
       with:
         version: ${{ matrix.emacs_version }}
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Check startup
       run:  sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules && git submodule update --init --recursive && ./test-startup.sh
