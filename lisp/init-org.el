@@ -985,7 +985,7 @@ paragraph indentation inside quote environments.  INFO is ignored."
   :after org
   :commands (org-cliplink org-cliplink-dwim)
   :bind (:map org-mode-map
-              ("C-c C-l" . org-cliplink)))
+              ("C-x p i" . org-cliplink)))
 
 (use-package org-appear
   :if (locate-library "org-appear")
