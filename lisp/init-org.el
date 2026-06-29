@@ -198,6 +198,9 @@
      ("cd" "demand" tags-todo "demand")
      ("cB" "book" tags-todo "book")
      ("cv" "video" tags-todo "video")))
+  (org-icalendar-include-todo 'all)
+  (org-icalendar-use-deadline '(event-if-todo event-if-not-todo))
+  (org-icalendar-use-scheduled '(event-if-todo event-if-not-todo))
   :config
   ;; === Mode setup ===
   (defun cdadar/org-mode-setup ()
