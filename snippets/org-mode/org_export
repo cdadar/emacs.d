@@ -136,3 +136,7 @@
 
 # 特殊的符号
 #+LATEX_HEADER: \usepackage{pifont}
+
+# 表格
+#+LATEX_HEADER: \usepackage{tabularx}
+#+LATEX_HEADER: \usepackage{array}

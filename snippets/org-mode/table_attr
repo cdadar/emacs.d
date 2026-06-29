@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: table_attr
+# key: table_attr
+# --
+
+#+ATTR_LATEX: :environment tabularx :width \textwidth :align |>{\raggedright\arraybackslash}p{0.48\textwidth}|>{\raggedright\arraybackslash}p{0.48\textwidth}|
