@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: LaTeX tabularx 2-col table
+# key: tab2
+# --
+#+BEGIN_EXPORT latex
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{0.48\textwidth}|>{\raggedright\arraybackslash}p{0.48\textwidth}|}
+\hline
+${1:列1标题} & ${2:列2标题} \\
+\hline
+${3:内容} & ${4:内容} \\
+\hline
+\end{tabularx}
+\end{center}
+#+END_EXPORT

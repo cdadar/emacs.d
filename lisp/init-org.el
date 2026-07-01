@@ -805,6 +805,17 @@ paragraph indentation inside quote environments.  INFO is ignored."
   (interactive)
   (org-latex-export-to-pdf t))
 
+(defun cdadar/org-latex-fix-multicolumn-trailing-ampersand (text backend info)
+  "Remove trailing `&' after `\\multicolumn' when it spans all columns.
+Org pads single-cell rows to the full column count, adding an extra
+`&' after `\\multicolumn{N}{...}{...}' which creates a column-count
+mismatch in LaTeX."
+  (when (org-export-derived-backend-p backend 'latex)
+    (replace-regexp-in-string
+     "\\\\multicolumn{\\([0-9]+\\)}{\\([^}]*\\)}{\\([^}]*\\)} & \\\\\\\\"
+     "\\\\multicolumn{\\1}{\\2}{\\3} \\\\\\\\"
+     text)))
+
 (use-package ox
   :ensure nil
   :after org
@@ -820,7 +831,9 @@ paragraph indentation inside quote environments.  INFO is ignored."
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-fix-bibleref-compat)
   (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-fix-quote-paragraph-spacing))
+               #'cdadar/org-latex-fix-quote-paragraph-spacing)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-fix-multicolumn-trailing-ampersand))
 
 (use-package ox-latex
   :ensure nil

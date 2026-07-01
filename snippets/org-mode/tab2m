@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: LaTeX tabularx 2-col with merged header
+# key: tab2m
+# --
+#+BEGIN_EXPORT latex
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{0.48\textwidth}|>{\raggedright\arraybackslash}p{0.48\textwidth}|}
+\hline
+\multicolumn{2}{|c|}{${1:合并标题}} \\
+\hline
+${2:列1} & ${3:列2} \\
+\hline
+${4:内容} & ${5:内容} \\
+\hline
+\end{tabularx}
+\end{center}
+#+END_EXPORT
