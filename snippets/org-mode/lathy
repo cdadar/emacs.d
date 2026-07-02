@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: LaTeX hyperref colorlinks setup
+# key: lathy
+# --
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
