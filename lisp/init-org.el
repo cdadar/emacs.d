@@ -817,11 +817,11 @@ mismatch in LaTeX."
      text)))
 
 (defun cdadar/org-latex-add-toc-for-starred-sections (text backend info)
-  "Add \\addcontentsline after starred sections so they appear in TOC.
+  "Add \\phantomsection + \\addcontentsline for starred sections in TOC.
 When `num:nil' is set, Org exports sections as \\section* which
 don't appear in the table of contents.  This filter adds
-\\addcontentsline{toc}{level}{title} after each starred heading
-so the TOC is populated without section numbers."
+\\phantomsection (hyperref anchor) and \\addcontentsline{toc}{level}{title}
+after each starred heading so the TOC is populated with clickable links."
   (when (org-export-derived-backend-p backend 'latex)
     (dolist (level '(("subsubsection" . "subsubsection")
                      ("subsection" . "subsection")
@@ -829,7 +829,8 @@ so the TOC is populated without section numbers."
       (setq text
             (replace-regexp-in-string
              (concat "\\\\" (car level) "\\*{\\([^}]*\\)}")
-             (concat "\\\\" (car level) "*{\\1}\n"
+             (concat "\\\\phantomsection\n"
+                     "\\\\" (car level) "*{\\1}\n"
                      "\\\\addcontentsline{toc}{" (cdr level) "}{\\1}")
              text))))
   text)
