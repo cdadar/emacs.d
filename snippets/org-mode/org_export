@@ -85,6 +85,7 @@
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
 #+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
 #+LATEX_HEADER: \usepackage{microtype}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
 #+LATEX_HEADER: \usepackage{csquotes}
 
 

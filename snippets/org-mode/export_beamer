@@ -27,6 +27,7 @@
 #+LATEX_HEADER: \usepackage{xeCJK}
 #+LATEX_HEADER: \usepackage{polyglossia}
 #+LATEX_HEADER: \usepackage{microtype}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
 #+LATEX_HEADER: \usepackage{ragged2e}
 #+LATEX_HEADER: \usepackage[most]{tcolorbox}
 

@@ -72,6 +72,7 @@
 #+LaTeX_HEADER: \usepackage{enumitem}
 #+LaTeX_HEADER: \usepackage{microtype}
 #+LaTeX_HEADER: \usepackage{csquotes}
+#+LaTeX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
 
 # 引用环境优化
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
