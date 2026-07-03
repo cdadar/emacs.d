@@ -621,6 +621,9 @@ NTH supports 1..5, or -1 for the last weekday in month."
     (when *is-a-mac*
       (define-key org-mode-map (kbd "M-h") nil)))
 
+  (defun cdadar/org-setup-refile ()
+    (advice-add 'org-refile :after #'cdadar/org-save-all-org-buffers-after-refile))
+
   ;; === Setup calls ===
   (cdadar/org-setup-agenda-window-hooks)
   (cdadar/org-setup-clocking)
@@ -870,9 +873,6 @@ mismatch in LaTeX."
 
 (defun cdadar/org-save-all-org-buffers-after-refile (&rest _)
   (org-save-all-org-buffers))
-
-(defun cdadar/org-setup-refile ()
-  (advice-add 'org-refile :after #'cdadar/org-save-all-org-buffers-after-refile))
 
 (defun cdadar/org-archive-done-tasks ()
   "archive of DONE AND CANCELLED in current buffer"
