@@ -205,7 +205,8 @@
   ;; === Mode setup ===
   (defun cdadar/org-mode-setup ()
     (setq truncate-lines nil
-          word-wrap t)
+          word-wrap t
+          word-wrap-by-category nil)
     (setq-local visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
     (visual-line-mode 1)
     (local-set-key [remap move-end-of-line] #'move-end-of-line)
@@ -225,6 +226,7 @@ typical word processor."
             (writeroom-mode 1))
           (setq truncate-lines nil
                 word-wrap t
+                word-wrap-by-category nil
                 cursor-type 'bar)
           (when (derived-mode-p 'org-mode)
             (kill-local-variable 'buffer-face-mode-face))
