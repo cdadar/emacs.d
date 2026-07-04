@@ -206,7 +206,7 @@
   (defun cdadar/org-mode-setup ()
     (setq truncate-lines nil
           word-wrap t
-          word-wrap-by-category nil)
+          word-wrap-by-category t)
     (setq-local visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
     (visual-line-mode 1)
     (local-set-key [remap move-end-of-line] #'move-end-of-line)
