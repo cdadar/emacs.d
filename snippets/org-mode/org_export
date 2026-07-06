@@ -71,6 +71,8 @@
 #+LATEX_HEADER: \titleformat{name=\section,numberless}{\normalfont\Large\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{section}{#1}]
 #+LATEX_HEADER: \titleformat{name=\subsection,numberless}{\normalfont\large\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{subsection}{#1}]
 #+LATEX_HEADER: \titleformat{name=\subsubsection,numberless}{\normalfont\normalsize\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{subsubsection}{#1}]
+#+LATEX_HEADER: \titleformat{name=\paragraph,numberless}{\normalfont\normalsize\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{paragraph}{#1}]
+#+LATEX_HEADER: \titleformat{name=\subparagraph,numberless}{\normalfont\normalsize\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{subparagraph}{#1}]
 
 # numbered sections
 #+LATEX_HEADER: \titleformat{\section}{\Large\bfseries}{\thesection}{1em}{#1}
@@ -92,7 +94,7 @@
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
 #+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
 #+LATEX_HEADER: \usepackage{microtype}
-#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,bookmarksdepth=5}
 #+LATEX_HEADER: \usepackage{csquotes}
 
 
