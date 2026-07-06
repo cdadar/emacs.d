@@ -815,11 +815,12 @@ paragraph indentation inside quote environments.  INFO is ignored."
 Org pads single-cell rows to the full column count, adding an extra
 `&' after `\\multicolumn{N}{...}{...}' which creates a column-count
 mismatch in LaTeX."
-  (when (org-export-derived-backend-p backend 'latex)
-    (replace-regexp-in-string
-     "\\\\multicolumn{\\([0-9]+\\)}{\\([^}]*\\)}{\\([^}]*\\)} & \\\\\\\\"
-     "\\\\multicolumn{\\1}{\\2}{\\3} \\\\\\\\"
-     text)))
+  (if (org-export-derived-backend-p backend 'latex)
+      (replace-regexp-in-string
+       "\\\\multicolumn{\\([0-9]+\\)}{\\([^}]*\\)}{\\([^}]*\\)} & \\\\\\\\"
+       "\\\\multicolumn{\\1}{\\2}{\\3} \\\\\\\\"
+       text)
+    text))
 
 (use-package ox
   :ensure nil
