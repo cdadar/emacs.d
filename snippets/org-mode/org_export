@@ -65,12 +65,19 @@
 #+LATEX_HEADER: \usepackage{setspace}
 #+LATEX_HEADER: \linespread{1.2} % 行距略大，适合逐字稿
 
-#+LATEX_HEADER: \usepackage{titlesec}
-#+LATEX_HEADER: \titleformat*{\section}{\Large\bfseries}
-#+LATEX_HEADER: \titleformat*{\subsection}{\large\bfseries}
-#+LATEX_HEADER: \titleformat{\subsubsection}[block]{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
-#+LATEX_HEADER: \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-#+LATEX_HEADER: \titleformat{\subparagraph}[block]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+#+LATEX_HEADER: \usepackage[explicit]{titlesec}
+
+# numberless sections — num:nil 时不编号的章节，生成 PDF 侧栏书签
+#+LATEX_HEADER: \titleformat{name=\section,numberless}{\normalfont\Large\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{section}{#1}]
+#+LATEX_HEADER: \titleformat{name=\subsection,numberless}{\normalfont\large\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{subsection}{#1}]
+#+LATEX_HEADER: \titleformat{name=\subsubsection,numberless}{\normalfont\normalsize\bfseries}{}{0pt}{#1}[\addcontentsline{toc}{subsubsection}{#1}]
+
+# numbered sections
+#+LATEX_HEADER: \titleformat{\section}{\Large\bfseries}{\thesection}{1em}{#1}
+#+LATEX_HEADER: \titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{#1}
+#+LATEX_HEADER: \titleformat{\subsubsection}[block]{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{#1}
+#+LATEX_HEADER: \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{#1}
+#+LATEX_HEADER: \titleformat{\subparagraph}[block]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{#1}
 
 # 🔥 关键补丁：修复“标题后不缩进”（必须在 titlesec 后）
 #+LATEX_HEADER: \usepackage{etoolbox}
