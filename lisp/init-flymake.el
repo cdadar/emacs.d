@@ -20,7 +20,7 @@
   :config
   (add-hook 'flymake-mode-hook
             (lambda ()
-              (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t))))
+              (add-to-list 'eldoc-documentation-functions 'flymake-eldoc-function))))
 
 (use-package flycheck
   ;; Disable flycheck checkers for which we have flymake equivalents.
