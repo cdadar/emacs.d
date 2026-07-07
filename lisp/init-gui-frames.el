@@ -81,8 +81,11 @@
                        (setq line-spacing 0))))
 
 
-
 (use-package disable-mouse)
+
+;; Unbind mouse bindings for text-scale-mode
+(dolist (bind '("C-<wheel-down>" "C-<wheel-up>" "C-<mouse-4>" "C-<mouse-5>"))
+  (define-key global-map (kbd bind) nil))
 
 
 (use-package pixel-scroll
