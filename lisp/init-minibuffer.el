@@ -255,7 +255,8 @@
   :init
   (with-eval-after-load 'vertico
     (define-key vertico-map (kbd "C-c C-o") 'embark-export)
-    (define-key vertico-map (kbd "C-c C-c") 'embark-act))
+    (define-key vertico-map (kbd "C-c C-c") 'embark-act)
+    (define-key vertico-map (kbd "C-c C-l") 'embark-collect))
 
   (setq prefix-help-command #'embark-prefix-help-command)
 
