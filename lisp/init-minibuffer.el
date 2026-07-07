@@ -314,8 +314,6 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
       (let ((embark-quit-after-action nil))
         (embark-dwim)))))
 
-
-
 (use-package marginalia
   :hook (after-init . marginalia-mode))
 
