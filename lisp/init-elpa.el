@@ -155,19 +155,12 @@ advice for `require-package', to which ARGS are passed."
 
 
 
-(defun sanityinc/set-tabulated-list-column-width (col-name width)
-  "Set any column with name COL-NAME to the given WIDTH."
-  (when (> width (length col-name))
-    (cl-loop for column across tabulated-list-format
-             when (string= col-name (car column))
-             do (setf (elt column 1) width))))
-
 (defun sanityinc/maybe-widen-package-menu-columns ()
   "Widen some columns of the package menu table to avoid truncation."
   (when (boundp 'tabulated-list-format)
-    (sanityinc/set-tabulated-list-column-width "Version" 13)
+    (setq package-version-column-width 20)
     (let ((longest-archive-name (apply 'max (mapcar 'length (mapcar 'car package-archives)))))
-      (sanityinc/set-tabulated-list-column-width "Archive" longest-archive-name))))
+      (setq package-archive-column-width longest-archive-name))))
 
 
 (provide 'init-elpa)
