@@ -77,15 +77,6 @@ VER, FILENAME, and ARGS are forwarded unchanged."
   :ensure nil
   :hook (after-init . save-place-mode))
 
-(use-package session
-  :custom
-  (session-save-file (locate-user-emacs-file ".session"))
-  (session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
-  :config
-  (setq session-save-file-coding-system 'utf-8)
-  :hook
-  (after-init . session-initialize))
-
 
 (provide 'init-sessions)
 ;;; init-sessions.el ends here
