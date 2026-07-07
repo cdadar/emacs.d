@@ -195,6 +195,8 @@
   ;; after lazily loading the package.
   :config
 
+  (setq xref-show-xrefs-function 'consult-xref)
+
   (sanityinc/no-consult-preview
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
