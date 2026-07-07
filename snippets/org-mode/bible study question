@@ -60,6 +60,18 @@
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{0em}
 
-#+LATEX_HEADER: \usepackage{titlesec} %自定义多级标题格式的宏包
-#+LATEX_HEADER: \titleformat{\section}[block]{\mdseries}{}{1em}{}[]
-#+LATEX_HEADER: \titleformat{\subsection}[block]{\mdseries}{}{1em}{}[]
+#+LATEX_HEADER: \usepackage[explicit]{titlesec}
+
+# numberless sections — num:nil 时不编号的章节，生成 PDF 侧栏书签
+#+LATEX_HEADER: \titleformat{name=\section,numberless}{\normalfont\Large\mdseries}{}{0pt}{#1}[\addcontentsline{toc}{section}{#1}]
+#+LATEX_HEADER: \titleformat{name=\subsection,numberless}{\normalfont\large\mdseries}{}{0pt}{#1}[\addcontentsline{toc}{subsection}{#1}]
+#+LATEX_HEADER: \titleformat{name=\subsubsection,numberless}{\normalfont\normalsize\mdseries}{}{0pt}{#1}[\addcontentsline{toc}{subsubsection}{#1}]
+#+LATEX_HEADER: \titleformat{name=\paragraph,numberless}{\normalfont\normalsize\mdseries}{}{0pt}{#1}[\addcontentsline{toc}{paragraph}{#1}]
+#+LATEX_HEADER: \titleformat{name=\subparagraph,numberless}{\normalfont\normalsize\mdseries}{}{0pt}{#1}[\addcontentsline{toc}{subparagraph}{#1}]
+
+# numbered sections（备用，用户可改 num:t）
+#+LATEX_HEADER: \titleformat{\section}[block]{\mdseries}{\thesection}{1em}{#1}
+#+LATEX_HEADER: \titleformat{\subsection}[block]{\mdseries}{\thesubsection}{1em}{#1}
+
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,bookmarksdepth=5}
+$0
