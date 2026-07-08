@@ -19,7 +19,6 @@
 
 #+LATEX_HEADER: \usetheme{metropolis}
 #+LATEX_HEADER: \setbeamertemplate{navigation symbols}{}
-#+LATEX_HEADER: \setbeamertemplate{footline}{}
 #+LATEX_HEADER: \setbeamertemplate{frametitle continuation}{}
 #+LATEX_HEADER: \setbeamercovered{transparent}
 
