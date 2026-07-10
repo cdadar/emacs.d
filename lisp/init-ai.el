@@ -127,5 +127,17 @@
   :hook (magit-mode . gptel-magit-install))
 
 
+;;;; Pi coding agent
+(use-package pi-coding-agent
+  :if (executable-find "pi")
+  :defer t
+  :bind (("C-c C-p" . pi-coding-agent))
+  :custom
+  (pi-coding-agent-essential-grammar-action 'auto)
+  :init
+  ;; Convenience alias (as recommended by README)
+  (defalias 'pi #'pi-coding-agent))
+
+
 (provide 'init-ai)
 ;;; init-ai.el ends here
