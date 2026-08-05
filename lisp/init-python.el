@@ -25,8 +25,9 @@
 (use-package ruff-format
   :after reformatter
   :config
+  (defvar ruff-fix-command "ruff" "Ruff executable for `ruff-fix-on-save-mode'.")
   (reformatter-define ruff-fix
-    :program ruff-format-command
+    :program ruff-fix-command
     :args (list "check" "--fix-only" "--stdin-filename" (or (buffer-file-name) input-file))
     :lighter " RuffFix"))
 
