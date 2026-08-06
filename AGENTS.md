@@ -8,6 +8,19 @@ For Claude Code users, the parallel project guidance lives in `CLAUDE.md`. Keep 
 
 This is a personal Emacs configuration based on [Purcell's emacs.d](https://github.com/purcell/emacs.d). The configuration is modular, with each feature separated into its own file in the `lisp/` directory.
 
+## Development Principles
+
+These rules are authoritative for all code changes in this repository:
+
+1. 不保留向后兼容。过时的直接删，别加兼容层、别写 migration、别留 fallback。
+2. 选能满足当前需求的最简单实现。不要预防性抽象，不要多此一举的配置层。
+3. 系统分层长。先跑通一个最小的端到端版本，再往上加东西。绝不为了未完成的复杂度拆掉能跑的东西。
+4. 组件保持模块化，关注点分离。
+5. 优先用成熟的、有人维护的库。没有明确理由别自己重写。
+6. 先翻项目里已有的依赖能做什么，再考虑加新包或自己写。别上来就假设库里没有。
+7. 架构决策往长了做。不接受"先这样以后再换"的临时方案。
+8. 先看成熟产品怎么解决同一个问题，用已验证的模式，别从零发明。
+
 ## Repository Structure
 
 - `init.el` - Main entry point that loads all configuration modules

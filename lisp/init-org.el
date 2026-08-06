@@ -494,6 +494,7 @@ NTH supports 1..5, or -1 for the last weekday in month."
     (define-key sanityinc/org-global-prefix-map (kbd "i") 'org-clock-in)
     (define-key sanityinc/org-global-prefix-map (kbd "o") 'org-clock-out)
     (define-key sanityinc/org-global-prefix-map (kbd "r") 'org-clock-report)
+    (define-key sanityinc/org-global-prefix-map (kbd "m") 'cdadar/md-clipboard-to-org)
     (define-key global-map (kbd "C-c o") sanityinc/org-global-prefix-map))
 
 
@@ -1249,6 +1250,47 @@ mismatch in LaTeX."
              org-pandoc-import-transient-mode)
   :vc (:url "https://github.com/tecosaur/org-pandoc-import"
             :rev :newest))
+
+
+  ;; === Markdown → Org from clipboard ===
+  (defun cdadar/md-clipboard-to-org (&optional insert-p)
+    "Convert markdown text to Org, replacing the clipboard with the result.
+
+Source of the markdown:
+- If the region is active, the region's text.
+- Otherwise, the clipboard (pasteboard on macOS).
+
+The converted Org text replaces the clipboard (and primary selection);
+with a prefix argument (or INSERT-P non-nil) it is also inserted at
+point in the current buffer.
+
+Uses pandoc:  pandoc -f markdown -t org --wrap=preserve"
+    (interactive "P")
+    (unless (executable-find "pandoc")
+      (user-error "pandoc is not installed (brew install pandoc)"))
+    (let* ((input (if (use-region-p)
+                      (buffer-substring-no-properties (region-beginning) (region-end))
+                    (gui-get-selection 'CLIPBOARD)))
+           (org-text nil))
+      (unless (and input (string-match-p "[^[:space:]]" input))
+        (user-error "No markdown text found in region or clipboard"))
+      (with-temp-buffer
+        (insert input)
+        (goto-char (point-min))
+        (unless (zerop (call-process-region (point-min) (point-max)
+                                            "pandoc" t t nil
+                                            "-f" "markdown" "-t" "org"
+                                            "--wrap=preserve"))
+          (error "pandoc conversion failed"))
+        (setq org-text (string-trim-right (buffer-string) "\n")))
+      (if (display-graphic-p)
+          (progn
+            (gui-set-selection 'CLIPBOARD org-text)
+            (gui-set-selection 'PRIMARY org-text))
+        (kill-new org-text))
+      (when insert-p
+        (insert org-text))
+      (message "markdown → org: %d chars, clipboard updated" (length org-text))))
 
 (provide 'init-org)
 ;;; init-org.el ends here
