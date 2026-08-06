@@ -1264,11 +1264,20 @@ The converted Org text replaces the clipboard (and primary selection);
 with a prefix argument (or INSERT-P non-nil) it is also inserted at
 point in the current buffer.
 
-Uses pandoc:  pandoc -f markdown -t org --wrap=preserve"
+Uses pandoc:  pandoc -f markdown -t org --wrap=preserve
+When org-pandoc-import is installed, its `_simple-headers.lua' filter is
+reused to drop pandoc's CUSTOM_ID properties and rewrite internal links."
     (interactive "P")
     (unless (executable-find "pandoc")
       (user-error "pandoc is not installed (brew install pandoc)"))
-    (let* ((input (if (use-region-p)
+    (let* ((opi-el (locate-library "org-pandoc-import"))
+           (simple-headers (and opi-el
+                                (expand-file-name "filters/_simple-headers.lua"
+                                                  (file-name-directory opi-el))))
+           (pandoc-args (append (list "-f" "markdown" "-t" "org" "--wrap=preserve")
+                                (when (and simple-headers (file-exists-p simple-headers))
+                                  (list "--lua-filter" simple-headers))))
+           (input (if (use-region-p)
                       (buffer-substring-no-properties (region-beginning) (region-end))
                     (gui-get-selection 'CLIPBOARD)))
            (org-text nil))
@@ -1277,10 +1286,8 @@ Uses pandoc:  pandoc -f markdown -t org --wrap=preserve"
       (with-temp-buffer
         (insert input)
         (goto-char (point-min))
-        (unless (zerop (call-process-region (point-min) (point-max)
-                                            "pandoc" t t nil
-                                            "-f" "markdown" "-t" "org"
-                                            "--wrap=preserve"))
+        (unless (zerop (apply #'call-process-region (point-min) (point-max)
+                              "pandoc" t t nil pandoc-args))
           (error "pandoc conversion failed"))
         (setq org-text (string-trim-right (buffer-string) "\n")))
       (if (display-graphic-p)
