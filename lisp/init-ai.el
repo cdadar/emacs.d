@@ -136,7 +136,108 @@
   (pi-coding-agent-essential-grammar-action 'auto)
   :init
   ;; Convenience alias (as recommended by README)
-  (defalias 'pi #'pi-coding-agent))
+  (defalias 'pi #'pi-coding-agent)
+
+  ;; oh-my-pi is a pi package (npm: oh-my-pi) that replaces Pi's default
+  ;; system prompt with a Sisyphus-style multi-agent orchestrator.  It adds
+  ;; specialist agents (oracle, librarian, explore), a skill system, and the
+  ;; in-session `/oh-my-pi-doctor' and `/oh-my-pi-reload' commands.
+  ;; See https://github.com/acidsugarx/oh-my-pi
+  ;;
+  ;; Config cascade (low to high priority):
+  ;;   built-in defaults  <  ~/.pi/oh-my-pi.jsonc  <  ./.oh-my-pi.jsonc
+  ;;
+  ;; These helpers only need the `pi' executable, so they live in :init and
+  ;; are available before `pi-coding-agent' is first loaded.
+  (defvar cdadar/pi-oh-my-pi-source "npm:oh-my-pi"
+    "pi package source spec for oh-my-pi, as understood by `pi install'.")
+
+  (defvar cdadar/pi-oh-my-pi-global-config
+    (expand-file-name "~/.pi/oh-my-pi.jsonc")
+    "User-global oh-my-pi config (JSONC).")
+
+  (defvar cdadar/pi-oh-my-pi-project-config ".oh-my-pi.jsonc"
+    "Project-local oh-my-pi config filename, relative to project root.")
+
+  (defun cdadar/pi-oh-my-pi-installed-p ()
+    "Return non-nil if the oh-my-pi package is installed for the Pi CLI."
+    (with-temp-buffer
+      (call-process "pi" nil t nil "list")
+      (goto-char (point-min))
+      (re-search-forward (regexp-quote "oh-my-pi") nil t)))
+
+  (defun cdadar/pi-oh-my-pi--run-to-buffer (command &rest args)
+    "Run `pi COMMAND ARGS...' streaming output to a `*oh-my-pi*' buffer.
+Display the buffer and return the `call-process' exit status."
+    (with-current-buffer (get-buffer-create "*oh-my-pi*")
+      (let ((inhibit-read-only t))
+        (erase-buffer))
+      (display-buffer (current-buffer))
+      (apply #'call-process "pi" nil t nil command args)))
+
+  (defun cdadar/pi-install-oh-my-pi (&optional arg)
+    "Install the oh-my-pi orchestration package for the Pi CLI.
+With prefix ARG, force a reinstall (uninstall first).  Output is shown
+in a `*oh-my-pi*' buffer.  Idempotent: does nothing if already installed."
+    (interactive "P")
+    (when (and arg (cdadar/pi-oh-my-pi-installed-p))
+      (cdadar/pi-uninstall-oh-my-pi))
+    (if (cdadar/pi-oh-my-pi-installed-p)
+        (message "oh-my-pi is already installed")
+      (message "Installing oh-my-pi (`pi install %s')..." cdadar/pi-oh-my-pi-source)
+      (let ((exit (cdadar/pi-oh-my-pi--run-to-buffer
+                   "install" cdadar/pi-oh-my-pi-source)))
+        (if (eq exit 0)
+            (message "oh-my-pi installed - restart Pi to activate")
+          (message "oh-my-pi install failed (exit %s)" exit)))))
+
+  (defun cdadar/pi-uninstall-oh-my-pi ()
+    "Remove the oh-my-pi package from the Pi CLI."
+    (interactive)
+    (if (not (cdadar/pi-oh-my-pi-installed-p))
+        (message "oh-my-pi is not installed")
+      (message "Removing oh-my-pi (`pi remove %s')..." cdadar/pi-oh-my-pi-source)
+      (let ((exit (cdadar/pi-oh-my-pi--run-to-buffer
+                   "remove" cdadar/pi-oh-my-pi-source)))
+        (if (eq exit 0)
+            (message "oh-my-pi removed")
+          (message "oh-my-pi remove failed (exit %s)" exit)))))
+
+  (defun cdadar/pi-oh-my-pi--maybe-stub (file)
+    "Insert a minimal oh-my-pi config stub into the current buffer if FILE is new."
+    (when (and (not (file-exists-p file)) (zerop (buffer-size)))
+      (insert
+       (concat
+        "{\n"
+        "  // oh-my-pi orchestration config (JSONC).\n"
+        "  // Cascade: defaults < ~/.pi/oh-my-pi.jsonc < ./.oh-my-pi.jsonc\n"
+        "  // Docs: https://github.com/acidsugarx/oh-my-pi\n"
+        "  \"orchestrator\": {\n"
+        "    \"agentName\": \"oh-my-pi\",\n"
+        "    \"promptTemplate\": \"sisyphus\"\n"
+        "  }\n"
+        "}\n"))))
+
+  (defun cdadar/pi-oh-my-pi-edit-global-config ()
+    "Open the user-global oh-my-pi config for editing.
+Creates a minimal stub if the file does not yet exist."
+    (interactive)
+    (find-file cdadar/pi-oh-my-pi-global-config)
+    (cdadar/pi-oh-my-pi--maybe-stub cdadar/pi-oh-my-pi-global-config))
+
+  (defun cdadar/pi-oh-my-pi-edit-project-config ()
+    "Open the project-local .oh-my-pi.jsonc for editing.
+Uses the current project root, or `default-directory' outside a project.
+Creates a minimal stub if the file does not yet exist."
+    (interactive)
+    (let* ((root (or (when (fboundp 'project-current)
+                       (let ((p (project-current nil)))
+                         (and p (fboundp 'project-root)
+                              (project-root p))))
+                     default-directory))
+           (file (expand-file-name cdadar/pi-oh-my-pi-project-config root)))
+      (find-file file)
+      (cdadar/pi-oh-my-pi--maybe-stub file))))
 
 
 (provide 'init-ai)
