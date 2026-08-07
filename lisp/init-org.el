@@ -1071,6 +1071,33 @@ mismatch in LaTeX."
    ([(f10)] . org-tree-slide-move-next-tree)))
 
 ;; Roam and reference extensions
+;; Loaded at top level (not inside use-package :config) so it is defined
+;; before `org-roam-capture-templates' evaluates below.
+(defun cdadar/org-capture-snippet-content (name)
+  "Return the body of yasnippet NAME (org-mode) for use in capture templates.
+
+Reads the snippet file from `user-emacs-directory'/snippets/org-mode/, strips
+the metadata header (everything before the `# --' separator) and yas
+`$[0-9]+' field/exit markers.  `%' chars are left untouched: org-capture
+only treats `%' followed by a placeholder letter (or `(', `[', `<') as
+escape sequences, and this snippet's `%'s are all LaTeX comment markers
+followed by space/CJK text."
+  (let ((file (expand-file-name
+               name
+               (expand-file-name "org-mode"
+                                 (expand-file-name "snippets" user-emacs-directory)))))
+    (unless (file-exists-p file)
+      (user-error "yasnippet not found: %s" file))
+    (with-temp-buffer
+      (insert-file-contents file)
+      (goto-char (point-min))
+      (when (re-search-forward "^# --$" nil t)
+        (delete-region (point-min) (point)))
+      (let ((s (buffer-string)))
+        (setq s (replace-regexp-in-string "\\$[0-9]+\\b" "" s))
+        (setq s (string-trim-left s "\n"))
+        s))))
+
 (use-package org-roam
   :if (locate-library "org-roam")
   :defer t
@@ -1114,7 +1141,7 @@ mismatch in LaTeX."
       :target (file+head "christian/other/%<%Y%m%d%H%M%S>-${slug}.org"
                          "#+title: ${title}\n#+tags: 听道")
       :unnarrowed t)
-     ("cs" "查经" plain "%?"
+     ("cs" "查经" plain (function (lambda () (concat "%?\n" (cdadar/org-capture-snippet-content "bible study"))))
       :target (file+head "christian/study/%<%Y%m%d%H%M%S>-${slug}.org"
                          "#+title: ${title}\n#+tags: 查经")
       :unnarrowed t)
