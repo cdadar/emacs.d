@@ -16,32 +16,13 @@
 (use-package agent-shell
   :defer t
   :commands (agent-shell)
-  :init
-  (defun cdadar/agent-shell-hermes-make-agent-config ()
-    (agent-shell-make-agent-config
-     :identifier 'hermes
-     :mode-line-name "Hermes"
-     :buffer-name "Hermes"
-     :shell-prompt "Hermes> "
-     :shell-prompt-regexp "Hermes> "
-     :client-maker
-     (lambda (buffer)
-       (agent-shell--make-acp-client
-        :command "hermes"
-        :command-params '("acp")
-        :context-buffer buffer))
-     :install-instructions
-     "Install Hermes Agent and ensure `hermes acp --check` succeeds."))
-
-  (defun cdadar/agent-shell-register-hermes ()
-    (setq agent-shell-agent-configs
-          (cons (cdadar/agent-shell-hermes-make-agent-config)
-                (cl-remove-if (lambda (c) (eq (alist-get :identifier c) 'hermes))
-                              agent-shell-agent-configs))))
-
   :config
-  (cdadar/agent-shell-register-hermes)
-  (setq agent-shell-preferred-agent-config 'hermes))
+  ;; The agent-shell package ships built-in configs for both 'pi and
+  ;; 'hermes (see `agent-shell-pi-make-agent-config' /
+  ;; `agent-shell-hermes-make-agent-config'), so no manual registration
+  ;; is needed.  Default to Pi, which speaks ACP via the `pi-acp'
+  ;; adapter (install with: npm i -g pi-acp).
+  (setq agent-shell-preferred-agent-config 'pi))
 
 
 ;;;; Coding agents
@@ -56,7 +37,7 @@
   (add-hook 'after-init #'ai-code-prompt-filepath-completion-mode)
   :config
   ;; Primary AI coding entrypoint, now routed through 'agent-shell
-  ;; which uses Hermes ACP. Other supported backends include
+  ;; which uses Pi ACP. Other supported backends include
   ;; 'codex, 'claude-code, 'gemini, 'github-copilot-cli, 'opencode,
   ;; 'grok, 'cursor, 'kiro, 'codebuddy, 'aider, 'eca, 'agent-shell,
   ;; 'claude-code-ide and 'claude-code-el.

@@ -13,9 +13,13 @@
   ;; 明确使用 zsh
   (exec-path-from-shell-shell-name "/bin/zsh")
 
-  ;; 使用 login shell，读取 ~/.zprofile / ~/.zshenv
-  ;; 不建议默认用 -i，避免 .zshrc 输出内容污染结果
-  (exec-path-from-shell-arguments '("-l"))
+  ;; 使用交互式登录 shell (-l -i)，读取 ~/.zprofile 与 ~/.zshrc。
+  ;; 必须加 -i：~/.hermes/node/bin（pi）、volta 全局包 shim、zinit
+  ;; polaris 等 PATH 仅在 ~/.zshrc 中设置，非交互 -l 读不到，会
+  ;; 导致 `executable-find' 找不到 pi。exec-path-from-shell 用
+  ;; __RESULT\0...\0__RESULT 标记解析 printf 输出，不受 .zshrc 的
+  ;; echo/输出污染，故 -i 安全。
+  (exec-path-from-shell-arguments '("-l" "-i"))
 
   :config
   ;; 需要同步到 Emacs 的环境变量
