@@ -911,8 +911,10 @@ mismatch in LaTeX."
    "/CANCELLED" 'file))
 
 (defun cdadar/org-agenda-calculate-efforts (limit)
-  "Sum the efforts of scheduled entries up to LIMIT in the agenda buffer."
-  (let (total)
+  "Sum the efforts of scheduled entries up to LIMIT in the agenda buffer.
+LIMIT may be nil, in which case it defaults to the end of the buffer."
+  (let ((limit (or limit (point-max)))
+        total)
     (save-excursion
       (while (< (point) limit)
         (when (member (org-get-at-bol 'type) '("scheduled" "past-scheduled"))
@@ -933,7 +935,8 @@ mismatch in LaTeX."
         (end-of-line)
         (insert-and-inherit (concat " ("
                                     (cdadar/org-agenda-calculate-efforts
-                                     (next-single-property-change (point) 'day))
+                                     (or (next-single-property-change (point) 'day)
+                                         (point-max)))
                                     ")"))
         (forward-line)))))
 
