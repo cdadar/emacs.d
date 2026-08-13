@@ -42,7 +42,7 @@
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
 #+LATEX_HEADER: \newfontfamily\greekfont[Script=Greek,Scale=1.1]{SBL Greek}   % 希腊文
-#+LATEX_HEADER: \newfontfamily\greekfontsf[Script=Greek,Scale=1.1]{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\greekfonTsf[Script=Greek,Scale=1.1]{SBL Greek}
 #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.2]{SBL Hebrew}  % 希伯来文
 
 # 备用字体（如需要）
@@ -93,7 +93,9 @@
 # 列表与微排版
 #+LATEX_HEADER: \usepackage{enumitem}
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
-#+LATEX_HEADER: \AtBeginEnvironment{quote}{\setlist{nosep}\quotecjkfont}
+#+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \list{}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parsep=0pt}\item\relax\quotecjkfont
+#+LATEX_HEADER: }{\endlist} % 压缩 quote 上下空行 + 楷体
 #+LATEX_HEADER: \usepackage{microtype}
 #+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,unicode=true,bookmarksdepth=5}
 #+LATEX_HEADER: \usepackage{csquotes}
