@@ -14,7 +14,7 @@
 #+LATEX_COMPILER: xelatex
 #+STARTUP: beamer
 #+LATEX_CLASS: beamer
-#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169,big]
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169,14pt]
 #+BIND: org-beamer-frame-default-options "allowframebreaks"
 
 #+LATEX_HEADER: \usetheme{metropolis}
