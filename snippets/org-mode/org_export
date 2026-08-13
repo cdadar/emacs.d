@@ -42,7 +42,7 @@
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
 #+LATEX_HEADER: \newfontfamily\greekfont[Script=Greek,Scale=1.1]{SBL Greek}   % 希腊文
-#+LATEX_HEADER: \newfontfamily\greekfonTsf[Script=Greek,Scale=1.1]{SBL Greek}
+#+LATEX_HEADER: \newfontfamily\greekfontsf[Script=Greek,Scale=1.1]{SBL Greek}
 #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.2]{SBL Hebrew}  % 希伯来文
 
 # 备用字体（如需要）
