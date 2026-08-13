@@ -32,6 +32,7 @@
 # #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体 CN}
 # #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{思源宋体}
 #+LATEX_HEADER: \setCJKmainfont[Scale=1.0]{LXGW WenKai}
+#+LATEX_HEADER: \setCJKsansfont[Scale=1.0]{LXGW WenKai}
 #+LATEX_HEADER: \setCJKmonofont[Scale=1.0]{LXGW WenKai Mono}
 
 
@@ -61,8 +62,9 @@
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
 #+LATEX_HEADER: \setlength{\parskip}{0em}
+#+LATEX_HEADER: \raggedbottom % 逐字稿避免页底大空隙
+#+LATEX_HEADER: \setlength{\emergencystretch}{2em} % 防止长行溢出
 
-#+LATEX_HEADER: \usepackage{setspace}
 #+LATEX_HEADER: \linespread{1.2} % 行距略大，适合逐字稿
 
 #+LATEX_HEADER: \usepackage[explicit]{titlesec}
@@ -90,11 +92,10 @@
 
 # 列表与微排版
 #+LATEX_HEADER: \usepackage{enumitem}
-#+LATEX_HEADER: \AtBeginEnvironment{quote}{\setlist{nosep}}
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
-#+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
+#+LATEX_HEADER: \AtBeginEnvironment{quote}{\setlist{nosep}\quotecjkfont}
 #+LATEX_HEADER: \usepackage{microtype}
-#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,bookmarksdepth=5}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,unicode=true,bookmarksdepth=5}
 #+LATEX_HEADER: \usepackage{csquotes}
 
 
@@ -150,3 +151,4 @@
 # 表格
 #+LATEX_HEADER: \usepackage{tabularx}
 #+LATEX_HEADER: \usepackage{array}
+#+LATEX_HEADER: \usepackage{booktabs} % 三线表
