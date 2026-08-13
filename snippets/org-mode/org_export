@@ -94,8 +94,9 @@
 #+LATEX_HEADER: \usepackage{enumitem}
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
 #+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \addvspace{0.5em}% quote 前留半行间距（前面已有更大间距时自动不叠加）
 #+LATEX_HEADER:   \list{}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parsep=0pt}\item\relax\quotecjkfont
-#+LATEX_HEADER: }{\endlist} % 压缩 quote 上下空行 + 楷体
+#+LATEX_HEADER: }{\endlist} % quote 下方紧贴 + 楷体
 #+LATEX_HEADER: \usepackage{microtype}
 #+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,unicode=true,bookmarksdepth=5}
 #+LATEX_HEADER: \usepackage{csquotes}
