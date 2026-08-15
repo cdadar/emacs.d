@@ -798,6 +798,24 @@ paragraph indentation inside quote environments.  INFO is ignored."
         (buffer-string))
     text))
 
+(defun cdadar/org-beamer-headline-as-text (orig-fun headline contents info)
+  "Beamer 导出：把 frame level 以下的标题输出为带层级的粗体文本，替代不可跨页的 block 环境。
+
+一级小节标题（frame-level + 1，如 H:1 时的二级、H:2 时的三级）用 \\large 粗体，
+更深级标题用正常字号粗体，从而保留标题层级视觉差异；同时 `allowframebreaks' 可以
+在段落间正常分页，内容不会被裁剪隐藏。
+以 :around advice 包裹 `org-beamer-headline'，参数遵循其 transcoder 协议。"
+  (if (not (org-export-derived-backend-p (plist-get info :back-end) 'beamer))
+      (funcall orig-fun headline contents info)
+    (let* ((level (org-export-get-relative-level headline info))
+           (frame-level (org-beamer--frame-level headline info)))
+      (if (<= level frame-level)
+          (funcall orig-fun headline contents info)
+        (let ((title (org-export-data (org-element-property :title headline) info)))
+          (if (= level (1+ frame-level))
+              (format "\n\\par\\medskip\\textbf{\\large %s}\\par\n\n%s" title (or contents ""))
+            (format "\n\\par\\smallskip\\textbf{%s}\\par\n\n%s" title (or contents ""))))))))
+
 (defconst cdadar/org-latex-beamer-class
   '("beamer"
     "\\documentclass[presentation]{beamer}\n"
@@ -840,7 +858,9 @@ mismatch in LaTeX."
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-fix-quote-paragraph-spacing)
   (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-fix-multicolumn-trailing-ampersand))
+               #'cdadar/org-latex-fix-multicolumn-trailing-ampersand)
+  (with-eval-after-load 'ox-beamer
+    (advice-add 'org-beamer-headline :around #'cdadar/org-beamer-headline-as-text)))
 
 (use-package ox-latex
   :ensure nil

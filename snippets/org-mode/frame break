@@ -3,6 +3,6 @@
 # key: frame_break
 # --
 
-:PROPERTIES:
-:BEAMER_opt: allowframebreaks=1.2,label=
-:END:
+#+begin_export latex
+\framebreak
+#+end_export
