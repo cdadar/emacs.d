@@ -61,7 +61,7 @@
 # 段落与标题
 #+LATEX_HEADER: \usepackage{indentfirst}
 #+LATEX_HEADER: \setlength{\parindent}{2em}
-#+LATEX_HEADER: \setlength{\parskip}{0em}
+#+LATEX_HEADER: \setlength{\parskip}{0.5em}
 #+LATEX_HEADER: \raggedbottom % 逐字稿避免页底大空隙
 #+LATEX_HEADER: \setlength{\emergencystretch}{2em} % 防止长行溢出
 
@@ -96,7 +96,7 @@
 #+LATEX_HEADER: \renewenvironment{quote}{%
 #+LATEX_HEADER:   \addvspace{0.5em}% quote 前留半行间距（前面已有更大间距时自动不叠加）
 #+LATEX_HEADER:   \list{}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parsep=0pt}\item\relax\quotecjkfont
-#+LATEX_HEADER: }{\endlist} % quote 下方紧贴 + 楷体
+#+LATEX_HEADER: }{\endlist\vspace{-\baselineskip}} % quote 下方抵消末行 \\ 的尾随空行，间距与普通段一致 + 楷体
 #+LATEX_HEADER: \usepackage{microtype}
 #+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,unicode=true,bookmarksdepth=5}
 #+LATEX_HEADER: \usepackage{csquotes}
