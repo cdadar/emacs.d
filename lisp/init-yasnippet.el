@@ -4,6 +4,13 @@
 
 ;; -*- lexical-binding: t -*-
 
+(defun my-gclip ()
+  "Return the clipboard text, falling back to the kill-ring head.
+Used by the `gclip' / `gtodo' yasnippets."
+  (or (ignore-errors (gui-get-selection 'CLIPBOARD))
+      (car kill-ring)
+      ""))
+
 
 ;; loading yasnippet will slow the startup
 ;; but it's necessary cost

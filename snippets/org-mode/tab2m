@@ -4,7 +4,7 @@
 # --
 #+BEGIN_EXPORT latex
 \begin{center}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{0.48\textwidth}|>{\raggedright\arraybackslash}p{0.48\textwidth}|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
 \multicolumn{2}{|c|}{${1:合并标题}} \\
 \hline

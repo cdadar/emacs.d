@@ -1,9 +1,9 @@
 # -*- mode: snippet -*-
 # name: bible study question
-# key: bibleₛtudy_question
+# key: bible_study_question
 # --
 
-#+OPTIONS: toc:nil  H:10 tex:t num:nil
+#+OPTIONS: toc:nil  H:6 tex:t num:nil
 #+OPTIONS: author:nil date:nil title:t
 #+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS: [14pt]
@@ -34,16 +34,17 @@
 
 
 # 多语言
-#+LATEX_HEADER: \usepackage{polyglossia}
 #+LATEX_HEADER: \setdefaultlanguage{english}
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
 
 #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{SBL Greek}   % 希腊文
 #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{SBL Hebrew}  % 希伯来文
 
-#+LATEX_HEADER: \usepackage{etoolbox}
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
-#+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
+#+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \addvspace{0.5em}% quote 前留半行间距（前面已有更大间距时自动不叠加）
+#+LATEX_HEADER:   \list{}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parsep=0pt}\item\relax\quotecjkfont
+#+LATEX_HEADER: }{\endlist} % quote 下方紧贴 + 楷体
 
 # 备用字体（如需要）
 # #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
@@ -72,6 +73,12 @@
 # numbered sections（备用，用户可改 num:t）
 #+LATEX_HEADER: \titleformat{\section}[block]{\mdseries}{\thesection}{1em}{#1}
 #+LATEX_HEADER: \titleformat{\subsection}[block]{\mdseries}{\thesubsection}{1em}{#1}
+
+# 🔥 关键补丁：修复“标题后不缩进”（必须在 titlesec 后）
+#+LATEX_HEADER: \usepackage{etoolbox}
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \patchcmd{\@afterheading}{\@nobreaktrue}{\@nobreakfalse\@afterindenttrue}{}{}
+#+LATEX_HEADER: \makeatother
 
 #+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,bookmarksdepth=5}
 $0

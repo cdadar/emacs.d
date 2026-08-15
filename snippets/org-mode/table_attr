@@ -3,4 +3,4 @@
 # key: table_attr
 # --
 
-#+ATTR_LATEX: :environment tabularx :width \textwidth :align |>{\raggedright\arraybackslash}p{0.48\textwidth}|>{\raggedright\arraybackslash}p{0.48\textwidth}|
+#+ATTR_LATEX: :environment tabularx :width \textwidth :align |>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|

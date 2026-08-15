@@ -86,8 +86,10 @@
 
 # 引用环境优化
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
-#+LATEX_HEADER: \AtBeginEnvironment{quote}{\quotecjkfont}
-#+LATEX_HEADER: \renewenvironment{quote}{\list{}{\leftmargin=0em}\item\relax}{\endlist}
+#+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \addvspace{0.5em}% quote 前留半行间距（前面已有更大间距时自动不叠加）
+#+LATEX_HEADER:   \list{}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parsep=0pt}\item\relax\quotecjkfont
+#+LATEX_HEADER: }{\endlist} % quote 下方紧贴 + 楷体
 
 
 * 请分享以下其中之一即可：上周讲义或讲解或主日讲台给你的感动、上周失败的见证或感恩的见证、上周操练的感恩与挑战。

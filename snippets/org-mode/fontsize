@@ -2,4 +2,4 @@
 # name: fontsize
 # key: fontsize
 # --
-\fontsize{8}{10}\selectfont
+\fontsize{10}{10}\selectfont
