@@ -76,7 +76,8 @@
 (use-package corfu-terminal
   :after corfu
   :demand t
-  :if (not (display-graphic-p))
+  :if (and (not (display-graphic-p))
+           (version< emacs-version "31"))
   :config
   (corfu-terminal-mode))
 

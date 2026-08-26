@@ -82,7 +82,7 @@ BUFFER and ALIST are as for `display-buffer-full-frame'."
   (when (yes-or-no-p (format "Really delete '%s'?"
                              (file-name-nondirectory buffer-file-name)))
     (delete-file (buffer-file-name))
-    (kill-this-buffer)))
+    (kill-buffer)))
 
 
 
