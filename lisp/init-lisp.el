@@ -65,7 +65,10 @@
   :hook ((emacs-lisp-mode . sanityinc/maybe-set-bundled-elisp-readonly)
          (emacs-lisp-mode . cdadar/set-up-emacs-lisp-mode-name)
          (emacs-lisp-mode . cdadar/set-up-hippie-expand-for-elisp)
-         (emacs-lisp-mode . sanityinc/run-lispy-mode-hooks)))
+         (emacs-lisp-mode . sanityinc/run-lispy-mode-hooks))
+  :custom
+  ;; Emacs 31: semantically fontify elisp (default is nil)
+  (elisp-fontify-semantically t))
 
 (use-package ipretty
   :hook
