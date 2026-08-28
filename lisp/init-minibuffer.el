@@ -66,9 +66,9 @@
      ;; Ignore single !
      ((string= "!" pattern) `(orderless-literal . ""))
      ;; Prefix and suffix
-     ((if-let (x (assq (aref pattern 0) +orderless-dispatch-alist))
+     ((if-let* ((x (assq (aref pattern 0) +orderless-dispatch-alist)))
           (cons (cdr x) (substring pattern 1))
-        (when-let (x (assq (aref pattern (1- (length pattern))) +orderless-dispatch-alist))
+        (when-let* ((x (assq (aref pattern (1- (length pattern))) +orderless-dispatch-alist)))
           (cons (cdr x) (substring pattern 0 -1)))))))
 
   ;; Define orderless style with initialism by default

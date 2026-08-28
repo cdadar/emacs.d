@@ -514,7 +514,7 @@ ORIG is the advised function, which is called with its ARGS."
 (defun cdadar/copy-buffer-file-name ()
   "Copy the current buffer's file path to the kill ring and message it."
   (interactive)
-  (if-let ((f (buffer-file-name)))
+  (if-let* ((f (buffer-file-name)))
       (progn
         (kill-new f)
         (message "Copied: %s" f))

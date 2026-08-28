@@ -50,7 +50,7 @@
        flymake-posframe-buffer
        :string (propertize
                 (concat flymake-diagnostic-at-point-error-prefix text)
-                'face (if-let ((type (get-char-property (point) 'flymake-diagnostic)))
+                'face (if-let* ((type (get-char-property (point) 'flymake-diagnostic)))
                           (pcase (flymake--diag-type type)
                             (:error 'error)
                             (:warning 'warning)
