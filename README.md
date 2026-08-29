@@ -24,7 +24,7 @@ in the approximate order of how much I use them, from most to least:
 * CSS / LESS / SASS / SCSS
 * Javascript / Typescript
 * HTML / HAML / Markdown / Textile / ERB
-* Common Lisp (with Slime)
+* Common Lisp (with Sly)
 * Python
 * Rust
 * Clojure (with Cider and nRepl)
