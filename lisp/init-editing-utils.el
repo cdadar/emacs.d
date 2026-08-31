@@ -190,10 +190,10 @@
   :hook (after-init . repeat-mode))
 
 ;;; Expand region
-(use-package expand-region
+(use-package expreg
   :bind
-  (("C-=" . er/expand-region)
-   ("C-|" . er/contract-region)))
+  (("C-=" . expreg-expand)
+   ("C-|" . expreg-contract)))
 
 
 ;;; Handy key bindings
@@ -322,10 +322,6 @@ ORIG is the advised function, which is called with its ARGS."
 (advice-add 'kmacro-call-macro :around 'sanityinc/disable-features-during-macro-call)
 
 
-(when (maybe-require-package 'expreg)
-  (global-set-key (kbd "C-=") 'expreg-expand)
-  (global-set-key (kbd "C--") 'expreg-contract))
-
 (use-package imenu-anywhere
   :bind
   (("M-s '" . imenu-anywhere)))
