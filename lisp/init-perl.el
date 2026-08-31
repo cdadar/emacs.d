@@ -6,7 +6,7 @@
   :ensure nil
   :init
   (defalias 'perl-mode 'cperl-mode)
-  :bind (:map help-command ("P" . cperl-perldoc))
+  :bind (:map help-map ("P" . cperl-perldoc))
   :custom
   (cperl-indent-level 4)
   (cperl-continued-statement-offset 8)
