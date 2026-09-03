@@ -57,6 +57,7 @@
 
 (use-package elisp-mode
   :ensure nil
+  :demand t
   :bind (:map emacs-lisp-mode-map
               ("C-x C-e" . sanityinc/eval-last-sexp-or-region)
               ("C-c C-e" . pp-eval-expression)
