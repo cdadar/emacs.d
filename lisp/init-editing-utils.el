@@ -101,6 +101,9 @@
   :hook
   (after-init . mode-line-bell-mode))
 
+;;; Hide the parentheses around major/minor modes in the mode line
+(setq mode-line-modes-delimiters '("" . ""))
+
 
 ;;; Newline behaviour (see also electric-indent-mode, enabled above)
 
@@ -149,7 +152,6 @@
 
 
 (use-package undo-tree
-  :diminish
   :hook
   (after-init . global-undo-tree-mode)
   :init
@@ -207,7 +209,6 @@
   (("C-;" . avy-goto-char-timer)))
 
 (use-package ace-pinyin
-  :diminish
   :hook (after-init . ace-pinyin-global-mode))
 
 (use-package multiple-cursors
@@ -236,7 +237,6 @@
 
 
 (use-package page-break-lines
-  :diminish
   :hook
   (after-init . global-page-break-lines-mode))
 
@@ -272,7 +272,6 @@
 
 
 (use-package whole-line-or-region
-  :diminish
   :hook
   (after-init . whole-line-or-region-global-mode))
 
@@ -377,7 +376,6 @@ ORIG is the advised function, which is called with its ARGS."
   (global-hungry-delete-mode))
 
 (use-package editorconfig
-  :diminish
   :config
   (editorconfig-mode))
 
@@ -393,7 +391,6 @@ ORIG is the advised function, which is called with its ARGS."
 
 
 (use-package super-save
-  :diminish
   :hook
   (after-init . super-save-mode)
   :custom

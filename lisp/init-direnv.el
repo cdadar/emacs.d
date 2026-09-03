@@ -3,7 +3,6 @@
 ;;; Code:
 
 (use-package envrc
-  :diminish
   :bind
   (:map envrc-mode-map
         ("C-c $" . envrc-command-map))

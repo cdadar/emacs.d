@@ -16,7 +16,6 @@
   ([remap just-one-space] . cycle-spacing))
 
 (use-package whitespace-cleanup-mode
-  :diminish
   :hook
   (after-init . global-whitespace-cleanup-mode))
 

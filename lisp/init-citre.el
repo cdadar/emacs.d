@@ -6,7 +6,6 @@
 ;;; Code:
 
 (use-package citre
-  :diminish
   :defer t
   :init
   (require 'citre-config)

@@ -8,7 +8,6 @@
   (eldoc-documentation-function #'eldoc-documentation-compose))
 
 (use-package flymake
-  :diminish
   :hook
   ((prog-mode text-mode) . flymake-mode)
   :bind

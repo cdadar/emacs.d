@@ -25,7 +25,6 @@
   (puni-mode -1))
 
 (use-package paredit
-  :diminish
   ;; Use paredit in the minibuffer
   ;; TODO: break out into separate package
   ;; http://emacsredux.com/blog/2013/04/18/evaluate-emacs-lisp-in-the-minibuffer/

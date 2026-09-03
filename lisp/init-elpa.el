@@ -88,7 +88,6 @@ locate PACKAGE."
   (auto-package-update-hide-results t))
 
 ;; Required by `use-package'
-(use-package diminish)
 (use-package bind-key)
 
 (use-package elpa-mirror
