@@ -1,4 +1,4 @@
-;;; advance-wc-mode.el --- Advance `wc-mode'
+;;; advance-wc-mode.el --- Advance `wc-mode' -*- lexical-binding: t -*-
 ;;
 ;; Filename: advance-wc-mode.el
 ;; Description:
