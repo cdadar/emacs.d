@@ -82,6 +82,8 @@ Return a list of languages seen along the way."
   :ensure nil
   :custom
   (treesit-font-lock-level 4)
+  ;; Enable all built-in ts-modes whose grammars are available
+  (treesit-enabled-modes t)
   :config
   (sanityinc/auto-configure-treesitter)
   ;; When there's js-ts-mode, we also prefer it to js2-mode
