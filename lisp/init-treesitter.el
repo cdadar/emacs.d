@@ -7,7 +7,11 @@
 ;;; ~/.emacs.d/tree-sitter as libtree-sitter-<lang>.<ext>.
 ;;; Code:
 
+;; Ensure clojure-ts-mode is installed (used by init-clojure*.el).
 (use-package clojure-ts-mode)
+
+;; Automatically use -ts-mode for supported languages and install
+;; missing grammars on demand.
 (use-package treesit-auto
   :hook (after-init . global-treesit-auto-mode)
   :custom
@@ -21,8 +25,7 @@
   :ensure nil
   :custom
   (treesit-font-lock-level 4)
-  ;; Enable all built-in ts-modes whose grammars are available;
-  ;; remapping to -ts modes is handled by treesit-auto above.
+  ;; Enable all built-in ts-modes whose grammars are available
   (treesit-enabled-modes t))
 
 (provide 'init-treesitter)
