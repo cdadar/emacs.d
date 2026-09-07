@@ -1034,6 +1034,70 @@ LIMIT may be nil, in which case it defaults to the end of the buffer."
   :after org
   :hook (org-mode . org-appear-mode))
 
+(use-package org-count-words
+  :vc (:url "https://github.com/Elilif/org-count-words" :rev :newest)
+  :after org
+  :commands (org-count-words-buffer org-count-words-region org-count-words-subtree org-count-words-mode)
+  :config
+  ;; 统计口径改为「非空格字符数」（同 advance-words-count 的 Ns），
+  ;; 这样 1:1 算 3 个字符而非 1 个词。
+  (defun cdadar/org-count-words-chars (start end)
+    "Count non-space characters between START and END."
+    (let ((count 0))
+      (save-excursion
+        (save-restriction
+          (goto-char start)
+          (while (and (< (point) end)
+                      (re-search-forward "[^[:space:]]" end t))
+            (setq count (1+ count)))))
+      count))
+  (setq org-count-words-function #'cdadar/org-count-words-chars)
+  ;; latex-fragment：只数宏参数内的字符（\gr{...} 算 … 内的内容），
+  ;; 宏名与括号不计。段落已统计整段，这里用负偏移抵消宏名/括号部分。
+  (defun cdadar/org-count-words-latex-fragment (element)
+    "Count non-space chars in the first {...} argument of a LaTeX fragment,
+offsetting the macro-name/brace chars already counted by the paragraph."
+    (let* ((beg (org-element-property :begin element))
+           (end (org-element-property :end element))
+           (text (buffer-substring-no-properties beg end))
+           (total (cdadar/org-count-words-chars beg end)))
+      (if (string-match "{\\([^}]*\\\)}" text)
+          (- (cdadar/org-count-words-chars (+ beg (match-beginning 1))
+                                          (+ beg (match-end 1)))
+             total)
+        (- total))))
+  (setf (alist-get 'latex-fragment org-count-words-element-functions)
+        #'cdadar/org-count-words-latex-fragment)
+  ;; heading 是否计入可切换：有时要标题文字，有时不要。
+  (defvar cdadar/org-count-words-include-headings t
+    "Non-nil counts headline text in org-count-words.")
+  (defun cdadar/org-count-words-set-headings (include)
+    "Add or remove `headline' from `org-count-words-elemnts' for INCLUDE."
+    (if include
+        (add-to-list 'org-count-words-elemnts 'headline)
+      (setq org-count-words-elemnts (delq 'headline org-count-words-elemnts))))
+  (defun cdadar/org-count-words-toggle-headings ()
+    "Toggle whether org-count-words counts headline text."
+    (interactive)
+    (setq cdadar/org-count-words-include-headings
+          (not cdadar/org-count-words-include-headings))
+    (cdadar/org-count-words-set-headings cdadar/org-count-words-include-headings)
+    (message "org-count-words: %s headings"
+             (if cdadar/org-count-words-include-headings "counting" "ignoring")))
+  ;; 标题统计从星号之后开始，结构性的 `*` 不计入。
+  (defun cdadar/org-count-words-headline (element)
+    "Count chars in headline ELEMENT text, excluding leading stars/spaces."
+    (let* ((beg (org-element-property :begin element))
+           (end (or (org-element-property :contents-begin element)
+                    (org-element-property :end element))))
+      (save-excursion
+        (goto-char beg)
+        (skip-chars-forward "* \t")
+        (when (< (point) end)
+          (cdadar/org-count-words-chars (point) end)))))
+  (setf (alist-get 'headline org-count-words-element-functions)
+        #'cdadar/org-count-words-headline))
+
 ;; Export extensions
 ;; create ppt
 (use-package ox-ioslide
