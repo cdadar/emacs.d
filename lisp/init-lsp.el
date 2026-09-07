@@ -37,10 +37,15 @@
   :ensure nil
   :preface
   (defconst cdadar/eglot-managed-extra-modes
-    '(html-mode markdown-mode
+    '(html-mode web-mode markdown-mode
       tex-mode latex-mode LaTeX-mode
       yaml-mode yaml-ts-mode)
     "Non-`prog-mode' major modes that should auto-enable Eglot when a server is available.")
+
+  (defun cdadar/eglot-vue-tsdk ()
+    "Return a TypeScript tsdk dir usable by Volar, or nil."
+    (let ((lib (expand-file-name "node_modules/typescript/lib" "~/.volar")))
+      (and (file-exists-p (expand-file-name "tsserverlibrary.js" lib)) lib)))
 
   (defconst cdadar/eglot-excluded-prog-modes
     '(emacs-lisp-mode lisp-mode makefile-mode snippet-mode)
@@ -73,6 +78,7 @@ missing server program per Emacs session."
       ("solargraph" . "gem install solargraph")
       ("terraform-ls" . "brew install hashicorp/tap/terraform-ls")
       ("typescript-language-server" . "npm install -g typescript-language-server typescript")
+      ("vue-language-server" . "npm install -g @volar/vue-language-server && npm install --prefix ~/.volar typescript@5")
       ("vim-language-server" . "npm install -g vim-language-server")
       ("vscode-css-language-server" . "npm install -g vscode-langservers-extracted")
       ("vscode-html-language-server" . "npm install -g vscode-langservers-extracted")
@@ -214,6 +220,13 @@ missing server program per Emacs session."
                        ("pyright-langserver" "--stdio")
                        ("ruff" "server")
                        "pylsp"))))
+  (add-to-list 'eglot-server-programs
+               '(((web-mode :language-id "vue"))
+                 . ("vue-language-server" "--stdio"
+                    :initializationOptions
+                    (lambda (&rest _)
+                      (when-let ((tsdk (cdadar/eglot-vue-tsdk)))
+                        `(:typescript (:tsdk ,tsdk)))))))
   (when (boundp 'eglot-events-buffer-config)
     (setq eglot-events-buffer-config '(:size 0 :format full))))
 
