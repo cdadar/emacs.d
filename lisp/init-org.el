@@ -1063,7 +1063,7 @@ offsetting the macro-name/brace chars already counted by the paragraph."
            (total (cdadar/org-count-words-chars beg end)))
       (if (string-match "{\\([^}]*\\\)}" text)
           (- (cdadar/org-count-words-chars (+ beg (match-beginning 1))
-                                          (+ beg (match-end 1)))
+                                           (+ beg (match-end 1)))
              total)
         (- total))))
   (setf (alist-get 'latex-fragment org-count-words-element-functions)
@@ -1365,9 +1365,9 @@ followed by space/CJK text."
             :rev :newest))
 
 
-  ;; === Markdown → Org from clipboard ===
-  (defun cdadar/md-clipboard-to-org (&optional insert-p)
-    "Convert markdown text to Org, replacing the clipboard with the result.
+;; === Markdown → Org from clipboard ===
+(defun cdadar/md-clipboard-to-org (&optional insert-p)
+  "Convert markdown text to Org, replacing the clipboard with the result.
 
 Source of the markdown:
 - If the region is active, the region's text.
@@ -1380,37 +1380,37 @@ point in the current buffer.
 Uses pandoc:  pandoc -f markdown -t org --wrap=preserve
 When org-pandoc-import is installed, its `_simple-headers.lua' filter is
 reused to drop pandoc's CUSTOM_ID properties and rewrite internal links."
-    (interactive "P")
-    (unless (executable-find "pandoc")
-      (user-error "pandoc is not installed (brew install pandoc)"))
-    (let* ((opi-el (locate-library "org-pandoc-import"))
-           (simple-headers (and opi-el
-                                (expand-file-name "filters/_simple-headers.lua"
-                                                  (file-name-directory opi-el))))
-           (pandoc-args (append (list "-f" "markdown" "-t" "org" "--wrap=preserve")
-                                (when (and simple-headers (file-exists-p simple-headers))
-                                  (list "--lua-filter" simple-headers))))
-           (input (if (use-region-p)
-                      (buffer-substring-no-properties (region-beginning) (region-end))
-                    (gui-get-selection 'CLIPBOARD)))
-           (org-text nil))
-      (unless (and input (string-match-p "[^[:space:]]" input))
-        (user-error "No markdown text found in region or clipboard"))
-      (with-temp-buffer
-        (insert input)
-        (goto-char (point-min))
-        (unless (zerop (apply #'call-process-region (point-min) (point-max)
-                              "pandoc" t t nil pandoc-args))
-          (error "pandoc conversion failed"))
-        (setq org-text (string-trim-right (buffer-string) "\n")))
-      (if (display-graphic-p)
-          (progn
-            (gui-set-selection 'CLIPBOARD org-text)
-            (gui-set-selection 'PRIMARY org-text))
-        (kill-new org-text))
-      (when insert-p
-        (insert org-text))
-      (message "markdown → org: %d chars, clipboard updated" (length org-text))))
+  (interactive "P")
+  (unless (executable-find "pandoc")
+    (user-error "pandoc is not installed (brew install pandoc)"))
+  (let* ((opi-el (locate-library "org-pandoc-import"))
+         (simple-headers (and opi-el
+                              (expand-file-name "filters/_simple-headers.lua"
+                                                (file-name-directory opi-el))))
+         (pandoc-args (append (list "-f" "markdown" "-t" "org" "--wrap=preserve")
+                              (when (and simple-headers (file-exists-p simple-headers))
+                                (list "--lua-filter" simple-headers))))
+         (input (if (use-region-p)
+                    (buffer-substring-no-properties (region-beginning) (region-end))
+                  (gui-get-selection 'CLIPBOARD)))
+         (org-text nil))
+    (unless (and input (string-match-p "[^[:space:]]" input))
+      (user-error "No markdown text found in region or clipboard"))
+    (with-temp-buffer
+      (insert input)
+      (goto-char (point-min))
+      (unless (zerop (apply #'call-process-region (point-min) (point-max)
+                            "pandoc" t t nil pandoc-args))
+        (error "pandoc conversion failed"))
+      (setq org-text (string-trim-right (buffer-string) "\n")))
+    (if (display-graphic-p)
+        (progn
+          (gui-set-selection 'CLIPBOARD org-text)
+          (gui-set-selection 'PRIMARY org-text))
+      (kill-new org-text))
+    (when insert-p
+      (insert org-text))
+    (message "markdown → org: %d chars, clipboard updated" (length org-text))))
 
 (provide 'init-org)
 ;;; init-org.el ends here
