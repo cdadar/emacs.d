@@ -987,7 +987,7 @@ LIMIT may be nil, in which case it defaults to the end of the buffer."
 ;;; --- Related packages ---
 
 (use-package writeroom-mode
-  :if (locate-library "writeroom-mode")
+  :if (locate-library "writeroom-mode"))
 
 
 (use-package grab-mac-link
