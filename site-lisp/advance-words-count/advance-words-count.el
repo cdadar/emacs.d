@@ -67,6 +67,13 @@
   :group 'advance-words-count
   :type 'string)
 
+(defcustom words-count-org-excluded-lines
+  "^[ \\t]*\\(\\*+[ \\t]\\|#+\\)"
+  "A regexp matching org lines excluded from the filtered count.
+Headings (`* title') and meta lines (`#+TITLE', `#+PROPERTY', ...)."
+  :group 'advance-words-count
+  :type 'regexp)
+
 (defcustom words-count-regexp-list
   (list words-count-rule-CJK
         words-count-rule-nonespace
@@ -98,6 +105,40 @@
           (setq count (1+ count)))))
     count))
 
+(defun words-count-filtered-char-count (start end)
+  "Count non-space characters in START..END, skipping lines matching
+`words-count-org-excluded-lines'."
+  (save-excursion
+    (save-restriction
+      (goto-char start)
+      (let ((count 0))
+        (while (and (<= (point) end) (< (point) (point-max)))
+          (let* ((ls (line-beginning-position))
+                 (le (line-end-position))
+                 (line (buffer-substring-no-properties ls le)))
+            (when (and (not (string-match-p words-count-org-excluded-lines line))
+                       (< ls end))
+              (let ((from (max start ls))
+                    (to (min end le)))
+                (when (< from to)
+                  (setq count
+                        (+ count
+                           (length (replace-regexp-in-string
+                                    "[[:space:]]" ""
+                                    (buffer-substring-no-properties from to))))))))
+            (goto-char (1+ le))))
+        count))))
+
+(defun words-count-org-filter-string (start end arg)
+  "Return a display string for the org-filtered char count.
+Outside org-mode returns an empty string.  ARG selects verbose style."
+  (if (derived-mode-p 'org-mode)
+      (format (if arg
+                  " Filtered Chars (excl. headings & #+ lines) .. %d\n"
+                ", Fc:%d")
+              (words-count-filtered-char-count start end))
+    ""))
+
 ;; This function is perserved as an exmple for configuration.
 (defun words-count--format-message (cons &optional arg)
   "Format a string to be shown for `words-count--message'.
@@ -118,9 +159,10 @@ verbosely."
  Number of Lines ............... %d
  ANSCII Words .................. %d
 %s
+%s
 ========================================
 "
-       "Ns:%d, Al:%d, Ln:%d, An:%d, %s")
+       "Ns:%d, Al:%d, Ln:%d, An:%d, %s%s")
      (cadr list)
      (- end start)
      (count-lines start end)
@@ -135,7 +177,8 @@ verbosely."
  Word Count .................... %d\n"
                  "Ha:%d, Wc:%d")
                (car list)
-               (+ (car list) (car (last list))))))))
+               (+ (car list) (car (last list)))))
+     (words-count-org-filter-string start end arg))))
 
 ;;;###autoload
 (defmacro define-words-count-function
