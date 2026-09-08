@@ -22,8 +22,11 @@
               (add-to-list 'eldoc-documentation-functions 'flymake-eldoc-function))))
 
 (use-package flycheck
-  ;; Disable flycheck checkers for which we have flymake equivalents.
+  ;; Pure checker provider for flymake-flycheck; no flycheck UI is enabled.
+  ;; Deferred until flymake-flycheck pulls it in.
+  :defer t
   :config
+  ;; Disable flycheck checkers for which we have flymake equivalents.
   (setq-default flycheck-disabled-checkers
                 (append (default-value 'flycheck-disabled-checkers)
                         '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package sh-shellcheck))))
@@ -32,8 +35,7 @@
 (use-package flymake-flycheck
   :after (flymake flycheck)
   :hook
-  ((flymake-mode . flymake-flycheck-auto)
-   ((prog-mode text-mode) . flymake-mode)))
+  (flymake-mode . flymake-flycheck-auto))
 
 (use-package flymake-diagnostic-at-point
   :commands flymake-diagnostic-at-point-mode
