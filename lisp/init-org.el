@@ -1331,7 +1331,6 @@ followed by space/CJK text."
   (org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-roam-bibtex
-  :if (locate-library "org-roam-bibtex")
   :after org-roam)
 
 (use-package org-zettel-ref-mode
@@ -1347,17 +1346,14 @@ followed by space/CJK text."
 
 ;; Review, math, and import extensions
 (use-package org-review
-  :if (locate-library "org-review")
   :bind (:map org-agenda-mode-map
               ("C-c C-r" . org-review-insert-last-review)))
 
 (use-package org-fragtog
-  :if (locate-library "org-fragtog")
   :hook ((org-mode . org-fragtog-mode)))
 
 
 (use-package org-pandoc-import
-  :if (locate-library "org-pandoc-import")
   :commands (org-pandoc-import-as-org
              org-pandoc-import-to-org
              org-pandoc-import-transient-mode)
