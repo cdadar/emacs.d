@@ -26,7 +26,15 @@
 
 ;;; Commentary:
 
-;;
+;; Eglot-based LSP integration:
+;; - Auto-enable Eglot for `prog-mode' derivatives (minus
+;;   `cdadar/eglot-excluded-prog-modes') and for the non-programming modes in
+;;   `cdadar/eglot-managed-extra-modes' (HTML, Markdown, TeX, YAML).
+;; - Detect missing LSP servers and auto-install them in interactive sessions
+;;   via `cdadar/eglot-server-installers', once per missing server per session.
+;; - Custom server setups: Python prefers basedpyright/pyright/ruff/pylsp;
+;;   Vue uses Volar with a pinned TypeScript tsdk.
+;; - Eglot inside Org Babel source blocks via `cdadar/lsp-org-babel-enable'.
 
 ;;; Code:
 
@@ -38,8 +46,8 @@
   :preface
   (defconst cdadar/eglot-managed-extra-modes
     '(html-mode web-mode markdown-mode
-      tex-mode latex-mode LaTeX-mode
-      yaml-mode yaml-ts-mode)
+                tex-mode latex-mode LaTeX-mode
+                yaml-mode yaml-ts-mode)
     "Non-`prog-mode' major modes that should auto-enable Eglot when a server is available.")
 
   (defun cdadar/eglot-vue-tsdk ()
@@ -98,21 +106,6 @@ missing server program per Emacs session."
              (not (apply #'derived-mode-p cdadar/eglot-excluded-prog-modes)))
         (apply #'derived-mode-p cdadar/eglot-managed-extra-modes)))
 
-  (defun cdadar/eglot-contact-available-p (contact)
-    "Return non-nil when CONTACT names an available Eglot server."
-    (cond
-     ((null contact) nil)
-     ;; TCP server CONTACT: (HOST PORT).
-     ((and (consp contact) (stringp (car contact)) (numberp (cadr contact))) t)
-     ;; Local command CONTACT: (PROGRAM ARGS...).
-     ((and (consp contact) (stringp (car contact)))
-      (let ((program (car contact)))
-        (if (file-name-absolute-p program)
-            (file-executable-p program)
-          (executable-find program))))
-     ;; Preserve support for uncommon Eglot CONTACT shapes.
-     (t t)))
-
   (defun cdadar/eglot-contact-program (contact)
     "Return the local executable program from Eglot CONTACT, or nil."
     (when (and (consp contact)
@@ -123,11 +116,11 @@ missing server program per Emacs session."
 
   (defun cdadar/eglot-missing-candidates-from-error (err)
     "Return missing executable candidates described by Eglot error ERR."
-    (let ((message (error-message-string err)))
-      (when (string-match "None of \\(.*\\) are valid executables" message)
+    (let ((msg (error-message-string err)))
+      (when (string-match "None of \\(.*\\) are valid executables" msg)
         (mapcar (lambda (candidate)
                   (string-trim candidate "[[:space:]'‘’`]+" "[[:space:]'‘’`]+"))
-                (split-string (match-string 1 message) "," t "[[:space:]]+")))))
+                (split-string (match-string 1 msg) "," t "[[:space:]]+")))))
 
   (defun cdadar/eglot-recommended-missing-server ()
     "Return a missing LSP server executable with a configured installer."
@@ -145,11 +138,14 @@ missing server program per Emacs session."
                        (assoc candidate cdadar/eglot-server-installers))
                      (cdadar/eglot-missing-candidates-from-error err))))))
 
-  (defun cdadar/eglot-install-server-maybe ()
-    "Auto-install the recommended LSP server for the current buffer if possible."
+  (defun cdadar/eglot-install-server-maybe (&optional server)
+    "Auto-install SERVER, or the recommended missing LSP server when nil.
+The install is only attempted in interactive sessions, only for server
+programs listed in `cdadar/eglot-server-installers', and only once per
+missing server program per Emacs session."
     (when (and cdadar/eglot-auto-install-server
                (not noninteractive))
-      (let* ((server (cdadar/eglot-recommended-missing-server))
+      (let* ((server (or server (cdadar/eglot-recommended-missing-server)))
              (command (cdr (assoc server cdadar/eglot-server-installers)))
              (installer (car (and command (split-string-and-unquote command))))
              (target-buffer (current-buffer)))
@@ -171,46 +167,47 @@ missing server program per Emacs session."
              process
              (lambda (proc _event)
                (when (memq (process-status proc) '(exit signal))
-                 (let ((server (replace-regexp-in-string "^eglot-install-" ""
-                                                          (process-name proc))))
-                   (remhash server cdadar/eglot-server-install-processes)
-                   (if (zerop (process-exit-status proc))
-                       (progn
-                         (message "Eglot: installed %s" server)
-                         (when (buffer-live-p target-buffer)
-                           (with-current-buffer target-buffer
-                             (when (cdadar/eglot-managed-mode-p)
-                               (eglot-ensure)))))
-                     (message "Eglot: failed to install %s; see %s"
-                              server (buffer-name (process-buffer proc))))))))))))))
-
-  (defun cdadar/eglot-server-available-p ()
-    "Return non-nil when Eglot can infer an available server for this buffer."
-    (when (require 'eglot nil t)
-      (condition-case nil
-          (cdadar/eglot-contact-available-p (nth 3 (eglot--guess-contact nil)))
-        (error nil))))
+                 (remhash server cdadar/eglot-server-install-processes)
+                 (if (zerop (process-exit-status proc))
+                     (progn
+                       (message "Eglot: installed %s" server)
+                       (when (buffer-live-p target-buffer)
+                         (with-current-buffer target-buffer
+                           (when (cdadar/eglot-managed-mode-p)
+                             (eglot-ensure)))))
+                   (message "Eglot: failed to install %s; see %s"
+                            server (buffer-name (process-buffer proc)))))))))))))
 
   (defun cdadar/eglot-ensure-maybe ()
     "Enable Eglot, installing a recommended server first when needed."
     (when (cdadar/eglot-managed-mode-p)
-      (if (cdadar/eglot-server-available-p)
-          (eglot-ensure)
-        (cdadar/eglot-install-server-maybe))))
+      (if-let ((missing (cdadar/eglot-recommended-missing-server)))
+          (cdadar/eglot-install-server-maybe missing)
+        (eglot-ensure))))
   :commands (eglot eglot-ensure)
   :hook (prog-mode . cdadar/eglot-ensure-maybe)
+  :bind (:map eglot-mode-map
+         ("C-c C-l r" . eglot-rename)
+         ("C-c C-l e" . eglot-code-actions)
+         ("C-c C-l f" . eglot-format-buffer)
+         ("C-c C-l o" . eglot-code-action-organize-imports))
   :init
   (dolist (mode cdadar/eglot-managed-extra-modes)
     (add-hook (intern (format "%s-hook" mode)) #'cdadar/eglot-ensure-maybe))
-  :custom
-  (eglot-autoshutdown t)
-  (eglot-send-changes-idle-time 0.5)
-  :init
   ;; Emacs 29 uses `eglot-events-buffer-size'.  Emacs 30 replaced it with
   ;; `eglot-events-buffer-config', but still reads this legacy variable while
   ;; computing the new default, so keep it in `:init' before Eglot loads.
   (setq eglot-events-buffer-size 0)
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-extend-to-xref t)
+  (eglot-send-changes-idle-time 0.5)
   :config
+  ;; Disable semantic tokens: the per-frame rendering overhead is not worth it
+  ;; for most sessions; errors/warnings still surface via flymake.
+  (defun cdadar/eglot-disable-semantic-tokens ()
+    (eglot-semantic-tokens-mode -1))
+  (add-hook 'eglot-managed-mode-hook #'cdadar/eglot-disable-semantic-tokens)
   ;; Prefer project-independent Python LSP servers that work well with uv-managed
   ;; projects instead of virtualenvwrapper/pyvenv-style activation.
   (add-to-list 'eglot-server-programs
@@ -240,15 +237,6 @@ missing server program per Emacs session."
   :config
   (consult-eglot-embark-mode))
 
-;; Emacs LSP booster
-(use-package eglot-booster
-  :ensure nil
-  :after eglot
-  :if (and (executable-find "emacs-lsp-booster")
-           (locate-library "eglot-booster"))
-  :commands (eglot-booster-mode)
-  :init
-  (eglot-booster-mode 1))
 
 (use-package org-src
   :ensure nil
