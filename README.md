@@ -79,10 +79,10 @@ emacs -Q -l ~/.emacs.d/init-mini.el
 
 This repository includes project-level guidance for AI coding agents:
 
-- `CLAUDE.md` for Claude Code
-- `AGENTS.md` for Codex, OpenCode, and similar agents
+- `AGENTS.md` — the file to edit (read by Codex, OpenCode, pi, and similar agents)
+- `CLAUDE.md` — a symlink to it, for Claude Code
 
-Keep these two files aligned when repository conventions, supported Emacs versions, or verification workflows change.
+Edit `AGENTS.md` only; the symlink keeps both in sync.
 
 ## Updates
 

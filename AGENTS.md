@@ -1,8 +1,8 @@
 # AGENTS.md
 
-This file provides guidance to OpenAI Codex, OpenCode, and other project-level coding agents when working with code in this repository.
+This file provides guidance to project-level coding agents (Claude Code, OpenAI Codex, OpenCode, and similar) when working with code in this repository.
 
-For Claude Code users, the parallel project guidance lives in `CLAUDE.md`. Keep `AGENTS.md` and `CLAUDE.md` aligned when project conventions change.
+`CLAUDE.md` is a symlink to this file: edit `AGENTS.md` and both agents see the change. Do not replace the symlink with a copy.
 
 ## Overview
 
