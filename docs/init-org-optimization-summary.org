@@ -116,6 +116,88 @@
 - 当前 ~init-org.el~ 的 ~load-file~、~batch-byte-compile~ 与 ~./test-startup.sh~ 也已重新验证通过。
 - 本轮已单独验证：将 ~org-export-headline-levels~ 设为 ~5~ 后，五级 Org heading 的 LaTeX 导出不再降级为 ~enumerate~ / ~\\item~。
 
+* 本轮：导出问题专项（2026-09-17）
+
+** 历史笔记重新能出 PDF
+- 新增导出 filter ~cdadar/org-latex-drop-duplicate-documentclass~：52 篇笔记在
+  ~#+LATEX_HEADER~ 里自带 ~\documentclass[14pt]{article}~，Org 又输出一次默认 class
+  声明，LaTeX 报 “Two \documentclass…” 后整篇产不出 PDF。filter 保留 Org 的声明，
+  删掉同一 class 的重复声明；~\begin{document}~ 之后（正文里的 LaTeX 示例）不动，
+  不同 class 的重复声明也不动。class 选项应写 ~#+LATEX_CLASS_OPTIONS~。
+- 验证：~20241120194527-耶稣的救恩_召罪人.org~ 由「产不出 PDF」变为正常出 PDF。
+
+** quote 负 vspace 兜底
+- ~cdadar/org-latex-fix-quote-paragraph-spacing~ 现在还会删掉前言里旧笔记自改 quote
+  环境时留下的 ~\endlist\vspace{-\baselineskip}~（文字重叠的元凶）。
+- 验证：~20260815212757-与世界分别.org~、~20260829210526-认识肉体_十架.org~
+  导出正常，生成的 =.tex= 中已无负 vspace。
+
+** allowframebreaks 只留一套机制
+- 默认值由 ~init-org.el~ 的 ~org-beamer-frame-default-options~ 全局提供，
+  ~snippets/org-mode/export_beamer~ 里重复的 ~#+BIND~ 已删。旧 _ppt 笔记里同值的
+  ~#+BIND~ 保留（值相同，不值得为它改 63 篇笔记）。
+
+** 配置卫生
+- 复原上一轮被削掉的反斜杠：~cdadar/org-latex-needs-quote-cjk-font-p~ 的 4 处正则，
+  以及 bibleref / beamer headline 的文档字符串。
+- 删掉文件中部多余的 ~(require 'rx)~（Emacs 29+ 已自动加载 ~rx~）。
+- ~cdadar/org-latex-fix-multicolumn-trailing-ampersand~ 补 ~(ignore info)~，
+  消掉 byte-compile 的 unused lexical argument 警告。
+
+** 本轮验证
+- ~check-parens~、~load-file~、~./test-startup.sh~ 均通过。
+- 导出 filter 单元测试 9 条全过：重复 class 删除、正文不误伤、异构 class 不误删、
+  负 vspace 只动前言、quote 末行断行、字体回退包裹、quote 字体不重复注入。
+- 真实导出 5 篇全部成功：~耶稣的救恩~（本轮之前失败）、~与世界分别~、
+  ~认识肉体_十架~、~教會生活~、~信心的道路_ppt~（6 个 frame，allowframebreaks 生效）。
+- 字数统计口径：~\gr{λόγος}~ 由正文 10 字符修正为 5 字符（宏名与括号不计）。
+
+** 缺字：按导出文本实际出现的字符注入回退字体
+- XeTeX 不像 LuaTeX 那样自动字体回退，主字体（TeX Gyre Termes）没有带音/多音希腊文、
+  圈号、制表符、几何符号（xeCJK 默认不管这些），导出后就是空白。
+- 新增 filter ~cdadar/org-latex-add-glyph-fallback~：扫描导出后的 LaTeX 文本，只对里面
+  真出现的字符按区间写 ~\newunicodechar~：希腊文（U+0370-03FF、U+1F00-1FFF）→
+  SBL Greek；圈号/制表符（U+2460-24FF、U+2500-257F）→ CJK 字体（~cdadar/org-latex-cjk-main-font~）；
+  几何符号（U+25A0-25FF）→ Apple Symbols。希腊文不带音的字也一并映射，避免同一个词
+  里两种字体混排。无 fontspec 或已注入过的文档不动。
+- 验证：~认识肉体_十架~（─ U+2500）、~教會生活~（ἐκκλησία）导出后日志 
+  =Missing character= 为 0；渲染出的 PDF 里 ─ 是正常居中横线，ἐκκλησία 完整可读。
+- 上轮当死代码删掉的旧符号回退（写死了 ①②③→Apple Symbols）没恢复：实测那套映射反而会把
+  本来能渲染的 ①②③ 弄丢。
+
+** 圈号统一为 ~\textcircled{N}~（手动命令，不做导出拦截）
+- 新增 ~cdadar/org-replace-circled-numbers~（=M-x= 调用）：把 buffer 里的 ①..⑳ 换成
+  ~\textcircled{N}~（笔记里早就用了 95 处这个写法，统一成同一个）。
+- 跳过 =#= 开头的行（关键字/注释/块分隔符）与 ~src~ / ~example~ 块；整体算一次 undo，
+  返回替换条数；重复调用幂等。
+- 尝试过写成导出 filter，撤掉了：那篇笔记自己的 header 里有
+  ~\newunicodechar{①}{{\symbolfallback ①}}~，导出拦截会把 header 里的 ① 也换成命令，
+  把 ~\newunicodechar~ 砸出 =Invalid argument=。改成手动改源文件。
+- 验证（副本上跑）：~摩西五经概论~ 改 4 处、~学道_诗篇73_76篇~ 改 17 处，
+  注释行/关键字行/~src~ 块都没动。
+
+** newunicodechar 重复定义同一字符会死循环
+- 现象：~摩西五经概论~ 导出报 =! TeX capacity exceeded, input stack size=10000=，
+  卡在 ~\item ▸~。
+- 原因：~\newunicodechar~ 把字符设成 active；如果该字符已经 active（笔记 header 已映射），
+  再定义一次时，**替换文本里那个字符会被当成 active token 再展开**，于是无限递归。
+- 修法：~cdadar/org-latex-glyph-fallback-chars~ 遇到文本里已有
+  ~\newunicodechar{<该字符>}~ 的字符就跳过（~cdadar/org-latex-unicodechar-mapped-p~）。
+- 验证：该笔记重新导出，0 错误 0 递归，PDF 正常。
+
+** 两处笔记自身的毛病
+- ~20250219220537-医治枯手的耶稣_ppt.org~：~\setCJKmainfont~ 写在
+  ~\usepackage{...xeCJK}~ 之前（xeCJK 还没加载），把 usepackage 行上提一行。
+- ~20260912230726-教會生活.org~：删掉一个孤立的 PUA 字符 U+F076（网页图标残留，无字体可渲染）。
+
+* 仍未处理
+- 另外 9 个笔记里还有 6 种 PUA 残留字符（U+F0A7/F076/F06C/E044/E070/E030，共 20 处），
+  同样无字体可渲染；要清就单独跑一遍。
+- ~摩西五经概论~ 还剩 6 个缺字：希伯来文 ה/י（U+05D4/U+05D9）、IPA 音标 ˈ/ʌ
+  （U+02C8/U+028C）——笔记里这些字符没包在 ~\heb{}~ 里，直接落在主字体上。
+  要堵的话就把希伯来文段（U+0590-05FF）与 IPA（U+0250-02AF）加进
+  ~cdadar/org-latex-glyph-fallback-ranges~（希伯来文→SBL Hebrew）。
+
 * 可选后续
 
 ** 进一步拆分 Babel 配置

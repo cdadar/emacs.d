@@ -92,11 +92,18 @@
 
 # 列表与微排版
 #+LATEX_HEADER: \usepackage{enumitem}
+# 列表：每层不同符号
+#+LATEX_HEADER: \setlist[itemize,1]{label=\textperiodcentered}
+#+LATEX_HEADER: \setlist[itemize,2]{label=\textopenbullet}
+#+LATEX_HEADER: \setlist[itemize,3]{label=\textasteriskcentered}
+#+LATEX_HEADER: \setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+#+LATEX_HEADER: \setlist[enumerate,2]{label=(\arabic*),ref=\arabic*}
+#+LATEX_HEADER: \setlist[enumerate,3]{label=\alph*),ref=\alph*}
 #+LATEX_HEADER: \newCJKfontfamily\quotecjkfont[Scale=1.0]{Kaiti SC}
 #+LATEX_HEADER: \renewenvironment{quote}{%
 #+LATEX_HEADER:   \addvspace{0.5em}% quote 前留半行间距（前面已有更大间距时自动不叠加）
 #+LATEX_HEADER:   \list{}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parsep=0pt}\item\relax\quotecjkfont
-#+LATEX_HEADER: }{\endlist\vspace{-\baselineskip}} % quote 下方抵消末行 \\ 的尾随空行，间距与普通段一致 + 楷体
+#+LATEX_HEADER: }{\endlist} % quote 末行的 \\ 由导出 filter 去掉，负 vspace 会导致文字重叠，不用
 #+LATEX_HEADER: \usepackage{microtype}
 #+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,unicode=true,bookmarksdepth=5}
 #+LATEX_HEADER: \usepackage{csquotes}

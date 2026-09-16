@@ -1,5 +1,6 @@
-# key: export_beamer
+# -*- mode: snippet -*-
 # name: export_beamer
+# key: export_beamer
 # --
 
 #+TITLE: ${1:Title}
@@ -15,20 +16,24 @@
 #+STARTUP: beamer
 #+LATEX_CLASS: beamer
 #+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169,14pt]
-#+BIND: org-beamer-frame-default-options "allowframebreaks"
+
+# `allowframebreaks' 在 init-org.el 里全局默认，模板不再重复声明。
+
+# 投影仪演示基准：16:9 + 14pt（场地更大改 17pt），一级标题 = 一页，二级标题 = 页内粗体小标题。
+# 投影仪上不用透明遮罩（灰色字在投影上糊）和伪斜体（CJK 斜体是拉斜的），经文靠楷体区分。
+# 这份 preamble 就是本文件的基准，需要时就地改（字号、字体、颜色都在这段里）。
 
 #+LATEX_HEADER: \usetheme{metropolis}
 #+LATEX_HEADER: \setbeamertemplate{navigation symbols}{}
 #+LATEX_HEADER: \setbeamertemplate{frametitle continuation}{}
-#+LATEX_HEADER: \setbeamercovered{transparent}
 
 #+LATEX_HEADER: \usepackage{fontspec}
 #+LATEX_HEADER: \usepackage{xeCJK}
 #+LATEX_HEADER: \usepackage{polyglossia}
 #+LATEX_HEADER: \usepackage{microtype}
-#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
 #+LATEX_HEADER: \usepackage{ragged2e}
 #+LATEX_HEADER: \usepackage[most]{tcolorbox}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
 
 #+LATEX_HEADER: \setdefaultlanguage{english}
 #+LATEX_HEADER: \setotherlanguages{greek,hebrew}
@@ -71,7 +76,7 @@
 
 #+LATEX_HEADER: \renewenvironment{quote}{%
 #+LATEX_HEADER:   \list{}{\leftmargin=0em\rightmargin=0em}\item[]%
-#+LATEX_HEADER:   \begin{minipage}[t]{\linewidth}\RaggedRight\itshape\quotecjkfont
+#+LATEX_HEADER:   \begin{minipage}[t]{\linewidth}\RaggedRight\quotecjkfont
 #+LATEX_HEADER: }{%
 #+LATEX_HEADER:   \end{minipage}\endlist%
 #+LATEX_HEADER: }
@@ -97,9 +102,9 @@
 #+LATEX_HEADER: \newcommand{\leftinstitute}[1]{%
 #+LATEX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
 #+LATEX_HEADER: }
-#+LATEX_HEADER: \leftinstitute{}
+#+LATEX_HEADER: \leftinstitute{${4:可6:45-52}}
 
-# 使用示例：
+# 使用示例（biblequote 是上面定义的 tcolorbox，比 quote 更适合跨页经文）：
 # #+Begin_Export latex
 # \begin{biblequote}
 # Blessed are the pure in heart, for they shall see God.\\

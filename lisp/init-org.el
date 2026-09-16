@@ -685,6 +685,182 @@ INFO follow the Org export filter protocol."
        text t t)
     text))
 
+(defconst cdadar/org-latex-font-fallbacks
+  '(("思源宋体 CN" . "LXGW WenKai")
+    ("思源宋体" . "LXGW WenKai")
+    ("Noto Serif CJK SC" . "LXGW WenKai")
+    ("Noto Serif SC" . "LXGW WenKai")
+    ("思源黑体 CN" . "PingFang SC")
+    ("楷体" . "Kaiti SC")
+    ("Courier Std" . "Courier New"))
+  "本机没装的字体 → 已装的替代字体。
+每篇笔记仍然照旧写自己想要的字体；导出时那一行会被包进字体存在性判断，
+本机装了真字体就自动用回真字体，不必改笔记。")
+
+(defconst cdadar/org-latex-font-load-regexp
+  (rx "\\"
+      (or (seq "set" (optional "CJK") (or "main" "sans" "mono") "font")
+          (seq "new" (optional "CJK") "fontfamily" "\\" (+ (any "A-Za-z@"))))
+      (optional "[" (* (not (any "]"))) "]"))
+  "匹配一条 LaTeX 字体加载命令（含可选参数）。")
+
+(defun cdadar/org-latex-use-installed-fonts (text backend info)
+  "本机没装的字体改用已装的字体，导出 LaTeX TEXT。
+笔记照旧写自己想要的字体：这一行会被包进字体存在性判断，本机装了真字体
+（比如以后补装了思源宋体）就自动用回真字体，不必改任何笔记。
+BACKEND 与 INFO 遵循 Org 导出过滤器协议。"
+  (ignore info)
+  (if (org-export-derived-backend-p backend 'latex)
+      (let ((case-fold-search nil))
+        (dolist (pair cdadar/org-latex-font-fallbacks text)
+          (setq text
+                (replace-regexp-in-string
+                 (concat cdadar/org-latex-font-load-regexp
+                         "{" (regexp-quote (car pair)) "}")
+                 (lambda (match)
+                   ;; MATCH 是「命令 + {字体名}」；直接去掉尾部字体名得出命令，
+                   ;; 不依赖 match data（替换回调里 match data 不可靠）。
+                   (let ((command (substring match 0
+                                             (- (length match)
+                                                (length (car pair)) 2))))
+                     (concat "\\IfFontExistsTF{" (car pair) "}"
+                             "{" command "{" (car pair) "}}"
+                             "{" command "{" (cdr pair) "}}")))
+                 text t t)))
+        text)
+    text))
+
+(defconst cdadar/org-latex-glyph-fallback-ranges
+  '((#x0370 #x03FF "\\cdadargreek")
+    (#x1F00 #x1FFF "\\cdadargreek")
+    (#x2460 #x24FF "\\cdadarcjk")
+    (#x2500 #x257F "\\cdadarcjk")
+    (#x25A0 #x25FF "\\cdadarsym"))
+  "字符区间 → 回退字体命令。
+Times 系主字体没有带音希腊文、圈号、制表符与几何符号，XeTeX 又不像 LuaTeX 那样
+自动回退，那些字符会变成空白。这里的分配是：希腊文用笔记自己的 SBL Greek，
+CJK 语境的圈号/制表符用 CJK 字体，其余符号用系统符号字体。")
+
+(defconst cdadar/org-latex-glyph-fallback-marker "cdadar-glyph-fallback"
+  "已注入回退字体设置时留在导言区的标记，用于避免重复注入。")
+
+(defun cdadar/org-latex-unicodechar-mapped-p (text char)
+  "Return non-nil when TEXT already maps CHAR with `\\newunicodechar'.
+Redefining such a character puts an active copy of it inside its own replacement
+text, and newunicodechar then expands it forever."
+  (string-match-p (concat (regexp-quote "\\newunicodechar{")
+                          (regexp-quote (string char))
+                          "}")
+                  text))
+
+(defun cdadar/org-latex-glyph-fallback-chars (text)
+  "Return the characters in TEXT that need a fallback font.
+Each element is (CHARACTER . FONT-COMMAND-NAME).  Characters the note maps
+itself with `\\newunicodechar' are left to the note."
+  (let (found)
+    (dolist (char (delete-dups (string-to-list text)))
+      (dolist (range cdadar/org-latex-glyph-fallback-ranges)
+        (when (and (<= (nth 0 range) char (nth 1 range))
+                   (not (assq char found))
+                   (not (cdadar/org-latex-unicodechar-mapped-p text char)))
+          (push (cons char (nth 2 range)) found))))
+    (sort found #'car-less-than-car)))
+
+(defun cdadar/org-latex-glyph-fallback-snippet (text)
+  "Return LaTeX fallback-font setup for the characters in TEXT, or nil."
+  (let ((chars (cdadar/org-latex-glyph-fallback-chars text)))
+    (when chars
+      (concat
+       "\\usepackage{newunicodechar}\n"
+       (format "%% %s\n" cdadar/org-latex-glyph-fallback-marker)
+       "\\IfFontExistsTF{SBL Greek}"
+       "{\\newfontfamily\\cdadargreek{SBL Greek}}"
+       "{\\newfontfamily\\cdadargreek{DejaVu Sans}}\n"
+       (format "\\newfontfamily\\cdadarcjk{%s}\n" cdadar/org-latex-cjk-main-font)
+       "\\IfFontExistsTF{Apple Symbols}"
+       "{\\newfontfamily\\cdadarsym{Apple Symbols}}"
+       "{\\newfontfamily\\cdadarsym{Arial Unicode MS}}\n"
+       (mapconcat (lambda (pair)
+                    (format "\\newunicodechar{%c}{{%s %c}}"
+                            (car pair) (cdr pair) (car pair)))
+                  chars "\n")))))
+
+(defun cdadar/org-latex-add-glyph-fallback (text backend info)
+  "Redirect characters the main font lacks to a font that has them.
+The Times-like main font has no accented Greek, circled numbers, box drawing
+characters or geometric shapes, and XeTeX has no automatic font fallback, so
+they would come out blank; only the characters actually present in TEXT are
+remapped.  Requires fontspec, hence the guard.  BACKEND and INFO follow the Org
+export filter protocol."
+  (ignore info)
+  (if (and (org-export-derived-backend-p backend 'latex)
+           (string-match-p "fontspec" text)
+           (not (string-match-p cdadar/org-latex-glyph-fallback-marker text)))
+      (let ((snippet (cdadar/org-latex-glyph-fallback-snippet text)))
+        (if snippet
+            (replace-regexp-in-string
+             (regexp-quote "\\begin{document}") (concat snippet "\n\\begin{document}")
+             text t t)
+          text))
+    text))
+
+(defconst cdadar/org-circled-number-regexp
+  (format "[%c-%c]" #x2460 #x2473)
+  "匹配 ①..⑳（U+2460..U+2473）。")
+
+(defun cdadar/org-replace-circled-numbers ()
+  "Replace ①..⑳ in the current Org buffer with `\\textcircled{N}'.
+笔记里本来就到处用 `\\textcircled{1}'，这个命令把从别处粘来的圈号字符统一成同一写法。
+跳过 `#' 开头的行（关键字、注释、块分隔符；笔记 header 可能用 `\\newunicodechar'
+映射过这个字符，改了会破坏映射）与 src / example 块内容；整体算一次 undo。"
+  (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "只在 Org buffer 里用"))
+  (let ((count 0))
+    (atomic-change-group
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward cdadar/org-circled-number-regexp nil t)
+          (let ((char (char-after (match-beginning 0))))
+            (unless (or (save-excursion (forward-line 0)
+                                        (looking-at-p "[[:blank:]]*#"))
+                        (org-in-block-p '("src" "example")))
+              (replace-match (format "\\textcircled{%d}" (- char #x245F)) t t)
+              (setq count (1+ count)))))))
+    (message "圈号 → \\textcircled{}：替换 %d 处" count)
+    count))
+
+(defun cdadar/org-latex-drop-duplicate-documentclass (text backend info)
+  "Drop the extra `\\documentclass' lines notes add on top of their class.
+Notes written before `#+LATEX_CLASS_OPTIONS' habitually declare the class again
+in a `#+LATEX_HEADER' line; LaTeX rejects that with \"Two \\documentclass or
+\\documentstyle commands\" and then produces no PDF.  The declaration Org emits
+from `org-latex-classes' is kept, and later declarations of the same class are
+dropped, options included -- class options belong in `#+LATEX_CLASS_OPTIONS'.
+BACKEND and INFO follow the Org export filter protocol."
+  (ignore info)
+  (if (org-export-derived-backend-p backend 'latex)
+      (with-temp-buffer
+        (insert text)
+        (save-excursion
+          (save-restriction
+            (narrow-to-region
+             (point-min)
+             (or (and (re-search-forward (regexp-quote "\\begin{document}") nil t)
+                      (match-beginning 0))
+                 (point-max)))
+            (goto-char (point-min))
+            (let ((re (concat (regexp-quote "\\documentclass")
+                              "\\[[^]]*\\]?" "{\\([^}]*\\)}")))
+              (when (re-search-forward re nil t)
+                (let ((class (match-string 1)))
+                  (while (re-search-forward re nil t)
+                    (when (string= class (match-string 1))
+                      (delete-region (line-beginning-position)
+                                     (min (point-max) (1+ (line-end-position)))))))))))
+        (buffer-string))
+    text))
+
 (defun cdadar/org-latex-quote-cjk-font-snippet ()
   "Return LaTeX setup for the preferred CJK quote font."
   (format "\\usepackage{etoolbox}
@@ -712,46 +888,6 @@ BACKEND and INFO follow the Org export filter protocol."
        text t t)
     text))
 
-(defconst cdadar/org-latex-global-symbol-fallback-snippet
-  (mapconcat
-   #'identity
-   '("\\usepackage{newunicodechar}"
-     "\\IfFontExistsTF{Arial Unicode MS}"
-     "  {\\newfontfamily\\symbolfallback{Arial Unicode MS}}"
-     "  {\\IfFontExistsTF{Apple Symbols}"
-     "     {\\newfontfamily\\symbolfallback{Apple Symbols}}"
-     "     {\\newfontfamily\\symbolfallback{DejaVu Sans}}}"
-     "\\newunicodechar{※}{{\\symbolfallback ※}}"
-     "\\newunicodechar{①}{{\\symbolfallback ①}}"
-     "\\newunicodechar{②}{{\\symbolfallback ②}}"
-     "\\newunicodechar{③}{{\\symbolfallback ③}}"
-     "\\newunicodechar{④}{{\\symbolfallback ④}}"
-     "\\newunicodechar{▸}{{\\symbolfallback ▸}}"
-     "\\newunicodechar{‐}{{\\symbolfallback ‐}}"
-     "\\newunicodechar{─}{{\\symbolfallback ─}}")
-   "\n")
-  "LaTeX header snippet providing fallback glyphs missing in common serif fonts.")
-
-(defun cdadar/org-latex-global-needs-symbol-fallback-p (text)
-  "Return non-nil when exported LaTeX TEXT needs fallback symbol font setup."
-  (and (or (string-match-p "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{Times New Roman}" text)
-           (string-match-p "\\\\setmainfont\\(?:\\[\(?:.\|\n\)*\\]\\)?{texgyretermes}" text)
-           (string-match-p "\\\\setmainfont\\(?:\\[[^]]*\\]\\)?{TeX Gyre Termes}" text))
-       (string-match-p "[※①②③④▸‐─]" text)
-       (not (string-match-p "\\\\newfontfamily\\\\symbolfallback" text))))
-
-(defun cdadar/org-latex-global-inject-symbol-fallback (text backend info)
-  "Inject fallback glyph support into exported LaTeX TEXT.
-BACKEND and INFO follow the Org export filter protocol."
-  (ignore info)
-  (if (and (org-export-derived-backend-p backend 'latex)
-           (cdadar/org-latex-global-needs-symbol-fallback-p text))
-      (replace-regexp-in-string
-       "\\\\begin{document}"
-       (concat cdadar/org-latex-global-symbol-fallback-snippet "\n\\begin{document}")
-       text t t)
-    text))
-
 (defun cdadar/org-latex-fix-bibleref-compat (text backend info)
   "Normalize older bibleref snippets in exported LaTeX TEXT.
 Some notes still use `\\usepackage[style=default]{bibleref}', but recent
@@ -775,23 +911,49 @@ environment command.  BACKEND and INFO follow the Org export filter protocol."
     text))
 
 (defun cdadar/org-latex-fix-quote-paragraph-spacing (text backend info)
-  "Replace quote-internal blank paragraphs after LaTeX line breaks.
-This keeps grouped quote lines visually separated in PDF without triggering
-paragraph indentation inside quote environments.  INFO is ignored."
+  "Normalize line breaks inside LaTeX quote environments in exported TEXT.
+A blank line after an Org line break becomes an explicit vertical skip, and the
+line break on the last quote line is dropped: the quote environment already
+ends the paragraph, so keeping it only adds an empty line (the old
+negative-vspace workaround over-corrected that into overlapping text).  Notes
+that still carry that workaround in their own quote environment redefinition
+have it dropped from the preamble, so they stop overlapping without edits.
+INFO is ignored."
   (ignore info)
   (if (org-export-derived-backend-p backend 'latex)
       (with-temp-buffer
         (insert text)
+        (save-excursion
+          (save-restriction
+            (narrow-to-region
+             (point-min)
+             (or (and (re-search-forward (regexp-quote "\\begin{document}") nil t)
+                      (match-beginning 0))
+                 (point-max)))
+            (goto-char (point-min))
+            (let ((re (concat "\\(" (regexp-quote "\\endlist") "\\)"
+                              (regexp-quote "\\vspace")
+                              "{[-][[:blank:]]*"
+                              (regexp-quote "\\baselineskip")
+                              "[[:blank:]]*}")))
+              (while (re-search-forward re nil t)
+                (replace-match "\\1" t)))))
         (goto-char (point-min))
-        (while (re-search-forward "\\\\begin{quote}" nil t)
+        (while (re-search-forward (regexp-quote "\\begin{quote}") nil t)
           (let ((quote-start (match-beginning 0)))
-            (when (re-search-forward "\\\\end{quote}" nil t)
+            (when (re-search-forward (regexp-quote "\\end{quote}") nil t)
               (let ((quote-end-marker (copy-marker (match-end 0))))
                 (save-restriction
                   (narrow-to-region quote-start quote-end-marker)
                   (goto-char (point-min))
                   (while (search-forward "\\\\\n\n" nil t)
                     (replace-match "\\\\[0.6\\baselineskip]\n" t t))
+                  (goto-char (point-max))
+                  (when (re-search-backward
+                         (concat (regexp-quote "\\\\") "[ \t]*\n[ \t]*"
+                                 (regexp-quote "\\end{quote}"))
+                         nil t)
+                    (replace-match "\n\\end{quote}" t t))
                   (widen))
                 (goto-char quote-end-marker)
                 (set-marker quote-end-marker nil)))))
@@ -816,16 +978,38 @@ paragraph indentation inside quote environments.  INFO is ignored."
               (format "\n\\par\\medskip\\textbf{\\large %s}\\par\n\n%s" title (or contents ""))
             (format "\n\\par\\smallskip\\textbf{%s}\\par\n\n%s" title (or contents ""))))))))
 
-(defconst cdadar/org-latex-beamer-class
-  '("beamer"
-    "\\documentclass[presentation]{beamer}\n"
-    ("\\section{%s}" . "\\section*{%s}")
-    ("\\subsection{%s}" . "\\subsection*{%s}")
-    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-  "Beamer class definition appended to `org-latex-classes'.")
+(defun cdadar/org-beamer-document-p ()
+  "Return non-nil when the current buffer is a Beamer presentation.
+
+Ask the `latex' backend for the document's class on purpose: the beamer
+backend defaults `:latex-class' to the beamer class name, which would report
+every plain note that declares no class at all as a presentation."
+  (and (require 'ox-beamer nil t)
+       (string-prefix-p "beamer"
+                        (or (plist-get (org-export-get-environment 'latex)
+                                       :latex-class)
+                            ""))))
+
+(defun cdadar/org-latex-export-to-pdf-route (orig-fun &rest args)
+  "Export a Beamer presentation with the Beamer backend, else call ORIG-FUN.
+
+Frames only exist in the Beamer backend.  Exporting a presentation through
+the plain LaTeX backend silently turns every frame into `\\section*', which
+drops the slide structure and breaks the metropolis theme."
+  (if (cdadar/org-beamer-document-p)
+      (apply #'org-beamer-export-to-pdf args)
+    (apply orig-fun args)))
+
+(defun cdadar/org-latex-export-to-latex-route (orig-fun &rest args)
+  "Export a Beamer presentation as Beamer LaTeX, else call ORIG-FUN."
+  (if (cdadar/org-beamer-document-p)
+      (apply #'org-beamer-export-to-latex args)
+    (apply orig-fun args)))
 
 (defun cdadar/org-latex-export-to-pdf-async ()
-  "Asynchronously export the current Org buffer to PDF."
+  "Asynchronously export the current Org buffer to PDF.
+`org-latex-export-to-pdf' is routed to the Beamer backend for presentations
+by `cdadar/org-latex-export-to-pdf-route'."
   (interactive)
   (org-latex-export-to-pdf t))
 
@@ -833,7 +1017,8 @@ paragraph indentation inside quote environments.  INFO is ignored."
   "Remove trailing `&' after `\\multicolumn' when it spans all columns.
 Org pads single-cell rows to the full column count, adding an extra
 `&' after `\\multicolumn{N}{...}{...}' which creates a column-count
-mismatch in LaTeX."
+mismatch in LaTeX.  INFO is ignored."
+  (ignore info)
   (if (org-export-derived-backend-p backend 'latex)
       (replace-regexp-in-string
        "\\\\multicolumn{\\([0-9]+\\)}{\\([^}]*\\)}{\\([^}]*\\)} & \\\\\\\\"
@@ -850,30 +1035,38 @@ mismatch in LaTeX."
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-use-english-main-font)
   (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-inject-quote-cjk-font)
+               #'cdadar/org-latex-use-installed-fonts)
   (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-global-inject-symbol-fallback)
+               #'cdadar/org-latex-add-glyph-fallback)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-drop-duplicate-documentclass)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-inject-quote-cjk-font)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-fix-bibleref-compat)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-fix-quote-paragraph-spacing)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-fix-multicolumn-trailing-ampersand)
+  (advice-add 'org-latex-export-to-pdf :around
+              #'cdadar/org-latex-export-to-pdf-route)
+  (advice-add 'org-latex-export-to-latex :around
+              #'cdadar/org-latex-export-to-latex-route)
   (with-eval-after-load 'ox-beamer
+    (setq org-beamer-frame-default-options "allowframebreaks")
     (advice-add 'org-beamer-headline :around #'cdadar/org-beamer-headline-as-text)))
 
 (use-package ox-latex
   :ensure nil
   :after ox
   :custom
+  (org-latex-compiler "xelatex")
   (org-latex-pdf-process
    (if (executable-find "latexmk")
        '("latexmk -xelatex -interaction=nonstopmode -outdir=%o %f")
      '("xelatex -interaction nonstopmode -output-directory %o %f"
        "xelatex -interaction nonstopmode -output-directory %o %f"
-       "xelatex -interaction nonstopmode -output-directory %o %f")))
-  :config
-  (add-to-list 'org-latex-classes cdadar/org-latex-beamer-class))
+       "xelatex -interaction nonstopmode -output-directory %o %f"))))
 
 ;;; --- Standalone utilities and interactive commands ---
 
@@ -1061,7 +1254,7 @@ offsetting the macro-name/brace chars already counted by the paragraph."
            (end (org-element-property :end element))
            (text (buffer-substring-no-properties beg end))
            (total (cdadar/org-count-words-chars beg end)))
-      (if (string-match "{\\([^}]*\\\)}" text)
+      (if (string-match "{\\([^}]*\\)}" text)
           (- (cdadar/org-count-words-chars (+ beg (match-beginning 1))
                                            (+ beg (match-end 1)))
              total)
