@@ -730,6 +730,45 @@ BACKEND 与 INFO 遵循 Org 导出过滤器协议。"
         text)
     text))
 
+(defconst cdadar/org-latex-cjk-char-regexp
+  (format "[%c-%c%c-%c%c-%c%c-%c]"
+          #x3000 #x303F #x3400 #x4DBF #x4E00 #x9FFF #xFF00 #xFFEF)
+  "中日韩标点、汉字与全角字符，用来判断文档是否真需要 CJK 字体。")
+
+(defconst cdadar/org-latex-default-cjk-font-marker "cdadar-default-cjk-font"
+  "已注入默认 CJK 字体时留在导言区的标记，用于避免重复注入。")
+
+(defun cdadar/org-latex-default-cjk-font-snippet ()
+  "Return the default xeCJK setup for notes that declare no CJK font."
+  (format "\\usepackage{xeCJK}
+%% %s
+\\setCJKmainfont[Scale=1.0]{%s}
+\\setCJKsansfont[Scale=1.0]{%s}
+\\setCJKmonofont[Scale=1.0]{%s}"
+          cdadar/org-latex-default-cjk-font-marker
+          cdadar/org-latex-cjk-main-font
+          cdadar/org-latex-cjk-main-font
+          cdadar/org-latex-cjk-mono-font))
+
+(defun cdadar/org-latex-default-cjk-font (text backend info)
+  "Give a note that declares no CJK font the default one.
+A note without `\\setCJKmainfont' renders every Chinese character with the main
+font, i.e. as nothing.  Notes that declare their own CJK font, or that contain no
+CJK characters at all, are left alone.  BACKEND and INFO follow the Org export
+filter protocol."
+  (ignore info)
+  (if (and (org-export-derived-backend-p backend 'latex)
+           (string-match-p "fontspec" text)
+           (string-match-p cdadar/org-latex-cjk-char-regexp text)
+           (not (string-match-p "\\\\setCJK\\(main\\|sans\\|mono\\)font" text))
+           (not (string-match-p cdadar/org-latex-default-cjk-font-marker text))
+           (string-match-p (regexp-quote "\\begin{document}") text))
+      (replace-regexp-in-string
+       (regexp-quote "\\begin{document}")
+       (concat (cdadar/org-latex-default-cjk-font-snippet) "\n\\begin{document}")
+       text t t)
+    text))
+
 (defconst cdadar/org-latex-glyph-fallback-ranges
   '((#x0370 #x03FF "\\cdadargreek")
     (#x1F00 #x1FFF "\\cdadargreek")
@@ -1036,6 +1075,8 @@ mismatch in LaTeX.  INFO is ignored."
                #'cdadar/org-latex-use-english-main-font)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-use-installed-fonts)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-default-cjk-font)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-add-glyph-fallback)
   (add-to-list 'org-export-filter-final-output-functions

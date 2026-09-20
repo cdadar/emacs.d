@@ -185,6 +185,19 @@
   ~\newunicodechar{<该字符>}~ 的字符就跳过（~cdadar/org-latex-unicodechar-mapped-p~）。
 - 验证：该笔记重新导出，0 错误 0 递归，PDF 正常。
 
+** 没声明字体的笔记给默认 CJK 字体
+- 现象：一篇不写 ~#+LATEX_HEADER~ 字体的中文笔记，导出后每个汉字都是空白
+  （实测 46 个 =Missing character=，全落在 lmroman 上）。
+- 新增 filter ~cdadar/org-latex-default-cjk-font~：文档里没有
+  ~\setCJK\(main\|sans\|mono\)font~ 且确实含中日韩字符时，在
+  ~\begin{document}~ 前插 ~\usepackage{xeCJK}~ + 本配置的 ~cdadar/org-latex-cjk-main-font~
+  （main/sans/mono 三个）。
+- 不动的情形：已声明 CJK 字体、文档里没有 CJK 字符（纯英文不加 xeCJK）、
+  没有 fontspec（pdflatex 文档不能塞 xeCJK）、已注入过。
+- 验证：裸中文笔记导出 0 缺字，渲染出的汉字正常；~教會生活~ 没被重复注入；
+  「polyglossia 但无 CJK 字体」 的合成笔记也 0 错 0 缺字。
+- 只补 CJK；英文主字体仍是 LaTeX 默认的 Latin Modern（要统一成 TeX Gyre Termes 另说）。
+
 ** 两处笔记自身的毛病
 - ~20250219220537-医治枯手的耶稣_ppt.org~：~\setCJKmainfont~ 写在
   ~\usepackage{...xeCJK}~ 之前（xeCJK 还没加载），把 usepackage 行上提一行。
