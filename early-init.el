@@ -1,6 +1,6 @@
-;;; early-init.el --- Early initialization. -*- lexical-binding: t -*-
+;;; early-init.el --- Early initialization. -*- lexical-binding: t no-byte-compile: t -*-
 
-;; Copyright (C) 2019-2025 Vincent Zhang
+;; Copyright (C) 2019-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -28,17 +28,47 @@
 ;; Emacs 27 introduces early-init.el, which is run before init.el,
 ;; before package and UI initialization happens.
 ;;
+;; Taken from Centaur Emacs (https://github.com/seagle0128/.emacs.d);
+;; startup performance optimizations are the reason this file exists here.
+;;
 
 ;;; Code:
 
-;; Defer garbage collection further back in the startup process
-(setq gc-cons-threshold most-positive-fixnum)
+;; PERF: Defer garbage collection further back in the startup process.
+;; `gcmh-mode' (in init.el) restores a sane threshold after startup.
+(setq gc-cons-percentage 1.0)
+(if noninteractive                     ; in CLI sessions
+    (setq gc-cons-threshold #x8000000) ; 128MB
+  (setq gc-cons-threshold most-positive-fixnum))
+
+;; Increase how much is read from processes in a single chunk (default is 4kb)
+(setq read-process-output-max #x10000)  ; 64kb
+
+;; PERF: Many elisp file API calls consult `file-name-handler-alist'.
+;; Setting it to nil speeds up startup significantly.
+;; Also skip the .so/.gz search on `load-path': no dynamic modules are loaded
+;; this early.  Everything is restored right after startup.
+(let ((default-file-name-handler-alist file-name-handler-alist)
+      (default-load-suffixes load-suffixes)
+      (default-load-file-rep-suffixes load-file-rep-suffixes))
+  (setq file-name-handler-alist nil
+        load-suffixes '(".elc" ".el")
+        load-file-rep-suffixes '(""))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq load-suffixes default-load-suffixes
+                    load-file-rep-suffixes default-load-file-rep-suffixes
+                    file-name-handler-alist default-file-name-handler-alist))
+            101))
+
+;; PERF: introduced in Emacs 31 to speed up startup ~15%
+(when (boundp 'load-path-filter-function)
+  (setq load-path-filter-function #'load-path-filter-cache-directory-files))
 
 ;; Prevent unwanted runtime compilation for gccemacs (native-comp) users;
 ;; packages are compiled ahead-of-time when they are installed and site files
 ;; are compiled when gccemacs is installed.
-(setq native-comp-deferred-compilation t
-      native-comp-jit-compilation nil)
+(setq native-comp-jit-compilation nil)
 
 ;; Package initialize occurs automatically, before `user-init-file' is
 ;; loaded, but after `early-init-file'. We handle package
@@ -66,8 +96,19 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 (when (featurep 'ns)
-  (push '(ns-transparent-titlebar . t) default-frame-alist))
-;; (setq-default mode-line-format nil)
+  (push '(ns-transparent-titlebar . t) default-frame-alist)
+  ;; Default the macOS titlebar/scrollbar appearance to dark, so the initial
+  ;; frame does not flash light before `init-themes.el' picks the theme.
+  (push '(ns-appearance . dark) default-frame-alist))
+
+;; Prevent the flash of an unstyled mode line while startup is in progress;
+;; the `emacs-startup-hook' entry below puts it back.
+(defvar cdadar--mode-line-format (default-value 'mode-line-format)
+  "Value of `mode-line-format' saved before it is disabled during startup.")
+(setq-default mode-line-format nil)
+(add-hook 'emacs-startup-hook
+          (lambda () (setq-default mode-line-format cdadar--mode-line-format))
+          100)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; early-init.el ends here
