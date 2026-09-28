@@ -50,6 +50,11 @@
 ;;               " "
 ;;               vc-relative-file)))
 
+;; Display buffer icons
+(use-package nerd-icons-ibuffer
+  :if (cdadar/nerd-font-available-p)
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
 (use-package tempbuf
   :ensure nil
   :load-path "site-lisp/tempbuf"

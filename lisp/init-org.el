@@ -250,6 +250,10 @@ typical word processor."
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0))))
 
+  ;; `prose-mode' has no default binding; it lives in `org-mode-map', which
+  ;; `cdadar/org-mode-setup' cannot bind because `prose-mode' is defined below.
+  (define-key org-mode-map (kbd "C-c z") #'prose-mode)
+
   ;; === Agenda window hooks ===
   (defun cdadar/org-agenda-align-on-config-change ()
     (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))
@@ -1641,6 +1645,25 @@ reused to drop pandoc's CUSTOM_ID properties and rewrite internal links."
     (when insert-p
       (insert org-text))
     (message "markdown → org: %d chars, clipboard updated" (length org-text))))
+
+;; GitHub-flavored Markdown export (`C-c C-e g m').
+;; The dispatch menu is built from `org-export-registered-backends', so
+;; loading the backend is all that is needed: putting `gfm' into
+;; `org-export-backends' would run its Customize `:set', which drops every
+;; registered backend that is not named in the list (org-ref's, for one).
+(use-package ox-gfm
+  :demand t
+  :after org)
+
+;; Maintain the `#+TOC:' table of contents on save
+(use-package toc-org
+  :hook org-mode)
+
+;; Variable pitch for prose, fixed pitch for code and tables in one buffer.
+;; Complements `prose-mode', which already centers the text through
+;; `writeroom-mode' (so `olivetti' is intentionally not used here).
+(use-package mixed-pitch
+  :hook (prose-mode . mixed-pitch-mode))
 
 (provide 'init-org)
 ;;; init-org.el ends here

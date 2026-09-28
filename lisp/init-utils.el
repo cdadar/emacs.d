@@ -140,5 +140,20 @@ BUFFER and ALIST are as for `display-buffer-full-frame'."
       (daemonp)))
 
 
+;; Icons
+(defvar cdadar--nerd-font-available 'unknown
+  "Memoized result of `cdadar/nerd-font-available-p'.")
+
+(defun cdadar/nerd-font-available-p ()
+  "Return non-nil when the Nerd Font symbols font is available.
+Used to keep the `nerd-icons' integrations (dired, ibuffer, corfu,
+marginalia) off until the font is installed; see `init-fonts.el'."
+  (when (display-graphic-p)
+    (if (eq cdadar--nerd-font-available 'unknown)
+        (setq cdadar--nerd-font-available
+              (and (find-font (font-spec :family "Symbols Nerd Font Mono")) t))
+      cdadar--nerd-font-available)))
+
+
 (provide 'init-utils)
 ;;; init-utils.el ends here

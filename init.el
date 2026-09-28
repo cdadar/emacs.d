@@ -90,6 +90,7 @@
 (require 'init-flymake)
 (require 'init-lsp)
 ;; (require 'init-eglot)
+(require 'init-dap)
 
 (require 'init-recentf)
 (require 'init-minibuffer)
@@ -101,6 +102,7 @@
 
 (require 'init-editing-utils)
 (require 'init-whitespace)
+(require 'init-highlight)
 
 (require 'init-git)
 (require 'init-github)

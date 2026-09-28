@@ -21,6 +21,18 @@
   (interactive "P")
   (user-error "Mouse wheel text scaling is disabled in this configuration"))
 
+;; Icon font used by the `nerd-icons' integrations (dired, ibuffer, corfu,
+;; marginalia).  Installed with
+;;   brew install --cask font-symbols-only-nerd-font
+;; or `M-x nerd-icons-install-fonts'.  `cdadar/nerd-font-available-p'
+;; (init-utils.el) keeps those integrations off until the font is there.
+(use-package nerd-icons
+  :commands (nerd-icons-install-fonts)
+  :config
+  (unless (cdadar/nerd-font-available-p)
+    (message "Nerd Font symbols font is missing: run \
+`M-x nerd-icons-install-fonts' or `brew install --cask font-symbols-only-nerd-font'")))
+
 (use-package mouse
   :ensure nil
   :custom

@@ -318,6 +318,11 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 (use-package marginalia
   :hook (after-init . marginalia-mode))
 
+;; Display completion icons in the minibuffer
+(use-package nerd-icons-completion
+  :if (cdadar/nerd-font-available-p)
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup))
+
 (use-package embark-consult
   :after (embark consult)
   :demand)

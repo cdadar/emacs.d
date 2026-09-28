@@ -138,6 +138,14 @@
   :bind
   (("C-c p E" . corfu-english-helper-search)))
 
+;; Display completion icons in the margin
+(use-package nerd-icons-corfu
+  :if (cdadar/nerd-font-available-p)
+  :after corfu
+  :init
+  (with-eval-after-load 'corfu
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)))
+
 
 
 (provide 'init-corfu)

@@ -129,5 +129,40 @@ Call a second time to restore the original window configuration."
   (pulsar-global-mode t))
 
 
+;; Enforce rules for popup buffers: diagnostics, completion and process
+;; output get a dedicated slot instead of stealing the layout.
+;; NOTE: shells are deliberately excluded, so that eshell/eat keep their
+;; own windows.
+(use-package popper
+  :bind (:map popper-mode-map
+              ("C-<tab>" . popper-toggle)
+              ("C-M-<tab>" . popper-cycle))
+  :hook (after-init . popper-mode)
+  :custom
+  (popper-group-function #'popper-group-by-project)
+  :init
+  (setq popper-mode-line ""
+        popper-reference-buffers
+        '("\\*Messages\\*$"
+          "Output\\*$"
+          "^\\*eldoc.*\\*$"
+          "\\*Compile-Log\\*$"
+          "\\*Completions\\*$"
+          "\\*Warnings\\*$"
+          "\\*Async Shell Command\\*$"
+          "\\*Apropos\\*$"
+          "\\*Backtrace\\*$"
+          "\\*Embark \\(Collect\\|Live\\):.*\\*$"
+          "^\\*Flymake.*\\*$"
+          "^\\*Flycheck.*\\*$"
+          help-mode
+          compilation-mode
+          tabulated-list-mode
+          flymake-diagnostics-buffer-mode
+          grep-mode
+          occur-mode
+          rg-mode)))
+
+
 (provide 'init-windows)
 ;;; init-windows.el ends here
