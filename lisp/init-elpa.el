@@ -16,6 +16,84 @@
   (package-install-upgrade-built-in t)
   (package-native-compile t))
 
+
+;;
+;; ELPA mirrors
+;;
+;; MELPA is frequently unreachable from mainland China.  `melpa' keeps the
+;; upstream URLs; the rest are mirrors (https://elpa.emacs-china.org/).
+;; Pick one with `M-x cdadar/test-package-archives' (measures and saves) or
+;; `M-x cdadar/set-package-archives'.
+
+(defcustom cdadar-package-archives-alist
+  `((melpa   . (("gnu"    . "https://elpa.gnu.org/packages/")
+                ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                ("melpa"  . "https://melpa.org/packages/")))
+    (tencent . (("gnu"    . "https://mirrors.cloud.tencent.com/elpa/gnu/")
+                ("nongnu" . "https://mirrors.cloud.tencent.com/elpa/nongnu/")
+                ("melpa"  . "https://mirrors.cloud.tencent.com/elpa/melpa/")))
+    (tuna    . (("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+    (ustc    . (("gnu"    . "https://mirrors.ustc.edu.cn/elpa/gnu/")
+                ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")
+                ("melpa"  . "https://mirrors.ustc.edu.cn/elpa/melpa/")))
+    (bfsu    . (("gnu"    . "https://mirrors.bfsu.edu.cn/elpa/gnu/")
+                ("nongnu" . "https://mirrors.bfsu.edu.cn/elpa/nongnu/")
+                ("melpa"  . "https://mirrors.bfsu.edu.cn/elpa/melpa/"))))
+  "Package archive sets to choose from."
+  :group 'package
+  :type '(alist :key-type symbol :value-type alist))
+
+(defcustom cdadar-package-archives 'melpa
+  "Package archive set in use, a key of `cdadar-package-archives-alist'.
+Use `cdadar/set-package-archives' (or Customize) to change it."
+  :group 'package
+  :set (lambda (symbol value)
+         (set symbol value)
+         (setq package-archives
+               (or (alist-get value cdadar-package-archives-alist)
+                   (error "Unknown package archives: `%s'" value))))
+  :type '(radio
+          ,@(mapcar (lambda (item) (list 'const (car item)))
+                    cdadar-package-archives-alist)))
+
+;; `defcustom' only runs `:set' through Customize, so apply the default here.
+;; A value saved by `cdadar/set-package-archives' in custom.el wins later.
+(setq package-archives (alist-get cdadar-package-archives cdadar-package-archives-alist))
+
+(defun cdadar/set-package-archives (archives &optional refresh)
+  "Use the package archive set ARCHIVES and save the choice to `custom-file'.
+ARCHIVES is one of `cdadar-package-archives-alist'.  With REFRESH
+\(interactively, a prefix argument) also refresh the package contents."
+  (interactive
+   (list (intern (completing-read "Select package archives: "
+                                  (mapcar #'car cdadar-package-archives-alist)))
+         current-prefix-arg))
+  (customize-save-variable 'cdadar-package-archives archives)
+  (when refresh (package-refresh-contents))
+  (message "Set package archives to `%s'" archives))
+
+(defun cdadar/test-package-archives (&optional no-save)
+  "Fetch `archive-contents' from every mirror in
+`cdadar-package-archives-alist' and use the fastest one.
+Return the fastest archive name.  With NO-SAVE, only report it."
+  (interactive)
+  (let* ((results
+          (mapcar
+           (lambda (pair)
+             (let ((url (concat (cdr (assoc "melpa" (cdr pair))) "archive-contents"))
+                   (start (float-time)))
+               (message "Fetching %s..." url)
+               (ignore-errors (url-copy-file url null-device t))
+               (cons (car pair) (- (float-time) start))))
+           cdadar-package-archives-alist))
+         (fastest (caar (sort results (lambda (a b) (< (cdr a) (cdr b)))))))
+    (message "`%s' is the fastest package archive" fastest)
+    (unless no-save
+      (cdadar/set-package-archives fastest))
+    fastest))
+
 ;;; Fire up package.el
 
 (use-package package
