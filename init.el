@@ -35,6 +35,15 @@
 (defconst emacs/>=30p
   (version<= "30.0" emacs-version)
   "Emacs is 30 or above.")
+
+;; The libgccjit bundled with this Emacs (GCC 14) turns the Darwin kernel
+;; version straight into a macOS one (Darwin 27 -> 18.0), which Xcode 27's
+;; clang rejects as a deployment target.  Pin the minimum to the version
+;; Emacs itself was built for.  Set after `comp' loads (it is not preloaded),
+;; otherwise its `defcustom' would overwrite the value.
+(with-eval-after-load 'comp
+  (when (eq system-type 'darwin)
+    (add-to-list 'native-comp-driver-options "-mmacosx-version-min=11.0")))
 
 ;; Process performance tuning
 
