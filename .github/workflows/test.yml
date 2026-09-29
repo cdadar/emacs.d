@@ -29,6 +29,14 @@ jobs:
 
     - uses: actions/checkout@v7
     - name: Check startup
-      run:  sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules && git submodule update --init --recursive && ./test-startup.sh
+      run: |
+        # .gitmodules may not exist (it is only there while a submodule is);
+        # rewriting it unconditionally fails the step with sed's exit code 2
+        # before the config is ever loaded.
+        if [ -f .gitmodules ]; then
+          sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+        fi
+        git submodule update --init --recursive
+        ./test-startup.sh
     - name: Test init-lsp
       run:  ./test-init-lsp.sh
