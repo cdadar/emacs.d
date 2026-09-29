@@ -85,7 +85,18 @@
 ;; Copy&paste the GUI clipboard from a text terminal
 (unless *win64*
   (use-package xclip
-    :hook (after-init . xclip-mode)))
+    :init
+    (defun cdadar/xclip-mode-maybe ()
+      "Enable `xclip-mode' when a clipboard helper is actually available.
+`xclip-mode' signals a `file-error' when it cannot find one, and it runs
+from `after-init-hook': that would abort the hook and silently skip every
+hook registered after it (marginalia, popper, saving the selected
+packages, ...).  On macOS the helper is `pbpaste', which is always there."
+      (require 'xclip)
+      (if (executable-find xclip-program)
+          (xclip-mode 1)
+        (message "xclip-mode not enabled: %s not found" xclip-program)))
+    :hook (after-init . cdadar/xclip-mode-maybe)))
 
 ;; Browse devdocs.io documents with EWW
 (use-package devdocs
