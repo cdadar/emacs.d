@@ -111,9 +111,9 @@
   - ~require 'ob-plantuml~
   - ~require 'ob-ditaa~
 
-** 当前状态（2026-05-02）
-- 当前 ~init-org.el~ 的 batch ~check-parens~ 已通过。
-- 当前 ~init-org.el~ 的 ~load-file~、~batch-byte-compile~ 与 ~./test-startup.sh~ 也已重新验证通过。
+** 历史验证（2026-05-02）
+- 当时 ~init-org.el~ 的 batch ~check-parens~ 已通过。
+- 当时 ~init-org.el~ 的 ~load-file~、~batch-byte-compile~ 与 ~./test-startup.sh~ 也已重新验证通过。
 - 本轮已单独验证：将 ~org-export-headline-levels~ 设为 ~5~ 后，五级 Org heading 的 LaTeX 导出不再降级为 ~enumerate~ / ~\\item~。
 
 * 本轮：导出问题专项（2026-09-17）

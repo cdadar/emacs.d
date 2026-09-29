@@ -79,7 +79,8 @@ The configuration uses constants to enable/disable features based on Emacs versi
 
 LSP integration via `eglot` (configured in `init-lsp.el`):
 - Auto-enabled for most programming modes except emacs-lisp, lisp, makefile
-- Configured with optimized settings: 4MB read-process-output-max, autoshutdown enabled
+- Configured with optimized settings: 4MB `read-process-output-max` (set in `init.el`), autoshutdown enabled
+- Debugging is `dape` (`init-dap.el`, bound to `<f9>`); `init-gud` stays commented out in `init.el`
 
 Major language configurations available:
 - Go: `init-go.el`
@@ -94,17 +95,14 @@ Major language configurations available:
 
 The configuration includes multiple AI coding assistants:
 
-1. **emigo** - AI code assistant
-2. **ellama** - Local LLM integration via Ollama (if available)
-3. **aider** - AI pair programming (bound to `C-c a`, uses Anthropic Claude Sonnet)
-4. **ai-code** - Universal AI backend switcher (supports opencode, claude-code, cursor, etc.)
-5. **eca** - Emacs Code Assistant
-6. **agent-shell** - AI-powered shell with Evil mode support
+1. **ellama** - Local LLM integration via Ollama (if available)
+2. **aider** - AI pair programming (bound to `C-c C-a`; model and flags come from `~/.aider.conf.yml`)
+3. **ai-code** - Universal AI backend switcher, default backend `agent-shell` (`init-ai.el` holds `ai-code-set-backend` and the backend list)
+4. **agent-shell** - AI-powered shell with Evil mode support
 
 When modifying AI-related code:
 - API keys are set via environment variables (e.g., `ANTHROPIC_API_KEY`)
-- Backend selection uses `ai-code-set-backend` with options: 'codex, 'gemini, 'github-copilot-cli, 'opencode, 'grok, 'claude-code-ide, 'claude-code, 'cursor
-- Auto-revert is enabled globally for AI changes to appear automatically
+- Auto-revert is enabled globally in `init-editing-utils.el`, not here, so AI changes appear without a manual revert
 
 ## Org-mode Configuration
 
@@ -116,6 +114,9 @@ The `init-org.el` contains extensive org-mode setup:
 - LaTeX export keeps five Org headline levels as real headings (`section` through `subparagraph`) instead of degrading deep headings into enumerate/list items
 - LaTeX quote export rewrites `\\` + blank lines inside quote blocks to preserve left alignment in generated PDFs
 - Diagram support configures existing PlantUML / ditaa tools from local jars or `PLANTUML_JAR` / `DITAA_JAR`; it does not auto-download them at startup
+- `prose-mode` is bound to `C-c z` in Org buffers: it centers the text with `writeroom-mode`, switches on `mixed-pitch` and a bar cursor. `olivetti` is deliberately not used — it and `writeroom-mode` both control the margins
+- `toc-org` keeps the table of contents under a `:TOC:`-tagged heading up to date on save
+- `ox-gfm` provides `C-c C-e g g`. It is loaded instead of being listed in `org-export-backends`, because that variable's Customize `:set` drops every registered backend it does not name, which breaks `org-ref`'s backend
 - Configured for various export formats
 
 ## Common Modifications
@@ -153,3 +154,5 @@ emacs --batch -f batch-byte-compile lisp/init-FOO.el
 - Server mode starts automatically after initialization
 - Custom file is separate (`custom.el`) to avoid polluting init files
 - The config supports but doesn't require native compilation (configured in `early-init.el`)
+- macOS appearance is read from the `AppleInterfaceStyle` default through `defaults` (`init-themes.el`). Do not reintroduce an AppleScript / `auto-dark` probe: `ns-do-applescript` fails with "AppleScript error 1" in a Finder/Dock-launched Emacs, and the error is raised from `auto-dark-mode` itself, so the mode never installs its timer and the appearance is not followed at all
+- Frame tiling lives under `C-c v` (`init-gui-frames.el`); `C-M-<arrow>` deliberately stays with `backward-sexp` / `forward-sexp` / `backward-up-list` / `down-list`. On NS `set-frame-size` overshoots by the window decorations, so the tiling measures the outer rectangle and corrects itself — do not replace that with fixed offsets

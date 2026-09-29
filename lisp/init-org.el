@@ -1646,7 +1646,7 @@ reused to drop pandoc's CUSTOM_ID properties and rewrite internal links."
       (insert org-text))
     (message "markdown → org: %d chars, clipboard updated" (length org-text))))
 
-;; GitHub-flavored Markdown export (`C-c C-e g m').
+;; GitHub-flavored Markdown export (`C-c C-e g g').
 ;; The dispatch menu is built from `org-export-registered-backends', so
 ;; loading the backend is all that is needed: putting `gfm' into
 ;; `org-export-backends' would run its Customize `:set', which drops every
@@ -1655,7 +1655,7 @@ reused to drop pandoc's CUSTOM_ID properties and rewrite internal links."
   :demand t
   :after org)
 
-;; Maintain the `#+TOC:' table of contents on save
+;; Keep the table of contents under a `:TOC:'-tagged heading up to date on save
 (use-package toc-org
   :hook org-mode)
 

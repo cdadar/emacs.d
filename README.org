@@ -15,6 +15,7 @@ git submodule update --init --recursive
 ** 安装外部依赖
 - ripgrep (https://github.com/BurntSushi/ripgrep)  very very very fast!!!
 - libnotify-tools 提供 org-pomodoro 的通知命令 =notify-send=
+- Symbols Nerd Font 提供 dired / ibuffer / corfu / marginalia 的图标字形，macOS 用 =brew install --cask font-symbols-only-nerd-font=；未安装时这些图标集成会自动关闭（=cdadar/nerd-font-available-p=）
 
 
 ** 包管理器
