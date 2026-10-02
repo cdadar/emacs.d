@@ -45,6 +45,29 @@
 #+LATEX_HEADER: \newfontfamily\greekfontsf[Script=Greek,Scale=1.1]{SBL Greek}
 #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.2]{SBL Hebrew}  % 希伯来文
 
+# 缺字回退：Times 系主字体没有音标/圈号/符号字形，xeCJK 的楷体（quote）缺全角中点
+# 宽区间（希腊文/圈号/制表符/几何图形）由 init-org.el 的导出过滤器按实际字符自动注入
+#+LATEX_HEADER: \xeCJKsetup{AutoFallBack=true}                 % 楷体缺字自动回退到正文 CJK 字体（・ 等）
+#+LATEX_HEADER: \IfFontExistsTF{Noto Emoji}{\setCJKfallbackfamilyfont{\CJKrmdefault}{Noto Emoji}}{\setCJKfallbackfamilyfont{\CJKrmdefault}{Symbola}}            % 变体选择符 VS16
+#+LATEX_HEADER: \IfFontExistsTF{Noto Emoji}{\setCJKfallbackfamilyfont{quotecjkfont}{Noto Emoji}}{\setCJKfallbackfamilyfont{quotecjkfont}{Symbola}}             % 同上，quote 的楷体族
+#+LATEX_HEADER: \providefontfamily\cdadargreek{SBL Greek}       % 带音希腊文
+#+LATEX_HEADER: \providefontfamily\cdadarcjk{LXGW WenKai}       % 圈号、制表符
+#+LATEX_HEADER: \providefontfamily\cdadarsym{Apple Symbols}     % 几何图形、☆ 等
+#+LATEX_HEADER: \providefontfamily\cdadaripa{Lato}              % 国际音标
+#+LATEX_HEADER: \providefontfamily\cdadaremoji{Noto Emoji}      % 单色 emoji（装字体：local/install_emoji_fonts.sh）
+#+LATEX_HEADER: \usepackage{newunicodechar}
+#+LATEX_HEADER: \newunicodechar{☆}{{\cdadarsym ☆}}
+#+LATEX_HEADER: \newunicodechar{🔥}{{\cdadaremoji 🔥}}
+#+LATEX_HEADER: \newunicodechar{⭐}{{\cdadaremoji ⭐}}
+#+LATEX_HEADER: \newunicodechar{✅}{{\cdadaremoji ✅}}
+#+LATEX_HEADER: \newunicodechar{❤}{{\cdadaremoji ❤}}
+#+LATEX_HEADER: \newunicodechar{ɑ}{{\cdadaripa ɑ}}
+#+LATEX_HEADER: \newunicodechar{ɒ}{{\cdadaripa ɒ}}
+#+LATEX_HEADER: \newunicodechar{ɪ}{{\cdadaripa ɪ}}
+#+LATEX_HEADER: \newunicodechar{ʌ}{{\cdadaripa ʌ}}
+#+LATEX_HEADER: \newunicodechar{ˈ}{{\cdadaripa ˈ}}
+#+LATEX_HEADER: \newunicodechar{ˌ}{{\cdadaripa ˌ}}
+
 # 备用字体（如需要）
 # #+LATEX_HEADER: \newfontfamily\greekfont[Scale=1.0]{Gentium}
 # #+LATEX_HEADER: \newfontfamily\hebrewfont[Script=Hebrew,Scale=1.0]{Ezra SIL}

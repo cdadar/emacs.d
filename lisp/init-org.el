@@ -774,15 +774,31 @@ filter protocol."
     text))
 
 (defconst cdadar/org-latex-glyph-fallback-ranges
-  '((#x0370 #x03FF "\\cdadargreek")
-    (#x1F00 #x1FFF "\\cdadargreek")
-    (#x2460 #x24FF "\\cdadarcjk")
-    (#x2500 #x257F "\\cdadarcjk")
-    (#x25A0 #x25FF "\\cdadarsym"))
+  '((#x0250 #x02FF "\\cdadaripa")        ; 国际音标与修饰符
+    (#x0370 #x03FF "\\cdadargreek")      ; 希腊文
+    (#x1F00 #x1FFF "\\cdadargreek")      ; 希腊文扩展（带音）
+    (#x2460 #x24FF "\\cdadarcjk")        ; 圈号 ①-⑳ ⑴-⒇
+    (#x2500 #x257F "\\cdadarcjk")        ; 制表符
+    (#x25A0 #x25FF "\\cdadarsym")        ; 几何图形 ▸ ●
+    (#x2600 #x26FF "\\cdadarsym")        ; 杂项符号 ☆ ★ ☀
+    (#x2700 #x27BF "\\cdadaremoji")      ; Dingbats ✅ ❤ ✂（Apple Symbols 无）
+    (#x2B00 #x2BFF "\\cdadaremoji")      ; ⭐ ⭕ ⬛ ⬅
+    (#x200D #x200D "\\cdadaremoji")      ; ZWJ（组合 emoji 序列）
+    (#x1F000 #x1FAFF "\\cdadaremoji"))   ; 表情符号区 🔥 👍 🎉
   "字符区间 → 回退字体命令。
-Times 系主字体没有带音希腊文、圈号、制表符与几何符号，XeTeX 又不像 LuaTeX 那样
-自动回退，那些字符会变成空白。这里的分配是：希腊文用笔记自己的 SBL Greek，
-CJK 语境的圈号/制表符用 CJK 字体，其余符号用系统符号字体。")
+Times 系主字体没有国际音标、带音希腊文、圈号、制表符、几何符号与杂项符号，
+XeTeX 又不像 LuaTeX 那样自动回退，那些字符会变成方块。这里的分配是：音标用
+Lato，希腊文用笔记自己的 SBL Greek，CJK 语境的圈号/制表符用 CJK 字体，文字
+类符号用系统符号字体，emoji 与 Dingbats 用单色 emoji 字体（安装见
+`~/project/private/script/local/install_emoji_fonts.sh'）。
+
+区间互不重叠，`cdadar/org-latex-glyph-fallback-chars' 按列表顺序取第一个命中的
+区间，所以重叠会让结果依赖顺序。
+
+全角中点 ・(U+30FB) 与变体选择符 VS15/VS16(U+FE0E/FE0F) 这类缺字不在这里：
+它们被 xeCJK 归入 MiddlePunct / CM 类，由 `cdadar/org-latex-cjk-autofallback'
+打开 xeCJK 自带的回退（并把 emoji 字体接到回退链上）顶替，写成 `\\newunicodechar'
+对它们无效。")
 
 (defconst cdadar/org-latex-glyph-fallback-marker "cdadar-glyph-fallback"
   "已注入回退字体设置时留在导言区的标记，用于避免重复注入。")
@@ -817,12 +833,18 @@ itself with `\\newunicodechar' are left to the note."
        "\\usepackage{newunicodechar}\n"
        (format "%% %s\n" cdadar/org-latex-glyph-fallback-marker)
        "\\IfFontExistsTF{SBL Greek}"
-       "{\\newfontfamily\\cdadargreek{SBL Greek}}"
-       "{\\newfontfamily\\cdadargreek{DejaVu Sans}}\n"
-       (format "\\newfontfamily\\cdadarcjk{%s}\n" cdadar/org-latex-cjk-main-font)
+       "{\\providefontfamily\\cdadargreek{SBL Greek}}"
+       "{\\providefontfamily\\cdadargreek{DejaVu Sans}}\n"
+       (format "\\providefontfamily\\cdadarcjk{%s}\n" cdadar/org-latex-cjk-main-font)
        "\\IfFontExistsTF{Apple Symbols}"
-       "{\\newfontfamily\\cdadarsym{Apple Symbols}}"
-       "{\\newfontfamily\\cdadarsym{Arial Unicode MS}}\n"
+       "{\\providefontfamily\\cdadarsym{Apple Symbols}}"
+       "{\\providefontfamily\\cdadarsym{Arial Unicode MS}}\n"
+       "\\IfFontExistsTF{Lato}"
+       "{\\providefontfamily\\cdadaripa{Lato}}"
+       "{\\providefontfamily\\cdadaripa{DejaVu Sans}}\n"
+       "\\IfFontExistsTF{Noto Emoji}"
+       "{\\providefontfamily\\cdadaremoji{Noto Emoji}}"
+       "{\\providefontfamily\\cdadaremoji{Symbola}}\n"
        (mapconcat (lambda (pair)
                     (format "\\newunicodechar{%c}{{%s %c}}"
                             (car pair) (cdr pair) (car pair)))
@@ -846,6 +868,59 @@ export filter protocol."
              text t t)
           text))
     text))
+
+(defconst cdadar/org-latex-cjk-autofallback-marker "cdadar-cjk-autofallback"
+  "标记 xeCJK 缺字回退那行由导出过滤器注入，便于在导出的 .tex 里找到它。")
+
+(defun cdadar/org-latex-cjk-autofallback-snippet (text)
+  "Return the xeCJK fallback setup for TEXT.
+AutoFallBack 让当前 CJK 字体族缺字时换用回退字体；两个
+`\\setCJKfallbackfamilyfont' 把 emoji 字体接到回退链上——变体选择符 U+FE00-FE0F
+被 xeCJK 归入 CM 类，`\\newunicodechar' 对它无效，只能靠字体回退。
+TEXT 里出现 quotecjkfont（quote 用楷体）时额外给那个字体族也接上。"
+  (concat
+   (format "%% %s\n" cdadar/org-latex-cjk-autofallback-marker)
+   "\\xeCJKsetup{AutoFallBack=true}\n"
+   "\\IfFontExistsTF{Noto Emoji}"
+   "{\\setCJKfallbackfamilyfont{\\CJKrmdefault}{Noto Emoji}}"
+   "{\\setCJKfallbackfamilyfont{\\CJKrmdefault}{Symbola}}\n"
+   (when (string-match-p "quotecjkfont" text)
+     (concat "\\IfFontExistsTF{Noto Emoji}"
+             "{\\setCJKfallbackfamilyfont{quotecjkfont}{Noto Emoji}}"
+             "{\\setCJKfallbackfamilyfont{quotecjkfont}{Symbola}}\n"))))
+
+(defconst cdadar/org-latex-variation-selectors
+  "[\uFE00-\uFE0F\U000E0100-\U000E01EF]"
+  "变体选择符（VS1-VS16 与补充区）：只影响 emoji 的呈现，排版时直接删掉。
+它们被 xeCJK 归入 CM（组合标记）类，`\\newunicodechar' 对它无效；删掉既不用
+依赖某个字体恰好有这几个零宽字形，也不影响字形（emoji 本身由 cdadaremoji 映射
+负责）。")
+
+(defun cdadar/org-latex-add-cjk-autofallback (text backend info)
+  "Let xeCJK substitute glyphs missing from the CJK family in use.
+Quote environments switch to Kaiti SC (see `cdadar/org-latex-cjk-quote-font'),
+and Kaiti SC has no glyph for the full-width middle dot ・(U+30FB) -- the frame
+in such a note then shows a tofu box.  Turning on xeCJK's own fallback replaces
+such glyphs with the note's body CJK font.  A `\\newunicodechar' mapping cannot
+fix this: the middle dot is an xeCJK MiddlePunct character, so xeCJK picks the font again
+inside the replacement text.  BACKEND and INFO follow the Org export filter
+protocol."
+  (ignore info)
+  (if (not (org-export-derived-backend-p backend 'latex))
+      text
+    ;; 变体选择符先删（CM 类字符只能靠字体回退，而回退字体未必有这两个零宽字形）
+    (let ((text (replace-regexp-in-string cdadar/org-latex-variation-selectors
+                                          "" text t t)))
+      (if (and (string-match-p "xeCJK" text)
+               ;; 笔记自己的 preamble（模板 snippet）可能已经写了这一行
+               (not (string-match-p "AutoFallBack" text))
+               (string-match-p (regexp-quote "\\begin{document}") text))
+          (replace-regexp-in-string
+           (regexp-quote "\\begin{document}")
+           (concat (cdadar/org-latex-cjk-autofallback-snippet text)
+                   "\n\\begin{document}")
+           text t t)
+        text))))
 
 (defconst cdadar/org-circled-number-regexp
   (format "[%c-%c]" #x2460 #x2473)
@@ -1083,6 +1158,8 @@ mismatch in LaTeX.  INFO is ignored."
                #'cdadar/org-latex-default-cjk-font)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-add-glyph-fallback)
+  (add-to-list 'org-export-filter-final-output-functions
+               #'cdadar/org-latex-add-cjk-autofallback)
   (add-to-list 'org-export-filter-final-output-functions
                #'cdadar/org-latex-drop-duplicate-documentclass)
   (add-to-list 'org-export-filter-final-output-functions
