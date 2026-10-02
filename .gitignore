@@ -82,3 +82,6 @@ disabled-packages/*
 slide_config.js
 .hermes/*
 agent/*
+
+
+.claude
