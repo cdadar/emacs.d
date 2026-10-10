@@ -15,7 +15,7 @@
 #+LATEX_COMPILER: xelatex
 #+STARTUP: beamer
 #+LATEX_CLASS: beamer
-#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169,14pt]
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169,17pt]
 
 # `allowframebreaks' 在 init-org.el 里全局默认，模板不再重复声明。
 
@@ -97,7 +97,16 @@
 #+LATEX_HEADER: \setlength{\parindent}{0pt}
 #+LATEX_HEADER: \setlength{\parskip}{0.45em}
 
+# quote 字号：正文 >14pt 时走 14pt；正文本身 ≤14pt（拥挤页在正文里手写
+# \fontsize{10}{10}\selectfont）时 quote 跟随正文，不会被反过来放大。
+# 单篇要单独换字号：\renewcommand{\cdadarquotefont}{...}
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \newcommand{\cdadarquotefont}{%
+#+LATEX_HEADER:   \ifdim\f@size pt>14pt \fontsize{14}{14}\selectfont \fi}
+#+LATEX_HEADER: \makeatother
+
 #+LATEX_HEADER: \renewenvironment{quote}{%
+#+LATEX_HEADER:   \cdadarquotefont
 #+LATEX_HEADER:   \list{}{\leftmargin=0em\rightmargin=0em}\item[]%
 #+LATEX_HEADER:   \begin{minipage}[t]{\linewidth}\RaggedRight\quotecjkfont
 #+LATEX_HEADER: }{%
@@ -125,7 +134,7 @@
 #+LATEX_HEADER: \newcommand{\leftinstitute}[1]{%
 #+LATEX_HEADER:   \institute{\parbox[t]{\textwidth}{\raggedright #1}}%
 #+LATEX_HEADER: }
-#+LATEX_HEADER: \leftinstitute{${4:可6:45-52}}
+#+LATEX_HEADER: \leftinstitute{}
 
 # 使用示例（biblequote 是上面定义的 tcolorbox，比 quote 更适合跨页经文）：
 # #+Begin_Export latex

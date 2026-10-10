@@ -203,6 +203,31 @@
   ~\usepackage{...xeCJK}~ 之前（xeCJK 还没加载），把 usepackage 行上提一行。
 - ~20260912230726-教會生活.org~：删掉一个孤立的 PUA 字符 U+F076（网页图标残留，无字体可渲染）。
 
+* 本轮：quote 字号写在笔记前言（2026-10-10）
+
+** 字号由前言里的 ~\cdadarquotefont~ 决定
+- 字号不放进 ~lisp/init-org.el~ 的导出 filter：filter 会连带影响所有笔记与文章类
+  导出，而字号是每份 deck 自己的排版选择，和字体、边距一样属于前言。
+- 前言 / ~snippets/org-mode/export_beamer~ 的 quote 环境里加：
+  ~\newcommand{\cdadarquotefont}{\ifdim\f@size pt>14pt \fontsize{14}{14}\selectfont \fi}~，
+  由 ~\renewenvironment{quote}~ 的 begin 段在 ~\list~ 之前调用。
+- 只在正文比它大时生效：17pt 的 deck quote 是 14pt；正文本身 ≤14pt 时（拥挤页在正文里
+  手写 ~\fontsize{10}{10}\selectfont~）quote 跟随正文，不会被反过来放大。
+- 调用点在 ~\begin{quote}~ 的组里，字号不泄漏到该页其余内容；放在 ~\list~ 之前与
+  「正文里手写字号」的效果一致（放进 minipage 会让 quote 外围按 17pt 行距留白，
+  整页内容变高、位置漂移：实测第 2 页段落起点差约 4-8pt）。
+- 单篇换字号：改前言里的 14pt，或 ~\renewcommand{\cdadarquotefont}{...}~。
+
+** 验证
+- ~20261010224029-感恩的生活_ppt~（17pt deck，9 页）逐页渲染比对：
+  - 与改动前比：只有第 2 页变（frame A 诗50:23 的 quote 由 17pt → 14pt，全文唯一
+    没手写字号的 quote）；手写 ~\fontsize{10}{10}\selectfont~ 的那页
+    （frame B a) 旧造的本性，6 处引用）逐像素一致。
+  - 与「按 init-org.el filter 注入」的临时版本比：9 页 300dpi 逐像素一致，
+    证明前言写法与 filter 等价。
+- 字号写在 ~init-org.el~ 的临时版本已回退；文章类导出（如
+  ~20241120194527-耶稣的救恩_召罪人~）不受影响。
+
 * 仍未处理
 - 另外 9 个笔记里还有 6 种 PUA 残留字符（U+F0A7/F076/F06C/E044/E070/E030，共 20 处），
   同样无字体可渲染；要清就单独跑一遍。
