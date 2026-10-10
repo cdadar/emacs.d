@@ -1,7 +1,13 @@
 # key: image
 # name: image
 # --
-#+attr_html: :width 500px
-#+attr_latex: :width ${1:0.6\textwidth}
+# 顺序要求：attr 行必须紧贴链接（org 的 affiliated keyword 规则）。
+# 中间夹任何 #+KEYWORD（例如 org-download 写的 #+DOWNLOADED）会让整组 attr 失效，
+# 导出退回 ox-latex 默认宽度 .9\linewidth —— 竖长截图会直接顶出版心。
+#
+# 对齐：latex 由 :center 控制（org-latex-images-centered 默认 t），html 由 :style 控制。
+#   本 snippet 居中；居左见 image_left，居右见 image_right。
+#+attr_html: :width 500px :style display:block;margin-left:auto;margin-right:auto
+#+attr_latex: :width ${1:0.6\textwidth} :center t
 #+ATTR_ORG: :width 500
 [[$0]]

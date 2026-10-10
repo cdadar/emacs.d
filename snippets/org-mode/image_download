@@ -1,0 +1,11 @@
+# key: image_download
+# name: image_download
+# --
+# org-download 截图专用（DOWNLOADED 行放最前）。
+# #+DOWNLOADED 非 affiliated 关键字，若落在 attr 与链接之间，宽度/对齐整组失效。
+# 居中版；居左/居右见 image_left / image_right。
+#+DOWNLOADED: screenshot @ `(format-time-string "%Y-%m-%d %H:%M:%S")`
+#+attr_html: :width 500px :style display:block;margin-left:auto;margin-right:auto
+#+attr_latex: :width ${1:0.4\textwidth} :center t
+#+ATTR_ORG: :width 500
+[[file:$0]]

@@ -1,0 +1,12 @@
+# key: image_right
+# name: image_right
+# --
+# 居右：latex 没有 :right，只能 :center nil + 裸 latex \begin{flushright}（必须与链接同一段）；
+#       html 用 display:block + 右 margin 0。
+# 文字环绕（图靠边、正文绕排）另用：:float wrap :placement {r}{0.4\textwidth}
+#   ox-latex 走 wrapfigure 并自动加 \usepackage{wrapfig}；html 用 :style float:right;margin-left:1em。
+# 不要用 #+begin_right，ox-latex 会原样输出 \begin{right}（LaTeX 无此环境，编译报错）。
+#+attr_html: :width 500px :style display:block;margin-left:auto;margin-right:0
+#+attr_latex: :width ${1:0.4\textwidth} :center nil
+#+ATTR_ORG: :width 500
+@@latex:\begin{flushright}@@[[file:$0]]@@latex:\end{flushright}@@

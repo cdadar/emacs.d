@@ -1,0 +1,10 @@
+# key: image_left
+# name: image_left
+# --
+# 居左：latex 用 :center nil（\noindent 去掉 2em 首行缩进，否则图会缩进 2em）；
+#       html 用 display:block + 左 margin 0（默认 CSS 只居中 .figure p，靠 style 压掉）。
+# 注意：latex 后端没有 :left，写 :left t 会被忽略（仍按 :center 默认值居中）。
+#+attr_html: :width 500px :style display:block;margin-left:0;margin-right:auto
+#+attr_latex: :width ${1:0.4\textwidth} :center nil
+#+ATTR_ORG: :width 500
+@@latex:\noindent@@[[file:$0]]
