@@ -210,6 +210,29 @@
   逐页与包之前完全一致（回退映射对已包字符照样生效），收益是源码语义明确、不依赖
   导出过滤器。~摩西五经概论~ 的希伯来文 ה/י 与 IPA ˈ/ʌ 缺字同时解决。
 
+** 标记类用内置命令，不自己写
+- 需求是「给选区套 ~*~、~+~、~-~ 这些标记」，org 自带三件，不必写命令：
+  - ~C-c e~ → ~org-emphasize~：敲一个字符（=*= 粗体、=/= 斜体、=_= 下划线、~=~ 等宽、
+    =~= 代码、=+= 删除线）包住选区；没有选区时作用于光标处的词。
+  - ~C-c -~ → ~org-ctrl-c-minus~：把选中各行变成列表项，再按一次切换项目符号 / 变回
+    普通文字。
+  - ~C-c *~ → ~org-ctrl-c-star~：把选中行变成标题。
+- 只有 ~org-emphasize~ 需要补绑定：上游默认**没有**给它设键（只有菜单项
+  =Emphasis...=），而习惯上写的 ~C-c C-x C-e~ 在本配置里是 clock 的
+  ~org-clock-modify-effort-estimate~，所以本配置把它绑到 ~C-c e~（=init-org.el= 的
+  org ~:bind~ 块）。~C-c -~ 与 ~C-c *~ 本来就是 org 的默认绑定。
+- 实测结论（解释为什么内置就够，也解释中文笔记里为什么强调两边都带空格）：
+  - ~org-emphasize~ 自己会补边界空格：~说重点好啊~ 选中 ~重点~ 按 ~C-c e~ =*= 得到
+    ~说 *重点* 好啊~；~foo bar~ 选 ~bar~ 则不加多余空格。
+  - org 9.8 的解析器把强调边界**写死**在 ~org-element--parse-generic-emphasis~ 里
+    （开标记前只能是空格、~-~、ASCII 括号、引号、~{~ 或行首；闭标记后只能是空格、
+    ~-~、句读、ASCII 括号或行尾）。~org-emphasis-regexp-components~ 只影响 org.el 的
+    font-lock：改它以后 Emacs 里看着像粗体，解析与导出却仍不认（实测），所以没动它。
+    这也是笔记里强调一律带空格的原因（=是 *「不明白」* 。=）。
+- 验证：~where-is~ / ~key-binding~ 查出三个键分别是 ~org-emphasize~、
+  ~org-ctrl-c-minus~、~org-ctrl-c-star~；内置命令实测输出 ~说 *重点* 好啊~（补空格）、
+  ~foo *bar*~（不补）、~- 文字~ 与 ~- a~ + ~- b~（列表项；再跑一次变回普通文字）。
+
 ** newunicodechar 重复定义同一字符会死循环
 - 现象：~摩西五经概论~ 导出报 =! TeX capacity exceeded, input stack size=10000=，
   卡在 ~\item ▸~。

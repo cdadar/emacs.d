@@ -14,6 +14,10 @@
          ("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
          :map org-mode-map
+         ;; 标记类都在 org 里：C-c e 强调（org-emphasize，上游默认不绑键；C-c C-x C-e
+         ;; 被 clock 的 org-clock-modify-effort-estimate 占了）、C-c - 列表项
+         ;; （org-ctrl-c-minus）、C-c * 标题（org-ctrl-c-star），不另写命令。
+         ("C-c e" . org-emphasize)
          ("C-M-<up>" . org-up-element))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :hook ((org-mode . cdadar/org-mode-setup)
