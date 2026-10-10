@@ -176,6 +176,40 @@
 - 验证（副本上跑）：~摩西五经概论~ 改 4 处、~学道_诗篇73_76篇~ 改 17 处，
   注释行/关键字行/~src~ 块都没动。
 
+** 希伯来文/希腊文：回退区间 + 包宏命令（手动）
+- 现象：~20261010224029-感恩的生活.org~ 导出报 =Missing character(s)~，146 处希伯来文
+  （18 个码点，U+05B0-05EA）落在 ~texgyretermes-regular.otf~ 上：正文里的希伯来文/
+  希腊文是裸字符（从别处粘来的经文），没包在 ~\heb{}~ 里。
+- 回退：~cdadar/org-latex-glyph-fallback-ranges~ 加希伯来文区间（U+0590-05FF，
+  字母 + 元音符号 niqqud + 读经记号）→ 新家族 ~\cdadarheb~
+  （~\IfFontExistsTF{SBL Hebrew}~ 否则 DejaVu Sans，带 ~Script=Hebrew~：niqqud 的
+  mark 定位靠这个 script tag）。映射仍只对导出文本里真出现的字符注入。
+- 手动命令 ~cdadar/org-wrap-hebrew-greek~（=M-x=）：把正文里裸着的希伯来文/希腊文
+  包成笔记前言的 ~\heb{}~ / ~\gr{}~（= ~\texthebrew~ / ~\textgreek~）。一段 =
+  连续的该文种字符、可跨空白（~בָּרוּךְ אַתָּה~、~μακάριοι οἱ καθαροί~ 各包成一个）；
+  跳过 =#= 开头的行（header 里就是宏的定义与例子）与 ~src~ / ~example~ / ~export~ 块；
+  已经包过的（含 ~\hebl{}~ / ~\grl{}~ / ~\texthebrew{}~ / ~\textgreek{}~）不重复包；
+  整体算一次 undo，返回包的个数。
+- 只在笔记前言定义了该文种简写（={\heb}= / ={\gr}= 字面串）时才包；没定义就跳过该文种
+  并在 message 里报出来。先写的是「没简写但有 polyglossia 语言就用 ~\texthebrew~」，
+  实测 3 篇老笔记既没简写也没 polyglossia，包上去导出直接 =Undefined control
+  sequence=，于是改成只认简写、宁可跳过也不猜宏名（那 3 篇的裸字符由回退映射照常渲染）。
+- 两个实测的 elisp 坑：~looking-back~ 会写 match data ——（1）helper 内要
+  ~save-match-data~ 且先取 match 两端再调它，否则接着读 ~match-end~ 读到的是它自己
+  那次匹配；（2）外层循环必须先把 ~match-beginning/end~ 取出来再用 region 替换，
+  不能用 ~replace-match~，否则会去替换早先那个 ~\heb{~，叠成 ~\heb{\heb{\heb{…}}}~。
+- 验证：16 条行为检查全过（单词/多词/=#= 行/src 块/export 块/中文标点边界/已包过/
+  ~\hebl{}~ 等变体/混合行/幂等/无宏跳过/只声明 polyglossia 也跳过/只有希腊文定义时
+  只包希腊文/~\providecommand~ 也算定义）；扫 ~roam/christian~ 与 ~roam/study~ 共
+  347 个裸字符、约 45 段，7 篇有简写定义的包了 37 处、3 篇无宏的跳过；包过的 7 篇导出
+  全部 =PDF file produced= 且无 =Missing character= 警告，跳过的一篇（~耶稣基督的神迹~）
+  导出正常，另两篇（~神永远的旨意~、~读经之路与解经原则~）本身就导不出来（前者
+  ={\color= 处 Undefined control sequence、连旧 PDF 都没有；后者前言里
+  ~urlcolor={url-gray}~ 未定义），与本次改动无关。
+- 包宏对渲染是透明的：~20261010224029-感恩的生活.org~ 副本上跑完导出，9 页 300dpi
+  逐页与包之前完全一致（回退映射对已包字符照样生效），收益是源码语义明确、不依赖
+  导出过滤器。~摩西五经概论~ 的希伯来文 ה/י 与 IPA ˈ/ʌ 缺字同时解决。
+
 ** newunicodechar 重复定义同一字符会死循环
 - 现象：~摩西五经概论~ 导出报 =! TeX capacity exceeded, input stack size=10000=，
   卡在 ~\item ▸~。
@@ -231,10 +265,6 @@
 * 仍未处理
 - 另外 9 个笔记里还有 6 种 PUA 残留字符（U+F0A7/F076/F06C/E044/E070/E030，共 20 处），
   同样无字体可渲染；要清就单独跑一遍。
-- ~摩西五经概论~ 还剩 6 个缺字：希伯来文 ה/י（U+05D4/U+05D9）、IPA 音标 ˈ/ʌ
-  （U+02C8/U+028C）——笔记里这些字符没包在 ~\heb{}~ 里，直接落在主字体上。
-  要堵的话就把希伯来文段（U+0590-05FF）与 IPA（U+0250-02AF）加进
-  ~cdadar/org-latex-glyph-fallback-ranges~（希伯来文→SBL Hebrew）。
 
 * 可选后续
 

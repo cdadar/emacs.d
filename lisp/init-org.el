@@ -777,6 +777,7 @@ filter protocol."
   '((#x0250 #x02FF "\\cdadaripa")        ; 国际音标与修饰符
     (#x0370 #x03FF "\\cdadargreek")      ; 希腊文
     (#x1F00 #x1FFF "\\cdadargreek")      ; 希腊文扩展（带音）
+    (#x0590 #x05FF "\\cdadarheb")        ; 希伯来文（字母、元音符号、读经记号）
     (#x2460 #x24FF "\\cdadarcjk")        ; 圈号 ①-⑳ ⑴-⒇
     (#x2500 #x257F "\\cdadarcjk")        ; 制表符
     (#x25A0 #x25FF "\\cdadarsym")        ; 几何图形 ▸ ●
@@ -786,10 +787,11 @@ filter protocol."
     (#x200D #x200D "\\cdadaremoji")      ; ZWJ（组合 emoji 序列）
     (#x1F000 #x1FAFF "\\cdadaremoji"))   ; 表情符号区 🔥 👍 🎉
   "字符区间 → 回退字体命令。
-Times 系主字体没有国际音标、带音希腊文、圈号、制表符、几何符号与杂项符号，
-XeTeX 又不像 LuaTeX 那样自动回退，那些字符会变成方块。这里的分配是：音标用
-Lato，希腊文用笔记自己的 SBL Greek，CJK 语境的圈号/制表符用 CJK 字体，文字
-类符号用系统符号字体，emoji 与 Dingbats 用单色 emoji 字体（安装见
+Times 系主字体没有国际音标、希伯来文、带音希腊文、圈号、制表符、几何符号与杂项
+符号，XeTeX 又不像 LuaTeX 那样自动回退，那些字符会变成方块。这里的分配是：音标用
+Lato，希腊文用笔记自己的 SBL Greek，希伯来文（含元音符号 niqqud，笔记里常它直接
+写在中文句子里）用 SBL Hebrew，CJK 语境的圈号/制表符用 CJK 字体，文字类符号用系统
+符号字体，emoji 与 Dingbats 用单色 emoji 字体（安装见
 `~/project/private/script/local/install_emoji_fonts.sh'）。
 
 区间互不重叠，`cdadar/org-latex-glyph-fallback-chars' 按列表顺序取第一个命中的
@@ -835,6 +837,9 @@ itself with `\\newunicodechar' are left to the note."
        "\\IfFontExistsTF{SBL Greek}"
        "{\\providefontfamily\\cdadargreek{SBL Greek}}"
        "{\\providefontfamily\\cdadargreek{DejaVu Sans}}\n"
+       "\\IfFontExistsTF{SBL Hebrew}"
+       "{\\providefontfamily\\cdadarheb[Script=Hebrew]{SBL Hebrew}}"
+       "{\\providefontfamily\\cdadarheb[Script=Hebrew]{DejaVu Sans}}\n"
        (format "\\providefontfamily\\cdadarcjk{%s}\n" cdadar/org-latex-cjk-main-font)
        "\\IfFontExistsTF{Apple Symbols}"
        "{\\providefontfamily\\cdadarsym{Apple Symbols}}"
@@ -946,6 +951,103 @@ protocol."
               (replace-match (format "\\textcircled{%d}" (- char #x245F)) t t)
               (setq count (1+ count)))))))
     (message "圈号 → \\textcircled{}：替换 %d 处" count)
+    count))
+
+(defconst cdadar/org-hebrew-char-regexp
+  (format "[%c-%c]" #x0590 #x05FF)
+  "匹配希伯来文块：字母、元音符号 niqqud（U+05B0-05BD 等）与读经记号。")
+
+(defconst cdadar/org-greek-char-regexp
+  (format "[%c-%c%c-%c]" #x0370 #x03FF #x1F00 #x1FFF)
+  "匹配希腊文与扩展区（多音符号，如 ἀγαπάω、ἐκκλησία）。")
+
+(defun cdadar/org-script-run-regexp (char-regexp)
+  "Return a regexp matching runs of CHAR-REGEXP separated by blanks.
+一段 = 连续的该文种字符，可跨空白（不跨换行）继续，让 `בָּרוּךְ אַתָּה'
+与 `μακάριοι οἱ καθαροί' 包成同一个宏参数；首尾空白留在匹配之外，不会吃掉
+后面中文。"
+  (format "\\(?:%s\\)\\(?:[[:blank:]]*\\(?:%s\\)\\)*" char-regexp char-regexp))
+
+(defun cdadar/org-script-run-wrapped-p (macros)
+  "Return non-nil when the current match already sits inside MACROS{...}.
+MACROS 是该文种可接受的宏名（笔记自家简写与 polyglossia 写法），已包过的
+不再叠一层；命令要能反复跑（笔记是一直加内容的）。
+先取下 match 两端：`looking-back' 自己会写 match data，之后再取 match-end 就是
+它自己那个匹配的了。"
+  (save-match-data
+    (let ((beg (match-beginning 0))
+          (end (match-end 0))
+          (open (concat "\\(?:" (regexp-opt macros) "\\){")))
+      (and (save-excursion
+             (goto-char beg)
+             (looking-back open (max (point-min) (- beg 16))))
+           (save-excursion
+             (goto-char end)
+             (looking-at-p "}"))))))
+
+(defun cdadar/org-script-macro-for (shorthand)
+  "Return the macro to wrap a script with in the current buffer, or nil.
+前言里定义了 SHORTHAND（`\\heb' 这个简写，模板都这么写）才用它；没定义就返回
+nil——这类老笔记里既没有简写也没有 polyglossia，硬包上去导出必报
+`Undefined control sequence'（实测 3 篇如此；它们的希伯来文/希腊文靠缺字回退
+照常渲染），由调用者跳过并在 message 里报出来。
+判断不写反斜杠正则：`{\\heb}' 这个字面串只在定义处出现，用 `regexp-quote' 拼。"
+  (when (string-match-p (concat "{" (regexp-quote shorthand) "}") (buffer-string))
+    shorthand))
+
+(defun cdadar/org-wrap-script-runs (char-regexp macros)
+  "Wrap runs of CHAR-REGEXP with the first of MACROS in the current buffer.
+MACROS 是同一文种的可接受宏名（自己的简写在前，polyglossia 写法在后）：已经在
+其中任何一个里的段落不再包。跳过 `#' 开头的行与 src / example / export 块。
+起点/终点先取出来再替换：中间那些检查会跑搜索，`replace-match' 靠的 match
+data 靠不住。返回包的个数。"
+  (let ((count 0))
+    (save-excursion
+      (goto-char (point-min))
+      (let ((re (cdadar/org-script-run-regexp char-regexp)))
+        (while (re-search-forward re nil t)
+          (let ((beg (match-beginning 0))
+                (end (match-end 0))
+                (run (match-string 0)))
+            (unless (or (save-excursion (forward-line 0)
+                                        (looking-at-p "[[:blank:]]*#"))
+                        (org-in-block-p '("src" "example" "export"))
+                        (cdadar/org-script-run-wrapped-p macros))
+              (delete-region beg end)
+              (insert (car macros) "{" run "}")
+              (setq count (1+ count)))))))
+    count))
+
+(defun cdadar/org-wrap-hebrew-greek ()
+  "Wrap every Hebrew and Greek run in the current Org buffer with `\\heb{}' / `\\gr{}'.
+从别处粘来的经文常常是裸字符（没包宏），导出时只能落在主字体上，靠
+`cdadar/org-latex-add-glyph-fallback' 的缺字回退兜底。这个命令把正文里的
+希伯来文/希腊文按文种包成笔记自家前言的 `\\heb{}' / `\\gr{}'（= `\\texthebrew' /
+`\\textgreek'）：字体、RTL、字体缩放都交给 polyglossia，源码也不再依赖导出过滤器。
+前言里没有 `\\newcommand{\\heb}' / `\\newcommand{\\gr}' 时跳过该文种并在 message 里
+报出来：那类笔记没有可用的宏，硬包只会让导出报 Undefined control sequence。
+跳过 `#' 开头的行（关键字、注释、块分隔符；header 里就是 `\\heb{}' 的定义与例子）、
+src / example / export 块，以及已经包过的（含 `\\hebl{}' / `\\grl{}' /
+`\\texthebrew{}' / `\\textgreek{}'）；整体算一次 undo，返回包的个数。"
+  (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "只在 Org buffer 里用"))
+  (let ((count 0) (skipped nil))
+    (atomic-change-group
+      (dolist (spec (list (list cdadar/org-hebrew-char-regexp "希伯来文" "\\heb"
+                                '("\\heb" "\\hebl" "\\texthebrew"))
+                          (list cdadar/org-greek-char-regexp "希腊文" "\\gr"
+                                '("\\gr" "\\grl" "\\textgreek"))))
+        (let ((macro (cdadar/org-script-macro-for (nth 2 spec))))
+          (if macro
+              (setq count (+ count (cdadar/org-wrap-script-runs
+                                    (nth 0 spec) (cons macro (nth 3 spec)))))
+            (push (nth 1 spec) skipped)))))
+    (message "希伯来文/希腊文 → \\heb{} / \\gr{}：包了 %d 处%s" count
+             (if skipped
+                 (format "；%s 跳过（前言没有对应的 \\heb / \\gr 定义）"
+                         (mapconcat #'identity (nreverse skipped) "、"))
+               ""))
     count))
 
 (defun cdadar/org-latex-drop-duplicate-documentclass (text backend info)
