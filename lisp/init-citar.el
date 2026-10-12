@@ -29,36 +29,24 @@
 
 ;;; Code:
 
-(defconst cdadar/bibtex-entry-key-regexp
-  "@[[:alpha:]]+[ \t\n]*[{(][ \t\n]*\\([^, \t\n]+\\)[ \t\n]*,"
-  "Regexp matching the entry type and the key of a BibTeX entry.")
+(require 'oc)
+(require 'parsebib)
+(require 'subr-x)
 
-(defun cdadar/bibtex-key-of-entry (entry)
-  "Return the citation key of the BibTeX ENTRY, or nil when there is none."
-  (when (string-match cdadar/bibtex-entry-key-regexp entry)
-    (match-string 1 entry)))
+(defun cdadar/bibtex-keys-in (text)
+  "Return the list of entry keys of the BibTeX entries in TEXT."
+  (with-temp-buffer
+    (insert text)
+    (hash-table-keys (car (parsebib-parse-bib-buffer)))))
 
-(defun cdadar/bibtex-bibliography-files ()
-  "Return the bibliography files citar and org-cite consult.
-The secondary value is used as a fallback when citar is not loaded."
-  (let ((files (cond ((bound-and-true-p citar-bibliography))
-                     ((bound-and-true-p org-cite-global-bibliography)))))
-    (when (functionp files)
-      (setq files (funcall files)))
-    (if files
-        (ensure-list files)
-      (user-error "No bibliography file configured"))))
-
-(defun cdadar/bibtex-key-present-p (key files)
-  "Return non-nil when the BibTeX KEY is defined in one of FILES."
-  (let ((re (concat "@[[:alpha:]]+[ \t\n]*[{(][ \t\n]*"
-                    (regexp-quote key) "[ \t\n]*,")))
-    (seq-some (lambda (file)
-                (when (file-readable-p file)
-                  (with-temp-buffer
-                    (insert-file-contents file)
-                    (re-search-forward re nil t))))
-              files)))
+(defun cdadar/bibtex-key-found-in (key files)
+  "Return the first file in FILES that defines the BibTeX KEY, or nil."
+  (seq-find (lambda (file)
+              (when (file-readable-p file)
+                (with-temp-buffer
+                  (insert-file-contents file)
+                  (gethash key (car (parsebib-parse-bib-buffer))))))
+            files))
 
 (defun cdadar/bibtex-append-entry (file entry)
   "Append BibTeX ENTRY to FILE, separated from the previous entry by a blank line."
@@ -76,24 +64,29 @@ The secondary value is used as a fallback when citar is not loaded."
 The entry is read from the active region, or from the head of the kill
 ring when the region is inactive, in which case the citation is
 inserted at point instead of replacing the region.  When the entry's
-key is not in the configured bibliography yet, the entry is appended
-to the first bibliography file so that the citation resolves."
+key is not in the buffer's bibliography yet, the entry is appended to
+the first bibliography file so that the citation resolves."
   (interactive)
   (let* ((region (and (use-region-p) (cons (region-beginning) (region-end))))
+         (where (if region "the region" "the kill ring"))
          (entry (string-trim
                  (if region
                      (buffer-substring-no-properties (car region) (cdr region))
                    (or (car kill-ring) ""))))
-         (key (cdadar/bibtex-key-of-entry entry)))
-    (unless key
-      (user-error "No BibTeX entry found in %s"
-                  (if region "the region" "the kill ring")))
-    (let* ((files (cdadar/bibtex-bibliography-files))
-           (target (car files)))
-      (if (cdadar/bibtex-key-present-p key files)
-          (message "%s is already in %s" key target)
-        (cdadar/bibtex-append-entry target entry)
-        (message "Added %s to %s" key target))
+         (keys (cdadar/bibtex-keys-in entry)))
+    (unless keys
+      (user-error "No BibTeX entry found in %s" where))
+    (when (cdr keys)
+      (user-error "%d BibTeX entries in %s; convert them one at a time"
+                  (length keys) where))
+    (let* ((key (car keys))
+           (files (org-cite-list-bibliography-files))
+           (target (car files))
+           (found (cdadar/bibtex-key-found-in key files)))
+      (cond (found (message "%s is already in %s" key found))
+            ((not target) (user-error "No bibliography file to add %s to" key))
+            (t (cdadar/bibtex-append-entry target entry)
+               (message "Added %s to %s" key target)))
       (goto-char (if region (car region) (point)))
       (when region (delete-region (car region) (cdr region)))
       (insert (format "[cite:@%s]" key)))))
