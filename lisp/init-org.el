@@ -18,6 +18,8 @@
          ;; 被 clock 的 org-clock-modify-effort-estimate 占了）、C-c - 列表项
          ;; （org-ctrl-c-minus）、C-c * 标题（org-ctrl-c-star），不另写命令。
          ("C-c e" . org-emphasize)
+         ;; 只补已经写好、但标记紧贴汉字而失效的强调（C-c C-x F 上游空着）。
+         ("C-c C-x F" . cdadar/org-fix-emphasis-boundaries)
          ("C-M-<up>" . org-up-element))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :hook ((org-mode . cdadar/org-mode-setup)
@@ -1404,6 +1406,114 @@ LIMIT may be nil, in which case it defaults to the end of the buffer."
     (unless noinsert
       (insert output-string))
     output-string))
+
+;; org 的强调边界写死在 `org-element--parse-generic-emphasis'（org 9.8）里：开标记前
+;; 只能是空白、`-'、ASCII 括号与引号、`{' 或行首，闭标记后只能是空白、`-'、ASCII
+;; 句读与括号或行尾。中文笔记里的 `说*重点*好啊'、`2. *结论*：…' 紧贴汉字，org 既不
+;; 加粗也不导出；`org-emphasize'（C-c e）只补它自己新插入的标记，补不了写好的文字。
+(defconst cdadar/org-emphasis-markers "*_=~"
+  "`cdadar/org-fix-emphasis-boundaries' 处理的强调标记。
+`/' 不在内：中文笔记里 `/` 几乎都是路径与并列分隔符（`图像/视频'、`视频_素材/杂项'），
+按斜体处理会大量误判。
+`+' 也不在内，这是实测的：近 120 天笔记里成对且紧贴汉字的 `+' 只有 4 处，全部是
+「加号 / 连接符」而不是删除线（`.rtf 14.9万+.doc 11.8万'、`（杂项+待定+按格式_PDF）'），
+补空格会把这些文字真的变成删除线；同一批语料里 `*' 命中 261 行、`=' 312 行、`~' 5 行，
+命中的全是紧贴全角标点的强调。要用 `+' 就把它加回这个字符串。")
+
+(defconst cdadar/org-emphasis-opening-chars "-('\"{"
+  "开标记前 org 认的 ASCII 边界字符（其余合法边界是空白与行首）。")
+
+(defconst cdadar/org-emphasis-closing-chars "-.,;:!?'\")}\\["
+  "闭标记后 org 认的 ASCII 边界字符（其余合法边界是空白与行尾）。")
+
+(defconst cdadar/org-emphasis-repairable-types
+  '(paragraph headline table-cell item quote-block center-block verse-block)
+  "org 会解析强调对象的节点类型。
+其余节点里的标记不是强调或不能动：src / example / export 块、comment、fixed-width
+行、链接（含中文文件路径）、verbatim / code、LaTeX 片段、`#+NAME:' 这类关键字。")
+
+(defun cdadar/org-emphasis-boundary-p (char chars)
+  "Return non-nil when CHAR is a valid org emphasis border.
+CHARS are the ASCII characters org accepts on that side; every other valid
+border is whitespace -- including U+3000, which Emacs gives whitespace syntax
+-- or the beginning / end of the buffer."
+  (or (null char)
+      (memq char (string-to-list chars))
+      (eq (char-syntax char) ?\s)))       ; ?\s 就是空格字符，U+3000 也是这个语法类
+
+(defun cdadar/org-emphasis-repairable-p (marker content before after bad-left bad-right)
+  "Return non-nil when a broken marker pair is emphasis worth a space.
+MARKER is the emphasis character, CONTENT what sits between the two markers,
+BEFORE / AFTER the characters around the pair, BAD-LEFT / BAD-RIGHT whether
+that side fails `cdadar/org-emphasis-boundary-p'.  Point must be at the first
+character of CONTENT.
+Only a border blocked by a non-ASCII character counts as Chinese emphasis:
+all-ASCII pairs (`a*b*c', `sdk=[34,35] ... sdk=34') stay untouched, as do
+marker runs (`**bold**', which org parses on its own)."
+  (and (or bad-left bad-right)
+       (or (and bad-left before (> before 127))
+           (and bad-right after (> after 127)))
+       (not (memq marker (list before after)))
+       (not (memq marker (string-to-list content)))
+       (memq (org-element-type (org-element-context))
+             cdadar/org-emphasis-repairable-types)))
+
+(defun cdadar/org-fix-emphasis-boundaries (beg end)
+  "给因缺少边界空格而失效的 org 强调标记补空格。
+org 的强调边界写死在 `org-element--parse-generic-emphasis' 里，中文笔记里紧贴汉字的
+标记（`说*重点*好啊'、`—*结论*：…'）既不显示也不导出为粗体，而 `org-emphasize'
+（C-c e）只补它自己新插入的标记。在 BEG..END（有选区时是选区，否则整个 buffer）
+内找这种标记，在紧贴非 ASCII 字符的那一侧补一个空格，与 `org-emphasize' 补的一致。
+只动 org 会解析强调的地方，且只动中文相关的边界：`a*b*c'、`sdk=[34,35] … sdk=34' 这类全
+ASCII 的算式与标识符不动，src / example / export 块、链接路径、verbatim / code、LaTeX
+片段、`#+NAME:' 这类关键字里的标记也不动。整条命令算一次 undo，可以反复跑（修好的不再
+是候选）；处理哪几个标记见 `cdadar/org-emphasis-markers'。返回补过的标记对数。"
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point-min) (point-max))))
+  (unless (derived-mode-p 'org-mode)
+    (user-error "只在 Org buffer 里用"))
+  (let ((regexp (format "\\([%s]\\)\\([^[:space:]][^\n]*?[^[:space:]]\\)\\1"
+                        cdadar/org-emphasis-markers))
+        (end (copy-marker end t))
+        (pairs 0)
+        (spaces 0))
+    (atomic-change-group
+      (save-excursion
+        (goto-char beg)
+        (while (re-search-forward regexp end t)
+          (let* ((marker (string-to-char (match-string-no-properties 1)))
+                 (content (match-string-no-properties 2))
+                 (open-beg (match-beginning 1))
+                 (before (char-before open-beg))
+                 (after (char-after (match-end 0)))
+                 (bad-left (not (cdadar/org-emphasis-boundary-p
+                                 before cdadar/org-emphasis-opening-chars)))
+                 (bad-right (not (cdadar/org-emphasis-boundary-p
+                                  after cdadar/org-emphasis-closing-chars)))
+                 ;; 搜索点跟着插入的文本往后走，保证循环推进；`org-element-context'
+                 ;; 会冲掉 match data，所以位置先存下来。
+                 (resume (copy-marker (match-end 0) t)))
+            (when (save-excursion
+                    (goto-char (1+ open-beg))
+                    (cdadar/org-emphasis-repairable-p
+                     marker content before after bad-left bad-right))
+              ;; 先补右边界再补左边界，前面的位置不受影响。
+              (when bad-right
+                (goto-char resume)
+                (insert " ")
+                (setq spaces (1+ spaces)))
+              (when bad-left
+                (goto-char open-beg)
+                (insert " ")
+                (setq spaces (1+ spaces)))
+              (setq pairs (1+ pairs)))
+            (goto-char resume)
+            (set-marker resume nil)))
+        (set-marker end nil)))
+    (message "强调边界补空格：%d 处标记、%d 个空格" pairs spaces)
+    pairs))
 
 ;;; --- Related packages ---
 
