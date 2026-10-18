@@ -11,7 +11,6 @@
   (sanityinc/fullframe-mode 'docker-containers-mode))
 
 (use-package dockerfile-mode)
-(use-package docker-compose-mode)
 
 
 (provide 'init-docker)
