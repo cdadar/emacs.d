@@ -124,6 +124,8 @@
 (require 'init-javascript)
 (require 'init-php)
 (require 'init-org)
+(require 'init-org-latex-fonts)
+(require 'init-org-latex-export)
 (require 'init-nxml)
 (require 'init-html)
 (require 'init-css)
