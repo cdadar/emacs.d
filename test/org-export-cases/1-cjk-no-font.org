@@ -1,4 +1,4 @@
 #+TITLE: 无 CJK 字体声明的中文笔记
 #+LATEX_HEADER: \usepackage{fontspec}
 
-中文正文，用来触发 default-cjk-font 注入 xeCJK。
+中文正文，用来触发默认字体注入与缺字回退。
