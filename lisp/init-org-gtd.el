@@ -337,7 +337,7 @@ LIMIT may be nil, in which case it defaults to the end of the buffer."
                 (mapcar #'org-duration-to-minutes
                         (cl-remove-if-not 'identity total))))))
 
-(defun my/org-agenda-insert-efforts ()
+(defun cdadar/org-agenda-insert-efforts ()
   "Insert the efforts for each day inside the agenda buffer."
   (save-excursion
     (let (pos)

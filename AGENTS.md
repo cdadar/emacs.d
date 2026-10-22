@@ -115,7 +115,8 @@ The `init-org.el` contains extensive org-mode setup:
 - LaTeX export keeps five Org headline levels as real headings (`section` through `subparagraph`) instead of degrading deep headings into enumerate/list items
 - LaTeX quote export rewrites `\\` + blank lines inside quote blocks to preserve left alignment in generated PDFs
 - Diagram support configures existing PlantUML / ditaa tools from local jars or `PLANTUML_JAR` / `DITAA_JAR`; it does not auto-download them at startup
-- `prose-mode` is bound to `C-c z` in Org buffers: it centers the text with `writeroom-mode`, switches on `mixed-pitch` and a bar cursor. `olivetti` is deliberately not used — it and `writeroom-mode` both control the margins
+- `prose-mode` is bound to `C-c z` in Org buffers: it centers the text with `writeroom-mode`, switches on `mixed-pitch` and a bar cursor. `olivetti` is deliberately not used — it and `writeroom-mode` both control the margins. It is defined in `init-org.el` at top level, not inside the deferred `use-package org` body, because packages hook onto it
+- `C-c o` is the manual-maintenance prefix: clocking under `j l i o r`, and the commands that have no other entry point under `m a t n k f F c h p` (Markdown→Org, archive done, clock summary by tag, monthly nth weekday, kill link, refile anywhere, agenda refile anywhere, circled numbers, Hebrew/Greek wrapping, async PDF export). Add new one-off commands there rather than inventing a chord in `org-mode-map`
 - `toc-org` keeps the table of contents under a `:TOC:`-tagged heading up to date on save
 - `ox-gfm` provides `C-c C-e g g`. It is loaded instead of being listed in `org-export-backends`, because that variable's Customize `:set` drops every registered backend it does not name, which breaks `org-ref`'s backend
 - Configured for various export formats

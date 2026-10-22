@@ -12,6 +12,52 @@
 (defvar org-directory (expand-file-name "~/org/")
   "Directory in which Org files live.  `lisp/init-local.el' overrides this.")
 
+;; `prose-mode' lives at top level, not inside `use-package org :config':
+;; it is a generic prose-editing mode (writeroom + mixed-pitch + bar cursor)
+;; that other packages hook onto, so it must exist whether or not Org has been
+;; loaded yet.
+(define-minor-mode prose-mode
+  "Set up a buffer for prose editing.
+This enables or modifies a number of settings so that the
+experience of editing prose is a little more like that of a
+typical word processor."
+  :init-value nil
+  :lighter " Prose"
+  (if prose-mode
+      (progn
+        (when (fboundp 'writeroom-mode)
+          (writeroom-mode 1))
+        (setq truncate-lines nil
+              word-wrap t
+              word-wrap-by-category nil
+              cursor-type 'bar)
+        (when (derived-mode-p 'org-mode)
+          (kill-local-variable 'buffer-face-mode-face))
+        (buffer-face-mode 1)
+        (setq-local blink-cursor-interval 0.6)
+        (setq-local show-trailing-whitespace nil)
+        (setq-local line-spacing 0.2)
+        (setq-local electric-pair-mode nil)
+        (ignore-errors (flyspell-mode 1))
+        (visual-line-mode 1))
+    (kill-local-variable 'truncate-lines)
+    (kill-local-variable 'word-wrap)
+    (kill-local-variable 'cursor-type)
+    (kill-local-variable 'blink-cursor-interval)
+    (kill-local-variable 'show-trailing-whitespace)
+    (kill-local-variable 'line-spacing)
+    (kill-local-variable 'electric-pair-mode)
+    (buffer-face-mode -1)
+    (flyspell-mode -1)
+    (visual-line-mode -1)
+    (when (fboundp 'writeroom-mode)
+      (writeroom-mode 0))))
+
+;; `prose-mode' has no default binding.  Wait for `org-mode-map' to exist
+;; instead of relying on the deferred `:config' body having run.
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c z") #'prose-mode))
+
 (use-package org
   :ensure nil
   :defer t
@@ -31,7 +77,7 @@
   :hook ((org-mode . cdadar/org-mode-setup)
          (org-agenda-mode . hl-line-mode)
          (org-agenda-after-show . org-show-entry)
-         (org-agenda-finalize . my/org-agenda-insert-efforts)
+         (org-agenda-finalize . cdadar/org-agenda-insert-efforts)
          (org-after-todo-state-change . cdadar/org-reschedule-monthly-nth-weekday))
   :custom
   (org-log-done t)
@@ -225,47 +271,6 @@
     (local-set-key [remap move-beginning-of-line] #'move-beginning-of-line)
     (local-set-key [remap kill-line] #'kill-line))
 
-  (define-minor-mode prose-mode
-    "Set up a buffer for prose editing.
-This enables or modifies a number of settings so that the
-experience of editing prose is a little more like that of a
-typical word processor."
-    :init-value nil
-    :lighter " Prose"
-    (if prose-mode
-        (progn
-          (when (fboundp 'writeroom-mode)
-            (writeroom-mode 1))
-          (setq truncate-lines nil
-                word-wrap t
-                word-wrap-by-category nil
-                cursor-type 'bar)
-          (when (derived-mode-p 'org-mode)
-            (kill-local-variable 'buffer-face-mode-face))
-          (buffer-face-mode 1)
-          (setq-local blink-cursor-interval 0.6)
-          (setq-local show-trailing-whitespace nil)
-          (setq-local line-spacing 0.2)
-          (setq-local electric-pair-mode nil)
-          (ignore-errors (flyspell-mode 1))
-          (visual-line-mode 1))
-      (kill-local-variable 'truncate-lines)
-      (kill-local-variable 'word-wrap)
-      (kill-local-variable 'cursor-type)
-      (kill-local-variable 'blink-cursor-interval)
-      (kill-local-variable 'show-trailing-whitespace)
-      (kill-local-variable 'line-spacing)
-      (kill-local-variable 'electric-pair-mode)
-      (buffer-face-mode -1)
-      (flyspell-mode -1)
-      (visual-line-mode -1)
-      (when (fboundp 'writeroom-mode)
-        (writeroom-mode 0))))
-
-  ;; `prose-mode' has no default binding; it lives in `org-mode-map', which
-  ;; `cdadar/org-mode-setup' cannot bind because `prose-mode' is defined below.
-  (define-key org-mode-map (kbd "C-c z") #'prose-mode)
-
   ;; === Babel ===
   (defun cdadar/org-find-first-existing-file (&rest paths)
     (seq-find #'file-exists-p (delq nil paths)))
@@ -346,16 +351,29 @@ typical word processor."
       (advice-add 'org-encrypt-entry :after #'cdadar/org-encrypt-unmark)))
 
   ;; === Global prefix keymap ===
+  ;; `C-c o' 是那些「偶尔手动跑一次」的 Org 命令的统一入口：它们除了 M-x 没有别的
+  ;; 入口，不绑在这里就发现不了。分两组：clocking（上游命令）与自己写的维护命令。
   (defvar sanityinc/org-global-prefix-map (make-sparse-keymap)
     "A keymap for handy global access to org helpers, particularly clocking.")
 
   (defun cdadar/org-setup-global-prefix ()
-    (define-key sanityinc/org-global-prefix-map (kbd "j") 'org-clock-goto)
-    (define-key sanityinc/org-global-prefix-map (kbd "l") 'org-clock-in-last)
-    (define-key sanityinc/org-global-prefix-map (kbd "i") 'org-clock-in)
-    (define-key sanityinc/org-global-prefix-map (kbd "o") 'org-clock-out)
-    (define-key sanityinc/org-global-prefix-map (kbd "r") 'org-clock-report)
-    (define-key sanityinc/org-global-prefix-map (kbd "m") 'cdadar/md-clipboard-to-org)
+    ;; clocking
+    (define-key sanityinc/org-global-prefix-map (kbd "j") #'org-clock-goto)
+    (define-key sanityinc/org-global-prefix-map (kbd "l") #'org-clock-in-last)
+    (define-key sanityinc/org-global-prefix-map (kbd "i") #'org-clock-in)
+    (define-key sanityinc/org-global-prefix-map (kbd "o") #'org-clock-out)
+    (define-key sanityinc/org-global-prefix-map (kbd "r") #'org-clock-report)
+    ;; 维护命令
+    (define-key sanityinc/org-global-prefix-map (kbd "m") #'cdadar/md-clipboard-to-org)
+    (define-key sanityinc/org-global-prefix-map (kbd "a") #'cdadar/org-archive-done-tasks)
+    (define-key sanityinc/org-global-prefix-map (kbd "t") #'cdadar/org-clock-sum-today-by-tags)
+    (define-key sanityinc/org-global-prefix-map (kbd "n") #'cdadar/org-set-monthly-nth-weekday)
+    (define-key sanityinc/org-global-prefix-map (kbd "k") #'cdadar/org-kill-link-at-point)
+    (define-key sanityinc/org-global-prefix-map (kbd "f") #'sanityinc/org-refile-anywhere)
+    (define-key sanityinc/org-global-prefix-map (kbd "F") #'sanityinc/org-agenda-refile-anywhere)
+    (define-key sanityinc/org-global-prefix-map (kbd "c") #'cdadar/org-replace-circled-numbers)
+    (define-key sanityinc/org-global-prefix-map (kbd "h") #'cdadar/org-wrap-hebrew-greek)
+    (define-key sanityinc/org-global-prefix-map (kbd "p") #'cdadar/org-latex-export-to-pdf-async)
     (define-key global-map (kbd "C-c o") sanityinc/org-global-prefix-map))
 
   ;; === UI ===
