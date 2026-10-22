@@ -1,0 +1,5 @@
+#+TITLE: 重复 documentclass
+#+LATEX_HEADER: \documentclass{article}
+#+LATEX_HEADER: \usepackage{xeCJK}
+
+正文。

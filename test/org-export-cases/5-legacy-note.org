@@ -1,0 +1,18 @@
+#+TITLE: 旧笔记写法（历史遗留的 header、字体、bibleref、跨列单元格）
+#+LATEX_HEADER: \usepackage{fontspec}
+#+LATEX_HEADER: \setmainfont{Times New Roman}
+#+LATEX_HEADER: \usepackage{xeCJK}
+#+LATEX_HEADER: \setCJKmainfont{思源宋体}
+#+LATEX_HEADER: \usepackage[style=default]{bibleref}
+#+LATEX_HEADER: \newcommand{\verse}[1]{\bibleref{#1}}
+
+引用经文 \verse{约 3:16}。
+
+#+begin_quote
+quote 里的中文用楷体，还有全角中点 ・。
+末尾换行\\
+#+end_quote
+
+| \multicolumn{2}{c}{整行跨列} |
+|------+----|
+| 甲 | 乙 |

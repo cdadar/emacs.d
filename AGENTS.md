@@ -149,6 +149,12 @@ emacs --batch -f batch-byte-compile lisp/init-FOO.el
 ./test-startup.sh
 ```
 
+Changes that touch Org LaTeX export (`init-org*.el` filters, `ox` / `ox-latex`) also go
+through `./test-org-export.sh OUT [BASELINE]`: snapshot the export of
+`test/org-export-cases/*.org` before and after, and the diff must be empty, unless the
+change intends to alter the output — then explain each difference. It is not wired into
+CI, because the snapshots carry this machine's Org version and font probes.
+
 ## Important Notes
 
 - Spell checking is disabled by default (`*spell-check-support-enabled*` is nil)
