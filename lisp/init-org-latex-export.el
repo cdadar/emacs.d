@@ -26,8 +26,11 @@ BACKEND and INFO follow the Org export filter protocol."
                       (match-beginning 0))
                  (point-max)))
             (goto-char (point-min))
+            ;; 选项组必须整体可选：写成 "\\[[^]]*\\]?" 时 `?' 只作用于 `]'，
+            ;; `[' 仍是必需的，于是 `\documentclass{article}'(无选项，最常见的
+            ;; 重复写法) 永远匹配不到，LaTeX 照样报 "Two \documentclass"。
             (let ((re (concat (regexp-quote "\\documentclass")
-                              "\\[[^]]*\\]?" "{\\([^}]*\\)}")))
+                              "\\(?:\\[[^]]*\\]\\)?" "{\\([^}]*\\)}")))
               (when (re-search-forward re nil t)
                 (let ((class (match-string 1)))
                   (while (re-search-forward re nil t)
@@ -202,32 +205,36 @@ mismatch in LaTeX.  INFO is ignored."
        text)
     text))
 
+(defconst cdadar/org-latex-final-output-filters
+  '(;; 先换字体、再给缺字包 fallback、最后才在没声明字体时注入默认 CJK 字体。
+    cdadar/org-latex-use-english-main-font
+    cdadar/org-latex-use-installed-fonts
+    cdadar/org-latex-default-cjk-font
+    ;; 下面两个都要在文本里已经有 xeCJK 时才动手，所以必须排在上一行之后。
+    cdadar/org-latex-inject-quote-cjk-font
+    cdadar/org-latex-add-cjk-autofallback
+    cdadar/org-latex-add-glyph-fallback
+    ;; 与字体无关的收尾修饰，顺序不敏感。
+    cdadar/org-latex-drop-duplicate-documentclass
+    cdadar/org-latex-fix-bibleref-compat
+    cdadar/org-latex-fix-quote-paragraph-spacing
+    cdadar/org-latex-fix-multicolumn-trailing-ampersand)
+  "导出 LaTeX 时依次调用的 final-output 过滤器，**按执行先后**排列。
+`org-export-filter-apply-functions' 按列表从前到后调用，而 `add-to-list' 是前插，
+所以注册时倒着 add（见下），列表里的顺序才是执行顺序。
+之前是把十个 `add-to-list' 依次写下来，实际执行顺序与阅读顺序相反：
+`inject-quote-cjk-font' 与 `add-cjk-autofallback' 都要求文本里已有 xeCJK，
+却排在注入 xeCJK 的 `default-cjk-font' 之前，于是对“没自己声明 CJK 字体”的笔记
+双双静默跳过。")
+
 (use-package ox
   :ensure nil
   :after org
   :config
   (require 'ox-md nil t)
   (require 'ox-latex nil t)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-use-english-main-font)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-use-installed-fonts)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-default-cjk-font)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-add-glyph-fallback)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-add-cjk-autofallback)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-drop-duplicate-documentclass)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-inject-quote-cjk-font)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-fix-bibleref-compat)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-fix-quote-paragraph-spacing)
-  (add-to-list 'org-export-filter-final-output-functions
-               #'cdadar/org-latex-fix-multicolumn-trailing-ampersand)
+  (dolist (filter (reverse cdadar/org-latex-final-output-filters))
+    (add-to-list 'org-export-filter-final-output-functions filter))
   (advice-add 'org-latex-export-to-pdf :around
               #'cdadar/org-latex-export-to-pdf-route)
   (advice-add 'org-latex-export-to-latex :around
