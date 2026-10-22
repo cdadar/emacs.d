@@ -5,6 +5,17 @@
 ;; 以及 review、fragtog、pandoc-import。
 ;;; Code:
 
+;; org-roam 的笔记目录：默认值，`lisp/init-local.el' 用 `setq' 覆盖。
+(defvar org-roam-directory (expand-file-name "roam/" org-directory))
+
+(defun cdadar/org-roam-autosync-maybe ()
+  "Turn on `org-roam-db-autosync-mode' only when the notes directory exists.
+仓库单独 checkout（CI、新机器）时 `org-roam-directory' 只是个默认路径，目录并不存在，
+autosync 会在 `after-init-hook' 里抛 file-missing（Opening directory）把启动打断。
+没有笔记目录时安静地不开就好。"
+  (when (file-directory-p org-roam-directory)
+    (org-roam-db-autosync-mode 1)))
+
 ;; Roam and reference extensions
 ;; Loaded at top level (not inside use-package :config) so it is defined
 ;; before `org-roam-capture-templates' evaluates below.
@@ -120,9 +131,9 @@ followed by space/CJK text."
       :target (file+head "blog/%<%Y%m%d%H%M%S>-${slug}.org"
                          "#+title: ${title}\n")
       :unnarrowed t)))
-  :hook (after-init . org-roam-db-autosync-mode)
+  :hook (after-init . cdadar/org-roam-autosync-maybe)
   :config
-  ;; org-roam-db-autosync-mode is enabled via :hook above
+  ;; autosync 由 `:hook' 里的 cdadar/org-roam-autosync-maybe 打开
   )
 
 (use-package org-roam-ui

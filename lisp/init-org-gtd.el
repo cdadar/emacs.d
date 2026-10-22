@@ -6,6 +6,20 @@
 ;; `use-package org' 的 :config 里只保留 `cdadar/org-setup-*' 的调用。
 ;;; Code:
 
+;; === Files ===
+;; capture 模板与 agenda 要用到的文件路径。这些是**默认值**：`lisp/init-local.el'
+;; （不入库）用 `setq' 覆盖。全部从 `org-directory' 派生，换目录只改那一个。
+(defvar org-agenda-file-inbox (expand-file-name "inbox.org" org-directory))
+(defvar org-agenda-file-note (expand-file-name "notes.org" org-directory))
+(defvar org-agenda-file-gtd (expand-file-name "gtd.org" org-directory))
+(defvar org-agenda-file-work (expand-file-name "work.org" org-directory))
+(defvar org-agenda-file-journal (expand-file-name "journal.org" org-directory))
+(defvar org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
+(defvar org-agenda-file-blogposts (expand-file-name "all-posts.org" org-directory))
+(defvar org-capture-web-bookmarks (expand-file-name "web.org" org-directory))
+(defvar org-capture-anki (expand-file-name "anki.org" org-directory))
+(defvar org-default-notes-file org-agenda-file-inbox)
+
 ;; === Agenda window hooks ===
 (defun cdadar/org-agenda-align-on-config-change ()
   (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))

@@ -1,10 +1,16 @@
 ;;; Init-Org.el --- Org-mode config -*- lexical-binding: t -*-
 ;;; Commentary:
-;; Among settings for many aspects of `org-mode', this code includes
-;; an opinionated setup for the Getting Things Done (GTD) system based
-;; around the Org Agenda.
+;; Org 的核心配置：键位、`org-mode' 设置、babel/crypt、全局前缀键。
+;; 其余按关注点分在同目录的其他模块里：init-org-gtd.el（GTD/agenda/capture）、
+;; init-org-text-tools.el、init-org-latex-*.el、init-org-roam.el、init-org-extras.el。
 
 ;;; Code:
+
+;; 所有 Org 路径的基准目录。这是**默认值**：`lisp/init-local.el'（不入库，个人
+;; 配置）会用 `setq' 覆盖它。用 `defvar' 而不是 `setq'，就是为了让先加载的
+;; init-local.el 赢，同时保证仓库单独 checkout 也能起来。
+(defvar org-directory (expand-file-name "~/org/")
+  "Directory in which Org files live.  `lisp/init-local.el' overrides this.")
 
 (use-package org
   :ensure nil
