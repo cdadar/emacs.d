@@ -17,6 +17,43 @@
   :bind (:map org-mode-map
               ("C-c g" . grab-mac-link)))
 
+(defun cdadar/notify-applescript-string (text)
+  "Return TEXT quoted for an AppleScript string literal.
+反斜杠与引号都要转义；用回调逐个字符处理，省得数反斜杠。"
+  (replace-regexp-in-string
+   "[\\\"]"
+   (lambda (match) (if (string= match "\\") "\\\\" "\\\""))
+   (or text "") t t))
+
+(defun cdadar/notify (title message)
+  "Show TITLE and MESSAGE as a desktop notification where the OS allows it.
+各平台的内置原语不一样（见 `(elisp) Desktop Notifications'）：Windows / Haiku
+有 `w32-notification-notify' / `haiku-notifications-notify'，Linux 桌面走 D-Bus
+的 `notifications-notify' 或外部的 notify-send，macOS 没有内置 API，只能调
+osascript。总在 echo area 里也 `message' 一次：终端里、或者通知服务不在时
+照样看得到，同时留一份在 *messages*。后端失败只记一条日志，不往调用方
+（pomodoro 的钩子）抛错。"
+  (message "%s: %s" title message)
+  (condition-case err
+      (cond
+       ;; Windows / Haiku：只有对应平台的构建里才 fboundp
+       ((fboundp 'w32-notification-notify)
+        (w32-notification-notify :title title :body message))
+       ((fboundp 'haiku-notifications-notify)
+        (haiku-notifications-notify :title title :body message))
+       ;; macOS 必须先于 notifications-notify 判断：本机 fboundp 为真但没有
+       ;; session bus，落到 D-Bus 分支只会静默失败。
+       ((and (eq system-type 'darwin) (executable-find "osascript"))
+        (call-process "osascript" nil 0 nil "-e"
+                      (format "display notification %s with title %s"
+                              (cdadar/notify-applescript-string message)
+                              (cdadar/notify-applescript-string title))))
+       ((fboundp 'notifications-notify)
+        (notifications-notify :title title :body message))
+       ((executable-find "notify-send")
+        (call-process "notify-send" nil 0 nil title message)))
+    (error (message "通知后端不可用（已忽略）: %S" err))))
+
 (use-package org-pomodoro
   :if (locate-library "org-pomodoro")
   :after org
@@ -30,16 +67,14 @@
    (org-pomodoro-long-break-finished . cdadar/org-pomodoro-long-break-finished-notify)
    (org-pomodoro-killed . cdadar/org-pomodoro-killed-notify))
   :config
-  (defun cdadar/org-pomodoro-notify (title message)
-    (call-process "notify-send" nil 0 nil title message))
   (defun cdadar/org-pomodoro-finished-notify ()
-    (cdadar/org-pomodoro-notify "Pomodoro completed!" "Time for a break."))
+    (cdadar/notify "Pomodoro completed!" "Time for a break."))
   (defun cdadar/org-pomodoro-break-finished-notify ()
-    (cdadar/org-pomodoro-notify "Pomodoro Short Break Finished" "Ready for Another?"))
+    (cdadar/notify "Pomodoro Short Break Finished" "Ready for Another?"))
   (defun cdadar/org-pomodoro-long-break-finished-notify ()
-    (cdadar/org-pomodoro-notify "Pomodoro Long Break Finished" "Ready for Another?"))
+    (cdadar/notify "Pomodoro Long Break Finished" "Ready for Another?"))
   (defun cdadar/org-pomodoro-killed-notify ()
-    (cdadar/org-pomodoro-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+    (cdadar/notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
 
 ;; Editing and UI extensions
 (use-package org-cliplink
