@@ -124,6 +124,7 @@
 (require 'init-javascript)
 (require 'init-php)
 (require 'init-org)
+(require 'init-org-gtd)
 (require 'init-org-text-tools)
 (require 'init-org-extras)
 (require 'init-org-roam)
