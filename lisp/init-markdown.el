@@ -3,103 +3,153 @@
 ;;; Code:
 
 (defcustom cdadar/markdown-pdf-cjk-font "PingFang SC"
-  "CJK font used when exporting markdown to PDF."
+  "CJK font used when exporting markdown to PDF (pandoc xelatex engine)."
   :type 'string
   :group 'markdown)
 
-(defcustom cdadar/markdown-pdf-chrome
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  "Chrome binary used to print the intermediate HTML to PDF."
-  :type 'string
-  :group 'markdown)
+(defconst cdadar/markdown-pdf-header-tex
+  "% Pandoc LaTeX header for markdown-export-pdf.
+% Keeps long tables inside the page: xltabular X columns wrap long paths and
+% code spans instead of letting longtable cells overlap their neighbours.
+\\usepackage{xurl}
+\\usepackage{fvextra}
+\\usepackage{xltabular}
+\\usepackage{booktabs}
+\\DefineVerbatimEnvironment{verbatim}{Verbatim}{breaklines,breakanywhere}
+\\DefineVerbatimEnvironment{Verbatim}{Verbatim}{breaklines,breakanywhere}
+\\usepackage{etoolbox}
+\\AtBeginEnvironment{xltabular}{\\footnotesize}
+\\setlength{\\tabcolsep}{3pt}
+\\setlength{\\emergencystretch}{10em}
+\\tolerance=2000
+\\sloppy
+\\renewcommand{\\arraystretch}{1.2}
+"
+  "LaTeX header passed to pandoc -H.")
 
-(defconst cdadar/markdown-pdf-css
-  "@page { size: A4; margin: 16mm 14mm; }
-html { -webkit-print-color-adjust: exact; }
-body {
-  font-family: \"__CJK_FONT__\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif;
-  font-size: 10.5pt;
-  line-height: 1.55;
-  color: #222;
-  overflow-wrap: anywhere;
-}
-h1 { font-size: 18pt; margin: 0 0 10pt; }
-h2 { font-size: 14pt; margin: 14pt 0 6pt; border-bottom: 1px solid #ddd; padding-bottom: 3pt; }
-h3 { font-size: 12pt; margin: 10pt 0 4pt; }
-p, li { orphans: 2; widows: 2; }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  margin: 6pt 0 10pt;
-  font-size: 8.5pt;
-}
-th, td {
-  border: 1px solid #bbb;
-  padding: 3pt 4pt;
-  vertical-align: top;
-  text-align: left;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-th { background: #f2f2f2; }
-thead { display: table-header-group; }
-tr { break-inside: avoid; }
-pre {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  background: #f6f6f6;
-  padding: 6pt;
-  border-radius: 3pt;
-  font-size: 8.5pt;
-}
-code { font-size: 0.92em; overflow-wrap: anywhere; }
-img { max-width: 100%; height: auto; }
-blockquote { margin: 6pt 0; padding-left: 10pt; border-left: 3px solid #ccc; color: #555; }"
-  "CSS for the intermediate HTML before printing to PDF.")
+(defconst cdadar/markdown-pdf-table-lua
+  "-- Replace pandoc's equal-width longtable with xltabular X columns.
+-- X columns wrap long paths/tokens instead of overflowing into neighbours.
+local function cell_len(cell)
+  return #pandoc.utils.stringify(cell)
+end
+
+local function scan(rows, maxlens)
+  for _, row in ipairs(rows) do
+    for i, cell in ipairs(row.cells) do
+      local l = cell_len(cell)
+      if i <= #maxlens and l > maxlens[i] then maxlens[i] = l end
+    end
+  end
+end
+
+local function cell_tex(cell)
+  local s = pandoc.write(pandoc.Pandoc(cell.contents), 'latex')
+  s = s:gsub('^%s+', ''):gsub('%s+$', ''):gsub('\\n', ' ')
+  return s
+end
+
+local function row_tex(row)
+  local cells = {}
+  for _, cell in ipairs(row.cells) do
+    table.insert(cells, cell_tex(cell))
+  end
+  return table.concat(cells, ' & ') .. ' \\\\\\\\'
+end
+
+function Table(t)
+  if not FORMAT:match('latex') then return t end
+  local n = #t.colspecs
+  local maxlens = {}
+  for i = 1, n do maxlens[i] = 0 end
+  scan(t.head.rows, maxlens)
+  for _, body in ipairs(t.bodies) do scan(body.body, maxlens) end
+
+  local weights, total = {}, 0
+  for i = 1, n do
+    weights[i] = math.sqrt(math.max(maxlens[i], 4))
+    total = total + weights[i]
+  end
+  local w, sumw = {}, 0
+  for i = 1, n do
+    w[i] = math.min(math.max(weights[i] / total, 0.08), 0.55)
+    sumw = sumw + w[i]
+  end
+
+  local cols = {}
+  for i = 1, n do
+    local hs = w[i] / sumw * n
+    table.insert(cols, string.format(
+      '>{\\\\hsize=%.4f\\\\hsize\\\\raggedright\\\\arraybackslash}X', hs))
+  end
+
+  local lines = { '\\\\begin{xltabular}{\\\\linewidth}{@{}' .. table.concat(cols) .. '@{}}' }
+  table.insert(lines, '\\\\toprule')
+  for _, r in ipairs(t.head.rows) do table.insert(lines, row_tex(r)) end
+  table.insert(lines, '\\\\midrule\\\\endhead')
+  for _, body in ipairs(t.bodies) do
+    for _, r in ipairs(body.body) do table.insert(lines, row_tex(r)) end
+  end
+  table.insert(lines, '\\\\bottomrule\\\\end{xltabular}')
+  return pandoc.RawBlock('latex', table.concat(lines, '\\n'))
+end
+
+-- URL-like code spans may break at / . - ; a path containing the | delimiter
+-- or LaTeX specials falls through to pandoc's normal \\texttt.
+function Code(el)
+  if FORMAT:match('latex') then
+    if el.text:find('[|{}%%\\\\]') then
+      return nil
+    end
+    return pandoc.RawInline('latex', '\\\\path|' .. el.text .. '|')
+  end
+end
+"
+  "Pandoc Lua filter that rebalances tables to xltabular X columns.")
 
 (defun cdadar/markdown-export-pdf ()
   "Export the current markdown buffer to a PDF next to the file, then open it.
 
-Uses pandoc to render standalone HTML and Chrome's headless printer for PDF.
-LaTeX is avoided because its longtable output overlaps on wide tables with
-long unbreakable tokens (paths, version strings, CJK text)."
+The PDF is opened by its default handler (`open' on macOS, i.e. Preview),
+not by `browse-url-of-file', which would hand it to the web browser.
+
+Pandoc renders through xelatex.  An inline header and Lua filter replace
+pandoc's equal-width longtable with xltabular X columns, so long paths and
+version strings wrap inside their cell instead of overlapping the next one."
   (interactive)
   (let* ((in (buffer-file-name))
          (out (and in (concat (file-name-sans-extension in) ".pdf")))
-         (title (and in (file-name-base in)))
-         (html (make-temp-file "markdown-pdf-" nil ".html"))
-         (css (make-temp-file "markdown-pdf-" nil ".css")))
+         (header (make-temp-file "markdown-pdf-" nil ".tex"))
+         (filter (make-temp-file "markdown-pdf-" nil ".lua")))
     (unless in
       (user-error "Buffer is not visiting a file"))
-    (unless (file-exists-p cdadar/markdown-pdf-chrome)
-      (user-error "Chrome not found: %s" cdadar/markdown-pdf-chrome))
+    (unless (executable-find "pandoc")
+      (user-error "pandoc not found in `exec-path'"))
+    (unless (executable-find "xelatex")
+      (user-error "xelatex not found in `exec-path'"))
     (unwind-protect
         (progn
-          (with-temp-file css
-            (insert (replace-regexp-in-string
-                     "__CJK_FONT__" cdadar/markdown-pdf-cjk-font
-                     cdadar/markdown-pdf-css)))
+          (with-temp-file header
+            (insert cdadar/markdown-pdf-header-tex))
+          (with-temp-file filter
+            (insert cdadar/markdown-pdf-table-lua))
           (with-temp-buffer
             (unless (zerop (call-process "pandoc" nil t nil
-                                         in "-o" html "--standalone"
-                                         "--embed-resources"
-                                         "--css" css
-                                         "--metadata" (concat "title=" title)))
-              (user-error "pandoc failed:\n%s" (buffer-string))))
-          (with-temp-buffer
-            (unless (zerop (call-process cdadar/markdown-pdf-chrome nil t nil
-                                         "--headless=new" "--disable-gpu"
-                                         "--no-pdf-header-footer"
-                                         (concat "--print-to-pdf=" out)
-                                         (concat "file://" html)))
-              (user-error "Chrome failed:\n%s" (buffer-string))))
+                                         in "-o" out
+                                         "--pdf-engine=xelatex"
+                                         "-V" (concat "CJKmainfont="
+                                                      cdadar/markdown-pdf-cjk-font)
+                                         "-V" "geometry:margin=12mm"
+                                         "--columns=200"
+                                         "-H" header
+                                         "--lua-filter" filter))
+              (user-error "PDF export failed:\n%s" (buffer-string))))
           (unless (file-exists-p out)
             (user-error "PDF export failed, no output at %s" out))
           (message "Exported %s" out)
-          (browse-url-of-file out))
-      (delete-file html)
-      (delete-file css))))
+          (call-process "open" nil 0 nil out))
+      (delete-file header)
+      (delete-file filter))))
 
 (use-package markdown-mode
   :bind (:map markdown-mode-command-map
