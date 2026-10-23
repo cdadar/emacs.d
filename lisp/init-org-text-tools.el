@@ -4,6 +4,8 @@
 ;; - 圈号 ①..⑳ 统一写成 \textcircled{N}
 ;; - 裸的希伯来文/希腊文包成笔记前言的 \heb{} / \gr{}
 ;; - 给紧贴汉字而失效的强调标记补边界空格
+;; - 拆掉被行内代码里的同名标记抢掉闭合的强调（嵌套冲突）
+;; - 嵌套强调 → LaTeX 导出片段（或补空格走原生嵌套）
 ;; - 剪贴板 Markdown → Org（走 pandoc）
 ;;; Code:
 
@@ -181,8 +183,10 @@ marker runs (`**bold**', which org parses on its own)."
            (and bad-right after (> after 127)))
        (not (memq marker (list before after)))
        (not (memq marker (string-to-list content)))
+       ;; `bold' 这类：标记已经被 org 解析成了一个（可能跨过头的）强调对象，也要能修。
        (memq (org-element-type (org-element-context))
-             cdadar/org-emphasis-repairable-types)))
+             (append cdadar/org-emphasis-repairable-types
+                     '(bold italic underline strike-through)))))
 
 (defun cdadar/org-fix-emphasis-boundaries (beg end)
   "给因缺少边界空格而失效的 org 强调标记补空格。
@@ -242,7 +246,389 @@ ASCII 的算式与标识符不动，src / example / export 块、链接路径、
     pairs))
 
 
+;; === 嵌套：内容里的同名标记抢闭合 ===
+(defconst cdadar/org-emphasis-pair-markers "*_+/"
+  "会被内容里的同名标记抢掉闭合的强调标记。
+`=' 与 `~' 不在此列：它们是代码 / 等宽分隔符，按构造内容里不可能再出现同名标记。")
 
+(defconst cdadar/org-inline-code-regexp "\\([=~]\\)\\(\\S-[^=~\n]*?\\S-\\)\\1"
+  "行内代码 / 等宽段的整段匹配（`=code='、`~verbatim~'），要求内容两端都不是空白。")
+
+(defun cdadar/org--inline-code-ranges (line)
+  "Return the inline-code ranges of LINE as a list of (BEG . END) offsets."
+  (let (ranges (start 0))
+    (while (string-match cdadar/org-inline-code-regexp line start)
+      (push (cons (match-beginning 0) (match-end 0)) ranges)
+      (setq start (match-end 0)))
+    (nreverse ranges)))
+
+(defun cdadar/org--emphasis-closing-position-p (line pos)
+  "Return non-nil when the marker at POS in LINE can close an emphasis.
+That is org's rule: a non-whitespace character before it, and whitespace,
+a closing ASCII border, or the end of line after it."
+  (let ((prev (and (> pos 0) (aref line (1- pos))))
+        (next (and (< (1+ pos) (length line)) (aref line (1+ pos)))))
+    (and prev
+         (not (eq (char-syntax prev) ?\s))
+         (or (null next)
+             (eq (char-syntax next) ?\s)
+             (memq next (string-to-list cdadar/org-emphasis-closing-chars))))))
+
+(defun cdadar/org--unsafe-emphasis-pairs (line marker)
+  "把 LINE 里被行内代码中同名标记抢掉闭合的 MARKER 配对找出来。
+返回 ((OPEN . CLOSE) ...)，偏移相对 LINE 起点。只算那些「代码段整个落在配对中间、
+且段内的 MARKER 落在 org 的闭标记位置」的配对；其余配对在 org 里仍能正确闭合。"
+  (let* ((ranges (cdadar/org--inline-code-ranges line))
+         (in-code-p (lambda (pos)
+                      (seq-some (lambda (r) (and (>= pos (car r)) (< pos (cdr r))))
+                                ranges)))
+         (positions nil)
+         (i 0)
+         pairs)
+    (while (< i (length line))
+      (when (and (eq (aref line i) marker) (not (funcall in-code-p i)))
+        (push i positions))
+      (setq i (1+ i)))
+    (setq positions (nreverse positions))
+    (while (cdr positions)
+      (let ((open (pop positions))
+            (close (pop positions)))
+        (when (seq-some
+               (lambda (r)
+                 (and (> (car r) open)
+                      (< (cdr r) close)
+                      (let ((p (1+ (car r)))
+                            (hit nil))
+                        (while (< p (1- (cdr r)))
+                          (when (and (eq (aref line p) marker)
+                                     (cdadar/org--emphasis-closing-position-p line p))
+                            (setq hit t))
+                          (setq p (1+ p)))
+                        hit)))
+               ranges)
+          (push (cons open close) pairs))))
+    (nreverse pairs)))
+
+(defun cdadar/org--emphasis-raw-context-p (pos)
+  "Return non-nil when POS holds markup org does not parse as emphasis.
+src / example / export 块、注释、`:NAME:' 类关键字、链接路径、代码与 LaTeX 片段里的
+标记改了只会弄坏内容，`cdadar/org-fix-emphasis-nesting' 一律不碰。"
+  (save-excursion
+    (goto-char pos)
+    (memq (org-element-type (org-element-context))
+          '(link code verbatim latex-fragment macro src-block example-block
+                 export-block comment fixed-width keyword))))
+
+(defun cdadar/org-fix-emphasis-nesting (beg end &optional report-only)
+  "拆掉被行内代码里的同名标记抢掉闭合的强调标记。
+org 的强调是扁平正则：`*外层 =a*b= 内层*' 里，代码段中的 `*'（前非空白，后紧跟空白、
+`- . , ; : ! ? ' \" ) } \\ [' 或行尾）会先被当成粗体的闭标记，结果 code 后面的文字被吞进
+粗体、真正的闭标记反过来成了新的开标记。这和 `cdadar/org-fix-emphasis-boundaries'
+处理的全角边界不是一回事，补空格也救不了，只能拆掉外层标记。
+
+在 BEG..END（有选区时是选区，否则整个 buffer）内逐行检查，只删掉「跨过一个含同名
+标记的代码段」的那一对标记：同一行里别处的强调、代码段本身、以及代码段里那个标记都
+原样保留。边界没修好的行会算错位，所以同一行既有全角边界问题又有嵌套冲突时，先跑
+`cdadar/org-fix-emphasis-boundaries'（C-c C-x F）再跑本命令。有前缀参数（REPORT-ONLY
+非 nil）时只报告不修改。整条命令算一次 undo，可以反复跑。表格里的改动不会自动重排，
+事后 `M-x org-table-align'。返回拆掉的配对数。"
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end) current-prefix-arg)
+     (list (point-min) (point-max) current-prefix-arg)))
+  (unless (derived-mode-p 'org-mode)
+    (user-error "只在 Org buffer 里用"))
+  (let ((found nil)
+        (lines nil)
+        (pairs 0))
+    (atomic-change-group
+      (save-excursion
+        (goto-char beg)
+        (while (< (point) end)
+          (let* ((line-beg (line-beginning-position))
+                 (line (buffer-substring-no-properties line-beg (line-end-position)))
+                 (hits nil))
+            (dolist (marker (string-to-list cdadar/org-emphasis-pair-markers))
+              (dolist (pair (cdadar/org--unsafe-emphasis-pairs line marker))
+                ;; 只在 org 真会解析强调的地方动：src / example 块、链接里的标记不碰。
+                (unless (or (cdadar/org--emphasis-raw-context-p (+ line-beg (car pair)))
+                            (cdadar/org--emphasis-raw-context-p (+ line-beg (cdr pair))))
+                  (push (+ line-beg (car pair)) hits)
+                  (push (+ line-beg (cdr pair)) hits))))
+            (when hits
+              (push (line-number-at-pos line-beg) lines)
+              (setq pairs (+ pairs (/ (length hits) 2)))
+              (setq found (append hits found)))
+            (forward-line 1)))
+        (unless report-only
+          (dolist (pos (sort found #'>))
+            (goto-char pos)
+            (delete-char 1))))
+    (message "%s强调嵌套：%d 对标记%s%s"
+             (if report-only "待拆" "已拆")
+             pairs
+             (if found "" "（无冲突）")
+             (if lines
+                 (format "，第 %s 行%s"
+                         (mapconcat #'number-to-string
+                                    (seq-take (nreverse lines) 5) "、")
+                         (if (> (length lines) 5) " 等" ""))
+               ""))
+    pairs)))
+
+
+;; === 嵌套强调 → LaTeX 宏 ===
+(defconst cdadar/org-latex-emphasis-markers "*_=~"
+  "转换成 LaTeX 宏的 org 标记：`*粗*' → `\\textbf{}'、`_下划线_' → `\\underline{}'、
+`=code=' / `~verbatim~' → `\\texttt{}'。
+`/' 与 `+' 不在内：中文笔记里的 `/` 几乎都是路径与并列分隔符，按斜体处理会误判；
+`+' 要 ulem 的 `\\sout'，而这两个标记本来就能在 org 里正常嵌套。")
+
+(defconst cdadar/org-latex-emphasis-macros
+  '((?* . "\\textbf{%s}")
+    (?_ . "\\underline{%s}")
+    (?= . "\\texttt{%s}")
+    (?~ . "\\texttt{%s}"))
+  "标记字符 → LaTeX 宏模板。")
+
+(defconst cdadar/org-latex-escape-alist
+  '((?\\ . "\\textbackslash{}")
+    (?_ . "\\_")
+    (?% . "\\%")
+    (?& . "\\&")
+    (?# . "\\#")
+    (?$ . "\\$")
+    (?^ . "\\textasciicircum{}")
+ (?{ . "\\{")
+    (?} . "\\}")
+    (?~ . "\\textasciitilde{}"))
+  "LaTeX 文本模式下的特殊字符转义表。")
+
+(defun cdadar/org--latex-escape (s)
+  "Return S with LaTeX special characters escaped."
+  (mapconcat (lambda (ch)
+               (or (cdr (assq ch cdadar/org-latex-escape-alist))
+                   (char-to-string ch)))
+             (string-to-list s) ""))
+
+(defun cdadar/org--latex-wrap (marker body)
+  "Wrap BODY in the LaTeX macro for MARKER."
+  (format (or (cdr (assq marker cdadar/org-latex-emphasis-macros))
+              "%s")
+          body))
+
+(defun cdadar/org--latex-convert (s)
+  "Rewrite the org markers in S as LaTeX macros, escaping plain text.
+只处理成对且内容非空的标记；找不到闭合的那一个当普通字符转义。"
+  (let ((out "")
+        (i 0)
+        (n (length s)))
+    (while (< i n)
+      (let* ((ch (aref s i))
+             (marker (and (memq ch (string-to-list cdadar/org-latex-emphasis-markers)) ch))
+             (close (and marker
+                         (string-match (regexp-quote (char-to-string ch)) s (1+ i)))))
+        (if (and close (> close (1+ i)))
+            (setq out (concat out
+                              (cdadar/org--latex-wrap
+                               ch
+                               (cdadar/org--latex-convert (substring s (1+ i) close))))
+                  i (1+ close))
+          (setq out (concat out (cdadar/org--latex-escape (char-to-string ch)))
+                i (1+ i)))))
+    out))
+
+(defun cdadar/org--latex-border-open-p (s pos)
+  "Return non-nil when the marker at POS in S may open an emphasis.
+同 org 的规则，但额外允许前面紧靠另一个标记（`*=code=*' 这类 org 能正常解析）。"
+  (let ((prev (and (> pos 0) (aref s (1- pos))))
+        (next (and (< (1+ pos) (length s)) (aref s (1+ pos)))))
+    (and (or (null prev)
+             (eq (char-syntax prev) ?\s)
+             (memq prev (string-to-list
+                         (concat "-('\"{" cdadar/org-latex-emphasis-markers))))
+         next
+         (not (eq (char-syntax next) ?\s)))))
+
+(defun cdadar/org--latex-border-close-p (s pos)
+  "Return non-nil when the marker at POS in S may close an emphasis."
+  (let ((prev (and (> pos 0) (aref s (1- pos))))
+        (next (and (< (1+ pos) (length s)) (aref s (1+ pos)))))
+    (and prev
+         (not (eq (char-syntax prev) ?\s))
+         (or (null next)
+             (eq (char-syntax next) ?\s)
+             (memq next (string-to-list
+                         (concat cdadar/org-emphasis-closing-chars
+                                 cdadar/org-latex-emphasis-markers)))))))
+
+(defun cdadar/org--in-ranges-p (ranges pos)
+  "Return non-nil when POS falls inside one of RANGES."
+  (seq-some (lambda (r) (and (>= pos (car r)) (< pos (cdr r)))) ranges))
+
+(defun cdadar/org--line-pairs (line)
+  "Return the emphasis pairs ((OPEN . CLOSE) ...) org would see in LINE.
+按 org 的边界规则左右扫描（标记可以嵌套），行内代码段里的标记不算。"
+  (let* ((ranges (cdadar/org--inline-code-ranges line))
+         (markers (string-to-list cdadar/org-latex-emphasis-markers))
+         (i 0)
+         (n (length line))
+         (stack nil)
+         pairs)
+    (while (< i n)
+      (unless (cdadar/org--in-ranges-p ranges i)
+        (let ((ch (aref line i)))
+          (when (memq ch markers)
+            (cond ((and stack (eq (caar stack) ch)
+                        (cdadar/org--latex-border-close-p line i))
+                   (push (cons (cdar stack) i) pairs)
+                   (pop stack))
+                  ((cdadar/org--latex-border-open-p line i)
+                   (push (cons ch i) stack))))))
+      (setq i (1+ i)))
+    pairs))
+
+(defun cdadar/org--glued-markers (line)
+  "Return the positions of markers in LINE that can neither open nor close.
+这种标记就是「紧贴汉字、org 解析不了」的内层标记，也是要重写的触发点。"
+  (let ((ranges (cdadar/org--inline-code-ranges line))
+        (markers (string-to-list cdadar/org-latex-emphasis-markers))
+        hits
+        (i 0)
+        (n (length line)))
+    (while (< i n)
+      (when (and (memq (aref line i) markers)
+                 (not (cdadar/org--in-ranges-p ranges i))
+                 (not (cdadar/org--latex-border-open-p line i))
+                 (not (cdadar/org--latex-border-close-p line i)))
+        (push i hits))
+      (setq i (1+ i)))
+    (nreverse hits)))
+
+(defun cdadar/org--rewrite-line (line add-spaces)
+  "Rewrite the unparsable nested emphasis in LINE.
+Return (NEW-LINE . PLACES), PLACES being the number of rewritten spans; glue
+markers that no recognisable pair encloses are left alone and reported through
+`cdadar/org--rewrite-line-leftovers' instead."
+  (let* ((pairs (cdadar/org--line-pairs line))
+         (glued (cdadar/org--glued-markers line))
+         (targets nil)
+         (leftovers 0))
+    (dolist (pos glued)
+      (let ((enclosing (seq-filter (lambda (p) (and (< (car p) pos) (> (cdr p) pos))) pairs)))
+        (if enclosing
+            ;; 取最内层的合法外层（同一行可能有多处）
+            (let ((best (car (sort enclosing
+                                   (lambda (a b) (< (- (cdr a) (car a)) (- (cdr b) (car b))))))))
+              (push best targets))
+          (setq leftovers (1+ leftovers)))))
+    (setq targets (delete-dups (nreverse targets)))
+    ;; 合并/去重：内层已经有外层要整段重写时，丢掉内层
+    (setq targets (seq-filter
+                   (lambda (p)
+                     (not (seq-some (lambda (q)
+                                      (and (not (equal p q))
+                                           (<= (car q) (car p)) (>= (cdr q) (cdr p))
+                                           (> (- (cdr q) (car q)) (- (cdr p) (car p)))))
+                                    targets)))
+                   targets))
+    (let ((new line))
+      (dolist (p (sort targets (lambda (a b) (> (car a) (car b)))))
+        (let* ((open (car p))
+               (close (cdr p))
+               (marker (aref line open))
+               (body (substring line (1+ open) close))
+               (repl (if add-spaces
+                         (concat (char-to-string marker)
+                                 (cdadar/org--space-nest body)
+                                 (char-to-string marker))
+                       (format "@@latex:%s@@"
+                               (cdadar/org--latex-wrap marker
+                                                      (cdadar/org--latex-convert body))))))
+          (setq new (concat (substring new 0 open) repl (substring new (1+ close))))))
+      (cons new (cons (length targets) leftovers)))))
+
+(defun cdadar/org--space-nest (s)
+  "Return S with a space inserted around every unsupported marker pair.
+`*粗体_下划线_结束*' → `粗体 _下划线_ 结束'：补上空格后 org 就能原生解析嵌套。"
+  (let ((out "")
+        (i 0)
+        (n (length s)))
+    (while (< i n)
+      (let* ((ch (aref s i))
+             (marker (and (memq ch (string-to-list cdadar/org-latex-emphasis-markers)) ch))
+             (close (and marker
+                         (string-match (regexp-quote (char-to-string ch)) s (1+ i)))))
+        (if (and close (> close (1+ i)))
+            (let ((inner (cdadar/org--space-nest (substring s (1+ i) close))))
+              (setq out (concat out
+                                (if (cdadar/org--latex-border-open-p s i) "" " ")
+                                (char-to-string ch) inner (char-to-string ch)
+                                (if (cdadar/org--latex-border-close-p s close) "" " "))
+                    i (1+ close)))
+          (setq out (concat out (char-to-string ch))
+                i (1+ i)))))
+    out))
+
+(defun cdadar/org-nested-emphasis-to-latex (beg end &optional add-spaces)
+  "把 org 解析不了的嵌套强调批量改写：默认转 LaTeX，ADD-SPACES 时改补空格。
+org 的强调不能随意嵌套：内层标记紧贴汉字时（`*粗体_下划线_结束*'）org 只认外层，
+内层标记会被当成普通字符（`_' 还会变成下标），buffer 里看不见、导出也没有。
+
+默认（前缀参数为空）把这种段落改写成导出片段：
+  `*粗体_下划线_结束*' → `@@latex:\\textbf{粗体\\underline{下划线}结束}@@'
+必须用 `@@latex:...@@' 而不是裸的 `\\textbf{}'：editor 会把纯文本里的 `{' `}'
+转义成 `\\{ / \\}'（实测 LaTeX 导出生成了 `\\textbf\\{...\\}'），只有导出片段才原样
+直通。代价：PDF/LaTeX 后端才有嵌套效果；buffer 里看到的是片段原码；**HTML 等其它后端
+会整段丢弃**（实测 `A @@latex:x@@ B' 导出成 `A  B'）。
+
+带前缀参数（ADD-SPACES 非 nil）时走另一条路：只在内层标记两侧补空格，
+`*粗体 _下划线_ 结束*' —— org 原生嵌套，buffer / HTML / PDF 都有样式，代价是多两个空格。
+
+两种模式都只处理「外层解析成功、内层没解析成对象」的单行强调；能正常嵌套的不动。
+只动 BEG..END（选区或整个 buffer）内的强调，处理的标记见
+`cdadar/org-latex-emphasis-markers'。整条命令算一次 undo，可反复跑。返回改写处数。"
+  (interactive
+   (list (if (use-region-p) (region-beginning) (point-min))
+         (if (use-region-p) (region-end) (point-max))
+         current-prefix-arg))
+  (unless (derived-mode-p 'org-mode)
+    (user-error "只在 Org buffer 里用"))
+  (let ((end (copy-marker end t))
+        (edits nil)
+        (count 0)
+        (leftovers 0))
+    (atomic-change-group
+      (save-excursion
+        (goto-char beg)
+        (while (< (point) end)
+          (let* ((line-beg (line-beginning-position))
+                 (line-end (line-end-position))
+                 (line (buffer-substring-no-properties line-beg line-end)))
+            (unless (or (string-match-p "\\`[[:space:]]*\\'" line)
+                        (cdadar/org--emphasis-raw-context-p line-beg))
+              (let* ((result (cdadar/org--rewrite-line line add-spaces))
+                     (new (car result))
+                     (places (cadr result)))
+                (when (> places 0)
+                  (push (cons line-beg line-end) edits)
+                  (setq count (+ count places)))
+                (setq leftovers (+ leftovers (cddr result)))
+                (unless (string= new line)
+                  (delete-region line-beg line-end)
+                  (goto-char line-beg)
+                  (insert new)))))
+          (forward-line 1))))
+    (set-marker end nil)
+    (message "嵌套强调：%d 处%s%s"
+             count
+             (cond ((zerop count) "（没有需要转换的）")
+                   (add-spaces "，已补空格（org 原生嵌套，全后端可用）")
+                   (t "，已改成 @@latex:@@ 片段（仅 LaTeX/PDF 后端）"))
+             (if (> leftovers 0)
+                 (format "；另有 %d 个标记没有可用的外层，先跑 C-c C-x F 补边界" leftovers)
+               ""))
+    count))
 ;; === Markdown → Org from clipboard ===
 (defun cdadar/md-clipboard-to-org (&optional insert-p)
   "Convert markdown text to Org, replacing the clipboard with the result.

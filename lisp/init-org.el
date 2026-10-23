@@ -72,6 +72,10 @@ typical word processor."
          ("C-c e" . org-emphasize)
          ;; 只补已经写好、但标记紧贴汉字而失效的强调（C-c C-x F 上游空着）。
          ("C-c C-x F" . cdadar/org-fix-emphasis-boundaries)
+         ;; 拆掉被行内代码里的同名标记抢掉闭合的强调（C-c C-x N 上游空着）。
+         ("C-c C-x N" . cdadar/org-fix-emphasis-nesting)
+         ;; 嵌套强调 → LaTeX 片段；C-u 改成补空格（上游 C-c C-x L 空着）。
+         ("C-c C-x L" . cdadar/org-nested-emphasis-to-latex)
          ("C-M-<up>" . org-up-element))
   :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
   :hook ((org-mode . cdadar/org-mode-setup)
