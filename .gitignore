@@ -32,6 +32,7 @@ site-lisp/package/
 /helm-adaptive-history
 /thumbs/
 /emms/
+/elfeed/
 /.smex-items
 /image-dired/
 /eshell
