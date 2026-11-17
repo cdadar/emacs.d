@@ -41,6 +41,7 @@ site-lisp/package/
 /ditaa*.jar
 /ido.last
 /recentf
+recentf.eld
 /viper
 /projectile-bookmarks.eld
 /anaconda-mode/
@@ -67,6 +68,7 @@ company-statistics-cache.el
 org-roam.db
 /projects
 places
+places.eld
 .last-package-update-day
 /forge-*.sqlite
 /projectile.cache
@@ -85,3 +87,5 @@ agent/*
 
 
 .claude
+
+projects.eld
