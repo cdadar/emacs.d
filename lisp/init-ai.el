@@ -13,35 +13,25 @@
 (use-package mcp
   :defer t)
 
-(use-package agent-shell
-  :defer t
-  :commands (agent-shell)
-  :config
-  ;; The agent-shell package ships built-in configs for both 'pi and
-  ;; 'hermes (see `agent-shell-pi-make-agent-config' /
-  ;; `agent-shell-hermes-make-agent-config'), so no manual registration
-  ;; is needed.  Default to Pi, which speaks ACP via the `pi-acp'
-  ;; adapter (install with: npm i -g pi-acp).
-  (setq agent-shell-preferred-agent-config 'pi))
-
 
 ;;;; Coding agents
 
 (use-package ai-code
   :defer t
   :commands (ai-code-menu)
-  :bind (("C-c A" . ai-code-menu))
+  :bind (("C-c A" . ai-code-menu)
+         ("C-c C-p" . ai-code-pi-start))
   :custom
   (ai-code-auto-test-type 'ask-me)
   :init
   (add-hook 'after-init #'ai-code-prompt-filepath-completion-mode)
   :config
-  ;; Primary AI coding entrypoint, now routed through 'agent-shell
-  ;; which uses Pi ACP. Other supported backends include
-  ;; 'codex, 'claude-code, 'gemini, 'github-copilot-cli, 'opencode,
-  ;; 'grok, 'cursor, 'kiro, 'codebuddy, 'aider, 'eca, 'agent-shell,
-  ;; 'claude-code-ide and 'claude-code-el.
-  (ai-code-set-backend 'agent-shell)
+  ;; Primary AI coding entrypoint.  Uses ai-code's native `pi' backend
+  ;; (`ai-code-pi'), which drives the `pi' CLI directly.  Other supported
+  ;; backends include 'codex, 'claude-code, 'gemini,
+  ;; 'github-copilot-cli, 'opencode, 'grok, 'cursor, 'kiro, 'codebuddy,
+  ;; 'aider, 'eca, 'claude-code-ide and 'claude-code-el.
+  (ai-code-set-backend 'pi)
   (with-eval-after-load 'evil
     (ai-code-backends-infra-evil-setup))
   (with-eval-after-load 'magit
@@ -106,18 +96,6 @@
 
 (use-package gptel-magit
   :hook (magit-mode . gptel-magit-install))
-
-
-;;;; Pi coding agent
-(use-package pi-coding-agent
-  :if (executable-find "pi")
-  :defer t
-  :bind (("C-c C-p" . pi-coding-agent))
-  :custom
-  (pi-coding-agent-essential-grammar-action 'auto)
-  :init
-  ;; Convenience alias (as recommended by README)
-  (defalias 'pi #'pi-coding-agent))
 
 
 (provide 'init-ai)

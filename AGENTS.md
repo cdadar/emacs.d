@@ -98,8 +98,7 @@ The configuration includes multiple AI coding assistants:
 
 1. **ellama** - Local LLM integration via Ollama (if available)
 2. **aider** - AI pair programming (bound to `C-c C-a`; model and flags come from `~/.aider.conf.yml`)
-3. **ai-code** - Universal AI backend switcher, default backend `agent-shell` (`init-ai.el` holds `ai-code-set-backend` and the backend list)
-4. **agent-shell** - AI-powered shell with Evil mode support
+3. **ai-code** - Universal AI backend switcher, default backend `pi` — ai-code's native `ai-code-pi` backend driving the `pi` CLI (`init-ai.el` holds `ai-code-set-backend` and the backend list; `C-c C-p` starts a Pi session, `C-c A` opens the menu)
 
 When modifying AI-related code:
 - API keys are set via environment variables (e.g., `ANTHROPIC_API_KEY`)
