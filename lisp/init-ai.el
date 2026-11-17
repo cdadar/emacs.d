@@ -16,22 +16,24 @@
 
 ;;;; Coding agents
 
+;; Pi's Emacs frontend.  `pilish' is the renamed `pi-coding-agent' (3.0),
+;; talking to `pi' over JSON-RPC instead of driving its TUI in a buffer.
+(use-package pilish
+  :bind (("C-c C-p" . pilish))
+  :init
+  (defalias 'pi #'pilish))
+
 (use-package ai-code
   :defer t
   :commands (ai-code-menu)
-  :bind (("C-c A" . ai-code-menu)
-         ("C-c C-p" . ai-code-pi-start))
+  :bind (("C-c A" . ai-code-menu))
   :custom
   (ai-code-auto-test-type 'ask-me)
   :init
   (add-hook 'after-init #'ai-code-prompt-filepath-completion-mode)
   :config
-  ;; Primary AI coding entrypoint.  Uses ai-code's native `pi' backend
-  ;; (`ai-code-pi'), which drives the `pi' CLI directly.  Other supported
-  ;; backends include 'codex, 'claude-code, 'gemini,
-  ;; 'github-copilot-cli, 'opencode, 'grok, 'cursor, 'kiro, 'codebuddy,
-  ;; 'aider, 'eca, 'claude-code-ide and 'claude-code-el.
-  (ai-code-set-backend 'pi)
+  ;; Backend left at ai-code's own default: Pi is handled by `pilish'
+  ;; above.  Pick another with `M-x ai-code-set-backend'.
   (with-eval-after-load 'evil
     (ai-code-backends-infra-evil-setup))
   (with-eval-after-load 'magit

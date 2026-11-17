@@ -98,7 +98,8 @@ The configuration includes multiple AI coding assistants:
 
 1. **ellama** - Local LLM integration via Ollama (if available)
 2. **aider** - AI pair programming (bound to `C-c C-a`; model and flags come from `~/.aider.conf.yml`)
-3. **ai-code** - Universal AI backend switcher, default backend `pi` — ai-code's native `ai-code-pi` backend driving the `pi` CLI (`init-ai.el` holds `ai-code-set-backend` and the backend list; `C-c C-p` starts a Pi session, `C-c A` opens the menu)
+3. **pilish** - Pi's Emacs frontend (the renamed `pi-coding-agent`, 3.0), talking to the `pi` CLI over JSON-RPC; `C-c C-p` starts or focuses the project's session, `M-x pi` is an alias.
+4. **ai-code** - Universal AI backend switcher for other CLIs; left at its own default backend, `C-c A` opens the menu (`init-ai.el`)
 
 When modifying AI-related code:
 - API keys are set via environment variables (e.g., `ANTHROPIC_API_KEY`)
